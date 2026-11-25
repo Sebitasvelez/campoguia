@@ -153,7 +153,7 @@
   // ------------------------------------------------------------ BIENVENIDA / CUENTA
   function vBienvenida(modo) {
     const cultOpts = cultivos().map((c) => `<option value="${h(c.id)}">${h(c.nombre)}</option>`).join("");
-    const intro = `<div class="top" style="padding-top:36px"><h1 style="font-size:28px">${h(NOMBRE)}</h1><p>Manual técnico de tu cultivo y registro de las actividades de tu finca. Funciona también sin internet.</p></div>`;
+    const intro = `<div class="top" style="padding-top:36px"><h1 style="font-size:28px">${h(NOMBRE)}</h1><p>Manual técnico de tu cultivo, registro de actividades y costos de producción de tu finca. Funciona también sin internet.</p></div>`;
     if (modo === "registro") {
       const ub = {};
       pintar(`${intro}<form class="cont" id="f" novalidate>
@@ -228,9 +228,9 @@
         <div class="grid2">${cultivos().map((c) => `<a class="cultivo ${c.id === ui.cultivo ? "sel" : ""}" href="#/cultivo/${h(c.id)}" data-c="${h(c.id)}"><span style="color:var(--verde)">${ic.hoja}</span><b>${h(c.nombre)}</b><span>Manual técnico · ${(I.problemas[c.id] || []).length} temas</span></a>`).join("")}</div>
         <div class="etq" style="margin-top:4px">Accesos rápidos</div>
         <div class="lista">
-          <a class="item" href="#/lotes"><div class="tx"><b>Registro de mis lotes</b><span>Fumigaciones, fertilizaciones y costos</span></div>${ic.flecha}</a>
+          <a class="item" href="#/lotes"><div class="tx"><b>Registro de mis lotes</b><span>Actividades y costos de producción</span></div>${ic.flecha}</a>
           <a class="item" href="#/calcular"><div class="tx"><b>Calcular dosis de productos</b><span>Por bomba, tanque, hectáreas o plantas</span></div>${ic.flecha}</a>
-          <a class="item" href="#/mezcla"><div class="tx"><b>Revisar una mezcla</b><span>Compatibilidad y orden en el tanque</span></div>${ic.flecha}</a>
+          <a class="item" href="#/mezcla"><div class="tx"><b>Revisar una mezcla</b><span>Compatibilidad, orden de mezcla y costos</span></div>${ic.flecha}</a>
         </div>
         <a class="btn wa" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", soy " + perfil.nombres + ". Necesito asesoría para mi cultivo."))}" target="_blank" rel="noopener">${ic.wa}Hablar con mi asesor</a>
       </main>`, "inicio");
@@ -368,7 +368,7 @@
     $$("[data-mz]").forEach((b) => b.addEventListener("click", () => { const x = fases[Number(b.dataset.mz)]; S.set("mezcla", x.elegidos.map((y) => ({ producto_id: Number(y.producto_id), dosis_tanque: Number(y.dosis_tanque) }))); location.hash = "#/mezcla"; }));
     $$("[data-rg]").forEach((b) => b.addEventListener("click", () => {
       const x = fases[Number(b.dataset.rg)];
-      prefill = { actividad: "Fumigación", lineas: x.elegidos.map((y) => ({ producto_id: y.producto_id, dosis: Number(y.dosis_tanque), unidad: (y.unidad || "cc") + "/tanque" })) };
+      prefill = { actividad: "Fumigación planta", lineas: x.elegidos.map((y) => ({ producto_id: y.producto_id, dosis: Number(y.dosis_tanque), unidad: (y.unidad || "cc") + "/tanque" })) };
       location.hash = "#/registrar";
     }));
   }
@@ -517,7 +517,7 @@
     ["ha", "pl", "vol", "lha", "ppb", "pha"].forEach((k) => { const el = $("#" + k); if (el) el.addEventListener("change", () => { cc[k] = el.value; re(); }); });
     $("#reg").addEventListener("click", () => {
       const dosisUsada = cc.usarMax ? d.max : d.min;
-      prefill = { cargas: r.bombas || "", actividad: p.categoria && /Fertiliz|Enmienda|Bioestim/.test(p.categoria) ? (d.modo === "tanque" ? "Fertilización foliar" : p.categoria === "Enmienda" ? "Enmienda" : "Fertilización al suelo") : p.categoria === "Herbicida" ? "Herbicida" : "Fumigación",
+      prefill = { cargas: r.bombas || "", actividad: p.categoria && /Fertiliz|Enmienda|Bioestim/.test(p.categoria) ? (d.modo === "tanque" ? "Fertilización foliar" : p.categoria === "Enmienda" ? "Enmienda" : "Fertilización al suelo") : p.categoria === "Herbicida" ? "Herbicida" : "Fumigación planta",
         lineas: [{ producto_id: p.id, dosis: d.modo === "tanque" ? r.porBomba : d.modo === "sitio" ? dosisUsada : dosisUsada,
           unidad: d.modo === "tanque" ? p.unidad + "/" + vol + " L" : d.modo === "sitio" ? "g/planta" : "kg/ha",
           total: r.total !== undefined ? r.total : r.kgTotal !== undefined ? r.kgTotal * 1000 : null }] };
@@ -573,7 +573,7 @@
     $$("[data-q]").forEach((b) => b.addEventListener("click", () => { m.splice(Number(b.dataset.q), 1); S.set("mezcla", m); vMezcla(); }));
     $("#add").addEventListener("change", (e) => { if (!e.target.value) return; const p = P(e.target.value); m.push({ producto_id: Number(p.id), dosis_tanque: L.dosisDe(p).min }); S.set("mezcla", m); vMezcla(); });
     const reg = $("#reg"); if (reg) reg.addEventListener("click", () => {
-      prefill = { actividad: "Fumigación", lineas: m.map((x) => ({ producto_id: x.producto_id, dosis: x.dosis_tanque !== null && x.dosis_tanque !== undefined ? Math.round(x.dosis_tanque * f * 10) / 10 : null, unidad: P(x.producto_id).unidad + "/" + volL() + " L" })) };
+      prefill = { actividad: "Fumigación planta", lineas: m.map((x) => ({ producto_id: x.producto_id, dosis: x.dosis_tanque !== null && x.dosis_tanque !== undefined ? Math.round(x.dosis_tanque * f * 10) / 10 : null, unidad: P(x.producto_id).unidad + "/" + volL() + " L" })) };
       location.hash = "#/registrar";
     });
     const va = $("#vaciar"); if (va) va.addEventListener("click", () => { S.set("mezcla", []); vMezcla(); });
@@ -650,53 +650,94 @@
     conectarFormLote(null, () => { location.hash = "#/lotes"; vLotes({}); });
   }
 
-  function exportarExcel(regs, nombreArchivo) {
+  function exportarExcel(regs, nombreArchivo, hectareas) {
     if (!window.XLSX) { toast("No se pudo cargar el exportador."); return; }
-    const filas = regs.map((r) => ({ Fecha: r.fecha, Lote: (D.lotes().find((l) => l.id === r.lote_id) || {}).nombre || "", "Ubicación lote": ((lo) => lo && lo.latitud ? mapaURL(lo.latitud, lo.longitud) : "")(D.lotes().find((l) => l.id === r.lote_id)), Actividad: r.actividad, Producto: r.producto_nombre || "",
-      Dosis: r.dosis, Unidad: r.unidad || "", "Aplicó": r.aplicador || "", Clima: r.clima || "", "Costo $": r.costo, "Carencia hasta": r.carencia_hasta || "", "Próxima aplicación": r.proxima_fecha || "", Observaciones: r.observaciones || "" }));
-    const ws = XLSX.utils.json_to_sheet(filas), wb = XLSX.utils.book_new();
-    ws["!cols"] = [10, 14, 26, 20, 22, 8, 12, 16, 10, 9, 13, 15, 30].map((w) => ({ wch: w }));
+    const lote = (id) => D.lotes().find((l) => l.id === id) || {};
+    const vacio = (v) => (v === null || v === undefined || v === "" ? "" : Number(v));
+    const ordenados = regs.filter((r) => !r.borrado).slice().sort((x, y) => (x.fecha < y.fecha ? -1 : x.fecha > y.fecha ? 1 : 0));
+    const filas = ordenados.map((r) => ({ Fecha: r.fecha, Lote: lote(r.lote_id).nombre || "", Actividad: r.actividad, "Producto o labor": r.producto_nombre || "",
+      Dosis: vacio(r.dosis), Unidad: r.unidad || "", "Quién aplicó / trabajó": r.aplicador || "", Clima: r.clima || "",
+      Personas: vacio(r.personas), "Pago diario $": vacio(r.pago_diario), "Días trabajados": vacio(r.costo_mano_obra ? r.dias_trabajo || 1 : ""),
+      "Costo insumos $": vacio(r.costo), "Costo mano de obra $": vacio(r.costo_mano_obra), "Costo total $": Math.round(((Number(r.costo) || 0) + (Number(r.costo_mano_obra) || 0)) * 100) / 100,
+      "Carencia hasta": r.carencia_hasta || "", "Próxima aplicación": r.proxima_fecha || "", Observaciones: r.observaciones || "",
+      "Ubicación lote": lote(r.lote_id).latitud ? mapaURL(lote(r.lote_id).latitud, lote(r.lote_id).longitud) : "" }));
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(filas);
+    ws["!cols"] = [10, 14, 20, 22, 7, 10, 18, 10, 8, 10, 9, 11, 13, 11, 12, 14, 30, 26].map((w) => ({ wch: w }));
     XLSX.utils.book_append_sheet(wb, ws, "Registros");
+    // hoja de costos de producción
+    const rc = L.resumenCostos(ordenados), ha = Number(hectareas) || 0;
+    const res = Object.entries(rc.por).sort((x, y) => y[1].costo - x[1].costo).map(([k, v]) => [k, v.insumos, v.mano_obra, v.costo, rc.total ? Math.round((v.costo / rc.total) * 1000) / 10 : 0]);
+    const fechas = ordenados.map((r) => r.fecha);
+    const aoa = [["Costos de producción"], [fechas.length ? `Del ${fechas[0]} al ${fechas[fechas.length - 1]}` : "Sin registros"], [],
+      ["Actividad", "Insumos $", "Mano de obra $", "Total $", "% del total"], ...res,
+      ["TOTAL", rc.insumos, rc.mano_obra, rc.total, rc.total ? 100 : 0], [],
+      ["Jornales registrados (personas × días)", rc.jornales]];
+    if (ha) aoa.push(["Hectáreas", ha], ["Costo de producción por ha $", Math.round((rc.total / ha) * 100) / 100], ["Insumos por ha $", Math.round((rc.insumos / ha) * 100) / 100], ["Mano de obra por ha $", Math.round((rc.mano_obra / ha) * 100) / 100]);
+    const ws2 = XLSX.utils.aoa_to_sheet(aoa);
+    ws2["!cols"] = [34, 12, 15, 12, 11].map((w) => ({ wch: w }));
+    XLSX.utils.book_append_sheet(wb, ws2, "Costos de producción");
     try { XLSX.writeFile(wb, nombreArchivo); } catch (e) { toast("Tu navegador no permitió la descarga."); }
   }
 
+  const FILTROS_LOTE = [["todo", "Todo"], ["fum", "Fumigación"], ["fer", "Fertilización"], ["mo", "Mano de obra"]];
+  function detalleMO(r) {
+    if (!r.costo_mano_obra) return "";
+    const d = Number(r.dias_trabajo) || 1;
+    return `Mano de obra: ${dinero(r.costo_mano_obra)} (${L.fmt(Number(r.personas) || 0)} persona${Number(r.personas) === 1 ? "" : "s"} × ${dinero(r.pago_diario)} × ${L.fmt(d)} día${d === 1 ? "" : "s"})`;
+  }
   function vLote(id, q) {
     const l = D.lotes().find((x) => x.id === id); if (!l) return vNoEncontrado();
-    const todos = D.registros().filter((r) => r.lote_id === id);
-    const filtro = q.f || "todo";
-    const regs = filtro === "todo" ? todos : todos.filter((r) => (filtro === "fum" ? /Fumig|Herbic/.test(r.actividad) : /Fertil|Enmienda/.test(r.actividad)));
-    const rc = L.resumenCostos(todos), et = etapa(l.etapa_id), c = cultivo(l.cultivo_id);
-    const colores = ["#1F5E3B", "#7FB08F", "#C9A574", "#163C5C", "#B0306A", "#4A5650"];
-    const acts = Object.entries(rc.por).sort((a, b) => b[1].costo - a[1].costo);
+    const todos = D.registros().filter((r) => r.lote_id === id && !r.borrado);
+    const filtro = FILTROS_LOTE.some(([k]) => k === q.f) ? q.f : "todo";
+    const regs = todos.filter((r) => filtro === "todo" ? true : filtro === "fum" ? L.grupoActividad(r.actividad) === "fumigacion" : filtro === "fer" ? L.grupoActividad(r.actividad) === "fertilizacion" : Number(r.costo_mano_obra) > 0);
+    const rc = L.resumenCostos(todos), et = etapa(l.etapa_id), c = cultivo(l.cultivo_id), ha = Number(l.hectareas) || 0;
+    const colores = ["#1F5E3B", "#7FB08F", "#C9A574", "#163C5C", "#B0306A", "#4A5650", "#8A6D3B", "#5B7FA6"];
+    const acts = Object.entries(rc.por).filter(([, v]) => v.costo > 0).sort((a, b) => b[1].costo - a[1].costo);
     const fechas = todos.map((r) => r.fecha).sort();
-    pintar(`${barra(l.nombre, [c && c.nombre, l.hectareas ? L.fmt(Number(l.hectareas)) + " ha" : "", et && et.nombre].filter(Boolean).join(" · "), "#/lotes")}
+    const totalFiltro = filtro === "mo" ? regs.reduce((a, r) => a + (Number(r.costo_mano_obra) || 0), 0) : regs.reduce((a, r) => a + (Number(r.costo) || 0) + (Number(r.costo_mano_obra) || 0), 0);
+    const tarjeta = (r) => {
+      const ci = Number(r.costo) || 0, cm = Number(r.costo_mano_obra) || 0, monto = filtro === "mo" ? cm : ci + cm;
+      const esLabor = L.grupoActividad(r.actividad) === "labor";
+      return `<div class="card" style="gap:4px">
+        <div class="fila"><span style="font-size:12px;font-weight:700;color:var(--verde);text-transform:uppercase">${h(r.actividad)} · ${fechaCorta(r.fecha)}</span><b>${monto ? dinero(monto) : ""}</b></div>
+        <b style="font-size:14.5px">${h(r.producto_nombre || "—")}${r.dosis !== null && r.dosis !== undefined && r.dosis !== "" ? " · " + h(L.fmt(Number(r.dosis))) + " " + h(r.unidad || "") : ""}</b>
+        ${filtro !== "mo" && ci && cm ? `<span class="mini">Insumos: ${dinero(ci)}</span>` : ""}
+        ${cm ? `<span class="mini">${h(detalleMO(r))}</span>` : ""}
+        <span class="mini">${[r.aplicador && (esLabor ? "Trabajó: " : "Aplicó: ") + r.aplicador, r.clima, r.carencia_hasta && "Carencia hasta " + fechaCorta(r.carencia_hasta), r.proxima_fecha && "Próxima: " + fechaCorta(r.proxima_fecha)].filter(Boolean).map(h).join(" · ")}</span>
+        ${r.observaciones ? `<span class="mini">“${h(r.observaciones)}”</span>` : ""}
+        <div class="fila" style="justify-content:flex-end"><button class="btn peligro chico" data-del="${h(r.id)}">Eliminar</button></div>
+      </div>`;
+    };
+    pintar(`${barra(l.nombre, [c && c.nombre, ha ? L.fmt(ha) + " ha" : "", et && et.nombre].filter(Boolean).join(" · "), "#/lotes")}
       <main class="cont">
         <section class="card">
-          <div class="fila"><span class="etq">Costo registrado</span><span class="mini">${fechas.length ? fechaCorta(fechas[0]) + " – " + fechaCorta(fechas[fechas.length - 1]) : ""}</span></div>
-          <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="grande" style="color:var(--texto)">${dinero(rc.total)}</span>${l.hectareas ? `<span class="mini">${dinero(rc.total / Number(l.hectareas))} por ha</span>` : ""}</div>
+          <div class="fila"><span class="etq">Costo de producción</span><span class="mini">${fechas.length ? fechaCorta(fechas[0]) + " – " + fechaCorta(fechas[fechas.length - 1]) : ""}</span></div>
+          <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="grande" style="color:var(--texto)">${dinero(rc.total)}</span>${ha ? `<span class="mini">${dinero(rc.total / ha)} por ha</span>` : ""}</div>
+          <div class="grid2">
+            <div class="dato"><span>Insumos</span><b>${dinero(rc.insumos)}</b>${ha ? `<span class="mini">${dinero(rc.insumos / ha)}/ha</span>` : ""}</div>
+            <div class="dato"><span>Mano de obra</span><b>${dinero(rc.mano_obra)}</b><span class="mini">${rc.jornales ? L.fmt(rc.jornales) + " jornal" + (rc.jornales === 1 ? "" : "es") : "Sin jornales"}${ha && rc.mano_obra ? " · " + dinero(rc.mano_obra / ha) + "/ha" : ""}</span></div>
+          </div>
           ${rc.total > 0 ? `<div class="barra-costos" aria-hidden="true">${acts.map(([k, v], i) => `<span style="width:${(v.costo / rc.total) * 100}%;background:${colores[i % colores.length]}"></span>`).join("")}</div>` : ""}
-          ${acts.map(([k, v], i) => `<div class="fila" style="font-size:13.5px"><span style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:3px;background:${colores[i % colores.length]}"></span>${h(k)} (${v.n} producto${v.n === 1 ? "" : "s"})</span><b>${dinero(v.costo)}</b></div>`).join("") || `<span class="mini">Aún no hay registros en este lote.</span>`}
+          ${acts.map(([k, v], i) => `<div class="fila" style="font-size:13.5px"><span style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:3px;background:${colores[i % colores.length]};flex-shrink:0"></span>${h(k)}</span><b>${dinero(v.costo)}</b></div>`).join("") || `<span class="mini">Aún no hay registros con costos en este lote.</span>`}
         </section>
         <div class="mini">${l.latitud ? `Ubicación del lote: ${h(Number(l.latitud).toFixed(5))}, ${h(Number(l.longitud).toFixed(5))} (±${h(l.precision_m)} m) · <a href="${h(mapaURL(l.latitud, l.longitud))}" target="_blank" rel="noopener">Ver en el mapa</a>` : `Este lote no tiene ubicación GPS. Guárdala en «Editar datos del lote» cuando estés en él.`}</div>
         <div class="acciones"><a class="btn" href="#/registrar?lote=${h(l.id)}">+ Registrar</a><button class="btn sec" id="xls">${ic.descarga}Exportar Excel</button></div>
-        <div class="chips">${[["todo", "Todo"], ["fum", "Fumigación"], ["fer", "Fertilización"]].map(([k, t]) => `<a class="chip ${filtro === k ? "sel" : ""}" href="#/lote/${h(id)}?f=${k}" style="text-decoration:none;display:inline-flex;align-items:center">${t}</a>`).join("")}</div>
-        <div class="lista">${regs.map((r) => `<div class="card" style="gap:4px">
-            <div class="fila"><span style="font-size:12px;font-weight:700;color:var(--verde);text-transform:uppercase">${h(r.actividad)} · ${fechaCorta(r.fecha)}</span><b>${r.costo !== null && r.costo !== undefined && r.costo !== "" ? dinero(r.costo) : ""}</b></div>
-            <b style="font-size:14.5px">${h(r.producto_nombre || "—")}${r.dosis !== null && r.dosis !== undefined && r.dosis !== "" ? " · " + h(L.fmt(Number(r.dosis))) + " " + h(r.unidad || "") : ""}</b>
-            <span class="mini">${[r.aplicador && "Aplicó: " + r.aplicador, r.clima, r.carencia_hasta && "Carencia hasta " + fechaCorta(r.carencia_hasta), r.proxima_fecha && "Próxima: " + fechaCorta(r.proxima_fecha)].filter(Boolean).map(h).join(" · ")}</span>
-            ${r.observaciones ? `<span class="mini">“${h(r.observaciones)}”</span>` : ""}
-            <div class="fila" style="justify-content:flex-end"><button class="btn peligro chico" data-del="${h(r.id)}">Eliminar</button></div>
-          </div>`).join("") || `<div class="vacio">Sin registros${filtro !== "todo" ? " de este tipo" : ""}.</div>`}</div>
+        <div class="chips">${FILTROS_LOTE.map(([k, t]) => `<a class="chip ${filtro === k ? "sel" : ""}" href="#/lote/${h(id)}?f=${k}" style="text-decoration:none;display:inline-flex;align-items:center">${t}</a>`).join("")}</div>
+        ${filtro !== "todo" && regs.length ? `<div class="fila mini"><span>${regs.length} registro${regs.length === 1 ? "" : "s"}</span><span>${filtro === "mo" ? "Mano de obra" : "Total"}: <b>${dinero(totalFiltro)}</b></span></div>` : ""}
+        <div class="lista">${regs.map(tarjeta).join("") || `<div class="vacio">${filtro === "mo" ? "Aún no hay registros con mano de obra. Al registrar una actividad, llena personas y pago diario." : "Sin registros" + (filtro !== "todo" ? " de este tipo" : "") + "."}</div>`}</div>
         <details class="card"><summary>Editar datos del lote</summary>${formLote(l).replace('class="card"', 'class=""')}</details>
       </main>`, "lotes");
-    $("#xls").addEventListener("click", () => exportarExcel(todos, `Registros_${l.nombre.replace(/[^\w-]+/g, "_")}.xlsx`));
+    $("#xls").addEventListener("click", () => exportarExcel(todos, `Costos_y_registros_${l.nombre.replace(/[^\w-]+/g, "_")}.xlsx`, ha));
     $$("[data-del]").forEach((b) => b.addEventListener("click", async () => { if (await UI.confirmar("¿Eliminar este registro?", { ok: "Eliminar", peligro: true })) { D.borrarRegistro(b.dataset.del); vLote(id, q); } }));
     conectarFormLote(l, () => vLote(id, q));
   }
 
   // ------------------------------------------------------------ REGISTRAR APLICACIÓN
-  const ACTIVIDADES = ["Fumigación", "Fertilización al suelo", "Fertilización foliar", "Enmienda", "Herbicida", "Otra"];
-  const CLIMAS = ["Soleado", "Nublado", "Llovizna", "Viento"];
+  const ACTIVIDADES = ["Fumigación planta", "Fumigación suelo", "Fertilización al suelo", "Fertilización foliar", "Enmienda", "Herbicida", "Labor cultural", "Otra"];
+  const CLIMAS = ["Despejado", "Nublado", "Soleado", "Llovizna"];
+  const LABORES = ["Poda", "Deshierbe manual", "Limpieza de plantas", "Polinización", "Amarre y tutoreo", "Raleo de frutos", "Embolsado de frutos", "Cosecha", "Riego", "Siembra", "Mantenimiento de postes"];
+  const esLabor = (a) => a === "Labor cultural";
   const porNombre = (t) => { const n = String(t || "").trim().toLowerCase(); return n ? (I.c.productos || []).find((p) => p.nombre.toLowerCase() === n) || null : null; };
   function costoAuto(pid, total) {
     const p = P(pid); if (!p || !p.pvp || !p.contenido || !total) return "";
@@ -707,7 +748,7 @@
     if (!lotes.length) { toast("Primero crea un lote"); location.hash = "#/lotes?nuevo=1"; return; }
     const pf = prefill || {}; prefill = null;
     if (q.p) pf.lineas = [{ producto_id: Number(q.p) }];
-    const st = { cargas: pf.cargas || "", actividad: pf.actividad || "Fumigación", clima: "Soleado", lineas: (pf.lineas && pf.lineas.length ? pf.lineas : [{}]).map((x) => Object.assign({ costo: costoAuto(x.producto_id, x.total), manual: false }, x)) };
+    const st = { cargas: pf.cargas || "", actividad: ACTIVIDADES.includes(pf.actividad) ? pf.actividad : "Fumigación planta", clima: "Despejado", lineas: (pf.lineas && pf.lineas.length ? pf.lineas : [{}]).map((x) => Object.assign({ costo: costoAuto(x.producto_id, x.total), manual: false }, x)) };
     const loteSel = q.lote || (lotes.length === 1 ? lotes[0].id : "");
     function linea(x, i) {
       const p = P(x.producto_id);
@@ -722,21 +763,34 @@
       </div>`;
     }
     function pintarForm() {
-      pintar(`${barra("Nuevo registro", "Fumigación o fertilización", q.lote ? "#/lote/" + q.lote : "#/lotes")}
+      const lab = esLabor(st.actividad);
+      pintar(`${barra("Nuevo registro", "Actividades y costos de la finca", q.lote ? "#/lote/" + q.lote : "#/lotes")}
         <form class="cont" id="fr" novalidate>
           <datalist id="lista-productos">${(I.c.productos || []).slice().sort((a, b) => a.nombre.localeCompare(b.nombre)).map((p) => `<option value="${h(p.nombre)}">`).join("")}</datalist>
           <datalist id="unidades"><option value="cc/bomba"><option value="g/bomba"><option value="cc/tanque"><option value="g/tanque"><option value="g/planta"><option value="kg/ha"><option value="L/ha"></datalist>
+          <datalist id="labores">${LABORES.map((x) => `<option value="${h(x)}">`).join("")}</datalist>
           <div class="grid2"><label class="campo">Lote<select name="lote" required><option value="">Elige…</option>${lotes.map((l) => `<option value="${h(l.id)}" ${l.id === loteSel ? "selected" : ""}>${h(l.nombre)}</option>`).join("")}</select></label>
           <label class="campo">Fecha<input name="fecha" type="date" value="${hoy()}" max="${hoy()}" required></label></div>
-          <div class="campo">Actividad<div class="chips" role="group" aria-label="Actividad">${ACTIVIDADES.map((a) => `<button type="button" class="chip ${st.actividad === a ? "sel" : ""}" data-act="${h(a)}">${h(a)}</button>`).join("")}</div></div>
+          <div class="campo">Actividad<div class="chips" role="group" aria-label="Actividad">${ACTIVIDADES.map((a) => `<button type="button" class="chip ${st.actividad === a ? "sel" : ""}" data-act="${h(a)}" aria-pressed="${st.actividad === a}">${h(a)}</button>`).join("")}</div></div>
+          ${lab ? `<label class="campo">¿Qué labor hiciste?<input name="labor" list="labores" autocomplete="off" placeholder="Ej. Poda, deshierbe, cosecha" value="${h(st.labor || "")}"></label>` : `
           <label class="campo">¿Cuántas bombas o tanques aplicaste?<span class="unido"><input name="cargas" inputmode="decimal" value="${h(st.cargas || "")}" placeholder="Ej. 10"><span>cargas</span></span><small>Con esto se calcula el total usado y el costo de cada producto.</small></label>
           <div class="etq">Productos aplicados</div>
           <div class="lista" id="lineas">${st.lineas.map(linea).join("")}</div>
-          <button type="button" class="btn sec chico" id="masLinea">+ Agregar otro producto de la mezcla</button>
-          <label class="campo">¿Quién aplicó?<input name="aplicador" value="${h(S.get("ultimo_aplicador", ""))}" placeholder="Nombre del aplicador"></label>
-          <div class="campo">Clima al aplicar<div class="grid2" style="grid-template-columns:repeat(4,minmax(0,1fr))">${CLIMAS.map((c) => `<button type="button" class="chip ${st.clima === c ? "sel" : ""}" data-clima="${c}" style="padding:8px 2px;font-size:13px">${c}</button>`).join("")}</div></div>
+          <button type="button" class="btn sec chico" id="masLinea">+ Agregar otro producto de la mezcla</button>`}
+          <div class="card" style="gap:10px">
+            <div class="fila"><b style="font-size:14px">Mano de obra</b><span class="mini">${lab ? "" : "Opcional"}</span></div>
+            <label class="campo">${lab ? "¿Quién trabajó?" : "¿Quién aplicó?"}<input name="aplicador" value="${h(st.aplicador !== undefined ? st.aplicador : S.get("ultimo_aplicador", ""))}" placeholder="Nombre o nombres"></label>
+            <div class="grid2" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+              <label class="campo">Personas<input name="personas" inputmode="numeric" value="${h(st.personas || "")}" placeholder="Ej. 2"></label>
+              <label class="campo">Pago diario<span class="unido"><span>$</span><input name="pago" inputmode="decimal" value="${h(st.pago !== undefined ? st.pago : S.get("ultimo_pago", ""))}" placeholder="15"></span></label>
+              <label class="campo">Días<input name="diasT" inputmode="decimal" value="${h(st.diasT || "1")}"></label>
+            </div>
+            <div class="fila" style="font-size:14px"><span>Costo de mano de obra</span><b id="costoMO">—</b></div>
+            <small class="mini">Pago diario por persona. Si trabajaron medio día, pon 0,5 en días.</small>
+          </div>
+          <div class="campo">${lab ? "Clima" : "Clima al aplicar"}<div class="grid2" style="grid-template-columns:repeat(4,minmax(0,1fr))">${CLIMAS.map((c) => `<button type="button" class="chip ${st.clima === c ? "sel" : ""}" data-clima="${c}" aria-pressed="${st.clima === c}" style="padding:8px 2px;font-size:13px">${c}</button>`).join("")}</div></div>
           <label class="campo">Observaciones<textarea name="obs" placeholder="Ej.: se vio menos daño en flores"></textarea></label>
-          <div class="card"><label class="fila" style="font-weight:600;font-size:14px">Recordarme la próxima aplicación<input type="checkbox" name="rec" checked style="width:24px;height:24px;accent-color:var(--verde)"></label>
+          <div class="card"><label class="fila" style="font-weight:600;font-size:14px">Recordarme la próxima ${lab ? "labor" : "aplicación"}<input type="checkbox" name="rec" checked style="width:24px;height:24px;accent-color:var(--verde)"></label>
             <label class="campo">En cuántos días<span class="unido"><input name="dias" inputmode="numeric" value="${h(S.get("ultimos_dias", 7))}"><span>días</span></span></label></div>
           <p class="mini" id="err" role="alert" style="color:var(--rojo);margin:0"></p>
           <button class="btn" type="submit">Guardar registro</button>
@@ -748,9 +802,15 @@
     }
     function conectarForm() {
       const f = $("#fr");
-      $$("[data-act]").forEach((b) => b.addEventListener("click", () => { leerLineas(); st.actividad = b.dataset.act; $$("[data-act]").forEach((x) => x.classList.toggle("sel", x === b)); }));
+      $$("[data-act]").forEach((b) => b.addEventListener("click", () => {
+        leerLineas(); const antes = esLabor(st.actividad); st.actividad = b.dataset.act;
+        if (antes !== esLabor(st.actividad)) { guardarCampos(); pintarForm(); restaurarCampos(); return; }
+        $$("[data-act]").forEach((x) => { x.classList.toggle("sel", x === b); x.setAttribute("aria-pressed", x === b); });
+      }));
+      const pintarMO = () => { const c = L.costoManoObra(f.personas.value, f.pago.value, f.diasT.value); $("#costoMO").textContent = c !== null ? dinero(c) : "—"; };
+      ["personas", "pago", "diasT"].forEach((k) => f[k].addEventListener("input", pintarMO)); pintarMO();
       $$("[data-clima]").forEach((b) => b.addEventListener("click", () => { st.clima = b.dataset.clima; $$("[data-clima]").forEach((x) => x.classList.toggle("sel", x === b)); }));
-      f.cargas.addEventListener("input", () => {
+      if (f.cargas) f.cargas.addEventListener("input", () => {
         leerLineas(); st.cargas = f.cargas.value; const n = Number(String(f.cargas.value).replace(",", "."));
         $$("#lineas [data-l]").forEach((card) => {
           const x = st.lineas[Number(card.dataset.l)], u = String(x.unidad || "");
@@ -760,7 +820,7 @@
           if (!x.manual) { x.costo = costoAuto(x.producto_id, x.total); $('[data-k="costo"]', card).value = x.costo; }
         });
       });
-      $("#masLinea").addEventListener("click", () => { leerLineas(); st.lineas.push({ costo: "", manual: false }); guardarCampos(); pintarForm(); restaurarCampos(); });
+      if ($("#masLinea")) $("#masLinea").addEventListener("click", () => { leerLineas(); st.lineas.push({ costo: "", manual: false }); guardarCampos(); pintarForm(); restaurarCampos(); });
       $$("[data-quitar]").forEach((b) => b.addEventListener("click", () => { leerLineas(); st.lineas.splice(Number(b.dataset.quitar), 1); guardarCampos(); pintarForm(); restaurarCampos(); }));
       $$("#lineas [data-l]").forEach((card) => {
         const i = Number(card.dataset.l);
@@ -773,16 +833,21 @@
         const err = $("#err");
         if (!f.lote.value) { err.textContent = "Elige el lote."; return; }
         st.lineas.forEach((x) => { const p = porNombre(x.producto_nombre); x.producto_id = p ? p.id : null; });
-        const lineas = st.lineas.filter((x) => String(x.producto_nombre || "").trim());
-        if (!lineas.length && st.actividad !== "Otra") { err.textContent = "Escribe al menos un producto."; return; }
+        const lab = esLabor(st.actividad);
+        const lineas = lab ? [] : st.lineas.filter((x) => String(x.producto_nombre || "").trim());
+        if (lab && !f.labor.value.trim()) { err.textContent = "Escribe qué labor hiciste."; return; }
+        if (!lab && !lineas.length && st.actividad !== "Otra") { err.textContent = "Escribe al menos un producto."; return; }
+        const mo = L.costoManoObra(f.personas.value, f.pago.value, f.diasT.value);
+        if ((f.personas.value.trim() || f.pago.value.trim()) && mo === null) { err.textContent = "Para la mano de obra llena personas, pago diario y días con números."; return; }
         const n = (v) => (v === "" || v === undefined || v === null ? null : Number(String(v).replace(",", ".")));
         const dias = f.rec.checked ? parseInt(f.dias.value, 10) : null;
-        S.set("ultimo_aplicador", f.aplicador.value); if (dias) S.set("ultimos_dias", dias);
+        S.set("ultimo_aplicador", f.aplicador.value); if (dias) S.set("ultimos_dias", dias); if (f.pago.value.trim()) S.set("ultimo_pago", f.pago.value.trim());
         const base = { lote_id: f.lote.value, fecha: f.fecha.value || hoy(), actividad: st.actividad, aplicador: f.aplicador.value.trim() || null, clima: st.clima, observaciones: f.obs.value.trim() || null };
-        const lista = (lineas.length ? lineas : [{}]).map((x, i) => {
-          const p = P(x.producto_id);
+        const manoObra = mo !== null ? { personas: n(f.personas.value), pago_diario: n(f.pago.value), dias_trabajo: n(f.diasT.value) || 1, costo_mano_obra: mo } : {};
+        const lista = (lineas.length ? lineas : [lab ? { producto_nombre: f.labor.value.trim() } : {}]).map((x, i) => {
+          const p = lab ? null : P(x.producto_id);
           return Object.assign({}, base, { producto_id: p ? Number(p.id) : null, producto_nombre: p ? p.nombre : (String(x.producto_nombre || "").trim() || null), dosis: n(x.dosis), unidad: x.unidad || null, costo: n(x.costo),
-            carencia_hasta: p && p.carencia_dias ? L.sumarDias(base.fecha, p.carencia_dias) : null, proxima_fecha: i === 0 && dias ? L.sumarDias(base.fecha, dias) : null });
+            carencia_hasta: p && p.carencia_dias ? L.sumarDias(base.fecha, p.carencia_dias) : null, proxima_fecha: i === 0 && dias ? L.sumarDias(base.fecha, dias) : null }, i === 0 ? manoObra : {});
         });
         D.guardarRegistros(lista);
         toast(navigator.onLine === false ? "Guardado. Se enviará cuando tengas señal." : "Registro guardado");
@@ -790,8 +855,13 @@
       });
     }
     let campos = {};
-    function guardarCampos() { const f = $("#fr"); if (!f) return; st.cargas = f.cargas.value; campos = { lote: f.lote.value, fecha: f.fecha.value, aplicador: f.aplicador.value, obs: f.obs.value, rec: f.rec.checked, dias: f.dias.value }; }
-    function restaurarCampos() { const f = $("#fr"); if (!f || !campos.fecha) return; f.lote.value = campos.lote; f.fecha.value = campos.fecha; f.aplicador.value = campos.aplicador; f.obs.value = campos.obs; f.rec.checked = campos.rec; f.dias.value = campos.dias; }
+    function guardarCampos() {
+      const f = $("#fr"); if (!f) return;
+      if (f.cargas) st.cargas = f.cargas.value; if (f.labor) st.labor = f.labor.value;
+      st.aplicador = f.aplicador.value; st.personas = f.personas.value; st.pago = f.pago.value; st.diasT = f.diasT.value;
+      campos = { lote: f.lote.value, fecha: f.fecha.value, obs: f.obs.value, rec: f.rec.checked, dias: f.dias.value };
+    }
+    function restaurarCampos() { const f = $("#fr"); if (!f || !campos.fecha) return; f.lote.value = campos.lote; f.fecha.value = campos.fecha; f.obs.value = campos.obs; f.rec.checked = campos.rec; f.dias.value = campos.dias; }
     pintarForm();
   }
 

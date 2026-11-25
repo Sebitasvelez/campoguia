@@ -201,10 +201,18 @@ create table if not exists registros (
   observaciones text,
   proxima_fecha date,
   carencia_hasta date,
+  personas numeric,            -- mano de obra: personas que trabajaron
+  pago_diario numeric,         -- pago diario por persona ($)
+  dias_trabajo numeric,        -- días trabajados (0,5 = medio día)
+  costo_mano_obra numeric,     -- personas × pago diario × días
   borrado boolean not null default false,
   creado timestamptz not null default now(),
   actualizado timestamptz not null default now()
 );
+alter table registros add column if not exists personas numeric;
+alter table registros add column if not exists pago_diario numeric;
+alter table registros add column if not exists dias_trabajo numeric;
+alter table registros add column if not exists costo_mano_obra numeric;
 create index if not exists registros_agricultor_idx on registros(agricultor_id, fecha desc);
 create index if not exists lotes_agricultor_idx on lotes(agricultor_id);
 
@@ -380,17 +388,19 @@ begin
   end loop;
   for x in select * from jsonb_array_elements(coalesce(p_registros, '[]')) loop
     insert into registros(id, agricultor_id, lote_id, fecha, actividad, producto_id, producto_nombre, dosis, unidad, aplicador,
-                          clima, costo, observaciones, proxima_fecha, carencia_hasta, borrado, actualizado)
+                          clima, costo, observaciones, proxima_fecha, carencia_hasta, personas, pago_diario, dias_trabajo, costo_mano_obra, borrado, actualizado)
     values ((x->>'id')::uuid, a.id, nullif(x->>'lote_id','')::uuid, (x->>'fecha')::date, x->>'actividad',
             nullif(x->>'producto_id','')::bigint, x->>'producto_nombre', nullif(x->>'dosis','')::numeric, x->>'unidad',
             x->>'aplicador', x->>'clima', nullif(x->>'costo','')::numeric, x->>'observaciones',
             nullif(x->>'proxima_fecha','')::date, nullif(x->>'carencia_hasta','')::date,
-            coalesce((x->>'borrado')::boolean, false), now())
+            nullif(x->>'personas','')::numeric, nullif(x->>'pago_diario','')::numeric, nullif(x->>'dias_trabajo','')::numeric,
+            nullif(x->>'costo_mano_obra','')::numeric, coalesce((x->>'borrado')::boolean, false), now())
     on conflict (id) do update set lote_id = excluded.lote_id, fecha = excluded.fecha, actividad = excluded.actividad,
       producto_id = excluded.producto_id, producto_nombre = excluded.producto_nombre, dosis = excluded.dosis,
       unidad = excluded.unidad, aplicador = excluded.aplicador, clima = excluded.clima, costo = excluded.costo,
       observaciones = excluded.observaciones, proxima_fecha = excluded.proxima_fecha,
-      carencia_hasta = excluded.carencia_hasta, borrado = excluded.borrado, actualizado = now()
+      carencia_hasta = excluded.carencia_hasta, personas = excluded.personas, pago_diario = excluded.pago_diario,
+      dias_trabajo = excluded.dias_trabajo, costo_mano_obra = excluded.costo_mano_obra, borrado = excluded.borrado, actualizado = now()
     where registros.agricultor_id = a.id;
   end loop;
   return app_mis_datos(p_token);

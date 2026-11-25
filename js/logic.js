@@ -259,15 +259,38 @@
     return Math.round((b - a) / 86400000);
   }
 
+  /** Grupo de una actividad para los filtros y el resumen de costos */
+  function grupoActividad(a) {
+    a = String(a || "");
+    if (/Fumig|Herbic/i.test(a)) return "fumigacion";
+    if (/Fertil|Enmienda/i.test(a)) return "fertilizacion";
+    if (/Labor/i.test(a)) return "labor";
+    return "otra";
+  }
+
+  /** Costo de mano de obra: personas × pago diario × días */
+  function costoManoObra(personas, pagoDiario, dias) {
+    const c = (v) => num(typeof v === "string" ? v.trim().replace(",", ".") : v);
+    const p = c(personas), pg = c(pagoDiario), d = c(dias === undefined || dias === null || dias === "" ? 1 : dias);
+    if (!p || !pg || !d) return null;
+    return r2(p * pg * d);
+  }
+
+  /** Costos de producción: insumos (productos) + mano de obra, en total y por actividad */
   function resumenCostos(registros) {
-    const por = {}; let total = 0;
+    const por = {}; let insumos = 0, mano = 0, jornales = 0;
     registros.forEach((r) => {
       if (r.borrado) return;
-      const c = num(r.costo) || 0;
-      por[r.actividad] = por[r.actividad] || { n: 0, costo: 0 };
-      por[r.actividad].n++; por[r.actividad].costo += c; total += c;
+      const ci = num(r.costo) || 0, cm = num(r.costo_mano_obra) || 0;
+      const k = r.actividad || "Otra";
+      por[k] = por[k] || { n: 0, insumos: 0, mano_obra: 0, costo: 0 };
+      if (r.producto_nombre) por[k].n++;
+      por[k].insumos += ci; por[k].mano_obra += cm; por[k].costo += ci + cm;
+      insumos += ci; mano += cm;
+      if (cm) jornales += (num(r.personas) || 0) * (num(r.dias_trabajo) || 1);
     });
-    return { total: r2(total), por };
+    Object.values(por).forEach((v) => { v.insumos = r2(v.insumos); v.mano_obra = r2(v.mano_obra); v.costo = r2(v.costo); });
+    return { total: r2(insumos + mano), insumos: r2(insumos), mano_obra: r2(mano), jornales: r2(jornales), por };
   }
 
   /** Alertas de carencia y recordatorios para hoy */
@@ -289,6 +312,6 @@
   }
 
   const api = { ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, compraOptima, precioUnitario, nombrePresentacion,
-    ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, alertas };
+    ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);

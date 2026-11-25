@@ -441,13 +441,13 @@
       const alertas = [];
       if (mios.some(dosisAlta)) alertas.push(["rojo", "Dosis alta"]);
       if (!ult || L.diasEntre(ult, hoy) > 30) alertas.push(["claro-ambar", ult ? "Sin actividad 30 días" : "Sin registros"]);
-      return Object.assign({}, a, { nRegs: mios.length, ult, alertas, costo: mios.reduce((s, r) => s + (Number(r.costo) || 0), 0) });
+      return Object.assign({}, a, { nRegs: mios.length, ult, alertas, costo: mios.reduce((s, r) => s + (Number(r.costo) || 0) + (Number(r.costo_mano_obra) || 0), 0) });
     });
   }
   function exportarRegistros(lista, archivo) {
     const ag = Object.fromEntries((DB.agricultores || []).map((a) => [a.id, a])), lo = Object.fromEntries((DB.lotes || []).map((l) => [l.id, l]));
     const filas = lista.filter((r) => !r.borrado).map((r) => { const a = ag[r.agricultor_id] || {}, l = lo[r.lote_id] || {};
-      return { Fecha: r.fecha, Agricultor: a.nombres, "Cédula": a.cedula, Celular: a.telefono, Provincia: a.provincia, Sector: a.sector, "Latitud finca": a.latitud, "Longitud finca": a.longitud, Lote: l.nombre, "Latitud lote": l.latitud, "Longitud lote": l.longitud, Cultivo: nomCultivo(l.cultivo_id), "Ha lote": l.hectareas, Actividad: r.actividad, Producto: r.producto_nombre, Dosis: r.dosis, Unidad: r.unidad, "Aplicó": r.aplicador, Clima: r.clima, "Costo $": r.costo, "Carencia hasta": r.carencia_hasta, "Próxima": r.proxima_fecha, Observaciones: r.observaciones, "Dosis alta": dosisAlta(r) ? "Sí" : "" }; });
+      return { Fecha: r.fecha, Agricultor: a.nombres, "Cédula": a.cedula, Celular: a.telefono, Provincia: a.provincia, Sector: a.sector, "Latitud finca": a.latitud, "Longitud finca": a.longitud, Lote: l.nombre, "Latitud lote": l.latitud, "Longitud lote": l.longitud, Cultivo: nomCultivo(l.cultivo_id), "Ha lote": l.hectareas, Actividad: r.actividad, "Producto o labor": r.producto_nombre, Dosis: r.dosis, Unidad: r.unidad, "Quién aplicó / trabajó": r.aplicador, Clima: r.clima, Personas: r.personas, "Pago diario $": r.pago_diario, "Días trabajados": r.costo_mano_obra ? r.dias_trabajo || 1 : "", "Costo insumos $": r.costo, "Costo mano de obra $": r.costo_mano_obra, "Costo total $": Math.round(((Number(r.costo) || 0) + (Number(r.costo_mano_obra) || 0)) * 100) / 100, "Carencia hasta": r.carencia_hasta, "Próxima": r.proxima_fecha, Observaciones: r.observaciones, "Dosis alta": dosisAlta(r) ? "Sí" : "" }; });
     const ws = XLSX.utils.json_to_sheet(filas), wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Registros"); XLSX.writeFile(wb, archivo);
   }
   function vAgricultores(q) {
@@ -465,7 +465,7 @@
         <div class="etq">Lotes (${lotes.length})</div>
         ${lotes.map((l) => `<div class="mini"><b>${h(l.nombre)}</b> · ${h(nomCultivo(l.cultivo_id))} · ${l.hectareas ? h(l.hectareas) + " ha" : ""} ${l.plantas ? "· " + h(l.plantas) + " pl" : ""} ${l.etapa_id ? "· " + h(nomEtapa(l.etapa_id)) : ""} · ${l.latitud ? `<a href="https://www.google.com/maps?q=${h(l.latitud)},${h(l.longitud)}" target="_blank" rel="noopener">Ver lote en el mapa</a> (±${h(l.precision_m)} m)` : "sin GPS"}</div>`).join("") || `<span class="mini">Sin lotes.</span>`}
         <div class="etq">Últimos registros (${regs.length})</div>
-        ${regs.slice(0, 40).map((r) => `<div class="mini" style="border-top:1px solid var(--borde);padding-top:6px"><b>${h(r.fecha)} · ${h(r.actividad)}</b>${dosisAlta(r) ? ' <span class="pill rojo">Dosis alta</span>' : ""}<br>${h(r.producto_nombre || "")} ${r.dosis !== null && r.dosis !== undefined ? h(r.dosis) + " " + h(r.unidad || "") : ""} ${r.costo ? "· $" + h(r.costo) : ""}${r.observaciones ? "<br>“" + h(r.observaciones) + "”" : ""}</div>`).join("") || `<span class="mini">Sin registros.</span>`}
+        ${regs.slice(0, 40).map((r) => `<div class="mini" style="border-top:1px solid var(--borde);padding-top:6px"><b>${h(r.fecha)} · ${h(r.actividad)}</b>${dosisAlta(r) ? ' <span class="pill rojo">Dosis alta</span>' : ""}<br>${h(r.producto_nombre || "")} ${r.dosis !== null && r.dosis !== undefined ? h(r.dosis) + " " + h(r.unidad || "") : ""} ${r.costo ? "· $" + h(r.costo) : ""}${r.costo_mano_obra ? " · Mano de obra $" + h(r.costo_mano_obra) + " (" + h(r.personas) + " pers.)" : ""}${r.observaciones ? "<br>“" + h(r.observaciones) + "”" : ""}</div>`).join("") || `<span class="mini">Sin registros.</span>`}
         <button class="btn ${sel.activo === false ? "" : "peligro"} chico" id="activo">${sel.activo === false ? "Reactivar cuenta" : "Desactivar cuenta"}</button>
       </aside>`;
     }
