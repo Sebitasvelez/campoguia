@@ -499,7 +499,7 @@
       res = `<div class="grid2"><div><div class="n">${h(L.cantidad(r.total, r.unidad))}</div><small>Producto requerido total</small></div>
         <div><div class="n">${L.fmt(r.litrosAgua, 0)} L</div><small>Agua total</small></div>
         <div><div class="n">${h(L.cantidad(r.porBomba, r.unidad))}</div><small>Dosis por ${equipoTxt(false)}</small></div>
-        <div><div class="n">${r.bombas}</div><small>${equipoTxt(true)}</small></div></div>
+        <div><div class="n">${L.textoEquipos(r.bombas)}</div><small>${equipoTxt(true)}${Math.abs(r.equiposExactos - r.bombas) > 0.005 ? ` <span style="opacity:.8">(${L.fmt(r.equiposExactos, 2)} exactos)</span>` : ""}</small></div></div>
         ${esTanque ? `<div class="linea">Dosis usada: <b>${h(L.cantidad(dhaElegida, p.unidad))} por ha</b> con ${L.fmt(lhaUsada, 0)} L de agua/ha${cc.equipo !== "tanque" ? ` · ${h(L.cantidad(r.porTanque, r.unidad))} por tanque de ${TANQUE()} L` : ""}</div>` : ""}`;
     } else if (r.kgTotal !== undefined) {
       res = `<div class="grid2"><div><div class="n">${L.fmt(r.kgTotal, 1)} kg</div><small>Producto requerido total</small></div>
@@ -539,7 +539,7 @@
     ["dha", "ha", "pl", "vol", "lha", "ppb", "ppt", "ppo", "pha"].forEach((k) => { const el = $("#" + k); if (el) el.addEventListener("change", () => { cc[k] = el.value; re(); }); });
     $("#reg").addEventListener("click", () => {
       const dosisUsada = cc.usarMax ? d.max : d.min;
-      prefill = { cargas: r.bombas || "", actividad: p.categoria && /Fertiliz|Enmienda|Bioestim/.test(p.categoria) ? (d.modo === "tanque" ? "Fertilización foliar" : p.categoria === "Enmienda" ? "Enmienda" : "Fertilización al suelo") : p.categoria === "Herbicida" ? "Herbicida" : "Fumigación planta",
+      prefill = { cargas: r.bombas ? String(r.bombas).replace(".", ",") : "", actividad: p.categoria && /Fertiliz|Enmienda|Bioestim/.test(p.categoria) ? (d.modo === "tanque" ? "Fertilización foliar" : p.categoria === "Enmienda" ? "Enmienda" : "Fertilización al suelo") : p.categoria === "Herbicida" ? "Herbicida" : "Fumigación planta",
         lineas: [{ producto_id: p.id, dosis: d.modo === "tanque" ? r.porBomba : d.modo === "sitio" ? dosisUsada : dosisUsada,
           unidad: d.modo === "tanque" ? p.unidad + "/" + vol + " L" : d.modo === "sitio" ? "g/planta" : "kg/ha",
           total: r.total !== undefined ? r.total : r.kgTotal !== undefined ? r.kgTotal * 1000 : null }] };

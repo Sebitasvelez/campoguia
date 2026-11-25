@@ -73,6 +73,19 @@
    * Cálculo para la finca.
    * opts: { modo:'ha'|'plantas', hectareas, plantas, plantasPorHa, litrosAguaHa, plantasPorBomba, bombaL, tanqueL, usarMax }
    */
+  /**
+   * Cuántos tanques o bombas preparar (regla del asesor):
+   * decimal menor a 0,2 → se baja al entero; de 0,2 a 0,69 → «y medio»; desde 0,7 → se sube al entero.
+   * Nunca menos de medio equipo.
+   */
+  function redondearEquipos(x) {
+    x = num(x); if (x === null || !isFinite(x) || x <= 0) return 0;
+    const ent = Math.floor(x + 1e-9), dec = x - ent;
+    let v = dec >= 0.7 - 1e-9 ? ent + 1 : dec >= 0.2 - 1e-9 ? ent + 0.5 : ent;
+    return Math.max(v, 0.5);
+  }
+  const textoEquipos = (v) => (v % 1 ? (Math.floor(v) ? Math.floor(v) + "½" : "½") : String(v));
+
   function calcularFinca(producto, dosis, opts) {
     const o = Object.assign({ bombaL: 20, tanqueL: 200, litrosAguaHa: 400, plantasPorBomba: 60, plantasPorHa: null }, opts);
     const d = o.usarMax ? dosis.max : dosis.min !== null ? dosis.min : dosis.max;
@@ -86,7 +99,8 @@
       else litros = ha !== null ? ha * num(o.litrosAguaHa) : null;
       if (litros === null || !isFinite(litros)) return res;
       res.litrosAgua = litros;
-      res.bombas = Math.ceil(litros / o.bombaL - 1e-9);
+      res.equiposExactos = litros / o.bombaL;
+      res.bombas = redondearEquipos(res.equiposExactos);
       res.tanques = r1(litros / o.tanqueL);
       res.porBomba = d * (o.bombaL / o.tanqueL);
       res.porTanque = d;
@@ -326,6 +340,6 @@
   }
 
   const api = { ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, compraOptima, precioUnitario, nombrePresentacion,
-    dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas };
+    redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);
