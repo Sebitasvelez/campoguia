@@ -282,7 +282,7 @@ insert into ajustes (clave, valor) values
   ('litros_agua_ha', '400'::jsonb),
   ('plantas_por_bomba', '60'::jsonb),
   ('ph_acido', '5.5'::jsonb),
-  ('aviso_legal', '"Recomendación técnica referencial. Lea siempre la etiqueta y use equipo de protección."'::jsonb);
+  ('aviso_legal', '"Recomendación técnica referencial. Lea siempre la etiqueta y verifique con su asesor."'::jsonb);
 
 select publicar_catalogo();
 commit;

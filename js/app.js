@@ -113,7 +113,7 @@
   }
   const segVol = () => `<div class="seg" role="group" aria-label="Volumen"><button data-vol="bomba" class="${ui.vol === "bomba" ? "sel" : ""}">Bomba ${BOMBA()} L</button><button data-vol="tanque" class="${ui.vol === "tanque" ? "sel" : ""}">Tanque ${TANQUE()} L</button></div>`;
   const conectarVol = (re) => $$("[data-vol]").forEach((b) => b.addEventListener("click", () => { ui.vol = b.dataset.vol; guardarUI(); re(); }));
-  const avisoSeguridad = () => `<div class="aviso ambar">${ic.alerta}<div>Usa guantes, mascarilla, gafas y ropa de manga larga. No fumigues con viento fuerte ni antes de lluvia. ${h(aj("aviso_legal", "Lee siempre la etiqueta."))}</div></div>`;
+  const avisoSeguridad = () => `<div class="aviso ambar">${ic.alerta}<div>Usa guantes, mascarilla, gafas y ropa de manga larga. No fumigues con sol, viento fuerte ni antes de lluvia. ${h(aj("aviso_legal", "Recomendación técnica referencial. Lea siempre la etiqueta y verifique con su asesor."))}</div></div>`;
   function agregarAMezcla(pid, dosisTanque) {
     const m = S.get("mezcla", []);
     if (!m.some((x) => String(x.producto_id) === String(pid))) { m.push({ producto_id: Number(pid), dosis_tanque: dosisTanque }); S.set("mezcla", m); toast("Agregado a tu mezcla"); }
@@ -497,6 +497,12 @@
     // costo total de aplicación = tanques o bombas a preparar × costo de producto por equipo
     const costoEquipo = r.tipo === "tanque" && r.porBomba !== undefined && pu !== null ? Math.round(r.porBomba * pu * 100) / 100 : null;
     const costoAplic = costoEquipo !== null && r.bombas ? Math.round(r.bombas * r.porBomba * pu * 100) / 100 : null;
+    const msgAsesor = () => {
+      const area = cc.modo === "ha" ? `${cc.ha} ha` : `${cc.pl || ""} plantas`;
+      if (r.tipo === "tanque" && r.total !== undefined) return `Hola, quiero verificar esta dosis de ${p.nombre}: ${L.cantidad(r.porBomba, r.unidad)} por ${equipoTxt(false)}${esTanque && dhaElegida !== null ? ` (${L.cantidad(dhaElegida, p.unidad)} por ha)` : ""}, para ${area}. En total ${L.cantidad(r.total, r.unidad)} en ${L.textoEquipos(r.bombas)} ${((t) => t.charAt(0).toLowerCase() + t.slice(1))(equipoTxt(r.bombas !== 1))}. ¿Está bien?`;
+      if (r.kgTotal !== undefined) return `Hola, quiero verificar esta dosis de ${p.nombre} para ${area}: ${L.fmt(r.kgTotal, 1)} kg en total${r.gPorPlanta ? ` (${L.fmt(r.gPorPlanta, 0)} g por planta)` : ""}. ¿Está bien?`;
+      return `Hola, quiero verificar la dosis de ${p.nombre} para mi cultivo.`;
+    };
     let res = "";
     if (r.tipo === "tanque" && r.total !== undefined) {
       res = `<div class="grid2"><div><div class="n">${h(L.cantidad(r.total, r.unidad))}</div><small>Producto requerido total</small></div>
@@ -533,6 +539,7 @@
         ${res ? `<section class="resultado" aria-live="polite"><div class="etq">Resultado</div>${res}${compra}</section>` : ""}
         <div class="acciones"><button class="btn" id="reg">Registrar aplicación</button>${d.modo === "tanque" ? `<button class="btn sec" id="mez">Agregar a mezcla</button>` : `<a class="btn sec" href="#/fertilizacion/${h(ui.cultivo || "")}">Ver plan de fertilización</a>`}</div>
         ${avisoSeguridad()}
+        ${res ? `<a class="btn wa" target="_blank" rel="noopener" href="${h(waLink(msgAsesor()))}">${ic.wa}Verificar dosis con mi asesor</a>` : ""}
       </main>`, "calcular");
     const re = () => vCalcular({});
     $("#prod").addEventListener("change", (e) => { cc.p = e.target.value; cc.d = null; cc.dha = null; cc.usarMax = false; re(); });
