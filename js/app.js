@@ -577,10 +577,10 @@
           : `<label class="campo">Número de plantas<span class="unido"><input id="pl" inputmode="numeric" value="${h(cc.pl || "")}"><span>plantas</span></span></label>`}
         ${d.modo === "tanque" ? `
           ${esTanque || cc.modo === "ha" ? `<label class="campo">Agua que usas por hectárea<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span><small>${esTanque ? "Con este dato se reparte la dosis por hectárea en cada bomba o tanque." : "Cámbialo según tu equipo y el tamaño de tus plantas."}</small></label>` : ""}
+          ${cc.modo === "plantas" ? `<label class="campo">Plantas que cubres con ${cc.equipo === "tanque" ? `un tanque de ${TANQUE()} L` : cc.equipo === "otro" ? `una carga de ${L.fmt(vol)} L` : `una bomba de ${BOMBA()} L`}<span class="unido"><input id="${campoPl}" inputmode="numeric" value="${h(cc[campoPl])}"><span>plantas</span></span></label>` : ""}
           <div class="etq">Mezcla en</div>
           <div class="seg" role="group" aria-label="Mezcla en"><button data-eq="bomba" class="${cc.equipo === "bomba" ? "sel" : ""}">Bomba ${BOMBA()} L</button><button data-eq="tanque" class="${cc.equipo === "tanque" ? "sel" : ""}">Tanque ${TANQUE()} L</button><button data-eq="otro" class="${cc.equipo === "otro" ? "sel" : ""}">Otro</button></div>
-          ${cc.equipo === "otro" ? `<label class="campo">Capacidad del equipo<span class="unido"><input id="vol" inputmode="decimal" value="${h(cc.vol || 16)}"><span>litros</span></span></label>` : ""}
-          ${cc.modo === "plantas" ? `<label class="campo">Plantas que cubres con ${cc.equipo === "tanque" ? `un tanque de ${TANQUE()} L` : cc.equipo === "otro" ? `una carga de ${L.fmt(vol)} L` : `una bomba de ${BOMBA()} L`}<span class="unido"><input id="${campoPl}" inputmode="numeric" value="${h(cc[campoPl])}"><span>plantas</span></span></label>` : ""}`
+          ${cc.equipo === "otro" ? `<label class="campo">Capacidad del equipo<span class="unido"><input id="vol" inputmode="decimal" value="${h(cc.vol || 16)}"><span>litros</span></span></label>` : ""}`
           : `<label class="campo">Plantas por hectárea<span class="unido"><input id="pha" inputmode="numeric" value="${h(cc.pha || "")}" placeholder="Ej. 1600"><span>pl/ha</span></span></label>`}
         ${r.avisos.map((a) => `<div class="aviso ambar">${ic.alerta}<div>${h(a)}</div></div>`).join("")}
         ${res ? `<section class="resultado" aria-live="polite"><div class="etq">Resultado</div>${res}${compra}</section>` : ""}
