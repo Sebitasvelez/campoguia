@@ -624,6 +624,9 @@
       return { p, total, envases, texto: envases ? envases + " × " + (p.presentacion || "envase") : null, costo: envases && p.pvp !== null && p.pvp !== undefined ? envases * Number(p.pvp) : null, costoTanque };
     });
     const costoCompra = compra.reduce((a, c) => a + (c.costo || 0), 0), costoTanqueMezcla = compra.reduce((a, c) => a + (c.costoTanque || 0), 0);
+    // costo por equipo que usa el agricultor: tanque de 200 L o bomba de 20 L
+    const costoEquipoMezcla = ui.vol === "tanque" ? costoTanqueMezcla : costoTanqueMezcla * BOMBA() / TANQUE();
+    const txtCostoEquipo = ui.vol === "tanque" ? `Costo por tanque de ${TANQUE()} L de aplicación` : `Costo por bomba de ${BOMBA()} L de aplicación`;
     let n = 0;
     pintar(`${barra("Mi mezcla", "Revisión de compatibilidad y orden", "#/")}
       <main class="cont">
@@ -640,7 +643,7 @@
           <label class="campo">${ui.vol === "tanque" ? "¿Cuántos tanques de " + TANQUE() : "¿Cuántas bombas de " + BOMBA()} L vas a aplicar?<span class="unido"><input id="cargas" inputmode="decimal" value="${h(ui.mezclaCargas || "1")}"><span>${ui.vol === "tanque" ? "tanques" : "bombas"}</span></span></label>
           ${compra.map((c) => `<div class="fila" style="font-size:14px;border-top:1px solid var(--borde);padding-top:8px"><span><b>${h(c.p.nombre)}</b><br><span class="mini">${c.total !== null ? h(L.cantidad(c.total, c.p.unidad)) + " en total" : "Ver etiqueta"}</span></span><span style="text-align:right">${c.texto ? h(c.texto) : "—"}${c.costo !== null ? `<br><span class="mini">${dinero(c.costo)}</span>` : ""}</span></div>`).join("")}
           <div class="fila" style="border-top:1px solid var(--borde);padding-top:8px"><span class="mini">Total de referencia</span><b>${dinero(costoCompra)}</b></div>
-          <div class="fila"><span class="mini">Costo por tanque de ${TANQUE()} L de aplicación</span><b>${dinero(costoTanqueMezcla)}</b></div>
+          <div class="fila"><span class="mini">${txtCostoEquipo}</span><b>${dinero(costoEquipoMezcla)}</b></div>
         </section>
         ${botonesReporte()}
         <div class="acciones"><button class="btn" id="reg">Registrar esta mezcla</button><button class="btn peligro" id="vaciar">Vaciar</button></div>
@@ -663,7 +666,7 @@
         destacados: [[String(m.length), "Productos en la mezcla"], [L.fmt(cargas, 1), ui.vol === "tanque" ? `Tanques de ${TANQUE()} L a aplicar` : `Bombas de ${BOMBA()} L a aplicar`]],
         secciones: [
           { titulo: `Dosis por ${volTxt()}`, filas: m.map((x) => [P(x.producto_id).nombre, fmtD(x)]) },
-          { titulo: "Para comprar", filas: compra.map((c) => [c.p.nombre + (c.total !== null ? ` (${L.cantidad(c.total, c.p.unidad)})` : ""), c.texto ? `${c.texto}${c.costo !== null ? " · " + dinero(c.costo) : ""}` : "Ver etiqueta"]).concat([["Total de referencia", dinero(costoCompra)], [`Costo por tanque de ${TANQUE()} L de aplicación`, dinero(costoTanqueMezcla)]]) },
+          { titulo: "Para comprar", filas: compra.map((c) => [c.p.nombre + (c.total !== null ? ` (${L.cantidad(c.total, c.p.unidad)})` : ""), c.texto ? `${c.texto}${c.costo !== null ? " · " + dinero(c.costo) : ""}` : "Ver etiqueta"]).concat([["Total de referencia", dinero(costoCompra)], [txtCostoEquipo, dinero(costoEquipoMezcla)]]) },
           { titulo: "Compatibilidad", avisos: prods.length >= 2 ? (rev.length ? rev.map((r) => ({ nivel: r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde", texto: (r.nivel === "incompatible" ? "NO MEZCLAR. " : r.nivel === "precaucion" ? "PRECAUCIÓN. " : "") + (r.a ? nombre(r.a) + " + " + nombre(r.b) + ": " : "") + (r.nota || "") })) : [{ nivel: "verde", texto: "Sin incompatibilidades registradas. Haz la prueba del frasco antes de llenar el tanque." }]) : [] },
           { titulo: "Orden de mezcla", textos: pasos },
         ], pie: pieReporte() });
