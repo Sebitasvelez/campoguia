@@ -813,10 +813,10 @@
         </section>
         <section class="card">
           <div class="fila"><span class="etq">Costo de producción</span><span class="mini">${desde || hasta ? (desde ? fechaCorta(desde) : "Inicio") + " – " + (hasta ? fechaCorta(hasta) : "hoy") : fechas.length ? fechaCorta(fechas[0]) + " – " + fechaCorta(fechas[fechas.length - 1]) : ""}</span></div>
-          <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="grande" style="color:var(--texto)">${dinero(rc.total)}</span>${ha && ha !== 1 ? `<span class="mini">${dinero(rc.total / ha)} por ha</span>` : ""}</div>
+          <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="grande" style="color:var(--texto)">${dinero(rc.total)}</span>${ha ? `<span class="mini">${ha === 1 ? "por ha" : dinero(rc.total / ha) + " por ha"}</span>` : ""}</div>
           <div class="grid2">
-            <div class="dato"><span>Insumos</span><b>${dinero(rc.insumos)}</b>${ha && ha !== 1 ? `<span class="mini">${dinero(rc.insumos / ha)}/ha</span>` : ""}</div>
-            <div class="dato"><span>Mano de obra</span><b>${dinero(rc.mano_obra)}</b><span class="mini">${rc.jornales ? L.fmt(rc.jornales) + " jornal" + (rc.jornales === 1 ? "" : "es") : "Sin jornales"}${ha && ha !== 1 && rc.mano_obra ? " · " + dinero(rc.mano_obra / ha) + "/ha" : ""}</span></div>
+            <div class="dato"><span>Insumos</span><b>${dinero(rc.insumos)}</b>${ha ? `<span class="mini">${ha === 1 ? "por ha" : dinero(rc.insumos / ha) + "/ha"}</span>` : ""}</div>
+            <div class="dato"><span>Mano de obra</span><b>${dinero(rc.mano_obra)}</b><span class="mini">${rc.jornales ? L.fmt(rc.jornales) + " jornal" + (rc.jornales === 1 ? "" : "es") : "Sin jornales"}${ha && rc.mano_obra ? " · " + (ha === 1 ? "por ha" : dinero(rc.mano_obra / ha) + "/ha") : ""}</span></div>
           </div>
           ${rc.total > 0 ? `<div class="barra-costos" aria-hidden="true">${acts.map(([k, v], i) => `<span style="width:${(v.costo / rc.total) * 100}%;background:${colores[i % colores.length]}"></span>`).join("")}</div>` : ""}
           ${acts.map(([k, v], i) => `<div class="fila" style="font-size:13.5px"><span style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:3px;background:${colores[i % colores.length]};flex-shrink:0"></span>${h(k)}</span><b>${dinero(v.costo)}</b></div>`).join("") || `<span class="mini">${desde || hasta ? "No hay registros con costos en este periodo." : "Aún no hay registros con costos en este lote."}</span>`}
