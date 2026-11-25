@@ -573,13 +573,13 @@
         ${rangoTxt && !(cc.d) && !(esTanque && n(cc.dha) !== null) ? `<div class="seg" role="group" aria-label="Dosis"><button data-dm="min" class="${!cc.usarMax ? "sel" : ""}">Dosis mínima</button><button data-dm="max" class="${cc.usarMax ? "sel" : ""}">Dosis alta</button></div>` : ""}
         <div class="etq">Calcular por</div>
         <div class="seg" role="group" aria-label="Calcular por"><button data-m="ha" class="${cc.modo === "ha" ? "sel" : ""}">Hectáreas</button><button data-m="plantas" class="${cc.modo === "plantas" ? "sel" : ""}">N.º de plantas</button></div>
-        ${cc.modo === "ha" ? `<label class="campo">Área a aplicar<span class="unido"><input id="ha" inputmode="decimal" value="${h(cc.ha)}"><span>ha</span></span></label>`
+        ${cc.modo === "ha" ? `<label class="campo">Área a aplicar (hectáreas)<span class="unido"><input id="ha" inputmode="decimal" value="${h(cc.ha)}"><span>ha</span></span></label>`
           : `<label class="campo">Número de plantas<span class="unido"><input id="pl" inputmode="numeric" value="${h(cc.pl || "")}"><span>plantas</span></span></label>`}
         ${d.modo === "tanque" ? `
-          <div class="etq">Equipo</div>
-          <div class="seg" role="group" aria-label="Equipo"><button data-eq="bomba" class="${cc.equipo === "bomba" ? "sel" : ""}">Bomba ${BOMBA()} L</button><button data-eq="tanque" class="${cc.equipo === "tanque" ? "sel" : ""}">Tanque ${TANQUE()} L</button><button data-eq="otro" class="${cc.equipo === "otro" ? "sel" : ""}">Otro</button></div>
-          ${cc.equipo === "otro" ? `<label class="campo">Capacidad del equipo<span class="unido"><input id="vol" inputmode="decimal" value="${h(cc.vol || 16)}"><span>litros</span></span></label>` : ""}
           ${esTanque || cc.modo === "ha" ? `<label class="campo">Agua que usas por hectárea<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span><small>${esTanque ? "Con este dato se reparte la dosis por hectárea en cada bomba o tanque." : "Cámbialo según tu equipo y el tamaño de tus plantas."}</small></label>` : ""}
+          <div class="etq">Mezcla en</div>
+          <div class="seg" role="group" aria-label="Mezcla en"><button data-eq="bomba" class="${cc.equipo === "bomba" ? "sel" : ""}">Bomba ${BOMBA()} L</button><button data-eq="tanque" class="${cc.equipo === "tanque" ? "sel" : ""}">Tanque ${TANQUE()} L</button><button data-eq="otro" class="${cc.equipo === "otro" ? "sel" : ""}">Otro</button></div>
+          ${cc.equipo === "otro" ? `<label class="campo">Capacidad del equipo<span class="unido"><input id="vol" inputmode="decimal" value="${h(cc.vol || 16)}"><span>litros</span></span></label>` : ""}
           ${cc.modo === "plantas" ? `<label class="campo">Plantas que cubres con ${cc.equipo === "tanque" ? `un tanque de ${TANQUE()} L` : cc.equipo === "otro" ? `una carga de ${L.fmt(vol)} L` : `una bomba de ${BOMBA()} L`}<span class="unido"><input id="${campoPl}" inputmode="numeric" value="${h(cc[campoPl])}"><span>plantas</span></span></label>` : ""}`
           : `<label class="campo">Plantas por hectárea<span class="unido"><input id="pha" inputmode="numeric" value="${h(cc.pha || "")}" placeholder="Ej. 1600"><span>pl/ha</span></span></label>`}
         ${r.avisos.map((a) => `<div class="aviso ambar">${ic.alerta}<div>${h(a)}</div></div>`).join("")}
