@@ -94,6 +94,50 @@
     return `<nav class="nav" aria-label="Principal">${it.map(([href, t, i, k]) => `<a href="${href}" class="${sel === k ? "sel" : ""}" ${sel === k ? 'aria-current="page"' : ""}>${i}${t}</a>`).join("")}</nav>`;
   }
   const demoBanner = () => (D.modoDemo ? `<div class="demo">Modo demostración: los datos se guardan solo en este equipo.</div>` : "");
+  // ------------------------------------------------------------ INSTALAR LA APP EN EL CELULAR
+  let avisoInstalar = null;
+  window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); avisoInstalar = e; refrescarInstalar(); });
+  window.addEventListener("appinstalled", () => { avisoInstalar = null; S.set("instalada", true); refrescarInstalar(); toast("CampoGuía quedó instalada. Búscala en tu pantalla de inicio."); });
+  const yaInstalada = () => (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
+  const esIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const enOtraApp = () => /FBAN|FBAV|Instagram|WhatsApp|Line\/|wv\)|TikTok/i.test(navigator.userAgent);
+  function cardInstalar(fijo) {
+    if (yaInstalada()) return "";
+    if (!fijo && Number(S.get("instalar_oculto", 0)) > Date.now()) return "";
+    return `<div class="card instalar" data-instalar-card style="flex-direction:row;align-items:center;gap:12px;border-color:var(--verde)">
+      <img src="icons/logo-redondo.svg" alt="" width="48" height="48" style="border-radius:12px;flex-shrink:0">
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px">
+        <b style="font-size:15px">Instala CampoGuía en tu celular</b>
+        <span class="mini">Ábrela con un toque desde tu pantalla de inicio y úsala sin internet.</span>
+        <div class="fila" style="justify-content:flex-start;gap:8px"><button type="button" class="btn chico" data-instalar>Instalar CampoGuía</button>${fijo ? "" : `<button type="button" class="btn sec chico" data-instalar-no>Ahora no</button>`}</div>
+      </div></div>`;
+  }
+  function refrescarInstalar() { if (yaInstalada()) $$("[data-instalar-card]").forEach((x) => x.remove()); }
+  function pasosInstalar() {
+    const fondo = document.createElement("div");
+    fondo.style.cssText = "position:fixed;inset:0;background:rgba(20,28,24,.45);display:flex;align-items:flex-end;justify-content:center;padding:16px;z-index:100";
+    const pasos = esIOS()
+      ? [["1", "Abre esta página en <b>Safari</b>."], ["2", "Toca el botón <b>Compartir</b> (el cuadrado con la flecha hacia arriba)."], ["3", "Baja y toca <b>Agregar a inicio</b>."], ["4", "Toca <b>Agregar</b>. El ícono de CampoGuía aparecerá en tu pantalla."]]
+      : enOtraApp()
+        ? [["1", "Estás dentro de otra app (WhatsApp, Facebook…). Toca el menú <b>⋮</b> arriba a la derecha."], ["2", "Elige <b>Abrir en Chrome</b> (o «Abrir en el navegador»)."], ["3", "En Chrome toca otra vez <b>Instalar CampoGuía</b>."]]
+        : [["1", "Toca el menú <b>⋮</b> de Chrome, arriba a la derecha."], ["2", "Elige <b>Instalar app</b> o <b>Agregar a la pantalla principal</b>."], ["3", "Confirma con <b>Instalar</b>. El ícono de CampoGuía aparecerá en tu pantalla."]];
+    fondo.innerHTML = `<div class="card" role="dialog" aria-modal="true" aria-label="Cómo instalar CampoGuía" style="max-width:420px;width:100%;gap:12px;box-shadow:0 12px 40px rgba(0,0,0,.25)">
+      <div class="fila"><b style="font-size:16px">Cómo instalar CampoGuía</b><button type="button" class="icono-btn" data-cerrar aria-label="Cerrar">✕</button></div>
+      ${pasos.map(([n, t]) => `<div style="display:flex;gap:10px;align-items:flex-start"><span style="flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--verde);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">${n}</span><span style="font-size:14.5px;line-height:1.45">${t}</span></div>`).join("")}
+      <button type="button" class="btn" data-cerrar>Entendido</button></div>`;
+    const cerrar = () => fondo.remove();
+    fondo.addEventListener("click", (e) => { if (e.target === fondo || e.target.closest("[data-cerrar]")) cerrar(); });
+    document.body.appendChild(fondo); fondo.querySelector(".btn").focus();
+  }
+  document.addEventListener("click", async (e) => {
+    if (e.target.closest("[data-instalar-no]")) { S.set("instalar_oculto", Date.now() + 7 * 864e5); $$("[data-instalar-card]").forEach((x) => x.remove()); return; }
+    if (!e.target.closest("[data-instalar]")) return;
+    if (avisoInstalar) {
+      const ev = avisoInstalar; avisoInstalar = null;
+      try { ev.prompt(); const r = await ev.userChoice; if (r && r.outcome === "accepted") { $$("[data-instalar-card]").forEach((x) => x.remove()); } } catch (er) { pasosInstalar(); }
+    } else pasosInstalar();
+  });
+
   function pintar(html, navSel) {
     const app = $("#app");
     app.innerHTML = `<div class="app">${demoBanner()}${html}</div>${navSel === null ? "" : nav(navSel)}`;
@@ -162,7 +206,7 @@
     const intro = `<div class="top" style="padding-top:36px"><img src="icons/logo-redondo.svg" alt="" width="72" height="72" style="display:block;margin-bottom:12px;border-radius:16px;box-shadow:0 0 0 2px rgba(255,255,255,.35)"><h1 style="font-size:28px">${h(NOMBRE)}</h1><p>Manual técnico de tu cultivo, registro de actividades y costos de producción de tu finca. Funciona también sin internet.</p></div>`;
     if (modo === "registro") {
       const ub = {};
-      pintar(`${intro}<form class="cont" id="f" novalidate>
+      pintar(`${intro}${cardInstalar() ? `<div class="cont" style="padding-bottom:0">${cardInstalar()}</div>` : ""}<form class="cont" id="f" novalidate>
         <h2 style="font-size:20px">Crea tu cuenta</h2>
         <label class="campo">Número de cédula<input name="cedula" inputmode="numeric" maxlength="10" autocomplete="off" required><small id="cedEstado">Con tu cédula ingresarás a la app.</small></label>
         <label class="campo">Nombres y apellidos<input name="nombres" autocomplete="name" required></label>
@@ -199,7 +243,7 @@
       });
       return;
     }
-    pintar(`${intro}<form class="cont" id="f" novalidate>
+    pintar(`${intro}${cardInstalar() ? `<div class="cont" style="padding-bottom:0">${cardInstalar()}</div>` : ""}<form class="cont" id="f" novalidate>
       <h2 style="font-size:20px">Ingresa con tu cédula</h2>
       <label class="campo">Número de cédula<input name="cedula" inputmode="numeric" maxlength="10" autocomplete="off" required></label>
       <p class="mini" id="err" role="alert" style="color:var(--rojo);margin:0"></p>
@@ -230,6 +274,7 @@
         ${al.map((a) => a.tipo === "carencia"
           ? `<a href="#/lotes" class="aviso rojo" style="text-decoration:none"><span class="pill rojo">CARENCIA</span><div><b>${h(a.lote)}:</b> no cosechar hasta el <b>${fechaCorta(a.fecha)}</b> (${a.dias} días)</div></a>`
           : `<a href="#/lotes" class="aviso ambar" style="text-decoration:none"><span class="pill ambar">RECORDATORIO</span><div><b>${h(a.lote)}:</b> ${h(a.actividad)} ${a.dias === 0 ? "hoy" : a.dias > 0 ? "en " + a.dias + " días" : "atrasada " + -a.dias + " días"}</div></a>`).join("")}
+        ${cardInstalar()}
         <div class="etq">Elige tu cultivo</div>
         <div class="grid2">${cultivos().map((c) => `<a class="cultivo ${c.id === ui.cultivo ? "sel" : ""}" href="#/cultivo/${h(c.id)}" data-c="${h(c.id)}"><span style="color:var(--verde);display:flex;height:44px;align-items:center">${ICONO_CULTIVO[c.id] || ic.hoja}</span><b>${h(c.nombre)}</b><span>Manual técnico · ${(I.problemas[c.id] || []).length} temas</span></a>`).join("")}</div>
         <div class="etq" style="margin-top:4px">Accesos rápidos</div>
@@ -979,6 +1024,7 @@
           <button class="btn sec" id="sync">Sincronizar ahora</button>
         </section>
         ${D.modoDemo ? `<a class="btn azul" href="admin.html">Abrir panel del administrador (demo)</a>` : ""}
+        ${cardInstalar(true)}
         <button class="btn peligro" id="salir">Cerrar sesión</button>
         <p class="mini" style="text-align:center">${h(NOMBRE)} · Asesoría técnica Ecuaquímica. Recomendaciones referenciales: lee siempre la etiqueta del producto.</p>
       </main>`, null);
