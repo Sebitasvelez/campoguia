@@ -22,7 +22,8 @@
     const by = (arr, k) => { const m = {}; (arr || []).forEach((x) => { (m[x[k]] = m[x[k]] || []).push(x); }); return m; };
     I = {
       c, prod: Object.fromEntries((c.productos || []).map((p) => [String(p.id), p])),
-      etapas: by((c.etapas || []).slice().sort((a, b) => a.orden - b.orden), "cultivo_id"),
+      etapas: by((c.etapas || []).filter((e) => e.uso !== "lote").sort((a, b) => a.orden - b.orden), "cultivo_id"),
+      etapasLote: by((c.etapas || []).filter((e) => e.uso === "lote").sort((a, b) => a.orden - b.orden), "cultivo_id"),
       problemas: by((c.problemas || []).slice().sort((a, b) => a.orden - b.orden), "cultivo_id"),
       recs: by((c.recomendaciones || []).slice().sort((a, b) => a.prioridad - b.prioridad), "problema_id"),
       plan: by((c.plan_sanitario || []).slice().sort((a, b) => a.orden - b.orden), "etapa_id"),
@@ -605,7 +606,7 @@
       <b>${l ? "Editar lote" : "Nuevo lote"}</b>
       <label class="campo">Nombre del lote<input name="nombre" required value="${h(lo.nombre || "Lote " + (D.lotes().length + 1))}"></label>
       <div class="grid2"><label class="campo">Cultivo<select name="cultivo_id">${cultivos().map((c) => `<option value="${h(c.id)}" ${c.id === cid ? "selected" : ""}>${h(c.nombre)}</option>`).join("")}</select></label>
-      <label class="campo">Etapa actual<select name="etapa_id"><option value="">—</option>${(I.c.etapas || []).filter((e) => e.uso !== "fertilizacion").map((e) => `<option value="${e.id}" data-c="${h(e.cultivo_id)}" ${String(lo.etapa_id) === String(e.id) ? "selected" : ""}>${h(e.nombre)}</option>`).join("")}</select></label></div>
+      <label class="campo">Etapa actual<select name="etapa_id"><option value="">—</option>${Object.values(I.etapasLote).flat().map((e) => `<option value="${e.id}" data-c="${h(e.cultivo_id)}" ${String(lo.etapa_id) === String(e.id) ? "selected" : ""}>${h(e.nombre)}</option>`).join("")}</select></label></div>
       <div class="grid2"><label class="campo">Hectáreas<input name="hectareas" inputmode="decimal" value="${h(lo.hectareas !== undefined && lo.hectareas !== null ? lo.hectareas : "")}"></label>
       <label class="campo">N.º de plantas<input name="plantas" inputmode="numeric" value="${h(lo.plantas || "")}"></label></div>
       ${bloqueUbicacion(lo.latitud ? lo : null, { titulo: "Ubicación del lote (opcional)", texto: "Párate dentro del lote y toca el botón para guardar su punto GPS. Funciona sin internet; se envía cuando tengas señal.", boton: lo.latitud ? "Estoy en el lote: actualizar ubicación" : "Estoy en el lote: guardar ubicación" })}

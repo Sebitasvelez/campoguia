@@ -17,7 +17,7 @@
   const FORMULACIONES = [["corrector_ph", "Corrector de pH"], ["polvo", "Polvo / WG / WP"], ["suspension", "Suspensión concentrada (SC)"], ["liquido", "Líquido (sin definir)"], ["emulsion", "Emulsionable (EC)"], ["soluble", "Soluble (SL)"], ["liquido_foliar", "Fertilizante / estimulante líquido"], ["aceite_adherente", "Aceite / adherente"], ["siliconado", "Siliconado"], ["granulado", "Granulado al suelo"], ["cebo", "Cebo"]];
   const optCultivos = () => (DB.cultivos || []).map((c) => [c.id, c.nombre]);
   const nomCultivo = (id) => ((DB.cultivos || []).find((c) => c.id === id) || {}).nombre || id || "";
-  const optEtapas = (cid) => (DB.etapas || []).filter((e) => !cid || e.cultivo_id === cid).sort((a, b) => (a.cultivo_id + a.orden).localeCompare(b.cultivo_id + b.orden, undefined, { numeric: true })).map((e) => [e.id, nomCultivo(e.cultivo_id) + " · " + e.nombre + (e.uso === "fertilizacion" ? " (fertilización)" : e.uso === "sanitario" ? " (sanitario)" : "")]);
+  const optEtapas = (cid) => (DB.etapas || []).filter((e) => e.uso !== "lote" && (!cid || e.cultivo_id === cid)).sort((a, b) => (a.cultivo_id + a.orden).localeCompare(b.cultivo_id + b.orden, undefined, { numeric: true })).map((e) => [e.id, nomCultivo(e.cultivo_id) + " · " + e.nombre + (e.uso === "fertilizacion" ? " (fertilización)" : e.uso === "sanitario" ? " (sanitario)" : "")]);
   const nomEtapa = (id) => { const e = (DB.etapas || []).find((x) => String(x.id) === String(id)); return e ? e.nombre : ""; };
   const optProductos = () => (DB.productos || []).slice().sort((a, b) => a.nombre.localeCompare(b.nombre)).map((p) => [p.id, p.nombre + (p.ingrediente_activo ? " · " + p.ingrediente_activo : "")]);
   const nomProducto = (id) => ((DB.productos || []).find((p) => String(p.id) === String(id)) || {}).nombre || "";
@@ -129,11 +129,11 @@
       tabla: "etapas", titulo: "Cultivos y etapas", ayuda: "Etapas fenológicas de cada cultivo. Para agregar un cultivo nuevo usa el botón «Nuevo cultivo».",
       buscar: (r) => r.nombre + " " + nomCultivo(r.cultivo_id),
       filtro: { campo: "cultivo_id", etiqueta: "Cultivo", opciones: optCultivos },
-      columnas: [["Cultivo", (r) => h(nomCultivo(r.cultivo_id))], ["Uso", (r) => h({ sanitario: "Plan sanitario", fertilizacion: "Fertilización", ambos: "Ambos" }[r.uso || "ambos"])], ["Orden", (r) => h(r.orden)], ["Etapa", (r) => `<b>${h(r.nombre)}</b>`], ["Semanas", (r) => h(r.semanas)], ["Riesgo hongos", (r) => h(r.riesgo_hongos)]],
+      columnas: [["Cultivo", (r) => h(nomCultivo(r.cultivo_id))], ["Uso", (r) => h({ sanitario: "Plan sanitario", fertilizacion: "Fertilización", ambos: "Ambos" }[r.uso || "ambos"] || (r.uso === "lote" ? "Etapa del lote" : r.uso))], ["Orden", (r) => h(r.orden)], ["Etapa", (r) => `<b>${h(r.nombre)}</b>`], ["Semanas", (r) => h(r.semanas)], ["Riesgo hongos", (r) => h(r.riesgo_hongos)]],
       campos: [
         { k: "cultivo_id", t: "Cultivo", tipo: "select", opciones: optCultivos, req: true },
         { k: "nombre", t: "Nombre de la etapa", req: true },
-        { k: "uso", t: "Se usa en", tipo: "select", opciones: () => [["ambos", "Plan sanitario y fertilización"], ["sanitario", "Solo plan sanitario"], ["fertilizacion", "Solo plan de fertilización"]], def: "ambos" },
+        { k: "uso", t: "Se usa en", tipo: "select", opciones: () => [["ambos", "Plan sanitario y fertilización"], ["sanitario", "Solo plan sanitario"], ["fertilizacion", "Solo plan de fertilización"], ["lote", "Etapa del lote (al crear un lote)"]], def: "ambos" },
         { k: "semanas", t: "Semanas (texto)" },
         { k: "riesgo_hongos", t: "Riesgo de sarna/hongos", tipo: "select", opciones: () => [["bajo", "Bajo"], ["ligero", "Ligero"], ["alto", "Alto"]], vacio: true },
         { k: "notas", t: "Recomendaciones de manejo", tipo: "area" }, { k: "costo_ref_texto", t: "Costo de referencia (texto)" }, { k: "orden", t: "Orden", tipo: "num", def: 1 },

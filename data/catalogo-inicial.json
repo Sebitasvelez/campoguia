@@ -1,5 +1,5 @@
 {
- "version": 6,
+ "version": 7,
  "publicado": null,
  "cultivos": [
   {
@@ -150,6 +150,72 @@
    "riesgo_hongos": null,
    "notas": null,
    "orden": 4
+  },
+  {
+   "id": 14,
+   "cultivo_id": "pitahaya",
+   "nombre": "Inicio / siembra",
+   "uso": "lote",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "costo_ref_texto": null,
+   "orden": 20
+  },
+  {
+   "id": 15,
+   "cultivo_id": "pitahaya",
+   "nombre": "Desarrollo de pencas",
+   "uso": "lote",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "costo_ref_texto": null,
+   "orden": 21
+  },
+  {
+   "id": 16,
+   "cultivo_id": "pitahaya",
+   "nombre": "Producción",
+   "uso": "lote",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "costo_ref_texto": null,
+   "orden": 22
+  },
+  {
+   "id": 17,
+   "cultivo_id": "cacao",
+   "nombre": "Inicio / siembra",
+   "uso": "lote",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "costo_ref_texto": null,
+   "orden": 20
+  },
+  {
+   "id": 18,
+   "cultivo_id": "cacao",
+   "nombre": "Desarrollo / crecimiento",
+   "uso": "lote",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "costo_ref_texto": null,
+   "orden": 21
+  },
+  {
+   "id": 19,
+   "cultivo_id": "cacao",
+   "nombre": "Producción",
+   "uso": "lote",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "costo_ref_texto": null,
+   "orden": 22
   }
  ],
  "productos": [

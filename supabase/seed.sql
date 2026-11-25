@@ -19,7 +19,13 @@ insert into etapas (id, cultivo_id, nombre, uso, semanas, riesgo_hongos, notas, 
   (10, 'cacao', 'Vivero y establecimiento', 'ambos', null, null, null, null, 1),
   (11, 'cacao', 'Desarrollo (1 a 3 años)', 'ambos', null, null, null, null, 2),
   (12, 'cacao', 'Floración', 'ambos', null, null, null, null, 3),
-  (13, 'cacao', 'Llenado de mazorca', 'ambos', null, null, null, null, 4);
+  (13, 'cacao', 'Llenado de mazorca', 'ambos', null, null, null, null, 4),
+  (14, 'pitahaya', 'Inicio / siembra', 'lote', null, null, null, null, 20),
+  (15, 'pitahaya', 'Desarrollo de pencas', 'lote', null, null, null, null, 21),
+  (16, 'pitahaya', 'Producción', 'lote', null, null, null, null, 22),
+  (17, 'cacao', 'Inicio / siembra', 'lote', null, null, null, null, 20),
+  (18, 'cacao', 'Desarrollo / crecimiento', 'lote', null, null, null, null, 21),
+  (19, 'cacao', 'Producción', 'lote', null, null, null, null, 22);
 select setval(pg_get_serial_sequence('etapas', 'id'), (select max(id) from etapas));
 
 insert into productos (id, nombre, ingrediente_activo, grupo, categoria, formulacion, modo_aplicacion, dosis_min, dosis_max, unidad, dosis_texto, presentacion, contenido, contenido_unidad, pvp, control, carencia_dias, reingreso_horas, categoria_tox, nota, fuente, presentaciones, activo) values
