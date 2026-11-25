@@ -1,0 +1,4382 @@
+{
+ "version": 6,
+ "publicado": null,
+ "cultivos": [
+  {
+   "id": "pitahaya",
+   "nombre": "Pitahaya amarilla",
+   "activo": true,
+   "orden": 1
+  },
+  {
+   "id": "cacao",
+   "nombre": "Cacao",
+   "activo": true,
+   "orden": 2
+  }
+ ],
+ "etapas": [
+  {
+   "id": 1,
+   "cultivo_id": "pitahaya",
+   "nombre": "Brotación",
+   "uso": "sanitario",
+   "semanas": "semanas 0, 1 y 2",
+   "riesgo_hongos": "bajo",
+   "notas": "Asegurar un buen mojado de los botones florales. Alternar cada semana sea 1 insecticida ó 1 acaricida, sea Omite o Bala (marcados «Alternar»).",
+   "costo_ref_texto": "(Costo aprox. tanque $ 25)",
+   "orden": 1
+  },
+  {
+   "id": 2,
+   "cultivo_id": "pitahaya",
+   "nombre": "Desarrollo de flor",
+   "uso": "sanitario",
+   "semanas": "semanas 3, 4 y 5",
+   "riesgo_hongos": "ligero",
+   "notas": "Asegurar un buen mojado de flores. Alternar cada semana 1 insecticida, sea Ninja o Engeo (marcados «Alternar»).",
+   "costo_ref_texto": "(Costo aprox. tanque $ 25)",
+   "orden": 2
+  },
+  {
+   "id": 3,
+   "cultivo_id": "pitahaya",
+   "nombre": "Apertura y cuajado",
+   "uso": "sanitario",
+   "semanas": "semanas 6, 7 y 8",
+   "riesgo_hongos": "alto",
+   "notas": "Cortar pétalos de flores luego de 5 días del cuajado floral, y acortar frecuencias de fumigación a cada 6 días. Asegurar un buen mojado de flores y utilizar aceites (marcados «Alternar»).",
+   "costo_ref_texto": "(Costo aprox. tanque $ 30)",
+   "orden": 3
+  },
+  {
+   "id": 4,
+   "cultivo_id": "pitahaya",
+   "nombre": "Fructificación",
+   "uso": "sanitario",
+   "semanas": "semanas 9, 10 y 11",
+   "riesgo_hongos": "ligero",
+   "notas": "Asegurar un buen mojado de frutos. Alternar cada semana sea 1 insecticida ó 1 acaricida, sea Solvigo ú Omite (marcados «Alternar»).",
+   "costo_ref_texto": "(Costo aprox. Tanque $ 26)",
+   "orden": 4
+  },
+  {
+   "id": 5,
+   "cultivo_id": "pitahaya",
+   "nombre": "Engrose",
+   "uso": "sanitario",
+   "semanas": "semanas 12, 13 y 14",
+   "riesgo_hongos": "bajo",
+   "notas": "Asegurar un buen mojado de frutos. Cuidado con productos que marquen residualidad en fruta.",
+   "costo_ref_texto": "(Costo aprox. Tanque $ 25)",
+   "orden": 5
+  },
+  {
+   "id": 6,
+   "cultivo_id": "pitahaya",
+   "nombre": "Establecimiento / siembra",
+   "uso": "fertilizacion",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "orden": 10
+  },
+  {
+   "id": 7,
+   "cultivo_id": "pitahaya",
+   "nombre": "Desarrollo de pencas",
+   "uso": "fertilizacion",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "orden": 11
+  },
+  {
+   "id": 8,
+   "cultivo_id": "pitahaya",
+   "nombre": "Floración",
+   "uso": "fertilizacion",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "orden": 12
+  },
+  {
+   "id": 9,
+   "cultivo_id": "pitahaya",
+   "nombre": "Engrose",
+   "uso": "fertilizacion",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "orden": 13
+  },
+  {
+   "id": 10,
+   "cultivo_id": "cacao",
+   "nombre": "Vivero y establecimiento",
+   "uso": "ambos",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "orden": 1
+  },
+  {
+   "id": 11,
+   "cultivo_id": "cacao",
+   "nombre": "Desarrollo (1 a 3 años)",
+   "uso": "ambos",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "orden": 2
+  },
+  {
+   "id": 12,
+   "cultivo_id": "cacao",
+   "nombre": "Floración",
+   "uso": "ambos",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "orden": 3
+  },
+  {
+   "id": 13,
+   "cultivo_id": "cacao",
+   "nombre": "Llenado de mazorca",
+   "uso": "ambos",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": null,
+   "orden": 4
+  }
+ ],
+ "productos": [
+  {
+   "id": 1,
+   "nombre": "Engeo",
+   "ingrediente_activo": "LAMBDACHIALOTRINA+TIAMETOXAN",
+   "grupo": "3A + 4A",
+   "categoria": "Insecticida",
+   "formulacion": "suspension",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 125.0,
+   "dosis_max": 150.0,
+   "unidad": "cc",
+   "dosis_texto": "125 - 150",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 89.0,
+   "control": "insectos chupadores, masticadores, raspadores (chinches, hormigas, avispas)",
+   "carencia_dias": null,
+   "reingreso_horas": 12,
+   "categoria_tox": "II",
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Ficha Ecuaquímica de Engeo: suspensión concentrada, categoría toxicológica II, reingreso 12 h. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22010172",
+     "empaque": "100 CC, ENVASE",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 9.8
+    },
+    {
+     "codigo": "22010174",
+     "empaque": "250 ML, ENVASE",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 24.0
+    },
+    {
+     "codigo": "22010171",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 89.0
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "nombre": "Voliam Flexi",
+   "ingrediente_activo": null,
+   "grupo": null,
+   "categoria": "Insecticida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 100.0,
+   "dosis_max": 100.0,
+   "unidad": "cc",
+   "dosis_texto": "100",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 188.0,
+   "control": null,
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": "Completar: ingrediente activo",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22010197",
+     "empaque": "100 ML, FRASCO",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 20.0
+    },
+    {
+     "codigo": "22019075",
+     "empaque": "200 ML, FRASCO",
+     "cantidad": 200.0,
+     "unidad": "cc",
+     "precio": 39.0
+    },
+    {
+     "codigo": "22019050",
+     "empaque": "1 LITRO, FRASCO",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 188.0
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "nombre": "Solvigo",
+   "ingrediente_activo": "ABAMECTINA + THIAMETOXAN",
+   "grupo": "6 + 4A",
+   "categoria": "Insecticida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 125.0,
+   "dosis_max": 150.0,
+   "unidad": "cc",
+   "dosis_texto": "125 - 150",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 78.0,
+   "control": "ácaros e insectos chupadores, raspadores (chinches, avispas)",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22019076",
+     "empaque": "100 ML, FRASCO",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 8.8
+    },
+    {
+     "codigo": "22010219",
+     "empaque": "1/4 LITRO, FRASCO",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 19.5
+    },
+    {
+     "codigo": "22010209",
+     "empaque": "1 LITRO, FRASCO",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 78.0
+    },
+    {
+     "codigo": "22010210",
+     "empaque": "5 LITROS, POMO",
+     "cantidad": 5000.0,
+     "unidad": "cc",
+     "precio": 375.0
+    },
+    {
+     "codigo": "22010211",
+     "empaque": "20 LITROS, CANECA",
+     "cantidad": 20000.0,
+     "unidad": "cc",
+     "precio": 1450.0
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "nombre": "Neem X",
+   "ingrediente_activo": "AZADIRACHTINA",
+   "grupo": "S/C",
+   "categoria": "Insecticida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 250.0,
+   "dosis_max": 250.0,
+   "unidad": "cc",
+   "dosis_texto": "250",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 45.95,
+   "control": "insectos masticadores, raspadores (hormigas, gusanos, avispas)",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22490040",
+     "empaque": "100 ML, FRASCO",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 5.2
+    },
+    {
+     "codigo": "22490007",
+     "empaque": "1/4 LITRO, ENVASE",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 12.5
+    },
+    {
+     "codigo": "22490008",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 45.95
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "nombre": "Ninja Zeon",
+   "ingrediente_activo": "LAMBDACHIALOTRINA",
+   "grupo": "3A",
+   "categoria": "Insecticida",
+   "formulacion": "suspension",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 200.0,
+   "dosis_max": 200.0,
+   "unidad": "cc",
+   "dosis_texto": "200",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 39.9,
+   "control": "insectos masticadores, raspadores (hormigas, gusanos, avispas)",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Ficha ADAMA Ninja 050 CS: lambda-cihalotrina en microcápsulas (tecnología Zeon). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22019136",
+     "empaque": "100 CC., FRASCO",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 4.5
+    },
+    {
+     "codigo": "22019111",
+     "empaque": "200 CC., FRASCO",
+     "cantidad": 200.0,
+     "unidad": "cc",
+     "precio": 8.5
+    },
+    {
+     "codigo": "22019110",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 39.9
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "nombre": "Curacron",
+   "ingrediente_activo": "PROFENOFOS",
+   "grupo": "1B",
+   "categoria": "Insecticida",
+   "formulacion": "emulsion",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 200.0,
+   "dosis_max": 250.0,
+   "unidad": "cc",
+   "dosis_texto": "200 - 250",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 28.8,
+   "control": "ácaros e insectos chupadores, raspadores (chinches, avispas)",
+   "carencia_dias": null,
+   "reingreso_horas": 24,
+   "categoria_tox": "II",
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Vademécum Agrícola Edifarm (Curacron 500 EC): categoría II, reingreso 24 h; no mezclar con productos alcalinos. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22010020",
+     "empaque": "50 CC., ENVASE",
+     "cantidad": 50.0,
+     "unidad": "cc",
+     "precio": 1.95
+    },
+    {
+     "codigo": "22010018",
+     "empaque": "100 CC., ENVASE",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 3.25
+    },
+    {
+     "codigo": "22010014",
+     "empaque": "1/4 LITRO, ENVASE",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 7.8
+    },
+    {
+     "codigo": "22010015",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 28.8
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "nombre": "Flecha",
+   "ingrediente_activo": "DIAZINON",
+   "grupo": "1B",
+   "categoria": "Insecticida",
+   "formulacion": "emulsion",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 250.0,
+   "dosis_max": 250.0,
+   "unidad": "cc",
+   "dosis_texto": "250",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 19.0,
+   "control": "insectos masticadores, raspadores (hormigas, gusanos, avispas)",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": "II",
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Referencia: diazinon 600 EC (ficha ADAMA Ecuador), categoría II. Confirmar con la etiqueta de Flecha. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22510016",
+     "empaque": "100 ML, ENVASE",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 3.4
+    },
+    {
+     "codigo": "22510011",
+     "empaque": "1/4 LITRO, ENVASE",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 5.8
+    },
+    {
+     "codigo": "22510010",
+     "empaque": "1/2 LITRO, ENVASE",
+     "cantidad": 500.0,
+     "unidad": "cc",
+     "precio": 9.9
+    },
+    {
+     "codigo": "22510009",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 19.0
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "nombre": "Pyrigran",
+   "ingrediente_activo": "CLORPIRIFOS",
+   "grupo": "1B",
+   "categoria": "Insecticida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 150.0,
+   "dosis_max": 150.0,
+   "unidad": "g",
+   "dosis_texto": "150",
+   "presentacion": "500 GRAMOS",
+   "contenido": 500.0,
+   "contenido_unidad": "g",
+   "pvp": 8.5,
+   "control": "Hormigas arrieras",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": "⚠ Contiene clorpirifos: en mayo de 2026 Agrocalidad prohibió su importación y registro en Ecuador. Verifica si aún puede recomendarse.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Agraria.pe, 25/05/2026: Agrocalidad prohíbe importación y registro de clorpirifos. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22760055",
+     "empaque": "20 GRAMOS C/SOBRE",
+     "cantidad": 20.0,
+     "unidad": "g",
+     "precio": 1.2
+    },
+    {
+     "codigo": "22760058",
+     "empaque": "500 GRAMOS, FUNDA",
+     "cantidad": 500.0,
+     "unidad": "g",
+     "precio": 8.5
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "nombre": "Bala",
+   "ingrediente_activo": "CLORPIRIFOS + CIPERMETRINA",
+   "grupo": "1B + 3A",
+   "categoria": "Insecticida",
+   "formulacion": "emulsion",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 250.0,
+   "dosis_max": 250.0,
+   "unidad": "cc",
+   "dosis_texto": "250",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 15.8,
+   "control": "insectos masticadores (gusanos, hormigas)",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": "⚠ Contiene clorpirifos: en mayo de 2026 Agrocalidad prohibió su importación y registro en Ecuador. Verifica si aún puede recomendarse.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Agraria.pe, 25/05/2026: Agrocalidad prohíbe importación y registro de clorpirifos. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22760006",
+     "empaque": "100 CC., FRASCO",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 1.85
+    },
+    {
+     "codigo": "22760005",
+     "empaque": "1/4 LITRO, FRASCO",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 4.4
+    },
+    {
+     "codigo": "22760019",
+     "empaque": "1/2 LITRO, ENVASE",
+     "cantidad": 500.0,
+     "unidad": "cc",
+     "precio": 8.5
+    },
+    {
+     "codigo": "22760002",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 15.8
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "nombre": "Tryclan",
+   "ingrediente_activo": "THIOCYCLAM HYDROGEN OXALATE",
+   "grupo": "14",
+   "categoria": "Insecticida",
+   "formulacion": "polvo",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 100.0,
+   "dosis_max": 100.0,
+   "unidad": "g",
+   "dosis_texto": "100",
+   "presentacion": "1 KILO",
+   "contenido": 1000.0,
+   "contenido_unidad": "g",
+   "pvp": 69.0,
+   "control": "insectos raspadores (avispas, babosas)",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22490071",
+     "empaque": "100 GRAMOS, FUNDA",
+     "cantidad": 100.0,
+     "unidad": "g",
+     "precio": 7.9
+    },
+    {
+     "codigo": "22490078",
+     "empaque": "1 KILO, FUNDA",
+     "cantidad": 1000.0,
+     "unidad": "g",
+     "precio": 69.0
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "nombre": "Attakill",
+   "ingrediente_activo": "SULFLURAMIDA",
+   "grupo": "S/C",
+   "categoria": "Cebo",
+   "formulacion": "cebo",
+   "modo_aplicacion": "sitio",
+   "dosis_min": 30.0,
+   "dosis_max": 60.0,
+   "unidad": "g",
+   "dosis_texto": "30 - 60 gr por sitio",
+   "presentacion": "1 KILO",
+   "contenido": 1000.0,
+   "contenido_unidad": "g",
+   "pvp": 14.5,
+   "control": "cebos para hormigas arrieras",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22500001",
+     "empaque": "500 GRAMOS, BOLSA",
+     "cantidad": 500.0,
+     "unidad": "g",
+     "precio": 7.5
+    },
+    {
+     "codigo": "22500002",
+     "empaque": "1 KILO, BOLSA",
+     "cantidad": 1000.0,
+     "unidad": "g",
+     "precio": 14.5
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "nombre": "Matababosa",
+   "ingrediente_activo": "METALDEHIDO",
+   "grupo": "S/C",
+   "categoria": "Cebo",
+   "formulacion": "cebo",
+   "modo_aplicacion": "sitio",
+   "dosis_min": 5.0,
+   "dosis_max": 5.0,
+   "unidad": "g",
+   "dosis_texto": "5 gr por sitio",
+   "presentacion": "500 GRAMOS",
+   "contenido": 500.0,
+   "contenido_unidad": "g",
+   "pvp": 3.35,
+   "control": "cebos para babosas, caracoles",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22230002",
+     "empaque": "500 GRAMOS, FUNDA",
+     "cantidad": 500.0,
+     "unidad": "g",
+     "precio": 3.35
+    },
+    {
+     "codigo": "22230001",
+     "empaque": "25 KILOS, SACO",
+     "cantidad": 25000.0,
+     "unidad": "g",
+     "precio": 142.0
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "nombre": "Theron",
+   "ingrediente_activo": "TETRADIFON",
+   "grupo": "12D",
+   "categoria": "Acaricida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 250.0,
+   "dosis_max": 330.0,
+   "unidad": "cc",
+   "dosis_texto": "250 a 330",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 21.0,
+   "control": "huevos y estados iniciales de ácaros",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22360045",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 21.0
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "nombre": "Floramite",
+   "ingrediente_activo": "BIFENAZATE",
+   "grupo": "20D",
+   "categoria": "Acaricida",
+   "formulacion": "polvo",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 25.0,
+   "dosis_max": 25.0,
+   "unidad": "g",
+   "dosis_texto": "25",
+   "presentacion": "500 GRAMOS",
+   "contenido": 500.0,
+   "contenido_unidad": "g",
+   "pvp": 275.0,
+   "control": "huevos, ninfas, adultos de ácaros control residual",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Floramite 50 WG: bifenazate, granulado dispersable, IRAC 20D. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22979034",
+     "empaque": "25 GRAMOS, FUNDA",
+     "cantidad": 25.0,
+     "unidad": "g",
+     "precio": 14.5
+    },
+    {
+     "codigo": "22070027",
+     "empaque": "500 GRAMOS, FUNDA",
+     "cantidad": 500.0,
+     "unidad": "g",
+     "precio": 275.0
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "nombre": "Starmite",
+   "ingrediente_activo": null,
+   "grupo": null,
+   "categoria": "Acaricida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 100.0,
+   "dosis_max": 100.0,
+   "unidad": "cc",
+   "dosis_texto": "100",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 435.0,
+   "control": "huevos, ninfas, adultos de ácaros control residual",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": "Completar: ingrediente activo",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22970019",
+     "empaque": "100 CC., FRASCO",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 49.0
+    },
+    {
+     "codigo": "22970038",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 435.0
+    }
+   ]
+  },
+  {
+   "id": 16,
+   "nombre": "Omite",
+   "ingrediente_activo": "PROPARGITE",
+   "grupo": "12C",
+   "categoria": "Acaricida",
+   "formulacion": "polvo",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 250.0,
+   "dosis_max": 250.0,
+   "unidad": "g",
+   "dosis_texto": "250",
+   "presentacion": "250 GR",
+   "contenido": 250.0,
+   "contenido_unidad": "g",
+   "pvp": 7.5,
+   "control": "ninfas, adultos de ácaros",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | No figura en la lista de precios Ecuaquímica de octubre 2025 (precio del Excel).",
+   "activo": true,
+   "presentaciones": []
+  },
+  {
+   "id": 17,
+   "nombre": "Phyton",
+   "ingrediente_activo": "SULFATO DE COBRE PENTAHIDRATADO",
+   "grupo": "MULTISITIO",
+   "categoria": "Fungicida preventivo",
+   "formulacion": "soluble",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 200.0,
+   "dosis_max": 250.0,
+   "unidad": "cc",
+   "dosis_texto": "200 - 250",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 46.0,
+   "control": "efecto translaminar amplio espectro, más eficiente en ascomicetos",
+   "carencia_dias": 0,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Ficha Phyton-27 (Chile): concentrado soluble, sin período de carencia. Confirmar con la etiqueta de Ecuador. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22490016",
+     "empaque": "100 CC., ENVASE",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 5.25
+    },
+    {
+     "codigo": "22490017",
+     "empaque": "1/4 LITRO, ENVASE",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 12.8
+    },
+    {
+     "codigo": "22490015",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 46.0
+    }
+   ]
+  },
+  {
+   "id": 18,
+   "nombre": "Daconil",
+   "ingrediente_activo": "CHLOROTHALONIL",
+   "grupo": "MULTISITIO",
+   "categoria": "Fungicida preventivo",
+   "formulacion": "suspension",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 330.0,
+   "dosis_max": 330.0,
+   "unidad": "cc",
+   "dosis_texto": "330",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 16.8,
+   "control": "amplio espectro, mas eficiente en ascomicetos y deuteromicetos",
+   "carencia_dias": 14,
+   "reingreso_horas": 24,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Ficha Syngenta Ecuador Daconil 720 SC: carencia 14 días en cacao (moniliasis); reingreso 12 a 24 h según versión (se usa 24 h). No mezclar con aceite agrícola. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22010138",
+     "empaque": "100 ML, FRASCO",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 2.1
+    },
+    {
+     "codigo": "22010137",
+     "empaque": "400 ML, ENVASE",
+     "cantidad": 400.0,
+     "unidad": "cc",
+     "precio": 7.0
+    },
+    {
+     "codigo": "22010136",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 16.8
+    },
+    {
+     "codigo": "22010146",
+     "empaque": "20 LITROS, CANECA",
+     "cantidad": 20000.0,
+     "unidad": "cc",
+     "precio": 295.0
+    }
+   ]
+  },
+  {
+   "id": 19,
+   "nombre": "Codicobre",
+   "ingrediente_activo": "GLUCONATO DE COBRE",
+   "grupo": "MULTISITIO",
+   "categoria": "Fungicida preventivo",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 500.0,
+   "dosis_max": 500.0,
+   "unidad": "cc",
+   "dosis_texto": "500",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 13.2,
+   "control": "amplio espectro, mas eficiente en ascomicetos",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22370125",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 13.2
+    }
+   ]
+  },
+  {
+   "id": 20,
+   "nombre": "Caldo Bordeles",
+   "ingrediente_activo": "SULFATO DE COBRE",
+   "grupo": "MULTISITIO",
+   "categoria": "Fungicida preventivo",
+   "formulacion": "polvo",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 500.0,
+   "dosis_max": 500.0,
+   "unidad": "g",
+   "dosis_texto": "500",
+   "presentacion": "500 GRAMOS",
+   "contenido": 500.0,
+   "contenido_unidad": "g",
+   "pvp": 6.5,
+   "control": "amplio espectro, mas eficiente en ascomicetos y oomicetos",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22350050",
+     "empaque": "500 GRAMOS, FUNDA",
+     "cantidad": 500.0,
+     "unidad": "g",
+     "precio": 6.5
+    },
+    {
+     "codigo": "22350049",
+     "empaque": "25 KILOS, SACO",
+     "cantidad": 25000.0,
+     "unidad": "g",
+     "precio": 273.0
+    }
+   ]
+  },
+  {
+   "id": 21,
+   "nombre": "Kocide",
+   "ingrediente_activo": "HIDROXIDO DE COBRE",
+   "grupo": "MULTISITIO",
+   "categoria": "Fungicida preventivo",
+   "formulacion": "polvo",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 400.0,
+   "dosis_max": 400.0,
+   "unidad": "g",
+   "dosis_texto": "400",
+   "presentacion": "400 GRAMOS",
+   "contenido": 400.0,
+   "contenido_unidad": "g",
+   "pvp": 8.25,
+   "control": "amplio espectro, efecto bactericida y fungicida",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Kocide 2000 (hidróxido de cobre 53,8 % WG): no mezclar con fosfitos. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22210007",
+     "empaque": "400 GRAMOS, FUNDA",
+     "cantidad": 400.0,
+     "unidad": "g",
+     "precio": 8.25
+    },
+    {
+     "codigo": "22210008",
+     "empaque": "25 KILOS, SACO",
+     "cantidad": 25000.0,
+     "unidad": "g",
+     "precio": 474.4
+    }
+   ]
+  },
+  {
+   "id": 22,
+   "nombre": "Score",
+   "ingrediente_activo": "DIFENOCONAZOLE",
+   "grupo": "G1",
+   "categoria": "Fungicida",
+   "formulacion": "emulsion",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 125.0,
+   "dosis_max": 150.0,
+   "unidad": "cc",
+   "dosis_texto": "125 - 150",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 98.4,
+   "control": "algunos hongos de los grupos ascomicetos y basidiomicetos",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Score 250 EC (Syngenta): concentrado emulsionable, FRAC 3; no mezclar con productos alcalinos. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22010081",
+     "empaque": "50 CC., FRASCO",
+     "cantidad": 50.0,
+     "unidad": "cc",
+     "precio": 4.2
+    },
+    {
+     "codigo": "22010083",
+     "empaque": "100 CC., FRASCO",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 7.7
+    },
+    {
+     "codigo": "22010080",
+     "empaque": "1/4 LITRO, FRASCO",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 18.9
+    },
+    {
+     "codigo": "22010079",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 98.4
+    },
+    {
+     "codigo": "22010151",
+     "empaque": "20 LITROS, CANECA",
+     "cantidad": 20000.0,
+     "unidad": "cc",
+     "precio": 1850.0
+    }
+   ]
+  },
+  {
+   "id": 23,
+   "nombre": "Uniform",
+   "ingrediente_activo": "AZOXISTROBIN + METALAXIL",
+   "grupo": "C3 + A1",
+   "categoria": "Fungicida",
+   "formulacion": "suspension",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 125.0,
+   "dosis_max": 150.0,
+   "unidad": "cc",
+   "dosis_texto": "125 - 150",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 86.55,
+   "control": "todo grupo de hongos, más eficiente en oomicetos",
+   "carencia_dias": null,
+   "reingreso_horas": 24,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Uniform (Syngenta, Perú): suspoemulsión (SE), reingreso 24 h. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22010221",
+     "empaque": "1/4 LITRO, ENVASE",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 23.5
+    },
+    {
+     "codigo": "22010220",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 86.55
+    }
+   ]
+  },
+  {
+   "id": 24,
+   "nombre": "Atajo",
+   "ingrediente_activo": "PYRACLOSTROBIN + EPOXICONAZOLE",
+   "grupo": "C3 + G1",
+   "categoria": "Fungicida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 250.0,
+   "dosis_max": 250.0,
+   "unidad": "cc",
+   "dosis_texto": "250",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 45.0,
+   "control": "todo grupo de hongos, más eficiente en ascomicetos",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22G60032",
+     "empaque": "250 ML, FRASCO",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 13.5
+    },
+    {
+     "codigo": "22G60031",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 45.0
+    }
+   ]
+  },
+  {
+   "id": 25,
+   "nombre": "Sico",
+   "ingrediente_activo": "DIFENOCONAZOLE",
+   "grupo": "G1",
+   "categoria": "Fungicida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 150.0,
+   "dosis_max": 150.0,
+   "unidad": "cc",
+   "dosis_texto": "150",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 48.0,
+   "control": "algunos hongos de los grupos ascomicetos y basidiomicetos",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22010085",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 48.0
+    },
+    {
+     "codigo": "22010086",
+     "empaque": "5 LITROS, CANECA",
+     "cantidad": 5000.0,
+     "unidad": "cc",
+     "precio": 230.4
+    },
+    {
+     "codigo": "22010122",
+     "empaque": "20 LITROS, CANECA",
+     "cantidad": 20000.0,
+     "unidad": "cc",
+     "precio": 848.0
+    }
+   ]
+  },
+  {
+   "id": 26,
+   "nombre": "Tilt",
+   "ingrediente_activo": "PROPICONAZOLE",
+   "grupo": "G1",
+   "categoria": "Fungicida",
+   "formulacion": "emulsion",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 200.0,
+   "dosis_max": 250.0,
+   "unidad": "cc",
+   "dosis_texto": "200 - 250",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 39.0,
+   "control": "algunos hongos de los grupos ascomicetos y basidiomicetos",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Tilt 250 EC (Syngenta): concentrado emulsionable. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22010097",
+     "empaque": "100 CC., FRASCO",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 4.4
+    },
+    {
+     "codigo": "22010096",
+     "empaque": "1/4 LITRO, FRASCO",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 10.5
+    },
+    {
+     "codigo": "22010100",
+     "empaque": "1 LITRO, FRASCO",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 39.0
+    },
+    {
+     "codigo": "22010099",
+     "empaque": "5 LITROS, CANECA",
+     "cantidad": 5000.0,
+     "unidad": "cc",
+     "precio": 190.0
+    },
+    {
+     "codigo": "22010101",
+     "empaque": "20 LITROS, CANECA",
+     "cantidad": 20000.0,
+     "unidad": "cc",
+     "precio": 740.0
+    }
+   ]
+  },
+  {
+   "id": 27,
+   "nombre": "Overseas",
+   "ingrediente_activo": "PIRACLOSTROBIN + BOSCALID",
+   "grupo": "C3 + C2",
+   "categoria": "Fungicida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 250.0,
+   "dosis_max": 250.0,
+   "unidad": "cc",
+   "dosis_texto": "250",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 54.0,
+   "control": "todo grupo de hongos, más eficiente en deuteromicetos",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22G60083",
+     "empaque": "250 ML, FRASCO",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 15.5
+    },
+    {
+     "codigo": "22G60053",
+     "empaque": "1 LITRO, FRASCO",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 54.0
+    }
+   ]
+  },
+  {
+   "id": 28,
+   "nombre": "Mertect",
+   "ingrediente_activo": "TIABENDAZOL",
+   "grupo": "B1",
+   "categoria": "Fungicida",
+   "formulacion": "suspension",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 125.0,
+   "dosis_max": 150.0,
+   "unidad": "cc",
+   "dosis_texto": "125 - 150",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 105.0,
+   "control": "algunos hongos de los grupos deuteromicetos",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Mertect 340 F / Tecto 500 SC: tiabendazol en suspensión; incompatible con productos alcalinos como el caldo bordelés. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22010147",
+     "empaque": "50 ML, ENVASE",
+     "cantidad": 50.0,
+     "unidad": "cc",
+     "precio": 6.2
+    },
+    {
+     "codigo": "22010141",
+     "empaque": "100 CC, ENVASE",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 11.9
+    },
+    {
+     "codigo": "22010163",
+     "empaque": "250 ML, ENVASE",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 28.55
+    },
+    {
+     "codigo": "22540009",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 105.0
+    }
+   ]
+  },
+  {
+   "id": 29,
+   "nombre": "Inspire Gold",
+   "ingrediente_activo": "CIPRODINIL + DIFENOCONAZOLE",
+   "grupo": "D1 + G1",
+   "categoria": "Fungicida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 250.0,
+   "dosis_max": 250.0,
+   "unidad": "cc",
+   "dosis_texto": "250",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 59.5,
+   "control": "algunos hongos de los grupos deuteromicetos y ascomicetos",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22019088",
+     "empaque": "400 ML, FRASCO",
+     "cantidad": 400.0,
+     "unidad": "cc",
+     "precio": 26.1
+    },
+    {
+     "codigo": "22019077",
+     "empaque": "1 LITRO, FRASCO",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 59.5
+    }
+   ]
+  },
+  {
+   "id": 30,
+   "nombre": "Carbovax",
+   "ingrediente_activo": "CARBOXIN + THIRAM",
+   "grupo": null,
+   "categoria": "Fungicida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": null,
+   "dosis_max": null,
+   "unidad": "cc",
+   "dosis_texto": null,
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 51.5,
+   "control": null,
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": "Completar: dosis",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22070033",
+     "empaque": "250 ML, ENVASE",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 14.0
+    },
+    {
+     "codigo": "22070030",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 51.5
+    },
+    {
+     "codigo": "22070032",
+     "empaque": "20 LITROS, CANECA",
+     "cantidad": 20000.0,
+     "unidad": "cc",
+     "precio": 968.6
+    }
+   ]
+  },
+  {
+   "id": 31,
+   "nombre": "Sigrado",
+   "ingrediente_activo": null,
+   "grupo": null,
+   "categoria": "Fungicida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": null,
+   "dosis_max": null,
+   "unidad": "g",
+   "dosis_texto": null,
+   "presentacion": "500 GRAMOS",
+   "contenido": 500.0,
+   "contenido_unidad": "g",
+   "pvp": 148.0,
+   "control": null,
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": "Completar: ingrediente activo, dosis",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22540438",
+     "empaque": "500 GRAMOS, FUNDA",
+     "cantidad": 500.0,
+     "unidad": "g",
+     "precio": 148.0
+    }
+   ]
+  },
+  {
+   "id": 32,
+   "nombre": "Kasumin",
+   "ingrediente_activo": "KASUGAMICINA",
+   "grupo": "S/C",
+   "categoria": "Desinfección de suelo",
+   "formulacion": "soluble",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 500.0,
+   "dosis_max": 750.0,
+   "unidad": "cc",
+   "dosis_texto": "500 - 750",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 19.9,
+   "control": "bactericida de acción sistemica",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Kasumin (UPL): concentrado soluble (SL). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22200004",
+     "empaque": "1/2 LITRO, FRASCO",
+     "cantidad": 500.0,
+     "unidad": "cc",
+     "precio": 10.25
+    },
+    {
+     "codigo": "22200003",
+     "empaque": "1 LITRO, FRASCO",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 19.9
+    }
+   ]
+  },
+  {
+   "id": 33,
+   "nombre": "Terraclor",
+   "ingrediente_activo": "PENTACLORONITROBENZENO",
+   "grupo": "MULTISITIO",
+   "categoria": "Desinfección de suelo",
+   "formulacion": "polvo",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 500.0,
+   "dosis_max": 500.0,
+   "unidad": "g",
+   "dosis_texto": "500",
+   "presentacion": "500 GR",
+   "contenido": 500.0,
+   "contenido_unidad": "g",
+   "pvp": 15.0,
+   "control": "hongos del suelo y semilla",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | No figura en la lista de precios Ecuaquímica de octubre 2025 (precio del Excel).",
+   "activo": true,
+   "presentaciones": []
+  },
+  {
+   "id": 34,
+   "nombre": "Aprecio",
+   "ingrediente_activo": "CAPTAN",
+   "grupo": "MULTISITIO",
+   "categoria": "Desinfección de suelo",
+   "formulacion": "polvo",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 500.0,
+   "dosis_max": 500.0,
+   "unidad": "g",
+   "dosis_texto": "500",
+   "presentacion": "500 GRAMOS",
+   "contenido": 500.0,
+   "contenido_unidad": "g",
+   "pvp": 12.0,
+   "control": "hongos del suelo y semilla",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22760018",
+     "empaque": "500 GRAMOS, FUNDA",
+     "cantidad": 500.0,
+     "unidad": "g",
+     "precio": 12.0
+    },
+    {
+     "codigo": "22760016",
+     "empaque": "25 KILOS, SACO",
+     "cantidad": 25000.0,
+     "unidad": "g",
+     "precio": 540.0
+    }
+   ]
+  },
+  {
+   "id": 35,
+   "nombre": "Tiro Fijo",
+   "ingrediente_activo": "GLUFOSINATO DE AMONIO",
+   "grupo": null,
+   "categoria": "Herbicida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 1000.0,
+   "dosis_max": 1000.0,
+   "unidad": "cc",
+   "dosis_texto": "1 LITRO",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 9.0,
+   "control": "no selectivo, postemergente de acción de contacto",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22720647",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 9.0
+    },
+    {
+     "codigo": "22720648",
+     "empaque": "4 LITROS, ENVASE",
+     "cantidad": 4000.0,
+     "unidad": "cc",
+     "precio": 35.2
+    },
+    {
+     "codigo": "22720646",
+     "empaque": "20 LITROS, ENVASE",
+     "cantidad": 20000.0,
+     "unidad": "cc",
+     "precio": 95.0
+    }
+   ]
+  },
+  {
+   "id": 36,
+   "nombre": "Guadaña",
+   "ingrediente_activo": "GLIFOSATO",
+   "grupo": null,
+   "categoria": "Herbicida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 1500.0,
+   "dosis_max": 1500.0,
+   "unidad": "cc",
+   "dosis_texto": "1,5 LITROS",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 7.5,
+   "control": "no selectivo, postemergente de acción sistémica",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22720023",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 7.5
+    },
+    {
+     "codigo": "22I80006",
+     "empaque": "4 LITROS, ENVASE",
+     "cantidad": 4000.0,
+     "unidad": "cc",
+     "precio": 28.6
+    },
+    {
+     "codigo": "22720026",
+     "empaque": "5 GALONES, CUÑETE",
+     "cantidad": 18927.0,
+     "unidad": "cc",
+     "precio": 140.0
+    }
+   ]
+  },
+  {
+   "id": 37,
+   "nombre": "Ecuamina",
+   "ingrediente_activo": "2,4 DIMETYL AMONIO",
+   "grupo": null,
+   "categoria": "Herbicida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 1000.0,
+   "dosis_max": 1000.0,
+   "unidad": "cc",
+   "dosis_texto": "1 LITRO",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 7.5,
+   "control": "selectivo, postemergente para control malezas de hojas anchas (plantas C3)",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22720641",
+     "empaque": "1/2 LITRO, FRASCO",
+     "cantidad": 500.0,
+     "unidad": "cc",
+     "precio": 4.0
+    },
+    {
+     "codigo": "22260049",
+     "empaque": "1 LITRO, FRASCO",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 7.5
+    },
+    {
+     "codigo": "22260048",
+     "empaque": "1 GALON, ENVASE",
+     "cantidad": 3785.4,
+     "unidad": "cc",
+     "precio": 28.2
+    },
+    {
+     "codigo": "22260047",
+     "empaque": "5 GALONES, CANECA",
+     "cantidad": 18927.0,
+     "unidad": "cc",
+     "precio": 140.0
+    }
+   ]
+  },
+  {
+   "id": 38,
+   "nombre": "Winquat",
+   "ingrediente_activo": "PARAQUAT",
+   "grupo": null,
+   "categoria": "Herbicida",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 1500.0,
+   "dosis_max": 1500.0,
+   "unidad": "cc",
+   "dosis_texto": "1,5 LITROS",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 8.0,
+   "control": "no  selectivo, postemergente de acción de contacto",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22F30018",
+     "empaque": "1 LITRO, FRASCO",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 8.0
+    },
+    {
+     "codigo": "22F30019",
+     "empaque": "1 GALON, ENVASE",
+     "cantidad": 3785.4,
+     "unidad": "cc",
+     "precio": 30.0
+    },
+    {
+     "codigo": "22F30020",
+     "empaque": "20 LITROS, ENVASE",
+     "cantidad": 20000.0,
+     "unidad": "cc",
+     "precio": 158.0
+    }
+   ]
+  },
+  {
+   "id": 39,
+   "nombre": "Nicorony",
+   "ingrediente_activo": "NICOSULFURON",
+   "grupo": null,
+   "categoria": "Herbicida",
+   "formulacion": "polvo",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 16.0,
+   "dosis_max": 16.0,
+   "unidad": "g",
+   "dosis_texto": "16",
+   "presentacion": "16 GRAMOS",
+   "contenido": 16.0,
+   "contenido_unidad": "g",
+   "pvp": 6.5,
+   "control": "selectivo, postemergente para control de gramíneas (plantas C4)",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22F30012",
+     "empaque": "16 GRAMOS, SACHET",
+     "cantidad": 16.0,
+     "unidad": "g",
+     "precio": 6.5
+    }
+   ]
+  },
+  {
+   "id": 40,
+   "nombre": "Hormonagro 1",
+   "ingrediente_activo": "AUXINAS",
+   "grupo": "HORMONAL",
+   "categoria": "Bioestimulante",
+   "formulacion": "polvo",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 200.0,
+   "dosis_max": 200.0,
+   "unidad": "g",
+   "dosis_texto": "200",
+   "presentacion": "1 KILO",
+   "contenido": 1000.0,
+   "contenido_unidad": "g",
+   "pvp": 28.3,
+   "control": "promotor de raíces primarias, ideal para uso en esquejes y estacas",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22410001",
+     "empaque": "100 GRAMOS, FUNDA",
+     "cantidad": 100.0,
+     "unidad": "g",
+     "precio": 5.65
+    },
+    {
+     "codigo": "22410000",
+     "empaque": "1 KILO, FUNDA",
+     "cantidad": 1000.0,
+     "unidad": "g",
+     "precio": 28.3
+    }
+   ]
+  },
+  {
+   "id": 41,
+   "nombre": "Cytokin",
+   "ingrediente_activo": "CITOQUININAS",
+   "grupo": "HORMONAL",
+   "categoria": "Bioestimulante",
+   "formulacion": "liquido_foliar",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 330.0,
+   "dosis_max": 330.0,
+   "unidad": "cc",
+   "dosis_texto": "330",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 35.0,
+   "control": "promotor de brotación  vegetitiva, floral y enraizamiento",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22480007",
+     "empaque": "100 CC., FRASCO",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 4.6
+    },
+    {
+     "codigo": "22480006",
+     "empaque": "1/4 LITRO, FRASCO",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 9.25
+    },
+    {
+     "codigo": "22480004",
+     "empaque": "1 LITRO, FRASCO",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 35.0
+    },
+    {
+     "codigo": "22480005",
+     "empaque": "2,5 GALONES, CANECA",
+     "cantidad": 9463.5,
+     "unidad": "cc",
+     "precio": 320.0
+    }
+   ]
+  },
+  {
+   "id": 42,
+   "nombre": "New Gibb",
+   "ingrediente_activo": "GIBERELINAS",
+   "grupo": "HORMONAL",
+   "categoria": "Bioestimulante",
+   "formulacion": "polvo",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 10.0,
+   "dosis_max": 10.0,
+   "unidad": "g",
+   "dosis_texto": "10 GR",
+   "presentacion": "10 GRAMOS",
+   "contenido": 10.0,
+   "contenido_unidad": "g",
+   "pvp": 2.1,
+   "control": "mejorar y emparejar la floración, para mezclar con otros estimulantes",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22490065",
+     "empaque": "10 GRAMOS, BOTELLA",
+     "cantidad": 10.0,
+     "unidad": "g",
+     "precio": 2.1
+    }
+   ]
+  },
+  {
+   "id": 43,
+   "nombre": "Solugro 12-48-8",
+   "ingrediente_activo": "12-48-8 + MICROS",
+   "grupo": "FERTILIZANTE",
+   "categoria": "Fertilizante foliar",
+   "formulacion": "polvo",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 1000.0,
+   "dosis_max": 1000.0,
+   "unidad": "g",
+   "dosis_texto": "1 KG",
+   "presentacion": "1 KILO",
+   "contenido": 1000.0,
+   "contenido_unidad": "g",
+   "pvp": 9.2,
+   "control": "fertlizante alto en fosforo + micros para enraizamiento/ floración",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22480022",
+     "empaque": "500 GRAMOS, FUNDA",
+     "cantidad": 500.0,
+     "unidad": "g",
+     "precio": 4.8
+    },
+    {
+     "codigo": "22480024",
+     "empaque": "1 KILO, FUNDA",
+     "cantidad": 1000.0,
+     "unidad": "g",
+     "precio": 9.2
+    },
+    {
+     "codigo": "22480023",
+     "empaque": "25 LIBRAS, SACO",
+     "cantidad": 11339.8,
+     "unidad": "g",
+     "precio": 99.0
+    }
+   ]
+  },
+  {
+   "id": 44,
+   "nombre": "Cumplidor",
+   "ingrediente_activo": "ACI. HUMICOS + ACIDO ARGÍNICO + AA",
+   "grupo": "FERTILIZANTE",
+   "categoria": "Fertilizante foliar",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 500.0,
+   "dosis_max": 500.0,
+   "unidad": "cc",
+   "dosis_texto": "500",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 13.6,
+   "control": "estimulación de pelos absorventes",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22H30012",
+     "empaque": "250 ML, FRASCO",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 3.7
+    },
+    {
+     "codigo": "22H30011",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 13.6
+    },
+    {
+     "codigo": "22H30009",
+     "empaque": "20 LITROS, CANECA",
+     "cantidad": 20000.0,
+     "unidad": "cc",
+     "precio": 240.0
+    }
+   ]
+  },
+  {
+   "id": 45,
+   "nombre": "Rayphos",
+   "ingrediente_activo": "18-26-0 + ACIDOS HUMICOS",
+   "grupo": "FERTILIZANTE",
+   "categoria": "Fertilizante foliar",
+   "formulacion": "polvo",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 1000.0,
+   "dosis_max": 1000.0,
+   "unidad": "g",
+   "dosis_texto": "1 KG",
+   "presentacion": "1 KILO",
+   "contenido": 1000.0,
+   "contenido_unidad": "g",
+   "pvp": 13.5,
+   "control": "fertlizante alto en fosforo + ácidos húmicos para enraizamiento/ floración",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22C10001",
+     "empaque": "1 KILO, FUNDA",
+     "cantidad": 1000.0,
+     "unidad": "g",
+     "precio": 13.5
+    },
+    {
+     "codigo": "22C10002",
+     "empaque": "20 KILOS, SACO",
+     "cantidad": 20000.0,
+     "unidad": "g",
+     "precio": 245.0
+    }
+   ]
+  },
+  {
+   "id": 46,
+   "nombre": "Isabion",
+   "ingrediente_activo": "AMINOACIDOS COLAGENO",
+   "grupo": "FERTILIZANTE",
+   "categoria": "Fertilizante foliar",
+   "formulacion": "liquido",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 500.0,
+   "dosis_max": 500.0,
+   "unidad": "cc",
+   "dosis_texto": "500",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 23.9,
+   "control": "aminoacidos y peptidos para compensar niveles de estrés de la planta",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22019065",
+     "empaque": "500 ML, FRASCO",
+     "cantidad": 500.0,
+     "unidad": "cc",
+     "precio": 12.9
+    },
+    {
+     "codigo": "22010215",
+     "empaque": "1 LITRO, FRASCO",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 23.9
+    }
+   ]
+  },
+  {
+   "id": 47,
+   "nombre": "Nu-Film P",
+   "ingrediente_activo": "PINOLENO",
+   "grupo": null,
+   "categoria": "Coadyuvante",
+   "formulacion": "aceite_adherente",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 250.0,
+   "dosis_max": 250.0,
+   "unidad": "cc",
+   "dosis_texto": "250 CC",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 16.8,
+   "control": "película adherente reduce el lavado del producto por lluvia.",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22480129",
+     "empaque": "100 CC., FRASCO",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 1.9
+    },
+    {
+     "codigo": "22480128",
+     "empaque": "1/4 LITRO, FRASCO",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 4.55
+    },
+    {
+     "codigo": "22480126",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 16.8
+    },
+    {
+     "codigo": "22480147",
+     "empaque": "10 LITROS, CANECA",
+     "cantidad": 10000.0,
+     "unidad": "cc",
+     "precio": 150.0
+    }
+   ]
+  },
+  {
+   "id": 48,
+   "nombre": "Vaporgard",
+   "ingrediente_activo": "MENTENO",
+   "grupo": null,
+   "categoria": "Coadyuvante",
+   "formulacion": "aceite_adherente",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 500.0,
+   "dosis_max": 500.0,
+   "unidad": "cc",
+   "dosis_texto": "500 CC",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 22.9,
+   "control": "película adherente reduce la pérdida de humedad y afectaciones por escarchas o heladas",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22480072",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 22.9
+    }
+   ]
+  },
+  {
+   "id": 49,
+   "nombre": "Silwet",
+   "ingrediente_activo": "POLIÉTER Y SILICONA",
+   "grupo": null,
+   "categoria": "Coadyuvante",
+   "formulacion": "siliconado",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 30.0,
+   "dosis_max": 30.0,
+   "unidad": "cc",
+   "dosis_texto": "30 CC",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 58.8,
+   "control": "fuerte dispersante siliconado que mejora el mojado y cobertura de fumigación",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22070029",
+     "empaque": "50 CC, FRASCO",
+     "cantidad": 50.0,
+     "unidad": "cc",
+     "precio": 3.5
+    },
+    {
+     "codigo": "22070028",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 58.8
+    }
+   ]
+  },
+  {
+   "id": 50,
+   "nombre": "Fijafix Ph",
+   "ingrediente_activo": "ALCOHOL ETOXILADO",
+   "grupo": null,
+   "categoria": "Coadyuvante",
+   "formulacion": "corrector_ph",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 100.0,
+   "dosis_max": 100.0,
+   "unidad": "cc",
+   "dosis_texto": "100 CC",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 9.8,
+   "control": "dispersante con regulador de ph con acción buffer",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22910011",
+     "empaque": "100 CC, ENVASE",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 1.45
+    },
+    {
+     "codigo": "22130021",
+     "empaque": "250 CC, ENVASE",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 2.8
+    },
+    {
+     "codigo": "22910012",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 9.8
+    }
+   ]
+  },
+  {
+   "id": 51,
+   "nombre": "Indicate",
+   "ingrediente_activo": "ACIDO FOSFORICO",
+   "grupo": null,
+   "categoria": "Coadyuvante",
+   "formulacion": "corrector_ph",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 50.0,
+   "dosis_max": 50.0,
+   "unidad": "cc",
+   "dosis_texto": "50 CC",
+   "presentacion": "1 LITRO",
+   "contenido": 1000.0,
+   "contenido_unidad": "cc",
+   "pvp": 13.6,
+   "control": "corrector de pH de agua",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22490004",
+     "empaque": "100 CC., FRASCO",
+     "cantidad": 100.0,
+     "unidad": "cc",
+     "precio": 1.9
+    },
+    {
+     "codigo": "22490026",
+     "empaque": "1/4 LITRO, FRASCO",
+     "cantidad": 250.0,
+     "unidad": "cc",
+     "precio": 3.7
+    },
+    {
+     "codigo": "22490005",
+     "empaque": "1 LITRO, ENVASE",
+     "cantidad": 1000.0,
+     "unidad": "cc",
+     "precio": 13.6
+    },
+    {
+     "codigo": "22490095",
+     "empaque": "5 LITROS, ENVASE",
+     "cantidad": 5000.0,
+     "unidad": "cc",
+     "precio": 65.4
+    }
+   ]
+  },
+  {
+   "id": 52,
+   "nombre": "Alcaplant",
+   "ingrediente_activo": "OXIDO DE CALCIO AL 35%",
+   "grupo": "FERTILIZANTE",
+   "categoria": "Enmienda",
+   "formulacion": "granulado",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 1500.0,
+   "dosis_max": 1500.0,
+   "unidad": "g",
+   "dosis_texto": "1,5 KG",
+   "presentacion": "20 KILOS",
+   "contenido": 20000.0,
+   "contenido_unidad": "g",
+   "pvp": 89.0,
+   "control": "aporte de Ca para el suelo y regulador de pH líquido",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22370025",
+     "empaque": "1,5 KILOS, BOLSA",
+     "cantidad": 1500.0,
+     "unidad": "g",
+     "precio": 8.6
+    },
+    {
+     "codigo": "22370120",
+     "empaque": "5 KILOS, BOLSA",
+     "cantidad": 5000.0,
+     "unidad": "g",
+     "precio": 24.1
+    },
+    {
+     "codigo": "22370103",
+     "empaque": "20 KILOS, Bag in box",
+     "cantidad": 20000.0,
+     "unidad": "g",
+     "precio": 89.0
+    }
+   ]
+  },
+  {
+   "id": 53,
+   "nombre": "Nutriq. Cosecha",
+   "ingrediente_activo": "SULFATO DE POTASIO + AMINOACIDOS",
+   "grupo": "FERTILIZANTE",
+   "categoria": "Fertilizante foliar",
+   "formulacion": "polvo",
+   "modo_aplicacion": "tanque",
+   "dosis_min": 2000.0,
+   "dosis_max": 3000.0,
+   "unidad": "g",
+   "dosis_texto": "2 - 3 KG",
+   "presentacion": "25 KG",
+   "contenido": 25000.0,
+   "contenido_unidad": "g",
+   "pvp": 80.0,
+   "control": "fórmula química para engrose a base de sulfato de potasio mejorado con AA",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | No figura en la lista de precios Ecuaquímica de octubre 2025 (precio del Excel).",
+   "activo": true,
+   "presentaciones": []
+  },
+  {
+   "id": 54,
+   "nombre": "Caldolomita",
+   "ingrediente_activo": "CARBONATO DE CALCIO + MAGNESIO",
+   "grupo": "ENMIENDA",
+   "categoria": "Enmienda",
+   "formulacion": "granulado",
+   "modo_aplicacion": "sitio",
+   "dosis_min": 250.0,
+   "dosis_max": 250.0,
+   "unidad": "g",
+   "dosis_texto": "250 gr por sitio",
+   "presentacion": "50 KG",
+   "contenido": 50000.0,
+   "contenido_unidad": "g",
+   "pvp": 21.0,
+   "control": "enmienda de suelo para corregir pH ácidos del suelo, aporta Ca y Mg al suelo",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | No figura en la lista de precios Ecuaquímica de octubre 2025 (precio del Excel).",
+   "activo": true,
+   "presentaciones": []
+  },
+  {
+   "id": 55,
+   "nombre": "Soli Tec",
+   "ingrediente_activo": "12-4-23+13S-0,3B-0,5Zn+0,3AA",
+   "grupo": "EDAFICO",
+   "categoria": "Fertilizante edáfico",
+   "formulacion": "granulado",
+   "modo_aplicacion": "suelo_ha",
+   "dosis_min": 150.0,
+   "dosis_max": 150.0,
+   "unidad": "kg/ha",
+   "dosis_texto": "3 sacos en mezcla/ ha",
+   "presentacion": "50 KILOS",
+   "contenido": 50000.0,
+   "contenido_unidad": "g",
+   "pvp": 52.4,
+   "control": "desarrollo vegetativo con tecnología Seaweed coated (ácido algínico)",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22J00003",
+     "empaque": "50 KILOS, SACO",
+     "cantidad": 50000.0,
+     "unidad": "g",
+     "precio": 52.4
+    }
+   ]
+  },
+  {
+   "id": 56,
+   "nombre": "Soli Phos",
+   "ingrediente_activo": "12-24-12+7S+0,3AA",
+   "grupo": "EDAFICO",
+   "categoria": "Fertilizante edáfico",
+   "formulacion": "granulado",
+   "modo_aplicacion": "suelo_ha",
+   "dosis_min": 150.0,
+   "dosis_max": 150.0,
+   "unidad": "kg/ha",
+   "dosis_texto": "3 sacos en mezcla/ ha",
+   "presentacion": "50 KILOS",
+   "contenido": 50000.0,
+   "contenido_unidad": "g",
+   "pvp": 64.0,
+   "control": "arranque de cultivos con tecnología Seaweed coated (ácido algínico)",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22J00001",
+     "empaque": "50 KILOS, SACO",
+     "cantidad": 50000.0,
+     "unidad": "g",
+     "precio": 64.0
+    }
+   ]
+  },
+  {
+   "id": 57,
+   "nombre": "Soli Plex",
+   "ingrediente_activo": "2-10-18+2Mg-11S-0,2Zn-0,9B-0,8Mn+0,3AA",
+   "grupo": "EDAFICO",
+   "categoria": "Fertilizante edáfico",
+   "formulacion": "granulado",
+   "modo_aplicacion": "suelo_ha",
+   "dosis_min": 150.0,
+   "dosis_max": 150.0,
+   "unidad": "kg/ha",
+   "dosis_texto": "3 sacos en mezcla/ ha",
+   "presentacion": "50 KILOS",
+   "contenido": 50000.0,
+   "contenido_unidad": "g",
+   "pvp": 61.5,
+   "control": "prefloración e inicio de flores de cultivos con tecnología Seaweed coated (ácido algínico)",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22J00004",
+     "empaque": "50 KILOS, SACO",
+     "cantidad": 50000.0,
+     "unidad": "g",
+     "precio": 61.5
+    }
+   ]
+  },
+  {
+   "id": 58,
+   "nombre": "Soli Nitro",
+   "ingrediente_activo": "18-22-0+5MO-5AA+0,3AA",
+   "grupo": "EDAFICO",
+   "categoria": "Fertilizante edáfico",
+   "formulacion": "granulado",
+   "modo_aplicacion": "suelo_ha",
+   "dosis_min": 150.0,
+   "dosis_max": 150.0,
+   "unidad": "kg/ha",
+   "dosis_texto": "3 sacos en mezcla/ ha",
+   "presentacion": "50 KILOS",
+   "contenido": 50000.0,
+   "contenido_unidad": "g",
+   "pvp": 38.4,
+   "control": "vigor y verdor con tecnología Seaweed coated (ácido algínico)",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22J00002",
+     "empaque": "50 KILOS, SACO",
+     "cantidad": 50000.0,
+     "unidad": "g",
+     "precio": 38.4
+    }
+   ]
+  },
+  {
+   "id": 59,
+   "nombre": "Soli K",
+   "ingrediente_activo": "0-0-54+2,5MgO-2S-0,3Zn+0,3AA",
+   "grupo": "EDAFICO",
+   "categoria": "Fertilizante edáfico",
+   "formulacion": "granulado",
+   "modo_aplicacion": "suelo_ha",
+   "dosis_min": 150.0,
+   "dosis_max": 150.0,
+   "unidad": "kg/ha",
+   "dosis_texto": "3 sacos en mezcla/ ha",
+   "presentacion": "50 KILOS",
+   "contenido": 50000.0,
+   "contenido_unidad": "g",
+   "pvp": 57.9,
+   "control": "engrose de cultivos con tecnología Seaweed coated (ácido algínico)",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "activo": true,
+   "presentaciones": [
+    {
+     "codigo": "22J00006",
+     "empaque": "50 KILOS, SACO",
+     "cantidad": 50000.0,
+     "unidad": "g",
+     "precio": 57.9
+    }
+   ]
+  }
+ ],
+ "problemas": [
+  {
+   "id": 1,
+   "cultivo_id": "pitahaya",
+   "tipo": "plaga",
+   "nombre": "Avispas / murujas",
+   "descripcion": "Raspan botones florales, flores y frutos.",
+   "orden": 1,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 2,
+   "cultivo_id": "pitahaya",
+   "tipo": "plaga",
+   "nombre": "Hormigas",
+   "descripcion": "Dañan raíces, flores y frutos; protegen a otras plagas.",
+   "orden": 2,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 3,
+   "cultivo_id": "pitahaya",
+   "tipo": "plaga",
+   "nombre": "Hormigas arrieras",
+   "descripcion": "Cortan y cargan tejido; nidos en el suelo.",
+   "orden": 3,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 4,
+   "cultivo_id": "pitahaya",
+   "tipo": "plaga",
+   "nombre": "Chinches",
+   "descripcion": "Pican tallos, botones y frutos; dejan manchas.",
+   "orden": 4,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 5,
+   "cultivo_id": "pitahaya",
+   "tipo": "plaga",
+   "nombre": "Ácaros",
+   "descripcion": "Manchas y raspado en cladodios y frutos.",
+   "orden": 5,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 6,
+   "cultivo_id": "pitahaya",
+   "tipo": "plaga",
+   "nombre": "Babosas y caracoles",
+   "descripcion": "Mordeduras en brotes tiernos y botones.",
+   "orden": 6,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 7,
+   "cultivo_id": "pitahaya",
+   "tipo": "plaga",
+   "nombre": "Nematodos",
+   "descripcion": "Raíces con nudos o lesiones; planta débil.",
+   "orden": 7,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 8,
+   "cultivo_id": "pitahaya",
+   "tipo": "enfermedad",
+   "nombre": "Antracnosis (Colletotrichum) y Alternaria",
+   "descripcion": "Manchas hundidas en cladodios, flores y frutos.",
+   "orden": 8,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 9,
+   "cultivo_id": "pitahaya",
+   "tipo": "enfermedad",
+   "nombre": "Fusarium / sarna fúngica",
+   "descripcion": "Pudrición de flor, manchado y sarna en fruto; pudrición de tallo.",
+   "orden": 9,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 10,
+   "cultivo_id": "pitahaya",
+   "tipo": "enfermedad",
+   "nombre": "Prevención de hongos (amplio espectro)",
+   "descripcion": "Aplicaciones preventivas, sobre todo en épocas de lluvia.",
+   "orden": 10,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 11,
+   "cultivo_id": "pitahaya",
+   "tipo": "enfermedad",
+   "nombre": "Bacteriosis / pudrición blanda",
+   "descripcion": "Tejido acuoso, blando y con mal olor.",
+   "orden": 11,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 12,
+   "cultivo_id": "pitahaya",
+   "tipo": "enfermedad",
+   "nombre": "Hongos del suelo (desinfección)",
+   "descripcion": "Antes de sembrar o en focos de pudrición de raíz.",
+   "orden": 12,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 13,
+   "cultivo_id": "pitahaya",
+   "tipo": "maleza",
+   "nombre": "Malezas en general (no selectivo)",
+   "descripcion": "Control total de malezas en calles. No tocar la planta.",
+   "orden": 13,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 14,
+   "cultivo_id": "pitahaya",
+   "tipo": "maleza",
+   "nombre": "Malezas de hoja ancha",
+   "descripcion": "Herbicida selectivo para hoja ancha.",
+   "orden": 14,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 15,
+   "cultivo_id": "pitahaya",
+   "tipo": "maleza",
+   "nombre": "Gramíneas (pastos)",
+   "descripcion": "Herbicida selectivo para gramíneas.",
+   "orden": 15,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 16,
+   "cultivo_id": "pitahaya",
+   "tipo": "nutricion",
+   "nombre": "Enraizamiento",
+   "descripcion": "Esquejes nuevos o raíces débiles.",
+   "orden": 16,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 17,
+   "cultivo_id": "pitahaya",
+   "tipo": "nutricion",
+   "nombre": "Brotación y floración pareja",
+   "descripcion": "Estimular y emparejar la brotación y la floración.",
+   "orden": 17,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 18,
+   "cultivo_id": "pitahaya",
+   "tipo": "nutricion",
+   "nombre": "Estrés de la planta",
+   "descripcion": "Después de sequía, exceso de lluvia, plagas o podas.",
+   "orden": 18,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 19,
+   "cultivo_id": "pitahaya",
+   "tipo": "nutricion",
+   "nombre": "Engrose de fruto",
+   "descripcion": "Mejorar tamaño y llenado del fruto.",
+   "orden": 19,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 20,
+   "cultivo_id": "pitahaya",
+   "tipo": "nutricion",
+   "nombre": "Suelo ácido (pH bajo)",
+   "descripcion": "Corregir acidez y aportar calcio y magnesio.",
+   "orden": 20,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
+   "fotos": []
+  },
+  {
+   "id": 21,
+   "cultivo_id": "cacao",
+   "tipo": "enfermedad",
+   "nombre": "Monilia (Moniliophthora roreri)",
+   "descripcion": "Manchas y bultos en mazorcas jóvenes, luego polvo blanco-crema. Retirar mazorcas enfermas cada semana.",
+   "orden": 21,
+   "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
+   "fotos": []
+  },
+  {
+   "id": 22,
+   "cultivo_id": "cacao",
+   "tipo": "enfermedad",
+   "nombre": "Escoba de bruja (Moniliophthora perniciosa)",
+   "descripcion": "Brotes hinchados en forma de escoba y mazorcas deformes. Poda sanitaria y sacar el material enfermo del lote.",
+   "orden": 22,
+   "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
+   "fotos": []
+  },
+  {
+   "id": 23,
+   "cultivo_id": "cacao",
+   "tipo": "enfermedad",
+   "nombre": "Mazorca negra (Phytophthora)",
+   "descripcion": "Manchas café-negras en la mazorca que avanzan rápido con la lluvia. Mejorar drenaje y regular sombra.",
+   "orden": 23,
+   "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
+   "fotos": []
+  },
+  {
+   "id": 24,
+   "cultivo_id": "cacao",
+   "tipo": "plaga",
+   "nombre": "Chinche del cacao (Monalonion)",
+   "descripcion": "Manchas negras hundidas en mazorcas y brotes por picaduras.",
+   "orden": 24,
+   "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
+   "fotos": []
+  },
+  {
+   "id": 25,
+   "cultivo_id": "cacao",
+   "tipo": "plaga",
+   "nombre": "Hormigas y comejenes",
+   "descripcion": "Daño en raíces, brotes y cortes de hojas.",
+   "orden": 25,
+   "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
+   "fotos": []
+  },
+  {
+   "id": 26,
+   "cultivo_id": "cacao",
+   "tipo": "maleza",
+   "nombre": "Malezas en general (no selectivo)",
+   "descripcion": "Control en calles sin tocar el tronco ni las hojas del cacao.",
+   "orden": 26,
+   "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
+   "fotos": []
+  },
+  {
+   "id": 27,
+   "cultivo_id": "cacao",
+   "tipo": "nutricion",
+   "nombre": "Suelo ácido (pH bajo)",
+   "descripcion": "Corregir acidez y aportar calcio y magnesio.",
+   "orden": 27,
+   "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
+   "fotos": []
+  },
+  {
+   "id": 28,
+   "cultivo_id": "cacao",
+   "tipo": "nutricion",
+   "nombre": "Floración y cuajado",
+   "descripcion": "Apoyar floración y cuajado de mazorcas.",
+   "orden": 28,
+   "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
+   "fotos": []
+  }
+ ],
+ "recomendaciones": [
+  {
+   "id": 1,
+   "problema_id": 1,
+   "producto_id": 1,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 2,
+   "problema_id": 1,
+   "producto_id": 3,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 3,
+   "problema_id": 1,
+   "producto_id": 5,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 4,
+   "problema_id": 1,
+   "producto_id": 4,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 5,
+   "problema_id": 1,
+   "producto_id": 10,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 6,
+   "problema_id": 2,
+   "producto_id": 1,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 7,
+   "problema_id": 2,
+   "producto_id": 9,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 8,
+   "problema_id": 2,
+   "producto_id": 6,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 9,
+   "problema_id": 2,
+   "producto_id": 7,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 10,
+   "problema_id": 2,
+   "producto_id": 4,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 11,
+   "problema_id": 3,
+   "producto_id": 11,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 12,
+   "problema_id": 3,
+   "producto_id": 8,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 13,
+   "problema_id": 4,
+   "producto_id": 1,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 14,
+   "problema_id": 4,
+   "producto_id": 3,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 15,
+   "problema_id": 4,
+   "producto_id": 6,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 16,
+   "problema_id": 5,
+   "producto_id": 3,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 17,
+   "problema_id": 5,
+   "producto_id": 14,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 18,
+   "problema_id": 5,
+   "producto_id": 16,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 19,
+   "problema_id": 5,
+   "producto_id": 13,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 20,
+   "problema_id": 5,
+   "producto_id": 15,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 21,
+   "problema_id": 6,
+   "producto_id": 12,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 22,
+   "problema_id": 6,
+   "producto_id": 10,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 23,
+   "problema_id": 7,
+   "producto_id": 3,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 24,
+   "problema_id": 8,
+   "producto_id": 22,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 25,
+   "problema_id": 8,
+   "producto_id": 24,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 26,
+   "problema_id": 8,
+   "producto_id": 23,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 27,
+   "problema_id": 8,
+   "producto_id": 25,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 28,
+   "problema_id": 8,
+   "producto_id": 26,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 29,
+   "problema_id": 8,
+   "producto_id": 18,
+   "etapa_id": null,
+   "prioridad": 6,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 30,
+   "problema_id": 9,
+   "producto_id": 27,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 31,
+   "problema_id": 9,
+   "producto_id": 28,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 32,
+   "problema_id": 9,
+   "producto_id": 29,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 33,
+   "problema_id": 9,
+   "producto_id": 30,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 34,
+   "problema_id": 10,
+   "producto_id": 18,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 35,
+   "problema_id": 10,
+   "producto_id": 21,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 36,
+   "problema_id": 10,
+   "producto_id": 17,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 37,
+   "problema_id": 10,
+   "producto_id": 19,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 38,
+   "problema_id": 10,
+   "producto_id": 20,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 39,
+   "problema_id": 11,
+   "producto_id": 32,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 40,
+   "problema_id": 11,
+   "producto_id": 17,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": 400,
+   "dosis_max": 400,
+   "nota": null
+  },
+  {
+   "id": 41,
+   "problema_id": 11,
+   "producto_id": 21,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 42,
+   "problema_id": 12,
+   "producto_id": 33,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 43,
+   "problema_id": 12,
+   "producto_id": 34,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 44,
+   "problema_id": 12,
+   "producto_id": 28,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": 250,
+   "dosis_max": 250,
+   "nota": null
+  },
+  {
+   "id": 45,
+   "problema_id": 12,
+   "producto_id": 17,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": 400,
+   "dosis_max": 400,
+   "nota": null
+  },
+  {
+   "id": 46,
+   "problema_id": 12,
+   "producto_id": 32,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 47,
+   "problema_id": 13,
+   "producto_id": 36,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 48,
+   "problema_id": 13,
+   "producto_id": 35,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 49,
+   "problema_id": 13,
+   "producto_id": 38,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 50,
+   "problema_id": 14,
+   "producto_id": 37,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 51,
+   "problema_id": 15,
+   "producto_id": 39,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 52,
+   "problema_id": 16,
+   "producto_id": 40,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 53,
+   "problema_id": 16,
+   "producto_id": 44,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 54,
+   "problema_id": 16,
+   "producto_id": 45,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 55,
+   "problema_id": 16,
+   "producto_id": 43,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 56,
+   "problema_id": 17,
+   "producto_id": 41,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 57,
+   "problema_id": 17,
+   "producto_id": 42,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 58,
+   "problema_id": 17,
+   "producto_id": 43,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 59,
+   "problema_id": 17,
+   "producto_id": 45,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 60,
+   "problema_id": 18,
+   "producto_id": 46,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 61,
+   "problema_id": 19,
+   "producto_id": 53,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 62,
+   "problema_id": 19,
+   "producto_id": 59,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 63,
+   "problema_id": 20,
+   "producto_id": 54,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 64,
+   "problema_id": 20,
+   "producto_id": 52,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null
+  },
+  {
+   "id": 65,
+   "problema_id": 21,
+   "producto_id": 18,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 66,
+   "problema_id": 21,
+   "producto_id": 21,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 67,
+   "problema_id": 21,
+   "producto_id": 17,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 68,
+   "problema_id": 22,
+   "producto_id": 21,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 69,
+   "problema_id": 22,
+   "producto_id": 17,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 70,
+   "problema_id": 23,
+   "producto_id": 23,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 71,
+   "problema_id": 23,
+   "producto_id": 21,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 72,
+   "problema_id": 23,
+   "producto_id": 17,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 73,
+   "problema_id": 24,
+   "producto_id": 1,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 74,
+   "problema_id": 24,
+   "producto_id": 3,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 75,
+   "problema_id": 25,
+   "producto_id": 1,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 76,
+   "problema_id": 25,
+   "producto_id": 11,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 77,
+   "problema_id": 26,
+   "producto_id": 36,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 78,
+   "problema_id": 26,
+   "producto_id": 35,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 79,
+   "problema_id": 27,
+   "producto_id": 54,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 80,
+   "problema_id": 28,
+   "producto_id": 43,
+   "etapa_id": null,
+   "prioridad": 1,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 81,
+   "problema_id": 28,
+   "producto_id": 45,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  },
+  {
+   "id": 82,
+   "problema_id": 28,
+   "producto_id": 46,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+  }
+ ],
+ "plan_sanitario": [
+  {
+   "id": 1,
+   "etapa_id": 1,
+   "producto_id": 24,
+   "dosis_tanque": 250.0,
+   "unidad": "cc",
+   "alternar": false,
+   "orden": 1
+  },
+  {
+   "id": 2,
+   "etapa_id": 1,
+   "producto_id": 18,
+   "dosis_tanque": 330.0,
+   "unidad": "cc",
+   "alternar": false,
+   "orden": 2
+  },
+  {
+   "id": 3,
+   "etapa_id": 1,
+   "producto_id": 16,
+   "dosis_tanque": 250.0,
+   "unidad": "g",
+   "alternar": true,
+   "orden": 3
+  },
+  {
+   "id": 4,
+   "etapa_id": 1,
+   "producto_id": 9,
+   "dosis_tanque": 250.0,
+   "unidad": "cc",
+   "alternar": true,
+   "orden": 4
+  },
+  {
+   "id": 5,
+   "etapa_id": 1,
+   "producto_id": 49,
+   "dosis_tanque": 25.0,
+   "unidad": "cc",
+   "alternar": false,
+   "orden": 5
+  },
+  {
+   "id": 6,
+   "etapa_id": 2,
+   "producto_id": 22,
+   "dosis_tanque": 150.0,
+   "unidad": "cc",
+   "alternar": false,
+   "orden": 1
+  },
+  {
+   "id": 7,
+   "etapa_id": 2,
+   "producto_id": 18,
+   "dosis_tanque": 330.0,
+   "unidad": "cc",
+   "alternar": false,
+   "orden": 2
+  },
+  {
+   "id": 8,
+   "etapa_id": 2,
+   "producto_id": 5,
+   "dosis_tanque": 200.0,
+   "unidad": "cc",
+   "alternar": true,
+   "orden": 3
+  },
+  {
+   "id": 9,
+   "etapa_id": 2,
+   "producto_id": 1,
+   "dosis_tanque": 150.0,
+   "unidad": "cc",
+   "alternar": true,
+   "orden": 4
+  },
+  {
+   "id": 10,
+   "etapa_id": 2,
+   "producto_id": 49,
+   "dosis_tanque": 25.0,
+   "unidad": "cc",
+   "alternar": false,
+   "orden": 5
+  },
+  {
+   "id": 11,
+   "etapa_id": 3,
+   "producto_id": 28,
+   "dosis_tanque": 200.0,
+   "unidad": "cc",
+   "alternar": false,
+   "orden": 1
+  },
+  {
+   "id": 12,
+   "etapa_id": 3,
+   "producto_id": 21,
+   "dosis_tanque": 400.0,
+   "unidad": "g",
+   "alternar": false,
+   "orden": 2
+  },
+  {
+   "id": 13,
+   "etapa_id": 3,
+   "producto_id": 48,
+   "dosis_tanque": 500.0,
+   "unidad": "cc",
+   "alternar": true,
+   "orden": 3
+  },
+  {
+   "id": 14,
+   "etapa_id": 4,
+   "producto_id": 27,
+   "dosis_tanque": 250.0,
+   "unidad": "cc",
+   "alternar": false,
+   "orden": 1
+  },
+  {
+   "id": 15,
+   "etapa_id": 4,
+   "producto_id": 21,
+   "dosis_tanque": 400.0,
+   "unidad": "g",
+   "alternar": false,
+   "orden": 2
+  },
+  {
+   "id": 16,
+   "etapa_id": 4,
+   "producto_id": 3,
+   "dosis_tanque": 150.0,
+   "unidad": "cc",
+   "alternar": true,
+   "orden": 3
+  },
+  {
+   "id": 17,
+   "etapa_id": 4,
+   "producto_id": 16,
+   "dosis_tanque": 250.0,
+   "unidad": "g",
+   "alternar": true,
+   "orden": 4
+  },
+  {
+   "id": 18,
+   "etapa_id": 4,
+   "producto_id": 48,
+   "dosis_tanque": 250.0,
+   "unidad": "cc",
+   "alternar": false,
+   "orden": 5
+  },
+  {
+   "id": 19,
+   "etapa_id": 5,
+   "producto_id": 22,
+   "dosis_tanque": 125.0,
+   "unidad": "cc",
+   "alternar": false,
+   "orden": 1
+  },
+  {
+   "id": 20,
+   "etapa_id": 5,
+   "producto_id": 10,
+   "dosis_tanque": 100.0,
+   "unidad": "g",
+   "alternar": false,
+   "orden": 2
+  },
+  {
+   "id": 21,
+   "etapa_id": 5,
+   "producto_id": 49,
+   "dosis_tanque": 25.0,
+   "unidad": "cc",
+   "alternar": false,
+   "orden": 3
+  }
+ ],
+ "plan_fertilizacion": [
+  {
+   "id": 1,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 6,
+   "tipo": "enmienda",
+   "producto_id": 54,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": 250,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": "Si el pH del suelo es ácido",
+   "nota": "Aplicar en el hoyo o sitio de siembra, 30 días antes de fertilizar.",
+   "orden": 1
+  },
+  {
+   "id": 2,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 6,
+   "tipo": "suelo",
+   "producto_id": 56,
+   "dosis_kg_ha": 150,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Arranque del cultivo (3 sacos/ha según portafolio).",
+   "orden": 2
+  },
+  {
+   "id": 3,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 6,
+   "tipo": "foliar",
+   "producto_id": 44,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": null,
+   "dosis_tanque": 500,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Estimula pelos absorbentes.",
+   "orden": 3
+  },
+  {
+   "id": 4,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 6,
+   "tipo": "foliar",
+   "producto_id": 40,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": null,
+   "dosis_tanque": 200,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Enraizamiento de esquejes.",
+   "orden": 4
+  },
+  {
+   "id": 5,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 7,
+   "tipo": "suelo",
+   "producto_id": 55,
+   "dosis_kg_ha": 150,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Desarrollo vegetativo.",
+   "orden": 5
+  },
+  {
+   "id": 6,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 7,
+   "tipo": "suelo",
+   "producto_id": 58,
+   "dosis_kg_ha": 150,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Vigor y verdor.",
+   "orden": 6
+  },
+  {
+   "id": 7,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 7,
+   "tipo": "foliar",
+   "producto_id": 46,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": null,
+   "dosis_tanque": 500,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Compensa estrés.",
+   "orden": 7
+  },
+  {
+   "id": 8,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 8,
+   "tipo": "suelo",
+   "producto_id": 57,
+   "dosis_kg_ha": 150,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Prefloración e inicio de flores.",
+   "orden": 8
+  },
+  {
+   "id": 9,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 8,
+   "tipo": "foliar",
+   "producto_id": 41,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": null,
+   "dosis_tanque": 330,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Brotación floral.",
+   "orden": 9
+  },
+  {
+   "id": 10,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 8,
+   "tipo": "foliar",
+   "producto_id": 43,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": null,
+   "dosis_tanque": 1000,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": null,
+   "orden": 10
+  },
+  {
+   "id": 11,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 8,
+   "tipo": "foliar",
+   "producto_id": 42,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": null,
+   "dosis_tanque": 10,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Emparejar floración; mezclar con otros estimulantes.",
+   "orden": 11
+  },
+  {
+   "id": 12,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 8,
+   "tipo": "foliar",
+   "producto_id": 45,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": null,
+   "dosis_tanque": 1000,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": null,
+   "orden": 12
+  },
+  {
+   "id": 13,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 9,
+   "tipo": "suelo",
+   "producto_id": 59,
+   "dosis_kg_ha": 150,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Engrose de fruto.",
+   "orden": 13
+  },
+  {
+   "id": 14,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 9,
+   "tipo": "foliar",
+   "producto_id": 53,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": null,
+   "dosis_tanque": 2000,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": null,
+   "orden": 14
+  },
+  {
+   "id": 15,
+   "cultivo_id": "pitahaya",
+   "etapa_id": 9,
+   "tipo": "foliar",
+   "producto_id": 46,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": null,
+   "dosis_tanque": 500,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Compensa estrés.",
+   "orden": 15
+  },
+  {
+   "id": 16,
+   "cultivo_id": "cacao",
+   "etapa_id": 10,
+   "tipo": "enmienda",
+   "producto_id": 54,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": 250,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": "Si el pH del suelo es ácido",
+   "nota": "En el hoyo de siembra.",
+   "orden": 16
+  },
+  {
+   "id": 17,
+   "cultivo_id": "cacao",
+   "etapa_id": 10,
+   "tipo": "suelo",
+   "producto_id": 56,
+   "dosis_kg_ha": 150,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Arranque (borrador: revisar dosis para cacao).",
+   "orden": 17
+  },
+  {
+   "id": 18,
+   "cultivo_id": "cacao",
+   "etapa_id": 11,
+   "tipo": "suelo",
+   "producto_id": 55,
+   "dosis_kg_ha": 150,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Borrador: revisar dosis para cacao.",
+   "orden": 18
+  },
+  {
+   "id": 19,
+   "cultivo_id": "cacao",
+   "etapa_id": 12,
+   "tipo": "suelo",
+   "producto_id": 57,
+   "dosis_kg_ha": 150,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Borrador: revisar dosis para cacao.",
+   "orden": 19
+  },
+  {
+   "id": 20,
+   "cultivo_id": "cacao",
+   "etapa_id": 13,
+   "tipo": "suelo",
+   "producto_id": 59,
+   "dosis_kg_ha": 150,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Borrador: revisar dosis para cacao.",
+   "orden": 20
+  }
+ ],
+ "compatibilidad": [
+  {
+   "id": 1,
+   "producto_a": 20,
+   "producto_b": 6,
+   "nivel": "incompatible",
+   "nota": "El caldo bordelés es alcalino y degrada a los organofosforados."
+  },
+  {
+   "id": 2,
+   "producto_a": 20,
+   "producto_b": 7,
+   "nivel": "incompatible",
+   "nota": "El caldo bordelés es alcalino y degrada a los organofosforados."
+  },
+  {
+   "id": 3,
+   "producto_a": 20,
+   "producto_b": 8,
+   "nivel": "incompatible",
+   "nota": "El caldo bordelés es alcalino y degrada a los organofosforados."
+  },
+  {
+   "id": 4,
+   "producto_a": 20,
+   "producto_b": 9,
+   "nivel": "incompatible",
+   "nota": "El caldo bordelés es alcalino y degrada a los organofosforados."
+  },
+  {
+   "id": 5,
+   "producto_a": 21,
+   "producto_b": 51,
+   "nivel": "precaucion",
+   "nota": "Bajar mucho el pH con cobres libera cobre soluble y puede quemar."
+  },
+  {
+   "id": 6,
+   "producto_a": 17,
+   "producto_b": 51,
+   "nivel": "precaucion",
+   "nota": "Bajar mucho el pH con cobres libera cobre soluble y puede quemar."
+  },
+  {
+   "id": 7,
+   "producto_a": 20,
+   "producto_b": 51,
+   "nivel": "precaucion",
+   "nota": "Bajar mucho el pH con cobres libera cobre soluble y puede quemar."
+  },
+  {
+   "id": 8,
+   "producto_a": 19,
+   "producto_b": 51,
+   "nivel": "precaucion",
+   "nota": "Bajar mucho el pH con cobres libera cobre soluble y puede quemar."
+  },
+  {
+   "id": 9,
+   "producto_a": 52,
+   "producto_b": 43,
+   "nivel": "incompatible",
+   "nota": "El calcio con fosfatos forma precipitado en el tanque."
+  },
+  {
+   "id": 10,
+   "producto_a": 52,
+   "producto_b": 45,
+   "nivel": "incompatible",
+   "nota": "El calcio con fosfatos forma precipitado en el tanque."
+  },
+  {
+   "id": 11,
+   "producto_a": 6,
+   "producto_b": 21,
+   "nivel": "precaucion",
+   "nota": "La ficha de Curacron (Edifarm) indica no mezclar con productos de reacción alcalina como los cobres."
+  },
+  {
+   "id": 12,
+   "producto_a": 18,
+   "producto_b": 48,
+   "nivel": "incompatible",
+   "nota": "La ficha técnica de Daconil 720 (Syngenta Ecuador) indica no mezclarlo con aceite agrícola."
+  },
+  {
+   "id": 13,
+   "producto_a": 18,
+   "producto_b": 47,
+   "nivel": "incompatible",
+   "nota": "La ficha técnica de Daconil 720 (Syngenta Ecuador) indica no mezclarlo con aceite agrícola."
+  },
+  {
+   "id": 14,
+   "producto_a": 22,
+   "producto_b": 20,
+   "nivel": "incompatible",
+   "nota": "No mezclar con productos de fuerte reacción alcalina como el caldo bordelés (fichas de difenoconazol y tiabendazol)."
+  },
+  {
+   "id": 15,
+   "producto_a": 25,
+   "producto_b": 20,
+   "nivel": "incompatible",
+   "nota": "No mezclar con productos de fuerte reacción alcalina como el caldo bordelés (fichas de difenoconazol y tiabendazol)."
+  },
+  {
+   "id": 16,
+   "producto_a": 29,
+   "producto_b": 20,
+   "nivel": "incompatible",
+   "nota": "No mezclar con productos de fuerte reacción alcalina como el caldo bordelés (fichas de difenoconazol y tiabendazol)."
+  },
+  {
+   "id": 17,
+   "producto_a": 28,
+   "producto_b": 20,
+   "nivel": "incompatible",
+   "nota": "No mezclar con productos de fuerte reacción alcalina como el caldo bordelés (fichas de difenoconazol y tiabendazol)."
+  },
+  {
+   "id": 18,
+   "producto_a": 38,
+   "producto_b": 36,
+   "nivel": "precaucion",
+   "nota": "El paraquat seca el tejido rápido y reduce el efecto del glifosato."
+  }
+ ],
+ "ajustes": {
+  "whatsapp_asesor": "https://wa.me/+593988763749",
+  "nombre_asesor": "Sebastián",
+  "volumen_tanque_l": 200,
+  "volumen_bomba_l": 20,
+  "litros_agua_ha": 400,
+  "plantas_por_bomba": 60,
+  "ph_acido": 5.5,
+  "aviso_legal": "Recomendación técnica referencial. Lea siempre la etiqueta y use equipo de protección."
+ }
+}
