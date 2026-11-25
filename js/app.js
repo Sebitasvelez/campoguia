@@ -476,7 +476,8 @@
     const n = (v) => (v === "" || v === undefined || v === null ? null : Number(String(v).replace(",", ".")));
     const lhaRef = Number(aj("litros_agua_ha", 400)) || 400;
     // productos de bomba/tanque: se calcula con la dosis por hectárea (editable)
-    const esTanque = d.modo === "tanque";
+    // solo los técnicos calculan con dosis por hectárea editable; los agricultores usan la dosis por tanque recomendada
+    const esTanque = d.modo === "tanque" && D.sesion.perfil.rol === "tecnico";
     const dh = esTanque ? L.dosisHaDe(p, lhaRef, TANQUE()) : null;
     if (esTanque && cc.d !== null && cc.d !== undefined && cc.d !== "" && !isNaN(Number(cc.d))) { cc.dha = Math.round(Number(cc.d) * lhaRef / TANQUE() * 10) / 10; cc.d = null; }
     const dhaElegida = esTanque ? (n(cc.dha) !== null && n(cc.dha) > 0 ? n(cc.dha) : cc.usarMax ? dh.max : dh.min) : null;
@@ -492,10 +493,10 @@
     let res = "";
     if (r.tipo === "tanque" && r.total !== undefined) {
       res = `<div class="grid2"><div><div class="n">${h(L.cantidad(r.total, r.unidad))}</div><small>Producto requerido total</small></div>
-        <div><div class="n">${r.bombas}</div><small>${equipoTxt(true)}</small></div>
+        <div><div class="n">${L.fmt(r.litrosAgua, 0)} L</div><small>Agua total</small></div>
         <div><div class="n">${h(L.cantidad(r.porBomba, r.unidad))}</div><small>Dosis por ${equipoTxt(false)}</small></div>
-        <div><div class="n">${L.fmt(r.litrosAgua, 0)} L</div><small>Agua total</small></div></div>
-        <div class="linea">Dosis usada: <b>${h(L.cantidad(dhaElegida, p.unidad))} por ha</b> con ${L.fmt(lhaUsada, 0)} L de agua/ha${cc.equipo !== "tanque" ? ` · ${h(L.cantidad(r.porTanque, r.unidad))} por tanque de ${TANQUE()} L` : ""}</div>`;
+        <div><div class="n">${r.bombas}</div><small>${equipoTxt(true)}</small></div></div>
+        ${esTanque ? `<div class="linea">Dosis usada: <b>${h(L.cantidad(dhaElegida, p.unidad))} por ha</b> con ${L.fmt(lhaUsada, 0)} L de agua/ha${cc.equipo !== "tanque" ? ` · ${h(L.cantidad(r.porTanque, r.unidad))} por tanque de ${TANQUE()} L` : ""}</div>` : ""}`;
     } else if (r.kgTotal !== undefined) {
       res = `<div class="grid2"><div><div class="n">${L.fmt(r.kgTotal, 1)} kg</div><small>Producto requerido total</small></div>
         <div><div class="n">${r.sacos50}</div><small>Sacos de 50 kg</small></div>
@@ -518,7 +519,7 @@
           <div class="etq">Equipo</div>
           <div class="seg" role="group" aria-label="Equipo"><button data-eq="bomba" class="${cc.equipo === "bomba" ? "sel" : ""}">Bomba ${BOMBA()} L</button><button data-eq="tanque" class="${cc.equipo === "tanque" ? "sel" : ""}">Tanque ${TANQUE()} L</button><button data-eq="otro" class="${cc.equipo === "otro" ? "sel" : ""}">Otro</button></div>
           ${cc.equipo === "otro" ? `<label class="campo">Capacidad del equipo<span class="unido"><input id="vol" inputmode="decimal" value="${h(cc.vol || 16)}"><span>litros</span></span></label>` : ""}
-          <label class="campo">Agua que usas por hectárea<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span><small>Con este dato se reparte la dosis por hectárea en cada bomba o tanque.</small></label>
+          ${esTanque || cc.modo === "ha" ? `<label class="campo">Agua que usas por hectárea<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span><small>${esTanque ? "Con este dato se reparte la dosis por hectárea en cada bomba o tanque." : "Cámbialo según tu equipo y el tamaño de tus plantas."}</small></label>` : ""}
           ${cc.modo === "plantas" ? `<label class="campo">Plantas que cubres con una bomba de ${BOMBA()} L<span class="unido"><input id="ppb" inputmode="numeric" value="${h(cc.ppb)}"><span>plantas</span></span></label>` : ""}`
           : `<label class="campo">Plantas por hectárea<span class="unido"><input id="pha" inputmode="numeric" value="${h(cc.pha || "")}" placeholder="Ej. 1600"><span>pl/ha</span></span></label>`}
         ${r.avisos.map((a) => `<div class="aviso ambar">${ic.alerta}<div>${h(a)}</div></div>`).join("")}
