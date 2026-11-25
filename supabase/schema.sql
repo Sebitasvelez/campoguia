@@ -50,7 +50,9 @@ create table if not exists productos (
   categoria_tox text,
   nota text,
   fuente text,               -- de dónde salió el dato (Excel del asesor, ficha técnica, internet)
-  presentaciones jsonb not null default '[]',  -- [{codigo, empaque, cantidad (cc o g), unidad, precio}] de la lista de precios oficial
+  presentaciones jsonb not null default '[]',
+  dosis_ha_min numeric,   -- dosis por hectárea (cc o g/ha) para la calculadora; vacía = se calcula desde la dosis por tanque
+  dosis_ha_max numeric,  -- [{codigo, empaque, cantidad (cc o g), unidad, precio}] de la lista de precios oficial
   activo boolean not null default true
 );
 
@@ -67,6 +69,8 @@ create table if not exists problemas (
   fuente text,
   fotos jsonb not null default '[]'   -- [{url, credito}] fotografías referenciales del manual
 );
+alter table productos add column if not exists dosis_ha_min numeric;
+alter table productos add column if not exists dosis_ha_max numeric;
 alter table problemas add column if not exists fotos jsonb not null default '[]';
 
 create table if not exists recomendaciones (

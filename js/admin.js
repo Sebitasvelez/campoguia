@@ -24,7 +24,7 @@
   const optProblemas = () => (DB.problemas || []).slice().sort((a, b) => (a.cultivo_id + a.orden).localeCompare(b.cultivo_id + b.orden, undefined, { numeric: true })).map((p) => [p.id, nomCultivo(p.cultivo_id) + " · " + p.nombre]);
   const nomProblema = (id) => ((DB.problemas || []).find((p) => String(p.id) === String(id)) || {}).nombre || "";
   const sn = (v) => (v === true ? "Sí" : v === false ? "No" : "");
-  const dosisTxt = (p) => p.modo_aplicacion === "suelo_ha" ? L.rango(p.dosis_min, p.dosis_max, "kg") + "/ha" : p.modo_aplicacion === "sitio" ? L.rango(p.dosis_min, p.dosis_max, "g") + "/sitio" : L.rango(p.dosis_min, p.dosis_max, p.unidad) + "/tanque";
+  const dosisTxt = (p) => p.modo_aplicacion === "suelo_ha" ? L.rango(p.dosis_min, p.dosis_max, "kg") + "/ha" : p.modo_aplicacion === "sitio" ? L.rango(p.dosis_min, p.dosis_max, "g") + "/sitio" : L.rango(p.dosis_min, p.dosis_max, p.unidad) + "/tanque" + (p.dosis_ha_min !== null && p.dosis_ha_min !== undefined && p.dosis_ha_min !== "" ? " · " + L.rango(p.dosis_ha_min, p.dosis_ha_max, p.unidad) + "/ha" : "");
 
   // ------------------------------------------------------------ secciones editables
   const SECCIONES = {
@@ -39,7 +39,9 @@
         { k: "categoria", t: "Categoría", tipo: "select", opciones: () => CATEGORIAS.map((c) => [c, c]), req: true },
         { k: "grupo", t: "Grupo IRAC / FRAC" },
         { k: "modo_aplicacion", t: "Modo de aplicación", tipo: "select", opciones: () => [["tanque", "En tanque (dosis por 200 L)"], ["sitio", "Por sitio / planta (g)"], ["suelo_ha", "Al suelo (kg por ha)"]], def: "tanque" },
-        { k: "dosis_min", t: "Dosis mínima", tipo: "num" }, { k: "dosis_max", t: "Dosis máxima", tipo: "num" },
+        { k: "dosis_min", t: "Dosis mínima (por tanque de 200 L, por sitio o kg/ha según el modo)", tipo: "num" }, { k: "dosis_max", t: "Dosis máxima", tipo: "num" },
+        { k: "dosis_ha_min", t: "Dosis por hectárea mínima (cc o g por ha)", tipo: "num", ayuda: "Solo productos en tanque. Es la que usa la calculadora. Si la dejas vacía, se calcula desde la dosis por tanque con el agua por hectárea de Ajustes." },
+        { k: "dosis_ha_max", t: "Dosis por hectárea máxima", tipo: "num" },
         { k: "unidad", t: "Unidad de la dosis", tipo: "select", opciones: () => [["cc", "cc"], ["g", "g"], ["kg/ha", "kg/ha"]], def: "cc" },
         { k: "formulacion", t: "Formulación (define el orden de mezcla)", tipo: "select", opciones: () => FORMULACIONES, def: "liquido" },
         { k: "presentacion", t: "Presentación (texto)", ayuda: "Ej. LT, 500 GR, 50 KG" },

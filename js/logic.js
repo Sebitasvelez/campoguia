@@ -49,6 +49,20 @@
     return { min, max: max === null ? min : max, unidad: producto.unidad, modo: producto.modo_aplicacion || "tanque" };
   }
 
+  /**
+   * Dosis por hectárea de un producto que se aplica con bomba o tanque.
+   * Usa la dosis/ha cargada en el producto; si no tiene, la calcula desde la dosis por tanque
+   * con el agua de referencia por hectárea (ajuste litros_agua_ha).
+   */
+  function dosisHaDe(producto, litrosRef, tanqueL, rec) {
+    const u = producto.unidad || "cc";
+    let min = num(producto.dosis_ha_min), max = num(producto.dosis_ha_max);
+    if (min !== null || max !== null) return { min: min !== null ? min : max, max: max !== null ? max : min, unidad: u, derivada: false };
+    const d = dosisDe(producto, rec), f = (num(litrosRef) || 400) / (tanqueL || 200);
+    if (d.min === null && d.max === null) return { min: null, max: null, unidad: u, derivada: true };
+    return { min: d.min !== null ? r1(d.min * f) : null, max: d.max !== null ? r1(d.max * f) : null, unidad: u, derivada: true };
+  }
+
   /** Dosis por volumen de agua (dosis de etiqueta expresada por tanque de 200 L) */
   function porVolumen(dosis, litros, tanqueL) {
     const f = litros / (tanqueL || 200);
@@ -312,6 +326,6 @@
   }
 
   const api = { ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, compraOptima, precioUnitario, nombrePresentacion,
-    ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas };
+    dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);
