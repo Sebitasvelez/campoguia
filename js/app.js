@@ -57,7 +57,7 @@
     lotes: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18v12H3zM9 6v12M15 6v12"/></svg>',
     mezcla: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg>',
     persona: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>',
-    wa: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg>',
+    wa: '<svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z"/><path fill="currentColor" d="M9.1 7.6c.2 0 .4 0 .6.4l.8 1.9c.1.2 0 .4-.1.6l-.6.7c-.1.1-.1.3 0 .5.5.9 1.2 1.7 2.1 2.3.4.3.8.5 1.2.7.2.1.4 0 .5-.1l.7-.8c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.3.3.6-.1.9-.9 1.7-1.8 1.8-.6.1-1.4 0-2.9-.6-2-.9-3.4-2.6-3.9-3.4-.5-.7-1-1.8-1-2.8 0-.9.4-1.6.8-2 .2-.3.5-.4.7-.4z"/></svg>',
     alerta: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="flex-shrink:0"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg>',
     hoja: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z"/><path d="M5 19l8-8"/></svg>',
     gota: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10z"/></svg>',
@@ -444,7 +444,7 @@
   }
 
   // ------------------------------------------------------------ REPORTES (imagen para guardar o compartir)
-  const botonesReporte = () => `<div class="acciones"><button class="btn azul" id="repGuardar">${ic.descarga}Guardar como imagen</button><button class="btn wa" id="repCompartir">${ic.wa}Compartir</button></div>`;
+  const botonesReporte = () => `<div class="acciones"><button class="btn wa" id="repCompartir" style="flex:1">${ic.wa}Compartir</button></div>`;
   function pieReporte() {
     const tel = String(aj("whatsapp_asesor", "")).replace(/^https?:\/\/wa\.me\/\+?/i, "").replace(/\D/g, "");
     return `Reporte generado con ${NOMBRE} · ${new Date().toLocaleString("es-EC", { dateStyle: "medium", timeStyle: "short" })} · Recomendación técnica referencial: lea siempre la etiqueta y use equipo de protección.` +
