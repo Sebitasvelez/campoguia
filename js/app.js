@@ -44,6 +44,11 @@
   const RIESGO = { bajo: ["verde", "Riesgo bajo de sarna/hongos"], ligero: ["claro-ambar", "Riesgo ligero de sarna/hongos"], alto: ["claro-rojo", "Riesgo alto de sarna/hongos"] };
 
   // ------------------------------------------------------------ íconos
+  // íconos de cultivo (estilo a color); los cultivos nuevos usan la hoja
+  const ICONO_CULTIVO = {
+    pitahaya: '<svg width="44" height="44" viewBox="-36 -44 72 86" aria-hidden="true"><ellipse cx="0" cy="4" rx="24" ry="30" fill="#F2C230"/><path d="M-18 -10 L-30 -18 L-14 -16 Z M18 -10 L30 -18 L14 -16 Z M-22 10 L-34 8 L-21 2 Z M22 10 L34 8 L21 2 Z M-12 26 L-18 38 L-5 30 Z M12 26 L18 38 L5 30 Z" fill="#6DA544"/><path d="M0 -26 Q-8 -38 -16 -40 Q-4 -42 2 -28 Z M0 -26 Q8 -40 18 -42 Q10 -32 2 -26 Z" fill="#6DA544"/><circle cx="-7" cy="0" r="2" fill="#B8860B"/><circle cx="7" cy="-2" r="2" fill="#B8860B"/><circle cx="0" cy="12" r="2" fill="#B8860B"/></svg>',
+    cacao: '<svg width="44" height="44" viewBox="-30 -52 60 92" aria-hidden="true"><path d="M0 -36 Q22 -30 24 0 Q22 30 0 38 Q-22 30 -24 0 Q-22 -30 0 -36 Z" fill="#C8762A"/><path d="M0 -36 Q8 0 0 38 M0 -36 Q-8 0 0 38 M-12 -31 Q-17 0 -12 33 M12 -31 Q17 0 12 33" fill="none" stroke="#8A4B16" stroke-width="2"/><path d="M0 -36 L0 -46 L7 -50" fill="none" stroke="#5B7A2E" stroke-width="3" stroke-linecap="round"/></svg>',
+  };
   const ic = {
     atras: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
     flecha: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>',
@@ -226,7 +231,7 @@
           ? `<a href="#/lotes" class="aviso rojo" style="text-decoration:none"><span class="pill rojo">CARENCIA</span><div><b>${h(a.lote)}:</b> no cosechar hasta el <b>${fechaCorta(a.fecha)}</b> (${a.dias} días)</div></a>`
           : `<a href="#/lotes" class="aviso ambar" style="text-decoration:none"><span class="pill ambar">RECORDATORIO</span><div><b>${h(a.lote)}:</b> ${h(a.actividad)} ${a.dias === 0 ? "hoy" : a.dias > 0 ? "en " + a.dias + " días" : "atrasada " + -a.dias + " días"}</div></a>`).join("")}
         <div class="etq">Elige tu cultivo</div>
-        <div class="grid2">${cultivos().map((c) => `<a class="cultivo ${c.id === ui.cultivo ? "sel" : ""}" href="#/cultivo/${h(c.id)}" data-c="${h(c.id)}"><span style="color:var(--verde)">${ic.hoja}</span><b>${h(c.nombre)}</b><span>Manual técnico · ${(I.problemas[c.id] || []).length} temas</span></a>`).join("")}</div>
+        <div class="grid2">${cultivos().map((c) => `<a class="cultivo ${c.id === ui.cultivo ? "sel" : ""}" href="#/cultivo/${h(c.id)}" data-c="${h(c.id)}"><span style="color:var(--verde);display:flex;height:44px;align-items:center">${ICONO_CULTIVO[c.id] || ic.hoja}</span><b>${h(c.nombre)}</b><span>Manual técnico · ${(I.problemas[c.id] || []).length} temas</span></a>`).join("")}</div>
         <div class="etq" style="margin-top:4px">Accesos rápidos</div>
         <div class="lista">
           <a class="item" href="#/lotes"><div class="tx"><b>Registro de mis lotes</b><span>Actividades y costos de producción</span></div>${ic.flecha}</a>
