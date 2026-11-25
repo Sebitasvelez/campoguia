@@ -41,7 +41,7 @@
   const volL = () => (ui.vol === "tanque" ? TANQUE() : BOMBA());
   const volTxt = () => (ui.vol === "tanque" ? `tanque de ${TANQUE()} L` : `bomba de ${BOMBA()} L`);
   const TIPOS = [["plaga", "Plagas"], ["enfermedad", "Enfermedades"], ["maleza", "Malezas"], ["nutricion", "Nutrición"]];
-  const RIESGO = { bajo: ["verde", "Riesgo bajo de sarna/hongos"], ligero: ["claro-ambar", "Riesgo ligero de sarna/hongos"], alto: ["claro-rojo", "Riesgo alto de sarna/hongos"] };
+  const RIESGO = { bajo: ["riesgo-bajo", "Riesgo bajo de sarna/hongos"], ligero: ["riesgo-ligero", "Riesgo ligero de sarna/hongos"], alto: ["riesgo-alto", "Riesgo alto de sarna/hongos"] };
 
   // ------------------------------------------------------------ íconos
   // íconos de cultivo (estilo a color); los cultivos nuevos usan la hoja

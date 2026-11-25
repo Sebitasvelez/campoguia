@@ -110,3 +110,8 @@ details.card summary{cursor:pointer;font-weight:600;font-size:14px;min-height:28
 .visor-cerrar{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:20px;cursor:pointer}
 .visor-pie{display:flex;align-items:center;gap:12px;color:#fff;font-size:14px;margin-top:12px;text-align:center}
 .visor-pie button{width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:24px;cursor:pointer;flex-shrink:0}
+
+/* semáforo de riesgo de sarna/hongos */
+.pill.riesgo-bajo{background:#2E9E4F;color:#fff}
+.pill.riesgo-ligero{background:#F5C518;color:#3D2E00}
+.pill.riesgo-alto{background:#D62E2E;color:#fff}
