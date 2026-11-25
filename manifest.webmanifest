@@ -1,7 +1,7 @@
 {
   "name": "CampoGuía",
   "short_name": "CampoGuía",
-  "description": "Manual técnico de cultivos y registro de actividades de la finca",
+  "description": "Manual técnico de tu cultivo, registro de actividades y costos de producción de tu finca",
   "lang": "es",
   "start_url": "./index.html",
   "scope": "./",

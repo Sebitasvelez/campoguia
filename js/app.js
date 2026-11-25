@@ -153,7 +153,7 @@
   // ------------------------------------------------------------ BIENVENIDA / CUENTA
   function vBienvenida(modo) {
     const cultOpts = cultivos().map((c) => `<option value="${h(c.id)}">${h(c.nombre)}</option>`).join("");
-    const intro = `<div class="top" style="padding-top:36px"><h1 style="font-size:28px">${h(NOMBRE)}</h1><p>Manual técnico de tu cultivo, registro de actividades y costos de producción de tu finca. Funciona también sin internet.</p></div>`;
+    const intro = `<div class="top" style="padding-top:36px"><img src="icons/logo-redondo.svg" alt="" width="72" height="72" style="display:block;margin-bottom:12px;border-radius:16px;box-shadow:0 0 0 2px rgba(255,255,255,.35)"><h1 style="font-size:28px">${h(NOMBRE)}</h1><p>Manual técnico de tu cultivo, registro de actividades y costos de producción de tu finca. Funciona también sin internet.</p></div>`;
     if (modo === "registro") {
       const ub = {};
       pintar(`${intro}<form class="cont" id="f" novalidate>
@@ -655,7 +655,7 @@
     const lote = (id) => D.lotes().find((l) => l.id === id) || {};
     const vacio = (v) => (v === null || v === undefined || v === "" ? "" : Number(v));
     const ordenados = regs.filter((r) => !r.borrado).slice().sort((x, y) => (x.fecha < y.fecha ? -1 : x.fecha > y.fecha ? 1 : 0));
-    const filas = ordenados.map((r) => ({ Fecha: r.fecha, Lote: lote(r.lote_id).nombre || "", Actividad: r.actividad, "Producto o labor": r.producto_nombre || "",
+    const filas = ordenados.map((r) => ({ Fecha: r.fecha, Lote: lote(r.lote_id).nombre || "", Actividad: r.actividad, Objetivo: r.objetivo || "", "Producto o labor": r.producto_nombre || "",
       Dosis: vacio(r.dosis), Unidad: r.unidad || "", "Quién aplicó / trabajó": r.aplicador || "", Clima: r.clima || "",
       Personas: vacio(r.personas), "Pago diario $": vacio(r.pago_diario), "Días trabajados": vacio(r.costo_mano_obra ? r.dias_trabajo || 1 : ""),
       "Costo insumos $": vacio(r.costo), "Costo mano de obra $": vacio(r.costo_mano_obra), "Costo total $": Math.round(((Number(r.costo) || 0) + (Number(r.costo_mano_obra) || 0)) * 100) / 100,
@@ -663,7 +663,7 @@
       "Ubicación lote": lote(r.lote_id).latitud ? mapaURL(lote(r.lote_id).latitud, lote(r.lote_id).longitud) : "" }));
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(filas);
-    ws["!cols"] = [10, 14, 20, 22, 7, 10, 18, 10, 8, 10, 9, 11, 13, 11, 12, 14, 30, 26].map((w) => ({ wch: w }));
+    ws["!cols"] = [10, 14, 20, 22, 22, 7, 10, 18, 10, 8, 10, 9, 11, 13, 11, 12, 14, 30, 26].map((w) => ({ wch: w }));
     XLSX.utils.book_append_sheet(wb, ws, "Registros");
     // hoja de costos de producción
     const rc = L.resumenCostos(ordenados), ha = Number(hectareas) || 0;
@@ -702,6 +702,7 @@
       return `<div class="card" style="gap:4px">
         <div class="fila"><span style="font-size:12px;font-weight:700;color:var(--verde);text-transform:uppercase">${h(r.actividad)} · ${fechaCorta(r.fecha)}</span><b>${monto ? dinero(monto) : ""}</b></div>
         <b style="font-size:14.5px">${h(r.producto_nombre || "—")}${r.dosis !== null && r.dosis !== undefined && r.dosis !== "" ? " · " + h(L.fmt(Number(r.dosis))) + " " + h(r.unidad || "") : ""}</b>
+        ${r.objetivo ? `<span class="mini">Objetivo: <b>${h(r.objetivo)}</b></span>` : ""}
         ${filtro !== "mo" && ci && cm ? `<span class="mini">Insumos: ${dinero(ci)}</span>` : ""}
         ${cm ? `<span class="mini">${h(detalleMO(r))}</span>` : ""}
         <span class="mini">${[r.aplicador && (esLabor ? "Trabajó: " : "Aplicó: ") + r.aplicador, r.clima, r.carencia_hasta && "Carencia hasta " + fechaCorta(r.carencia_hasta), r.proxima_fecha && "Próxima: " + fechaCorta(r.proxima_fecha)].filter(Boolean).map(h).join(" · ")}</span>
@@ -738,6 +739,18 @@
   const CLIMAS = ["Despejado", "Nublado", "Soleado", "Llovizna"];
   const LABORES = ["Poda", "Deshierbe manual", "Limpieza de plantas", "Polinización", "Amarre y tutoreo", "Raleo de frutos", "Embolsado de frutos", "Cosecha", "Riego", "Siembra", "Mantenimiento de postes"];
   const esLabor = (a) => a === "Labor cultural";
+  // sugerencias para el campo «Objetivo» según el tipo de actividad (el agricultor puede escribir lo que quiera)
+  function objetivosPara(actividad, loteId) {
+    const g = L.grupoActividad(actividad), lo = D.lotes().find((l) => l.id === loteId), cid = lo ? lo.cultivo_id : null;
+    const probs = (I.c.problemas || []).filter((p) => (!cid || p.cultivo_id === cid));
+    if (g === "fumigacion") {
+      if (/Herbic/.test(actividad)) return probs.filter((p) => p.tipo === "maleza").map((p) => "Control de " + p.nombre.toLowerCase()).concat(["Control de malezas"]);
+      return ["Prevención de hongos"].concat(probs.filter((p) => p.tipo === "plaga" || p.tipo === "enfermedad").map((p) => "Control de " + p.nombre.replace(/\s*\(.*?\)/g, "").toLowerCase()), ["Protección de flores", "Protección de frutos"]);
+    }
+    if (g === "fertilizacion") return ["Enraizamiento", "Desarrollo de pencas", "Brotación", "Floración", "Cuajado", "Engrose de fruto", "Recuperación de estrés", "Corregir acidez del suelo", "Mantenimiento"];
+    if (g === "labor") return ["Sanidad del cultivo", "Mejorar la floración", "Control de malezas", "Mejorar la ventilación", "Mejorar el tamaño del fruto", "Cosecha"];
+    return [];
+  }
   const porNombre = (t) => { const n = String(t || "").trim().toLowerCase(); return n ? (I.c.productos || []).find((p) => p.nombre.toLowerCase() === n) || null : null; };
   function costoAuto(pid, total) {
     const p = P(pid); if (!p || !p.pvp || !p.contenido || !total) return "";
@@ -772,6 +785,8 @@
           <div class="grid2"><label class="campo">Lote<select name="lote" required><option value="">Elige…</option>${lotes.map((l) => `<option value="${h(l.id)}" ${l.id === loteSel ? "selected" : ""}>${h(l.nombre)}</option>`).join("")}</select></label>
           <label class="campo">Fecha<input name="fecha" type="date" value="${hoy()}" max="${hoy()}" required></label></div>
           <div class="campo">Actividad<div class="chips" role="group" aria-label="Actividad">${ACTIVIDADES.map((a) => `<button type="button" class="chip ${st.actividad === a ? "sel" : ""}" data-act="${h(a)}" aria-pressed="${st.actividad === a}">${h(a)}</button>`).join("")}</div></div>
+          <label class="campo">Objetivo de la ${lab ? "labor" : "aplicación"}<input name="objetivo" list="objetivos" autocomplete="off" value="${h(st.objetivo || "")}" placeholder="${lab ? "Ej. Sanidad del cultivo" : L.grupoActividad(st.actividad) === "fertilizacion" ? "Ej. Floración" : "Ej. Control de avispas"}"><small>Opcional. Escribe para qué la hiciste.</small></label>
+          <datalist id="objetivos">${objetivosPara(st.actividad, loteSel).map((x) => `<option value="${h(x)}">`).join("")}</datalist>
           ${lab ? `<label class="campo">¿Qué labor hiciste?<input name="labor" list="labores" autocomplete="off" placeholder="Ej. Poda, deshierbe, cosecha" value="${h(st.labor || "")}"></label>` : `
           <label class="campo">¿Cuántas bombas o tanques aplicaste?<span class="unido"><input name="cargas" inputmode="decimal" value="${h(st.cargas || "")}" placeholder="Ej. 10"><span>cargas</span></span><small>Con esto se calcula el total usado y el costo de cada producto.</small></label>
           <div class="etq">Productos aplicados</div>
@@ -806,7 +821,13 @@
         leerLineas(); const antes = esLabor(st.actividad); st.actividad = b.dataset.act;
         if (antes !== esLabor(st.actividad)) { guardarCampos(); pintarForm(); restaurarCampos(); return; }
         $$("[data-act]").forEach((x) => { x.classList.toggle("sel", x === b); x.setAttribute("aria-pressed", x === b); });
+        refrescarObjetivos();
       }));
+      function refrescarObjetivos() {
+        $("#objetivos").innerHTML = objetivosPara(st.actividad, f.lote.value).map((x) => `<option value="${h(x)}">`).join("");
+        f.objetivo.placeholder = L.grupoActividad(st.actividad) === "fertilizacion" ? "Ej. Floración" : esLabor(st.actividad) ? "Ej. Sanidad del cultivo" : "Ej. Control de avispas";
+      }
+      f.lote.addEventListener("change", refrescarObjetivos);
       const pintarMO = () => { const c = L.costoManoObra(f.personas.value, f.pago.value, f.diasT.value); $("#costoMO").textContent = c !== null ? dinero(c) : "—"; };
       ["personas", "pago", "diasT"].forEach((k) => f[k].addEventListener("input", pintarMO)); pintarMO();
       $$("[data-clima]").forEach((b) => b.addEventListener("click", () => { st.clima = b.dataset.clima; $$("[data-clima]").forEach((x) => x.classList.toggle("sel", x === b)); }));
@@ -842,7 +863,7 @@
         const n = (v) => (v === "" || v === undefined || v === null ? null : Number(String(v).replace(",", ".")));
         const dias = f.rec.checked ? parseInt(f.dias.value, 10) : null;
         S.set("ultimo_aplicador", f.aplicador.value); if (dias) S.set("ultimos_dias", dias); if (f.pago.value.trim()) S.set("ultimo_pago", f.pago.value.trim());
-        const base = { lote_id: f.lote.value, fecha: f.fecha.value || hoy(), actividad: st.actividad, aplicador: f.aplicador.value.trim() || null, clima: st.clima, observaciones: f.obs.value.trim() || null };
+        const base = { lote_id: f.lote.value, fecha: f.fecha.value || hoy(), actividad: st.actividad, objetivo: f.objetivo.value.trim() || null, aplicador: f.aplicador.value.trim() || null, clima: st.clima, observaciones: f.obs.value.trim() || null };
         const manoObra = mo !== null ? { personas: n(f.personas.value), pago_diario: n(f.pago.value), dias_trabajo: n(f.diasT.value) || 1, costo_mano_obra: mo } : {};
         const lista = (lineas.length ? lineas : [lab ? { producto_nombre: f.labor.value.trim() } : {}]).map((x, i) => {
           const p = lab ? null : P(x.producto_id);
@@ -858,7 +879,7 @@
     function guardarCampos() {
       const f = $("#fr"); if (!f) return;
       if (f.cargas) st.cargas = f.cargas.value; if (f.labor) st.labor = f.labor.value;
-      st.aplicador = f.aplicador.value; st.personas = f.personas.value; st.pago = f.pago.value; st.diasT = f.diasT.value;
+      st.objetivo = f.objetivo.value; st.aplicador = f.aplicador.value; st.personas = f.personas.value; st.pago = f.pago.value; st.diasT = f.diasT.value;
       campos = { lote: f.lote.value, fecha: f.fecha.value, obs: f.obs.value, rec: f.rec.checked, dias: f.dias.value };
     }
     function restaurarCampos() { const f = $("#fr"); if (!f || !campos.fecha) return; f.lote.value = campos.lote; f.fecha.value = campos.fecha; f.obs.value = campos.obs; f.rec.checked = campos.rec; f.dias.value = campos.dias; }

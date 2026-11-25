@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>CampoGuía</title>
+  <rect width="512" height="512" fill="#1F5E3B"/>
+  <g transform="scale(3.6571) translate(-40 -20)">
+    <path d="M66 112 Q88 100 110 110 L110 138 Q88 128 66 140 Z" fill="#FFFFFF"/>
+    <path d="M154 112 Q132 100 110 110 L110 138 Q132 128 154 140 Z" fill="#E8F1EA"/>
+    <line x1="110" y1="110" x2="110" y2="70" stroke="#9BD3A8" stroke-width="4" stroke-linecap="round"/>
+    <path d="M110 84 Q90 80 84 60 Q104 60 110 84 Z" fill="#9BD3A8"/>
+    <path d="M110 76 Q128 70 136 50 Q114 52 110 76 Z" fill="#C9E86B"/>
+  </g>
+</svg>
