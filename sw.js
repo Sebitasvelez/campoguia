@@ -1,10 +1,10 @@
 /* CampoGuía · funciona sin internet: guarda la app en el teléfono */
-const VERSION = "campoguia-v17";
+const VERSION = "campoguia-v18";
 const FOTOS = "campoguia-fotos"; // fotos del manual: se guardan aparte y no se borran al actualizar la app
 const ARCHIVOS = ["./", "index.html", "css/app.css", "js/config.js", "js/ui.js", "js/logic.js", "js/data.js", "js/reporte.js", "js/app.js",
   "js/vendor/supabase.js", "js/vendor/xlsx.mini.min.js", "data/catalogo-inicial.json", "manifest.webmanifest",
   "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png", "icons/favicon.png", "icons/logo-redondo.svg"];
-self.addEventListener("install", (e) => { e.waitUntil(caches.open(VERSION).then((c) => c.addAll(ARCHIVOS)).then(() => self.skipWaiting())); });
+self.addEventListener("install", (e) => { e.waitUntil(caches.open(VERSION).then((c) => c.addAll(ARCHIVOS.map((u) => new Request(u, { cache: "reload" })))).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== VERSION && k !== FOTOS).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener("fetch", (e) => {
   const url = new URL(e.request.url);

@@ -1036,6 +1036,11 @@
     if (!I || I.c !== D.catalogo) { indexar(); router(); }
     D.sincronizar();
     setInterval(() => { D.actualizarCatalogo(); D.sincronizar(); }, 5 * 60 * 1000);
-    if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
+    if ("serviceWorker" in navigator && location.protocol === "https:") {
+      // cuando se publica una versión nueva, la app se recarga sola para usarla
+      const habiaVersion = !!navigator.serviceWorker.controller; let recargado = false;
+      navigator.serviceWorker.addEventListener("controllerchange", () => { if (habiaVersion && !recargado) { recargado = true; location.reload(); } });
+      navigator.serviceWorker.register("sw.js").then((reg) => { reg.update().catch(() => {}); document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") reg.update().catch(() => {}); }); }).catch(() => {});
+    }
   })();
 })();
