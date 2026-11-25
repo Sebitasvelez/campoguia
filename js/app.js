@@ -726,7 +726,7 @@
           const costoLote = L.resumenCostos(regs.filter((r) => r.lote_id === l.id)).total;
           return `<a class="card" href="#/lote/${h(l.id)}" style="text-decoration:none;color:inherit">
             <div class="fila"><b style="font-size:16px">${h(l.nombre)}${c ? " · " + h(c.nombre) : ""}</b><span class="mini">${l.hectareas ? L.fmt(Number(l.hectareas)) + " ha" : ""}${l.plantas ? " · " + L.fmt(l.plantas, 0) + " pl" : ""}</span></div>
-            <div class="chips" style="gap:6px">${et ? `<span class="pill verde">${h(et.nombre)}</span>` : ""}${enCar ? `<span class="pill claro-rojo">En carencia</span>` : ""}${l.latitud ? `<span class="pill gris">GPS ✓</span>` : ""}<span class="pill gris">${ult ? "Última: " + h(ult.actividad) + " · " + fechaCorta(ult.fecha) : "Sin registros"}</span><span class="pill claro-ambar">Costo total: ${dinero(costoLote || 0)}</span></div></a>`;
+            <div class="chips" style="gap:6px">${et ? `<span class="pill verde">${h(et.nombre)}</span>` : ""}${enCar ? `<span class="pill claro-rojo">En carencia</span>` : ""}${l.latitud ? `<span class="pill gris">GPS ✓</span>` : ""}<span class="pill gris">${ult ? "Última: " + h(ult.actividad) + " · " + fechaCorta(ult.fecha) : "Sin registros"}</span><span class="pill claro-ambar">Costo actual: ${dinero(costoLote || 0)}</span></div></a>`;
         }).join("")}</div>
         ${lotes.length ? `<a class="btn" href="#/registrar">+ Registrar aplicación</a>` : ""}
       </main>`, "lotes");
