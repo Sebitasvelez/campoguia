@@ -449,3 +449,14 @@ alter function public.norm_tel(text) set search_path = public;
 alter function public.cedula_valida(text) set search_path = public;
 revoke execute on function public.es_admin() from anon, public;
 grant execute on function public.es_admin() to authenticated;
+
+-- Permisos para la API (los proyectos nuevos de Supabase no los dan por defecto).
+-- La seguridad real la ponen las políticas RLS de arriba.
+grant usage on schema public to anon, authenticated;
+grant select on catalogo_publicado to anon, authenticated;
+grant select on admins to authenticated;
+grant select, insert, update, delete on cultivos, etapas, productos, problemas, recomendaciones,
+  plan_sanitario, plan_fertilizacion, compatibilidad, ajustes to authenticated;
+grant select, update on agricultores to authenticated;
+grant select on lotes, registros to authenticated;
+grant usage, select on all sequences in schema public to authenticated;
