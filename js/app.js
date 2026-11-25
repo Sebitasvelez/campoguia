@@ -681,7 +681,13 @@
     try { XLSX.writeFile(wb, nombreArchivo); } catch (e) { toast("Tu navegador no permitió la descarga."); }
   }
 
-  const FILTROS_LOTE = [["todo", "Todo"], ["fum", "Fumigación"], ["fer", "Fertilización"], ["mo", "Mano de obra"]];
+  const FILTROS_LOTE = [["todo", "Todo"], ["fum", "Fumigación"], ["fer", "Fertilización"], ["mo", "Mano de obra"], ["otra", "Otra"]];
+  const esFecha = (v) => /^\d{4}-\d{2}-\d{2}$/.test(String(v || ""));
+  function periodos() {
+    const t = hoy(), y = t.slice(0, 4), m = t.slice(5, 7);
+    const hace = (meses) => { const d = new Date(Number(y), Number(m) - 1 - meses, 1); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-01"; };
+    return [["", "", "Todo"], [y + "-" + m + "-01", t, "Este mes"], [hace(2), t, "Últimos 3 meses"], [y + "-01-01", t, "Este año"]];
+  }
   function detalleMO(r) {
     if (!r.costo_mano_obra) return "";
     const d = Number(r.dias_trabajo) || 1;
@@ -689,9 +695,14 @@
   }
   function vLote(id, q) {
     const l = D.lotes().find((x) => x.id === id); if (!l) return vNoEncontrado();
-    const todos = D.registros().filter((r) => r.lote_id === id && !r.borrado);
+    const desde = esFecha(q.d) ? q.d : "", hasta = esFecha(q.h) ? q.h : "";
+    const todosLote = D.registros().filter((r) => r.lote_id === id && !r.borrado);
+    const todos = todosLote.filter((r) => (!desde || r.fecha >= desde) && (!hasta || r.fecha <= hasta));
     const filtro = FILTROS_LOTE.some(([k]) => k === q.f) ? q.f : "todo";
-    const regs = todos.filter((r) => filtro === "todo" ? true : filtro === "fum" ? L.grupoActividad(r.actividad) === "fumigacion" : filtro === "fer" ? L.grupoActividad(r.actividad) === "fertilizacion" : Number(r.costo_mano_obra) > 0);
+    const g = (r) => L.grupoActividad(r.actividad);
+    const regs = todos.filter((r) => filtro === "todo" ? true : filtro === "fum" ? g(r) === "fumigacion" : filtro === "fer" ? g(r) === "fertilizacion" : filtro === "otra" ? g(r) === "otra" : Number(r.costo_mano_obra) > 0);
+    const url = (cambios) => { const o = Object.assign({ f: filtro === "todo" ? "" : filtro, d: desde, h: hasta }, cambios); return `#/lote/${encodeURIComponent(id)}?` + Object.entries(o).filter(([, v]) => v).map(([k, v]) => k + "=" + encodeURIComponent(v)).join("&"); };
+    const per = periodos(), perSel = per.find(([d0, h0]) => d0 === desde && h0 === hasta);
     const rc = L.resumenCostos(todos), et = etapa(l.etapa_id), c = cultivo(l.cultivo_id), ha = Number(l.hectareas) || 0;
     const colores = ["#1F5E3B", "#7FB08F", "#C9A574", "#163C5C", "#B0306A", "#4A5650", "#8A6D3B", "#5B7FA6"];
     const acts = Object.entries(rc.por).filter(([, v]) => v.costo > 0).sort((a, b) => b[1].costo - a[1].costo);
@@ -708,29 +719,36 @@
         ${cm ? `<span class="mini">${h(detalleMO(r))}</span>` : ""}
         <span class="mini">${[r.aplicador && (esLabor ? "Trabajó: " : "Aplicó: ") + r.aplicador, r.clima, r.carencia_hasta && "Carencia hasta " + fechaCorta(r.carencia_hasta), r.proxima_fecha && "Próxima: " + fechaCorta(r.proxima_fecha)].filter(Boolean).map(h).join(" · ")}</span>
         ${r.observaciones ? `<span class="mini">“${h(r.observaciones)}”</span>` : ""}
-        <div class="fila" style="justify-content:flex-end"><button class="btn peligro chico" data-del="${h(r.id)}">Eliminar</button></div>
+        <div class="fila" style="justify-content:flex-end;gap:8px"><a class="btn sec chico" href="#/registrar?editar=${encodeURIComponent(r.id)}">Editar</a><button class="btn peligro chico" data-del="${h(r.id)}">Eliminar</button></div>
       </div>`;
     };
     pintar(`${barra(l.nombre, [c && c.nombre, ha ? L.fmt(ha) + " ha" : "", et && et.nombre].filter(Boolean).join(" · "), "#/lotes")}
       <main class="cont">
+        <section class="card" style="gap:8px">
+          <div class="etq">Periodo</div>
+          <div class="chips">${per.map(([d0, h0, t]) => `<a class="chip ${perSel && perSel[2] === t ? "sel" : ""}" href="${h(url({ d: d0, h: h0 }))}" style="text-decoration:none;display:inline-flex;align-items:center">${t}</a>`).join("")}</div>
+          <div class="grid2"><label class="campo">Desde<input type="date" id="fDesde" value="${h(desde)}" max="${hoy()}"></label><label class="campo">Hasta<input type="date" id="fHasta" value="${h(hasta)}" max="${hoy()}"></label></div>
+        </section>
         <section class="card">
-          <div class="fila"><span class="etq">Costo de producción</span><span class="mini">${fechas.length ? fechaCorta(fechas[0]) + " – " + fechaCorta(fechas[fechas.length - 1]) : ""}</span></div>
+          <div class="fila"><span class="etq">Costo de producción</span><span class="mini">${desde || hasta ? (desde ? fechaCorta(desde) : "Inicio") + " – " + (hasta ? fechaCorta(hasta) : "hoy") : fechas.length ? fechaCorta(fechas[0]) + " – " + fechaCorta(fechas[fechas.length - 1]) : ""}</span></div>
           <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="grande" style="color:var(--texto)">${dinero(rc.total)}</span>${ha ? `<span class="mini">${dinero(rc.total / ha)} por ha</span>` : ""}</div>
           <div class="grid2">
             <div class="dato"><span>Insumos</span><b>${dinero(rc.insumos)}</b>${ha ? `<span class="mini">${dinero(rc.insumos / ha)}/ha</span>` : ""}</div>
             <div class="dato"><span>Mano de obra</span><b>${dinero(rc.mano_obra)}</b><span class="mini">${rc.jornales ? L.fmt(rc.jornales) + " jornal" + (rc.jornales === 1 ? "" : "es") : "Sin jornales"}${ha && rc.mano_obra ? " · " + dinero(rc.mano_obra / ha) + "/ha" : ""}</span></div>
           </div>
           ${rc.total > 0 ? `<div class="barra-costos" aria-hidden="true">${acts.map(([k, v], i) => `<span style="width:${(v.costo / rc.total) * 100}%;background:${colores[i % colores.length]}"></span>`).join("")}</div>` : ""}
-          ${acts.map(([k, v], i) => `<div class="fila" style="font-size:13.5px"><span style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:3px;background:${colores[i % colores.length]};flex-shrink:0"></span>${h(k)}</span><b>${dinero(v.costo)}</b></div>`).join("") || `<span class="mini">Aún no hay registros con costos en este lote.</span>`}
+          ${acts.map(([k, v], i) => `<div class="fila" style="font-size:13.5px"><span style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:3px;background:${colores[i % colores.length]};flex-shrink:0"></span>${h(k)}</span><b>${dinero(v.costo)}</b></div>`).join("") || `<span class="mini">${desde || hasta ? "No hay registros con costos en este periodo." : "Aún no hay registros con costos en este lote."}</span>`}
         </section>
         <div class="mini">${l.latitud ? `Ubicación del lote: ${h(Number(l.latitud).toFixed(5))}, ${h(Number(l.longitud).toFixed(5))} (±${h(l.precision_m)} m) · <a href="${h(mapaURL(l.latitud, l.longitud))}" target="_blank" rel="noopener">Ver en el mapa</a>` : `Este lote no tiene ubicación GPS. Guárdala en «Editar datos del lote» cuando estés en él.`}</div>
         <div class="acciones"><a class="btn" href="#/registrar?lote=${h(l.id)}">+ Registrar</a><button class="btn sec" id="xls">${ic.descarga}Exportar Excel</button></div>
-        <div class="chips">${FILTROS_LOTE.map(([k, t]) => `<a class="chip ${filtro === k ? "sel" : ""}" href="#/lote/${h(id)}?f=${k}" style="text-decoration:none;display:inline-flex;align-items:center">${t}</a>`).join("")}</div>
+        <div class="chips">${FILTROS_LOTE.map(([k, t]) => `<a class="chip ${filtro === k ? "sel" : ""}" href="${h(url({ f: k === "todo" ? "" : k }))}" style="text-decoration:none;display:inline-flex;align-items:center">${t}</a>`).join("")}</div>
         ${filtro !== "todo" && regs.length ? `<div class="fila mini"><span>${regs.length} registro${regs.length === 1 ? "" : "s"}</span><span>${filtro === "mo" ? "Mano de obra" : "Total"}: <b>${dinero(totalFiltro)}</b></span></div>` : ""}
-        <div class="lista">${regs.map(tarjeta).join("") || `<div class="vacio">${filtro === "mo" ? "Aún no hay registros con mano de obra. Al registrar una actividad, llena personas y pago diario." : "Sin registros" + (filtro !== "todo" ? " de este tipo" : "") + "."}</div>`}</div>
+        <div class="lista">${regs.map(tarjeta).join("") || `<div class="vacio">${(desde || hasta) && todosLote.length ? "No hay registros de este tipo en el periodo elegido." : filtro === "mo" ? "Aún no hay registros con mano de obra. Al registrar una actividad, llena personas y pago diario." : "Sin registros" + (filtro !== "todo" ? " de este tipo" : "") + "."}</div>`}</div>
         <details class="card"><summary>Editar datos del lote</summary>${formLote(l).replace('class="card"', 'class=""')}</details>
       </main>`, "lotes");
-    $("#xls").addEventListener("click", () => exportarExcel(todos, `Costos_y_registros_${l.nombre.replace(/[^\w-]+/g, "_")}.xlsx`, ha));
+    $("#xls").addEventListener("click", () => exportarExcel(todos, `Costos_y_registros_${l.nombre.replace(/[^\w-]+/g, "_")}${desde || hasta ? "_" + (desde || "inicio") + "_a_" + (hasta || hoy()) : ""}.xlsx`, ha));
+    const cambiarFechas = () => { const d0 = $("#fDesde").value, h0 = $("#fHasta").value; if (d0 && h0 && d0 > h0) { toast("La fecha «Desde» debe ser anterior a «Hasta»."); return; } location.hash = url({ d: d0, h: h0 }); };
+    $("#fDesde").addEventListener("change", cambiarFechas); $("#fHasta").addEventListener("change", cambiarFechas);
     $$("[data-del]").forEach((b) => b.addEventListener("click", async () => { if (await UI.confirmar("¿Eliminar este registro?", { ok: "Eliminar", peligro: true })) { D.borrarRegistro(b.dataset.del); vLote(id, q); } }));
     conectarFormLote(l, () => vLote(id, q));
   }
@@ -763,11 +781,21 @@
     const pf = prefill || {}; prefill = null;
     if (q.p) pf.lineas = [{ producto_id: Number(q.p) }];
     const st = { cargas: pf.cargas || "", actividad: ACTIVIDADES.includes(pf.actividad) ? pf.actividad : "Fumigación planta", clima: "Despejado", lineas: (pf.lineas && pf.lineas.length ? pf.lineas : [{}]).map((x) => Object.assign({ costo: costoAuto(x.producto_id, x.total), manual: false }, x)) };
-    const loteSel = q.lote || (lotes.length === 1 ? lotes[0].id : "");
+    // edición de un registro ya guardado (cada producto de una mezcla es un registro aparte)
+    const ed = q.editar ? D.registros().find((r) => r.id === q.editar && !r.borrado) : null;
+    if (q.editar && !ed) { toast("Ese registro ya no existe."); location.hash = q.lote ? "#/lote/" + q.lote : "#/lotes"; return; }
+    if (ed) {
+      Object.assign(st, { actividad: ed.actividad || "Otra", clima: ed.clima || "", objetivo: ed.objetivo || "", aplicador: ed.aplicador || "",
+        personas: ed.personas !== null && ed.personas !== undefined ? String(ed.personas) : "", pago: ed.pago_diario !== null && ed.pago_diario !== undefined ? String(ed.pago_diario) : "",
+        diasT: ed.dias_trabajo ? String(ed.dias_trabajo) : "1", labor: esLabor(ed.actividad) ? ed.producto_nombre || "" : "",
+        lineas: [{ producto_id: ed.producto_id, producto_nombre: ed.producto_nombre || "", dosis: ed.dosis, unidad: ed.unidad || "", costo: ed.costo !== null && ed.costo !== undefined ? ed.costo : "", manual: true }] });
+    }
+    const loteSel = ed ? ed.lote_id : q.lote || (lotes.length === 1 ? lotes[0].id : "");
+    const volver = ed ? "#/lote/" + ed.lote_id : q.lote ? "#/lote/" + q.lote : "#/lotes";
     function linea(x, i) {
       const p = P(x.producto_id);
       return `<div class="card" data-l="${i}" style="gap:8px;background:#FAFBF8">
-        <div class="fila"><b style="font-size:13.5px">Producto ${i + 1}</b>${st.lineas.length > 1 ? `<button type="button" class="icono-btn" data-quitar="${i}" aria-label="Quitar producto ${i + 1}">✕</button>` : ""}</div>
+        <div class="fila"><b style="font-size:13.5px">${ed ? "Producto" : "Producto " + (i + 1)}</b>${st.lineas.length > 1 && !ed ? `<button type="button" class="icono-btn" data-quitar="${i}" aria-label="Quitar producto ${i + 1}">✕</button>` : ""}</div>
         <label class="campo"><span class="sr">Producto</span><input data-k="producto_nombre" list="lista-productos" autocomplete="off" placeholder="Escribe el nombre del producto" value="${h(x.producto_nombre || (p ? p.nombre : ""))}"></label>
         <div class="grid2"><label class="campo">Dosis<input data-k="dosis" inputmode="decimal" value="${h(x.dosis !== undefined && x.dosis !== null ? Math.round(x.dosis * 100) / 100 : "")}"></label>
         <label class="campo">Unidad<input data-k="unidad" list="unidades" value="${h(x.unidad || (p ? (p.modo_aplicacion === "suelo_ha" ? "g/planta" : (p.unidad || "cc") + "/bomba") : ""))}"></label></div>
@@ -778,21 +806,21 @@
     }
     function pintarForm() {
       const lab = esLabor(st.actividad);
-      pintar(`${barra("Nuevo registro", "Actividades y costos de la finca", q.lote ? "#/lote/" + q.lote : "#/lotes")}
+      pintar(`${barra(ed ? "Editar registro" : "Nuevo registro", "Actividades y costos de la finca", volver)}
         <form class="cont" id="fr" novalidate>
           <datalist id="lista-productos">${(I.c.productos || []).slice().sort((a, b) => a.nombre.localeCompare(b.nombre)).map((p) => `<option value="${h(p.nombre)}">`).join("")}</datalist>
           <datalist id="unidades"><option value="cc/bomba"><option value="g/bomba"><option value="cc/tanque"><option value="g/tanque"><option value="g/planta"><option value="kg/ha"><option value="L/ha"></datalist>
           <datalist id="labores">${LABORES.map((x) => `<option value="${h(x)}">`).join("")}</datalist>
           <div class="grid2"><label class="campo">Lote<select name="lote" required><option value="">Elige…</option>${lotes.map((l) => `<option value="${h(l.id)}" ${l.id === loteSel ? "selected" : ""}>${h(l.nombre)}</option>`).join("")}</select></label>
           <label class="campo">Fecha<input name="fecha" type="date" value="${hoy()}" max="${hoy()}" required></label></div>
-          <div class="campo">Actividad<div class="chips" role="group" aria-label="Actividad">${ACTIVIDADES.map((a) => `<button type="button" class="chip ${st.actividad === a ? "sel" : ""}" data-act="${h(a)}" aria-pressed="${st.actividad === a}">${h(a)}</button>`).join("")}</div></div>
+          <div class="campo">Actividad<div class="chips" role="group" aria-label="Actividad">${ACTIVIDADES.concat(ACTIVIDADES.includes(st.actividad) ? [] : [st.actividad]).map((a) => `<button type="button" class="chip ${st.actividad === a ? "sel" : ""}" data-act="${h(a)}" aria-pressed="${st.actividad === a}">${h(a)}</button>`).join("")}</div></div>
           <label class="campo">Objetivo de la ${lab ? "labor" : "aplicación"}<input name="objetivo" list="objetivos" autocomplete="off" value="${h(st.objetivo || "")}" placeholder="${lab ? "Ej. Sanidad del cultivo" : L.grupoActividad(st.actividad) === "fertilizacion" ? "Ej. Floración" : "Ej. Control de avispas"}"><small>Opcional. Escribe para qué la hiciste.</small></label>
           <datalist id="objetivos">${objetivosPara(st.actividad, loteSel).map((x) => `<option value="${h(x)}">`).join("")}</datalist>
           ${lab ? `<label class="campo">¿Qué labor hiciste?<input name="labor" list="labores" autocomplete="off" placeholder="Ej. Poda, deshierbe, cosecha" value="${h(st.labor || "")}"></label>` : `
-          <label class="campo">¿Cuántas bombas o tanques aplicaste?<span class="unido"><input name="cargas" inputmode="decimal" value="${h(st.cargas || "")}" placeholder="Ej. 10"><span>cargas</span></span><small>Con esto se calcula el total usado y el costo de cada producto.</small></label>
+          <label class="campo">¿Cuántas bombas o tanques aplicaste?<span class="unido"><input name="cargas" inputmode="decimal" value="${h(st.cargas || "")}" placeholder="Ej. 10"><span>cargas</span></span><small>${ed ? "Llénalo solo si quieres recalcular el total y el costo." : "Con esto se calcula el total usado y el costo de cada producto."}</small></label>
           <div class="etq">Productos aplicados</div>
           <div class="lista" id="lineas">${st.lineas.map(linea).join("")}</div>
-          <button type="button" class="btn sec chico" id="masLinea">+ Agregar otro producto de la mezcla</button>`}
+          ${ed ? "" : `<button type="button" class="btn sec chico" id="masLinea">+ Agregar otro producto de la mezcla</button>`}`}
           <div class="card" style="gap:10px">
             <div class="fila"><b style="font-size:14px">Mano de obra</b><span class="mini">${lab ? "" : "Opcional"}</span></div>
             <label class="campo">${lab ? "¿Quién trabajó?" : "¿Quién aplicó?"}<input name="aplicador" value="${h(st.aplicador !== undefined ? st.aplicador : S.get("ultimo_aplicador", ""))}" placeholder="Nombre o nombres"></label>
@@ -809,7 +837,7 @@
           <div class="card"><label class="fila" style="font-weight:600;font-size:14px">Recordarme la próxima ${lab ? "labor" : "aplicación"}<input type="checkbox" name="rec" checked style="width:24px;height:24px;accent-color:var(--verde)"></label>
             <label class="campo">En cuántos días<span class="unido"><input name="dias" inputmode="numeric" value="${h(S.get("ultimos_dias", 7))}"><span>días</span></span></label></div>
           <p class="mini" id="err" role="alert" style="color:var(--rojo);margin:0"></p>
-          <button class="btn" type="submit">Guardar registro</button>
+          <button class="btn" type="submit">${ed ? "Guardar cambios" : "Guardar registro"}</button>
         </form>`, "lotes");
       conectarForm();
     }
@@ -834,6 +862,7 @@
       $$("[data-clima]").forEach((b) => b.addEventListener("click", () => { st.clima = b.dataset.clima; $$("[data-clima]").forEach((x) => x.classList.toggle("sel", x === b)); }));
       if (f.cargas) f.cargas.addEventListener("input", () => {
         leerLineas(); st.cargas = f.cargas.value; const n = Number(String(f.cargas.value).replace(",", "."));
+        if (ed && n > 0) st.lineas.forEach((x) => { x.manual = false; });
         $$("#lineas [data-l]").forEach((card) => {
           const x = st.lineas[Number(card.dataset.l)], u = String(x.unidad || "");
           if (!n || !x.dosis || !u.includes("/") || /planta|ha/.test(u)) return;
@@ -860,7 +889,7 @@
         if (lab && !f.labor.value.trim()) { err.textContent = "Escribe qué labor hiciste."; return; }
         if (!lab && !lineas.length && st.actividad !== "Otra") { err.textContent = "Escribe al menos un producto."; return; }
         const mo = L.costoManoObra(f.personas.value, f.pago.value, f.diasT.value);
-        if ((f.personas.value.trim() || f.pago.value.trim()) && mo === null) { err.textContent = "Para la mano de obra llena personas, pago diario y días con números."; return; }
+        if (f.personas.value.trim() && mo === null) { err.textContent = "Para la mano de obra llena personas, pago diario y días con números."; return; }
         const n = (v) => (v === "" || v === undefined || v === null ? null : Number(String(v).replace(",", ".")));
         const dias = f.rec.checked ? parseInt(f.dias.value, 10) : null;
         S.set("ultimo_aplicador", f.aplicador.value); if (dias) S.set("ultimos_dias", dias); if (f.pago.value.trim()) S.set("ultimo_pago", f.pago.value.trim());
@@ -871,6 +900,13 @@
           return Object.assign({}, base, { producto_id: p ? Number(p.id) : null, producto_nombre: p ? p.nombre : (String(x.producto_nombre || "").trim() || null), dosis: n(x.dosis), unidad: x.unidad || null, costo: n(x.costo),
             carencia_hasta: p && p.carencia_dias ? L.sumarDias(base.fecha, p.carencia_dias) : null, proxima_fecha: i === 0 && dias ? L.sumarDias(base.fecha, dias) : null }, i === 0 ? manoObra : {});
         });
+        if (ed) {
+          const nuevo = Object.assign({}, lista[0], { id: ed.id, creado: ed.creado, borrado: false });
+          ["personas", "pago_diario", "dias_trabajo", "costo_mano_obra"].forEach((k) => { if (!(k in nuevo)) nuevo[k] = null; });
+          D.guardarRegistros([nuevo]);
+          toast(navigator.onLine === false ? "Cambios guardados. Se enviarán cuando tengas señal." : "Cambios guardados");
+          location.hash = "#/lote/" + base.lote_id; return;
+        }
         D.guardarRegistros(lista);
         toast(navigator.onLine === false ? "Guardado. Se enviará cuando tengas señal." : "Registro guardado");
         location.hash = "#/lote/" + base.lote_id;
@@ -884,7 +920,8 @@
       campos = { lote: f.lote.value, fecha: f.fecha.value, obs: f.obs.value, rec: f.rec.checked, dias: f.dias.value };
     }
     function restaurarCampos() { const f = $("#fr"); if (!f || !campos.fecha) return; f.lote.value = campos.lote; f.fecha.value = campos.fecha; f.obs.value = campos.obs; f.rec.checked = campos.rec; f.dias.value = campos.dias; }
-    pintarForm();
+    if (ed) campos = { lote: ed.lote_id, fecha: ed.fecha, obs: ed.observaciones || "", rec: !!ed.proxima_fecha, dias: ed.proxima_fecha ? String(L.diasEntre(ed.fecha, ed.proxima_fecha)) : String(S.get("ultimos_dias", 7)) };
+    pintarForm(); restaurarCampos();
   }
 
   // ------------------------------------------------------------ PERFIL
