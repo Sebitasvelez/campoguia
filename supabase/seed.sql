@@ -7,7 +7,7 @@ insert into cultivos (id, nombre, activo, orden) values
   ('cacao', 'Cacao', true, 2);
 
 insert into etapas (id, cultivo_id, nombre, uso, semanas, riesgo_hongos, notas, costo_ref_texto, orden) values
-  (1, 'pitahaya', 'Brotación', 'sanitario', 'semanas 0, 1 y 2', 'bajo', 'Asegurar un buen mojado de los botones florales. Alternar cada semana sea 1 insecticida ó 1 acaricida, sea Omite o Bala (marcados «Alternar»).', '(Costo aprox. tanque $ 25)', 1),
+  (1, 'pitahaya', 'Brotación de botón', 'sanitario', 'semanas 0, 1 y 2', 'bajo', 'Asegurar un buen mojado de los botones florales. Alternar cada semana sea 1 insecticida ó 1 acaricida, sea Omite o Bala (marcados «Alternar»).', '(Costo aprox. tanque $ 25)', 1),
   (2, 'pitahaya', 'Desarrollo de flor', 'sanitario', 'semanas 3, 4 y 5', 'ligero', 'Asegurar un buen mojado de flores. Alternar cada semana 1 insecticida, sea Ninja o Engeo (marcados «Alternar»).', '(Costo aprox. tanque $ 25)', 2),
   (3, 'pitahaya', 'Apertura y cuajado', 'sanitario', 'semanas 6, 7 y 8', 'alto', 'Cortar pétalos de flores luego de 5 días del cuajado floral, y acortar frecuencias de fumigación a cada 6 días. Asegurar un buen mojado de flores y utilizar aceites (marcados «Alternar»).', '(Costo aprox. tanque $ 30)', 3),
   (4, 'pitahaya', 'Fructificación', 'sanitario', 'semanas 9, 10 y 11', 'ligero', 'Asegurar un buen mojado de frutos. Alternar cada semana sea 1 insecticida ó 1 acaricida, sea Solvigo ú Omite (marcados «Alternar»).', '(Costo aprox. Tanque $ 26)', 4),

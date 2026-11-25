@@ -399,14 +399,16 @@
       const fijos = items.filter((x) => !x.alternar), alt = items.filter((x) => x.alternar);
       return { et, items, fijos, alt, elegidos: fijos.concat(alt.slice(0, 1)) };
     }).filter((x) => x.items.length);
+    ui.planFase = ui.planFase || {};
+    const sel = Math.min(Number(ui.planFase[cid]) || 0, Math.max(fases.length - 1, 0));
     const costoItem = (x) => { const p = P(x.producto_id); return p.pvp !== null && p.pvp !== undefined && p.contenido ? (Number(x.dosis_tanque) / Number(p.contenido)) * Number(p.pvp) : 0; };
     const fila = (x) => { const p = P(x.producto_id); return `<div class="fila" style="padding:8px 0;border-top:1px solid var(--borde)"><div style="display:flex;flex-direction:column;gap:2px;min-width:0"><b style="font-size:15px">${h(p.nombre)} ${x.alternar ? '<span class="pill claro-ambar" style="margin-left:4px">Alternar</span>' : ""}</b><span class="mini">${h(p.categoria)}${p.ingrediente_activo ? " · " + h(p.ingrediente_activo) : ""}</span></div><b style="font-size:16px;white-space:nowrap">${h(L.cantidad(Number(x.dosis_tanque) * f, x.unidad))}</b></div>`; };
     pintar(`${barra("Plan sanitario", c.nombre, "#/cultivo/" + cid)}
       <main class="cont">
-        ${fases.length ? `<div class="chips" role="group" aria-label="Ir a la fase">${fases.map((x, i) => `<button class="chip" data-ir="${i}">${h(x.et.nombre)}</button>`).join("")}</div>
+        ${fases.length ? `<div class="chips" role="group" aria-label="Etapa fenológica">${fases.map((x, i) => `<button class="chip ${i === sel ? "sel" : ""}" data-ir="${i}" aria-pressed="${i === sel}">${h(x.et.nombre)}</button>`).join("")}</div>
         ${segVol()}
-        <p class="mini" style="margin:0">Dosis por ${h(volTxt())}. En cada fase, los productos marcados <b>Alternar</b> se usan uno por aplicación, cambiando cada semana.</p>
-        ${fases.map((x, i) => { const rz = x.et.riesgo_hongos ? RIESGO[x.et.riesgo_hongos] : null; return `<section class="card" id="fase-${i}" style="scroll-margin-top:80px">
+        <p class="mini" style="margin:0">Elige la etapa fenológica para ver su recomendación. Dosis por ${h(volTxt())}. Los productos marcados <b>Alternar</b> se usan uno por aplicación, cambiando cada semana.</p>
+        ${fases.map((x, i) => { if (i !== sel) return ""; const rz = x.et.riesgo_hongos ? RIESGO[x.et.riesgo_hongos] : null; return `<section class="card" id="fase-${i}" style="scroll-margin-top:80px">
           <div class="fila" style="align-items:flex-start"><div style="display:flex;flex-direction:column;gap:2px"><span class="etq" style="color:var(--verde)">Fase ${i + 1}</span><h2 style="font-size:20px">${h(x.et.nombre)}</h2>${x.et.semanas ? `<span class="mini">${h(x.et.semanas)}</span>` : ""}</div>${rz ? `<span class="pill ${rz[0]}" style="white-space:normal;text-align:right;max-width:130px">${rz[1]}</span>` : ""}</div>
           <div>${x.fijos.map(fila).join("")}${x.alt.map(fila).join("")}</div>
           ${x.et.notas ? `<div class="aviso verde">${ic.alerta}<div>${h(x.et.notas)}</div></div>` : ""}
@@ -416,7 +418,7 @@
         ${avisoSeguridad()}` : `<div class="vacio">Tu asesor aún no ha cargado el plan sanitario de este cultivo.</div>`}
       </main>`, "inicio");
     conectarVol(() => vPlan(cid));
-    $$("[data-ir]").forEach((b) => b.addEventListener("click", () => { const s = $("#fase-" + b.dataset.ir); if (s) s.scrollIntoView({ behavior: "smooth" }); }));
+    $$("[data-ir]").forEach((b) => b.addEventListener("click", () => { ui.planFase[cid] = Number(b.dataset.ir); S.set("ui", ui); vPlan(cid); }));
     $$("[data-mz]").forEach((b) => b.addEventListener("click", () => { const x = fases[Number(b.dataset.mz)]; S.set("mezcla", x.elegidos.map((y) => ({ producto_id: Number(y.producto_id), dosis_tanque: Number(y.dosis_tanque) }))); location.hash = "#/mezcla"; }));
     $$("[data-rg]").forEach((b) => b.addEventListener("click", () => {
       const x = fases[Number(b.dataset.rg)];
