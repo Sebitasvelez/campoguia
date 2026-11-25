@@ -351,7 +351,8 @@
       <div class="fila" style="align-items:flex-start"><div style="display:flex;flex-direction:column;gap:3px;min-width:0">
         <span style="font-size:12px;font-weight:600;color:var(--verde)">${h(etiqueta)}</span>
         <b style="font-size:18px">${h(p.nombre)}</b>
-        <span class="mini">${p.ingrediente_activo ? "i.a.: " + h(p.ingrediente_activo) : ""}${p.grupo ? " · Grupo " + h(p.grupo) : ""}</span></div>
+        <span class="mini">${p.ingrediente_activo ? "i.a.: " + h(p.ingrediente_activo) : ""}${p.grupo ? " · Grupo " + h(p.grupo) : ""}</span>
+        ${p.concentracion ? `<span class="mini"><b>Concentración:</b> ${h(p.concentracion)}</span>` : ""}</div>
         ${p.categoria_tox ? `<span class="pill claro-ambar">Cat. ${h(p.categoria_tox)}</span>` : ""}</div>
       <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="grande">${h(dv.grande)}</span><span class="mini" style="font-size:14px">${h(dv.sub)}</span></div>
       ${p.control ? `<div class="mini">${h(p.control)}</div>` : ""}
@@ -440,13 +441,13 @@
       const p = P(x.producto_id);
       if (x.tipo === "foliar") {
         const dosis = x.dosis_tanque !== null && x.dosis_tanque !== undefined ? Number(x.dosis_tanque) : L.dosisDe(p).min;
-        return `<div class="card"><div class="fila"><div class="tx" style="display:flex;flex-direction:column;gap:2px"><b>${h(p.nombre)}</b><span class="mini">${h(p.ingrediente_activo || "")}</span></div><b style="font-size:17px;white-space:nowrap">${h(L.cantidad(dosis * volL() / TANQUE(), p.unidad))}</b></div><span class="mini">por ${h(volTxt())}${x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : ""}${x.nota ? " · " + h(x.nota) : ""}</span></div>`;
+        return `<div class="card"><div class="fila"><div class="tx" style="display:flex;flex-direction:column;gap:2px"><b>${h(p.nombre)}</b><span class="mini">${h(p.ingrediente_activo || "")}${p.concentracion ? " · " + h(p.concentracion) : ""}</span></div><b style="font-size:17px;white-space:nowrap">${h(L.cantidad(dosis * volL() / TANQUE(), p.unidad))}</b></div><span class="mini">por ${h(volTxt())}${x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : ""}${x.nota ? " · " + h(x.nota) : ""}</span></div>`;
       }
       const r = L.calcularFertSuelo(x, p, String(ui.calc.ha).replace(",", "."), String(ui.calc.pha).replace(",", "."));
       if (r.costo) totalCosto += r.costo;
       const omitir = x.tipo === "enmienda" && !isNaN(ph) && ph >= phAcido;
       return `<div class="card" style="${omitir ? "opacity:.6" : ""}">
-        <div class="fila" style="align-items:flex-start"><div style="display:flex;flex-direction:column;gap:2px"><b>${h(p.nombre)}</b><span class="mini">${h(p.ingrediente_activo || "")}</span></div>
+        <div class="fila" style="align-items:flex-start"><div style="display:flex;flex-direction:column;gap:2px"><b>${h(p.nombre)}</b><span class="mini">${h(p.ingrediente_activo || "")}${p.concentracion ? " · " + h(p.concentracion) : ""}</span></div>
         <span class="pill ${x.tipo === "enmienda" ? "gris" : "verde"}">${x.tipo === "enmienda" ? "Enmienda" : "Al suelo"}</span></div>
         <div class="grid3"><div class="dato"><span>Por planta</span><b>${r.gPorPlanta !== null ? L.fmt(r.gPorPlanta, 0) + " g" : "—"}</b></div>
         <div class="dato"><span>Total finca</span><b>${r.kgTotal !== null ? L.fmt(r.kgTotal, 0) + " kg" : "—"}</b></div>
@@ -565,6 +566,7 @@
     pintar(`${barra("Calcular para mi finca", p.nombre, "#/")}
       <main class="cont">
         <label class="campo">Producto<select id="prod">${opcionesProductos(p.id)}</select></label>
+        ${p.concentracion ? `<div class="mini" style="margin-top:-6px">Concentración: <b>${h(p.concentracion)}</b></div>` : ""}
         ${esTanque ? `<label class="campo">Dosis por hectárea<span class="unido"><input id="dha" inputmode="decimal" value="${h(dhaElegida !== null ? L.fmt(dhaElegida) : "")}" placeholder="Escribe la dosis"><span>${h(p.unidad || "")}/ha</span></span>
           <small>${dh.min !== null ? `Recomendada: <b>${h(L.rango(dh.min, dh.max, p.unidad + "/ha"))}</b>${dh.derivada ? ` (equivale a ${h(L.rango(L.dosisDe(p).min, L.dosisDe(p).max, p.unidad))} por tanque de ${TANQUE()} L con ${L.fmt(lhaRef, 0)} L de agua/ha)` : ""}. Puedes cambiarla.` : "Este producto no tiene dosis por hectárea cargada: escríbela según la etiqueta."}${n(cc.dha) !== null && dh.min !== null && (n(cc.dha) < dh.min * 0.999 || n(cc.dha) > dh.max * 1.001) ? ` <span style="color:var(--rojo,#b3261e)">Está fuera del rango recomendado.</span>` : ""}</small></label>` : ""}
         <div class="mini" ${esTanque ? 'style="display:none"' : ""}>Dosis de etiqueta: <b>${h(d.modo === "tanque" ? L.rango(L.dosisDe(p).min, L.dosisDe(p).max, d.unidad) + " por tanque de " + TANQUE() + " L" : d.modo === "sitio" ? L.rango(d.min, d.max, "g") + " por sitio" : L.rango(d.min, d.max, "kg") + " por ha")}</b>${p.dosis_texto && d.modo === "tanque" ? "" : ""}</div>

@@ -52,7 +52,8 @@ create table if not exists productos (
   fuente text,               -- de dónde salió el dato (Excel del asesor, ficha técnica, internet)
   presentaciones jsonb not null default '[]',
   dosis_ha_min numeric,   -- dosis por hectárea (cc o g/ha) para la calculadora; vacía = se calcula desde la dosis por tanque
-  dosis_ha_max numeric,  -- [{codigo, empaque, cantidad (cc o g), unidad, precio}] de la lista de precios oficial
+  dosis_ha_max numeric,
+  concentracion text,     -- concentración del ingrediente activo (ej. 250 g/L EC)  -- [{codigo, empaque, cantidad (cc o g), unidad, precio}] de la lista de precios oficial
   activo boolean not null default true
 );
 
@@ -71,6 +72,7 @@ create table if not exists problemas (
 );
 alter table productos add column if not exists dosis_ha_min numeric;
 alter table productos add column if not exists dosis_ha_max numeric;
+alter table productos add column if not exists concentracion text;
 alter table problemas add column if not exists fotos jsonb not null default '[]';
 
 create table if not exists recomendaciones (

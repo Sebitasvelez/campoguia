@@ -1,5 +1,5 @@
 {
- "version": 7,
+ "version": 8,
  "publicado": null,
  "cultivos": [
   {
@@ -240,8 +240,9 @@
    "reingreso_horas": 12,
    "categoria_tox": "II",
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Ficha Ecuaquímica de Engeo: suspensión concentrada, categoría toxicológica II, reingreso 12 h. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Ficha Ecuaquímica de Engeo: suspensión concentrada, categoría toxicológica II, reingreso 12 h. | Concentración: Etiqueta Engeo (SAG Chile / ADAMA Ecuador). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Tiametoxam 141 g/L + Lambda-cihalotrina 106 g/L (ZC)",
    "presentaciones": [
     {
      "codigo": "22010172",
@@ -269,7 +270,7 @@
   {
    "id": 2,
    "nombre": "Voliam Flexi",
-   "ingrediente_activo": null,
+   "ingrediente_activo": "CLORANTRANILIPROL + TIAMETOXAM",
    "grupo": null,
    "categoria": "Insecticida",
    "formulacion": "liquido",
@@ -286,9 +287,10 @@
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo",
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Etiqueta Voliam Flexi 300 SC (SAG Chile). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Clorantraniliprol 100 g/L + Tiametoxam 200 g/L (SC)",
    "presentaciones": [
     {
      "codigo": "22010197",
@@ -334,8 +336,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Ficha Solvigo, reg. 152-I1/NA (Agrizon). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Abamectina 36 g/L + Tiametoxam 72 g/L (SC)",
    "presentaciones": [
     {
      "codigo": "22019076",
@@ -395,8 +398,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Nombre en lista de precios (Neem-X 0,40 EC). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Azadiractina 0,4 % (EC)",
    "presentaciones": [
     {
      "codigo": "22490040",
@@ -442,8 +446,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Ficha ADAMA Ninja 050 CS: lambda-cihalotrina en microcápsulas (tecnología Zeon). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Ficha ADAMA Ninja 050 CS: lambda-cihalotrina en microcápsulas (tecnología Zeon). | Concentración: Ficha Ninja (Edifarm / ADAMA). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Lambda-cihalotrina 50 g/L (CS, microcápsulas)",
    "presentaciones": [
     {
      "codigo": "22019136",
@@ -489,8 +494,9 @@
    "reingreso_horas": 24,
    "categoria_tox": "II",
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Vademécum Agrícola Edifarm (Curacron 500 EC): categoría II, reingreso 24 h; no mezclar con productos alcalinos. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Vademécum Agrícola Edifarm (Curacron 500 EC): categoría II, reingreso 24 h; no mezclar con productos alcalinos. | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Profenofos 500 g/L (EC)",
    "presentaciones": [
     {
      "codigo": "22010020",
@@ -543,8 +549,9 @@
    "reingreso_horas": null,
    "categoria_tox": "II",
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Referencia: diazinon 600 EC (ficha ADAMA Ecuador), categoría II. Confirmar con la etiqueta de Flecha. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Referencia: diazinon 600 EC (ficha ADAMA Ecuador), categoría II. Confirmar con la etiqueta de Flecha. | Concentración: Referencia: diazinon 600 EC (ADAMA Ecuador). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Diazinon 600 g/L (EC) (referencial, verificar etiqueta)",
    "presentaciones": [
     {
      "codigo": "22510016",
@@ -597,8 +604,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": "⚠ Contiene clorpirifos: en mayo de 2026 Agrocalidad prohibió su importación y registro en Ecuador. Verifica si aún puede recomendarse.",
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Agraria.pe, 25/05/2026: Agrocalidad prohíbe importación y registro de clorpirifos. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Agraria.pe, 25/05/2026: Agrocalidad prohíbe importación y registro de clorpirifos. | Concentración: Referencia: etiqueta Pyrigran (Brasil). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Clorpirifos 750 g/kg (WG) (referencial, verificar etiqueta)",
    "presentaciones": [
     {
      "codigo": "22760055",
@@ -637,8 +645,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": "⚠ Contiene clorpirifos: en mayo de 2026 Agrocalidad prohibió su importación y registro en Ecuador. Verifica si aún puede recomendarse.",
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Agraria.pe, 25/05/2026: Agrocalidad prohíbe importación y registro de clorpirifos. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Agraria.pe, 25/05/2026: Agrocalidad prohíbe importación y registro de clorpirifos. | Concentración: Ficha Bala 55 (Edifarm / Agrizon). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Clorpirifos 500 g/L + Cipermetrina 50 g/L (EC)",
    "presentaciones": [
     {
      "codigo": "22760006",
@@ -691,8 +700,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Tiociclam hidrogenoxalato 500 g/kg (SP)",
    "presentaciones": [
     {
      "codigo": "22490071",
@@ -731,8 +741,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Sulfluramida 3 g/kg (cebo granulado)",
    "presentaciones": [
     {
      "codigo": "22500001",
@@ -771,8 +782,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Metaldehído 50 g/kg (cebo)",
    "presentaciones": [
     {
      "codigo": "22230002",
@@ -811,8 +823,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Tetradifón 80 g/L (EC)",
    "presentaciones": [
     {
      "codigo": "22360045",
@@ -844,8 +857,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Floramite 50 WG: bifenazate, granulado dispersable, IRAC 20D. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Floramite 50 WG: bifenazate, granulado dispersable, IRAC 20D. | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Bifenazato 500 g/kg (WP)",
    "presentaciones": [
     {
      "codigo": "22979034",
@@ -866,7 +880,7 @@
   {
    "id": 15,
    "nombre": "Starmite",
-   "ingrediente_activo": null,
+   "ingrediente_activo": "CYENOPYRAFEN",
    "grupo": null,
    "categoria": "Acaricida",
    "formulacion": "liquido",
@@ -883,9 +897,10 @@
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo",
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "nota": null,
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Cyenopyrafen 314 g/L (SC)",
    "presentaciones": [
     {
      "codigo": "22970019",
@@ -924,8 +939,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | No figura en la lista de precios Ecuaquímica de octubre 2025 (precio del Excel).",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Omite 57 EC (catálogo AERU / Dhanuka). | No figura en la lista de precios Ecuaquímica de octubre 2025 (precio del Excel).",
    "activo": true,
+   "concentracion": "Propargite 570 g/L (EC) (referencial, verificar etiqueta)",
    "presentaciones": []
   },
   {
@@ -949,8 +965,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Ficha Phyton-27 (Chile): concentrado soluble, sin período de carencia. Confirmar con la etiqueta de Ecuador. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Ficha Phyton-27 (Chile): concentrado soluble, sin período de carencia. Confirmar con la etiqueta de Ecuador. | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Sulfato de cobre pentahidratado 240 g/L (SL)",
    "presentaciones": [
     {
      "codigo": "22490016",
@@ -996,8 +1013,9 @@
    "reingreso_horas": 24,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Ficha Syngenta Ecuador Daconil 720 SC: carencia 14 días en cacao (moniliasis); reingreso 12 a 24 h según versión (se usa 24 h). No mezclar con aceite agrícola. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Ficha Syngenta Ecuador Daconil 720 SC: carencia 14 días en cacao (moniliasis); reingreso 12 a 24 h según versión (se usa 24 h). No mezclar con aceite agrícola. | Concentración: Ficha Syngenta Ecuador / Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Clorotalonil 720 g/L (SC)",
    "presentaciones": [
     {
      "codigo": "22010138",
@@ -1050,8 +1068,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Cobre total 5,6 % p/p (gluconato de cobre)",
    "presentaciones": [
     {
      "codigo": "22370125",
@@ -1083,8 +1102,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Sulfato de cobre 800 g/kg (WP)",
    "presentaciones": [
     {
      "codigo": "22350050",
@@ -1123,8 +1143,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Kocide 2000 (hidróxido de cobre 53,8 % WG): no mezclar con fosfitos. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Kocide 2000 (hidróxido de cobre 53,8 % WG): no mezclar con fosfitos. | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Hidróxido de cobre 538 g/kg (WG)",
    "presentaciones": [
     {
      "codigo": "22210007",
@@ -1163,8 +1184,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Score 250 EC (Syngenta): concentrado emulsionable, FRAC 3; no mezclar con productos alcalinos. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Score 250 EC (Syngenta): concentrado emulsionable, FRAC 3; no mezclar con productos alcalinos. | Concentración: Vademécum Edifarm (Score 250 EC). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Difenoconazol 250 g/L (EC)",
    "presentaciones": [
     {
      "codigo": "22010081",
@@ -1224,8 +1246,9 @@
    "reingreso_horas": 24,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Uniform (Syngenta, Perú): suspoemulsión (SE), reingreso 24 h. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Uniform (Syngenta, Perú): suspoemulsión (SE), reingreso 24 h. | Concentración: Etiqueta Uniform Syngenta (SENASA Perú). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Azoxistrobina 322 g/L + Metalaxil-M 124 g/L (SE)",
    "presentaciones": [
     {
      "codigo": "22010221",
@@ -1264,8 +1287,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Referencia: formulación estándar piraclostrobin + epoxiconazol (Opera, Edifarm). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Piraclostrobin 133 g/L + Epoxiconazol 50 g/L (SE) (referencial, verificar etiqueta)",
    "presentaciones": [
     {
      "codigo": "22G60032",
@@ -1304,8 +1328,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Nombre comercial (Sico 250 EC, Syngenta). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Difenoconazol 250 g/L (EC)",
    "presentaciones": [
     {
      "codigo": "22010085",
@@ -1351,8 +1376,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Tilt 250 EC (Syngenta): concentrado emulsionable. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Tilt 250 EC (Syngenta): concentrado emulsionable. | Concentración: Nombre comercial (Tilt 250 EC, Syngenta). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Propiconazol 250 g/L (EC)",
    "presentaciones": [
     {
      "codigo": "22010097",
@@ -1414,6 +1440,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": null,
    "presentaciones": [
     {
      "codigo": "22G60083",
@@ -1452,8 +1479,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Mertect 340 F / Tecto 500 SC: tiabendazol en suspensión; incompatible con productos alcalinos como el caldo bordelés. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Mertect 340 F / Tecto 500 SC: tiabendazol en suspensión; incompatible con productos alcalinos como el caldo bordelés. | Concentración: Mertect 500, reg. 031-F6/NA (Edifarm). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Tiabendazol 500 g/L (SC)",
    "presentaciones": [
     {
      "codigo": "22010147",
@@ -1506,8 +1534,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Inspire Gold 33.8 EW (catálogo AERU; etiqueta SAG Chile). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Ciprodinil 251 g/L + Difenoconazol 87 g/L (EW)",
    "presentaciones": [
     {
      "codigo": "22019088",
@@ -1546,8 +1575,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": "Completar: dosis",
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Carboxin 200 g/L + Thiram 200 g/L (SC)",
    "presentaciones": [
     {
      "codigo": "22070033",
@@ -1595,6 +1625,7 @@
    "nota": "Completar: ingrediente activo, dosis",
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": null,
    "presentaciones": [
     {
      "codigo": "22540438",
@@ -1626,8 +1657,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Kasumin (UPL): concentrado soluble (SL). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Internet: Etiqueta Kasumin (UPL): concentrado soluble (SL). | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Kasugamicina 20 g/L (SL)",
    "presentaciones": [
     {
      "codigo": "22200004",
@@ -1666,8 +1698,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | No figura en la lista de precios Ecuaquímica de octubre 2025 (precio del Excel).",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Vademécum Edifarm. | No figura en la lista de precios Ecuaquímica de octubre 2025 (precio del Excel).",
    "activo": true,
+   "concentracion": "Quintoceno (PCNB) 750 g/kg (WP)",
    "presentaciones": []
   },
   {
@@ -1691,8 +1724,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Captan 800 g/kg (WG)",
    "presentaciones": [
     {
      "codigo": "22760018",
@@ -1731,8 +1765,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Referencia: formulación estándar de glufosinato (Edifarm). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Glufosinato de amonio 200 g/L (SL) (referencial, verificar etiqueta)",
    "presentaciones": [
     {
      "codigo": "22720647",
@@ -1778,8 +1813,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Ficha Agrizon. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Glifosato 480 g/L (SL)",
    "presentaciones": [
     {
      "codigo": "22720023",
@@ -1825,8 +1861,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Nombre comercial (Ecuamina 720). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "2,4-D amina 720 g/L (SL)",
    "presentaciones": [
     {
      "codigo": "22720641",
@@ -1879,8 +1916,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Referencia: formulación estándar de paraquat. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Paraquat 200 g/L (SL) (referencial, verificar etiqueta)",
    "presentaciones": [
     {
      "codigo": "22F30018",
@@ -1926,8 +1964,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Referencia: formulación estándar de nicosulfuron en sachet. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Nicosulfuron 750 g/kg (WG) (referencial, verificar etiqueta)",
    "presentaciones": [
     {
      "codigo": "22F30012",
@@ -1961,6 +2000,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": null,
    "presentaciones": [
     {
      "codigo": "22410001",
@@ -1999,8 +2039,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Vademécum Edifarm / Agrizon. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Citoquininas (kinetina) 0,01 %",
    "presentaciones": [
     {
      "codigo": "22480007",
@@ -2053,8 +2094,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Nombre comercial (New Gibb 10 %). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Ácido giberélico 10 %",
    "presentaciones": [
     {
      "codigo": "22490065",
@@ -2088,6 +2130,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "N 12 % · P₂O₅ 48 % · K₂O 8 % + micronutrientes",
    "presentaciones": [
     {
      "codigo": "22480022",
@@ -2135,6 +2178,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": null,
    "presentaciones": [
     {
      "codigo": "22H30012",
@@ -2182,6 +2226,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "N 18 % · P₂O₅ 26 % + ácidos húmicos",
    "presentaciones": [
     {
      "codigo": "22C10001",
@@ -2222,6 +2267,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": null,
    "presentaciones": [
     {
      "codigo": "22019065",
@@ -2260,8 +2306,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Poli-1-p-menteno 960 g/L",
    "presentaciones": [
     {
      "codigo": "22480129",
@@ -2314,8 +2361,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Referencia: ficha Vaporgard (Miller Chemical). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Di-1-p-menteno 96 % (referencial, verificar etiqueta)",
    "presentaciones": [
     {
      "codigo": "22480072",
@@ -2347,8 +2395,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Ficha Silwet L-77 (referencia). | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Heptametiltrisiloxano modificado con polialquilenóxido ~100 %",
    "presentaciones": [
     {
      "codigo": "22070029",
@@ -2387,8 +2436,9 @@
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": null,
-   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
+   "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Concentración: Vademécum Edifarm. | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Éster de poliglicol 25 %",
    "presentaciones": [
     {
      "codigo": "22910011",
@@ -2436,6 +2486,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": null,
    "presentaciones": [
     {
      "codigo": "22490004",
@@ -2490,6 +2541,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "Óxido de calcio 35 %",
    "presentaciones": [
     {
      "codigo": "22370025",
@@ -2537,6 +2589,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | No figura en la lista de precios Ecuaquímica de octubre 2025 (precio del Excel).",
    "activo": true,
+   "concentracion": null,
    "presentaciones": []
   },
   {
@@ -2562,6 +2615,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | No figura en la lista de precios Ecuaquímica de octubre 2025 (precio del Excel).",
    "activo": true,
+   "concentracion": null,
    "presentaciones": []
   },
   {
@@ -2587,6 +2641,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "12-4-23 + 13 S + 0,3 B + 0,5 Zn + 0,3 AA",
    "presentaciones": [
     {
      "codigo": "22J00003",
@@ -2620,6 +2675,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "12-24-12 + 7 S + 0,3 AA",
    "presentaciones": [
     {
      "codigo": "22J00001",
@@ -2653,6 +2709,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "2-10-18 + 2 Mg + 11 S + 0,2 Zn + 0,9 B + 0,8 Mn + 0,3 AA",
    "presentaciones": [
     {
      "codigo": "22J00004",
@@ -2686,6 +2743,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "18-22-0 + 5 MO + 5 AA",
    "presentaciones": [
     {
      "codigo": "22J00002",
@@ -2719,6 +2777,7 @@
    "nota": null,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | Precios y presentaciones: Lista de precios Ecuaquímica División Agro, octubre 2025.",
    "activo": true,
+   "concentracion": "0-0-54 + 2,5 MgO + 2 S + 0,3 Zn + 0,3 AA",
    "presentaciones": [
     {
      "codigo": "22J00006",
