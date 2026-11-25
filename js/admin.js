@@ -152,7 +152,7 @@
     : `<div class="ok-pub" id="estadoPub">Versión publicada: <b>${h(version ? version.version : "—")}</b>${version && version.publicado ? " · " + new Date(version.publicado).toLocaleString("es-EC", { dateStyle: "medium", timeStyle: "short" }) : ""}. Los celulares la descargan cuando tienen señal.</div>`;
   function marco(seccion, contenido) {
     $("#adm").innerHTML = `<div class="adm">
-      <nav class="adm-nav" aria-label="Secciones"><h1>${h(NOMBRE)} · Admin</h1>
+      <nav class="adm-nav" aria-label="Secciones"><h1 style="display:flex;align-items:center;gap:10px"><img src="icons/logo-admin.svg" alt="" width="36" height="36" style="border-radius:9px;flex-shrink:0">${h(NOMBRE)} · Admin</h1>
         ${MENU.map(([k, t]) => `<a href="#${k}" class="${k === seccion ? "sel" : ""}" ${k === seccion ? 'aria-current="page"' : ""}>${t}</a>`).join("")}
         <div class="pie"><span>${h(usuario && usuario.email)}${A.modoDemo ? " · modo demo" : ""}</span><a href="index.html" style="padding:0;min-height:0;color:#DCE7F1">Abrir la app del agricultor →</a><button id="salir">Cerrar sesión</button></div>
       </nav>
@@ -531,7 +531,7 @@
     return vResumen();
   }
   function vLogin(msg) {
-    $("#adm").innerHTML = `<div class="login"><form class="card" id="fl"><h2 style="font-size:22px">${h(NOMBRE)} · Administración</h2>
+    $("#adm").innerHTML = `<div class="login"><form class="card" id="fl"><img src="icons/logo-admin.svg" alt="" width="64" height="64" style="border-radius:14px"><h2 style="font-size:22px">${h(NOMBRE)} · Administración</h2>
       <p class="mini">Ingresa con el correo y la contraseña de administrador${A.modoDemo ? " (modo demostración: escribe cualquier correo)" : ""}.</p>
       <label class="campo">Correo<input name="correo" type="email" autocomplete="username" required></label>
       <label class="campo">Contraseña<input name="clave" type="password" autocomplete="current-password" ${A.modoDemo ? "" : "required"}></label>
