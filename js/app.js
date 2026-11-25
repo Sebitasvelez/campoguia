@@ -494,6 +494,9 @@
     const equipoTxt = (plural) => cc.equipo === "tanque" ? (plural ? `Tanques de ${vol} L` : `tanque de ${vol} L`) : cc.equipo === "bomba" ? (plural ? `Bombas de ${vol} L` : `bomba de ${vol} L`) : (plural ? `Cargas de ${vol} L` : `carga de ${vol} L`);
     const pu = L.precioUnitario(p);
     const costoTanque = r.tipo === "tanque" && r.porTanque !== undefined && pu !== null ? Math.round(r.porTanque * pu * 100) / 100 : null;
+    // costo total de aplicación = tanques o bombas a preparar × costo de producto por equipo
+    const costoEquipo = r.tipo === "tanque" && r.porBomba !== undefined && pu !== null ? Math.round(r.porBomba * pu * 100) / 100 : null;
+    const costoAplic = costoEquipo !== null && r.bombas ? Math.round(r.bombas * r.porBomba * pu * 100) / 100 : null;
     let res = "";
     if (r.tipo === "tanque" && r.total !== undefined) {
       res = `<div class="grid2"><div><div class="n">${h(L.cantidad(r.total, r.unidad))}</div><small>Producto requerido total</small></div>
@@ -507,7 +510,7 @@
         ${r.gPorPlanta ? `<div><div class="n">${L.fmt(r.gPorPlanta, 0)} g</div><small>Por planta</small></div>` : ""}
         ${r.sitios ? `<div><div class="n">${L.fmt(r.sitios, 0)}</div><small>Sitios / plantas</small></div>` : ""}</div>`;
     }
-    const compra = r.envases ? `<div class="linea">Necesitas comprar: <b>${h(r.compraTexto || r.envases + " × " + (r.presentacion || "envase"))}</b>${r.costoEnvases !== undefined ? ` · ${dinero(r.costoEnvases)}` : ""}${costoTanque !== null ? `<br><span style="font-size:12.5px">Costo por tanque de ${TANQUE()} L de aplicación: ${dinero(costoTanque)}</span>` : r.costoUsado !== undefined ? `<br><span style="font-size:12.5px">Costo de lo que aplicas: ${dinero(r.costoUsado)}</span>` : ""}</div>` : "";
+    const compra = r.envases ? `<div class="linea">Necesitas comprar: <b>${h(r.compraTexto || r.envases + " × " + (r.presentacion || "envase"))}</b>${r.costoEnvases !== undefined ? ` · ${dinero(r.costoEnvases)}` : ""}${costoTanque !== null ? `<br><span style="font-size:12.5px">Costo por tanque de ${TANQUE()} L de aplicación: ${dinero(costoTanque)}</span>` + (costoAplic !== null ? `<br><span style="font-size:15px">Costo total de aplicación: <b>${dinero(costoAplic)}</b></span><br><span style="font-size:12.5px">${L.textoEquipos(r.bombas)} ${h(((t) => t.charAt(0).toLowerCase() + t.slice(1))(equipoTxt(r.bombas !== 1)))} × ${dinero(costoEquipo)}</span>` : "") : r.costoUsado !== undefined ? `<br><span style="font-size:12.5px">Costo de lo que aplicas: ${dinero(r.costoUsado)}</span>` : ""}</div>` : "";
     pintar(`${barra("Calcular para mi finca", p.nombre, "#/")}
       <main class="cont">
         <label class="campo">Producto<select id="prod">${opcionesProductos(p.id)}</select></label>
