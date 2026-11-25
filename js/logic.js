@@ -339,7 +339,41 @@
     return Object.values(car).concat(out.filter((a) => a.tipo === "recordatorio").sort((a, b) => a.dias - b.dias));
   }
 
+  // ---------------- grupo de resistencia según IRAC / FRAC / HRAC (clasificaciones oficiales por modo de acción; no editable)
+  const CLAS_RESIST = [
+    // [patrón del ingrediente activo, ente, código]
+    [/lambda|cihalotr|cyhalothr/, "IRAC", "3A"], [/cipermetr|cypermethr/, "IRAC", "3A"],
+    [/tiametox|thiametox/, "IRAC", "4A"], [/clorantranil|chlorantranil/, "IRAC", "28"], [/abamect/, "IRAC", "6"],
+    [/azadirac/, "IRAC", "UN"], [/profenof|diazin|clorpirif|chlorpyrif/, "IRAC", "1B"], [/tiocicl|thiocycl/, "IRAC", "14"],
+    [/sulflur/, "IRAC", "13"], [/tetradif/, "IRAC", "12D"], [/propargit/, "IRAC", "12C"], [/bifenaz/, "IRAC", "20D"], [/cyenopyr|cienopir/, "IRAC", "25A"],
+    [/cobre|copper/, "FRAC", "M01"], [/clorotal|chlorothal/, "FRAC", "M05"], [/thiram|tiram/, "FRAC", "M03"], [/captan/, "FRAC", "M04"],
+    [/difenocon|propicon|epoxicon|tebucon/, "FRAC", "3"], [/azoxistrob|azoxystrob|piraclostrob|pyraclostrob/, "FRAC", "11"],
+    [/metalax|mefenox/, "FRAC", "4"], [/boscal|carboxin/, "FRAC", "7"], [/tiabend|thiabend/, "FRAC", "1"], [/ciprodin|cyprodin/, "FRAC", "9"],
+    [/kasug/, "FRAC", "24"], [/pentacloronitro|quintoc|pcnb/, "FRAC", "14"],
+    [/metaldeh/, null, "Molusquicida: sin grupo IRAC"],
+    [/glufos/, "HRAC", "10"], [/glifos|glyphos/, "HRAC", "9"], [/paraquat/, "HRAC", "22"], [/nicosulf/, "HRAC", "2"], [/2,?4[- ]?d\b|2,4 dim|2,4-d/, "HRAC", "4"],
+  ];
+  const CAT_PLAGUICIDA = /insectic|acaric|cebo|fungic|desinfecc|herbic|bactericida|nematic/i;
+  // Devuelve { grupo, aplica, faltan } — grupo: "IRAC 3A + 4A" / "FRAC 7 + M03"; faltan: componentes sin clasificar
+  function grupoResistencia(ia, categoria) {
+    const aplica = categoria ? CAT_PLAGUICIDA.test(categoria) : true;
+    if (!aplica) return { grupo: null, aplica: false, faltan: [] };
+    const txt = String(ia || "").trim();
+    if (!txt) return { grupo: null, aplica: true, faltan: ["(sin ingrediente activo)"] };
+    const partes = txt.split(/\s*\+\s*/).filter(Boolean), porEnte = {}, orden = [], faltan = [];
+    partes.forEach((p) => {
+      const n = p.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+      const m = CLAS_RESIST.find(([re]) => re.test(n));
+      if (!m) { faltan.push(p); return; }
+      const ente = m[1] || "";
+      if (!porEnte[ente]) { porEnte[ente] = []; orden.push(ente); }
+      if (!porEnte[ente].includes(m[2])) porEnte[ente].push(m[2]);
+    });
+    const grupo = orden.length ? orden.map((e) => (e ? e + " " : "") + porEnte[e].join(" + ")).join(" · ") : null;
+    return { grupo, aplica: true, faltan };
+  }
+
   const api = { ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, compraOptima, precioUnitario, nombrePresentacion,
-    redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas };
+    redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);

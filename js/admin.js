@@ -32,13 +32,13 @@
       tabla: "productos", titulo: "Productos", ayuda: "Dosis por tanque de 200 L (o por sitio / kg por ha según el modo). Los productos inactivos no se envían a la app.",
       buscar: (r) => [r.nombre, r.ingrediente_activo, r.categoria, r.control, r.fuente, r.nota].join(" "),
       filtro: { campo: "categoria", etiqueta: "Categoría", opciones: () => CATEGORIAS.map((c) => [c, c]) },
-      columnas: [["Producto", (r) => `<b>${h(r.nombre)}</b>${/Completar/.test(r.nota || "") ? `<br><span class="pill claro-ambar">${h((r.nota.match(/Completar:.*$/) || [""])[0])}</span>` : ""}${/^⚠/.test(r.nota || "") ? `<br><span class="pill claro-rojo">Clorpirifos: revisar</span>` : ""}${/Internet/.test(r.fuente || "") ? `<br><span class="pill gris">Dato de internet</span>` : ""}`], ["Ingrediente activo", (r) => h(r.ingrediente_activo) + (r.concentracion ? `<br><span class="mini">${h(r.concentracion)}</span>` : (r.ingrediente_activo ? '<br><span class="pill claro-ambar">Sin concentración</span>' : ""))], ["Categoría", (r) => h(r.categoria)],
+      columnas: [["Producto", (r) => `<b>${h(r.nombre)}</b>${/Completar/.test(r.nota || "") ? `<br><span class="pill claro-ambar">${h((r.nota.match(/Completar:.*$/) || [""])[0])}</span>` : ""}${/^⚠/.test(r.nota || "") ? `<br><span class="pill claro-rojo">Clorpirifos: revisar</span>` : ""}${/Internet/.test(r.fuente || "") ? `<br><span class="pill gris">Dato de internet</span>` : ""}`], ["Ingrediente activo", (r) => h(r.ingrediente_activo) + (r.grupo ? `<br><span class="pill gris">${h(r.grupo)}</span>` : "") + (r.concentracion ? `<br><span class="mini">${h(r.concentracion)}</span>` : (r.ingrediente_activo ? '<br><span class="pill claro-ambar">Sin concentración</span>' : ""))], ["Categoría", (r) => h(r.categoria)],
         ["Dosis", (r) => h(dosisTxt(r))], ["Presentaciones", (r) => (r.presentaciones || []).length ? (r.presentaciones || []).map((x) => h(L.nombrePresentacion(x)) + " $" + h(x.precio)).join("<br>") : (r.pvp !== null && r.pvp !== undefined ? "$" + h(r.pvp) + " (sin lista)" : "—")], ["Carencia", (r) => (r.carencia_dias !== null && r.carencia_dias !== undefined ? h(r.carencia_dias) + " d" : "—")], ["Activo", (r) => sn(r.activo !== false)]],
       campos: [
         { k: "nombre", t: "Nombre comercial", req: true }, { k: "ingrediente_activo", t: "Ingrediente activo" },
         { k: "concentracion", t: "Concentración del i.a.", ayuda: "Ej. Difenoconazol 250 g/L (EC). Se muestra en el manual y la calculadora." },
         { k: "categoria", t: "Categoría", tipo: "select", opciones: () => CATEGORIAS.map((c) => [c, c]), req: true },
-        { k: "grupo", t: "Grupo IRAC / FRAC" },
+        { k: "grupo", t: "Grupo de resistencia (IRAC / FRAC / HRAC)", tipo: "grupo" },
         { k: "modo_aplicacion", t: "Modo de aplicación", tipo: "select", opciones: () => [["tanque", "En tanque (dosis por 200 L)"], ["sitio", "Por sitio / planta (g)"], ["suelo_ha", "Al suelo (kg por ha)"]], def: "tanque" },
         { k: "dosis_min", t: "Dosis mínima (por tanque de 200 L, por sitio o kg/ha según el modo)", tipo: "num" }, { k: "dosis_max", t: "Dosis máxima", tipo: "num" },
         { k: "dosis_ha_min", t: "Dosis por hectárea mínima (cc o g por ha)", tipo: "num", ayuda: "Solo productos en tanque. Es la que usa la calculadora. Si la dejas vacía, se calcula desde la dosis por tanque con el agua por hectárea de Ajustes." },
@@ -245,6 +245,7 @@
         <div class="unido-adm"><input id="fotoUrl" type="url" placeholder="…o pega el enlace https de una foto"><button type="button" class="btn sec chico" id="fotoUrlMas">Agregar enlace</button></div>
         <span class="mini" id="fotoEstado"></span></div>`;
     }
+    if (c.tipo === "grupo") return `<div class="campo">${h(c.t)}<div id="grupoCalc" class="grupo-fijo" aria-live="polite"></div><small>Lo asigna la app según el ingrediente activo y las clasificaciones oficiales IRAC (insecticidas), FRAC (fungicidas) y HRAC (herbicidas). No se puede editar: cambia el ingrediente activo si está mal escrito.</small></div>`;
     if (c.tipo === "area") return `<label class="campo">${h(c.t)}<textarea name="${c.k}" rows="3">${h(v)}</textarea>${ay}</label>`;
     return `<label class="campo">${h(c.t)}${c.req ? " *" : ""}<input name="${c.k}" ${c.tipo === "num" ? 'inputmode="decimal"' : ""} value="${h(v)}" ${c.req ? "required" : ""}>${ay}</label>`;
   }
@@ -290,10 +291,18 @@
         agregar({ url: u, credito: "" }); $("#fotoUrl").value = ""; est.textContent = "";
       });
     }
+    const gc = $("#grupoCalc");
+    const pintarGrupo = () => {
+      const r = L.grupoResistencia(f.elements.ingrediente_activo.value, f.elements.categoria.value);
+      gc.innerHTML = !r.aplica ? '<span class="mini">No aplica: no es plaguicida.</span>'
+        : (r.grupo ? `<b>${h(r.grupo)}</b>` : "") + (r.faltan.length ? `<span class="pill claro-ambar">Sin clasificar: ${h(r.faltan.join(", "))}</span>` : "");
+    };
+    if (gc) { pintarGrupo(); ["ingrediente_activo", "categoria"].forEach((k) => f.elements[k].addEventListener("input", pintarGrupo)); f.elements.categoria.addEventListener("change", pintarGrupo); }
     f.addEventListener("submit", async (e) => {
       e.preventDefault();
       const datos = fila ? { id: fila.id } : {};
       for (const c of sec.campos) {
+        if (c.tipo === "grupo") continue;
         if (c.tipo === "fotos") {
           datos[c.k] = $$("#fotosFilas .foto-fila", f).map((n) => ({ url: n.dataset.url, credito: n.querySelector("[data-fk=credito]").value.trim() })).filter((x) => urlFotoOk(x.url));
           continue;
@@ -313,6 +322,7 @@
         else if (c.tipo !== "bool" && v === "") v = null;
         datos[c.k] = v;
       }
+      if (sec.campos.some((c) => c.tipo === "grupo")) datos.grupo = L.grupoResistencia(datos.ingrediente_activo, datos.categoria).grupo;
       const b = f.querySelector("button[type=submit]"); b.disabled = true;
       try {
         const guardada = await A.guardar(sec.tabla, datos);
@@ -353,6 +363,7 @@
       const existente = (DB.productos || []).find((p) => (f.id && String(p.id) === String(f.id)) || p.nombre.toLowerCase() === nombre.toLowerCase());
       const datos = existente ? { id: existente.id } : {};
       camposProd.forEach((c) => {
+        if (c.tipo === "grupo") return;
         let v = f[c.t]; if (v === undefined) return;
         if (c.tipo === "presentaciones") v = String(v || "").split(";").map((t) => t.trim()).filter(Boolean).map((t) => { const [codigo, empaque, cantidad, unidad, precio] = t.split("|"); return { codigo: codigo || null, empaque, cantidad: Number(cantidad), unidad, precio: Number(precio) }; }).filter((x) => x.cantidad > 0);
         else if (c.tipo === "num") v = v === null || v === "" ? null : Number(String(v).replace(",", "."));
@@ -361,6 +372,7 @@
         datos[c.k] = v;
       });
       if (!datos.categoria) datos.categoria = existente ? existente.categoria : "Insecticida";
+      datos.grupo = L.grupoResistencia(datos.ingrediente_activo !== undefined ? datos.ingrediente_activo : existente && existente.ingrediente_activo, datos.categoria).grupo;
       try { await A.guardar("productos", datos); n++; } catch (x) { err++; }
     }
     await cargarTodo(); marcarCambio(); toast(`${n} productos importados${err ? ", " + err + " con error" : ""}. Revisa y publica.`); router();

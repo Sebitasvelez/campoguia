@@ -351,7 +351,7 @@
       <div class="fila" style="align-items:flex-start"><div style="display:flex;flex-direction:column;gap:3px;min-width:0">
         <span style="font-size:12px;font-weight:600;color:var(--verde)">${h(etiqueta)}</span>
         <b style="font-size:18px">${h(p.nombre)}</b>
-        <span class="mini">${p.ingrediente_activo ? "i.a.: " + h(p.ingrediente_activo) : ""}${p.grupo ? " · Grupo " + h(p.grupo) : ""}</span>
+        <span class="mini">${p.ingrediente_activo ? "i.a.: " + h(p.ingrediente_activo) : ""}${p.grupo ? " · " + (/^(IRAC|FRAC|HRAC)/.test(p.grupo) ? "Grupo " : "") + h(p.grupo) : ""}</span>
         ${p.concentracion ? `<span class="mini"><b>Concentración:</b> ${h(p.concentracion)}</span>` : ""}</div>
         ${p.categoria_tox ? `<span class="pill claro-ambar">Cat. ${h(p.categoria_tox)}</span>` : ""}</div>
       <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap"><span class="grande">${h(dv.grande)}</span><span class="mini" style="font-size:14px">${h(dv.sub)}</span></div>
