@@ -216,7 +216,7 @@
         <label class="campo">Sector del cultivo<input name="sector" placeholder="Comunidad o parroquia" required></label></div>
         <div class="grid2"><label class="campo">Cultivo principal<select name="cultivo_id">${cultOpts}</select></label>
         <label class="campo">Hectáreas<input name="hectareas" inputmode="decimal" placeholder="Ej. 2"></label></div>
-        <label class="campo">Soy<select name="rol"><option value="agricultor">Agricultor</option><option value="tecnico">Técnico agrícola</option></select></label>
+        <label class="campo">Soy<select name="rol"><option value="agricultor">Agricultor</option><option value="tecnico">Técnico agrícola (requiere aprobación)</option></select></label>
         ${bloqueUbicacion(null)}
         <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--suave)"><input type="checkbox" name="acepta" checked style="width:22px;height:22px;margin:0;accent-color:var(--verde)"> Acepto que mi asesor vea mis registros y la ubicación de mi finca para darme seguimiento técnico.</label>
         <p class="mini" id="err" role="alert" style="color:var(--rojo);margin:0"></p>
@@ -240,6 +240,7 @@
             hectareas: f.hectareas.value.replace(",", "."), provincia: f.provincia.value, sector: f.sector.value, rol: f.rol.value,
             acepta_seguimiento: f.acepta.checked, latitud: ub.latitud, longitud: ub.longitud, precision_m: ub.precision_m });
           ui.cultivo = f.cultivo_id.value; guardarUI(); location.hash = "#/"; router();
+          if (f.rol.value === "tecnico") toast("Tu cuenta está lista. El acceso de técnico agrícola queda pendiente de aprobación de tu asesor.");
         } catch (er) { $("#err").textContent = er.codigo === "red" ? "Para crear tu cuenta necesitas internet. Inténtalo cuando tengas señal." : er.message; b.disabled = false; }
       });
       return;
@@ -378,7 +379,7 @@
     if (!pr.clasificacion || !["plaga", "enfermedad"].includes(pr.tipo)) return "";
     const clases = L.clasesDe(pr.clasificacion), gf = L.gruposFuncionales(pr.clasificacion), plaga = pr.tipo === "plaga";
     const que = pr.como_actua || clases.map((k) => L.CLASES[k].resumen).join(" ");
-    const tec = esTecnico(); // grupos químicos funcionales: solo para técnicos de almacén
+    const tec = esTecnico(); // grupos químicos funcionales: solo para técnicos agrícolas
     return `<article class="card ficha-clase">
       <div class="fila" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><span class="mini" style="font-weight:600">${plaga ? "Aparato bucal" : "Clase"}</span>${(clases.length ? clases : [pr.clasificacion]).map((k) => `<span class="pill verde" style="font-size:12.5px">${h(k)}</span>`).join("")}</div>
       <div><b style="font-size:15px">${plaga ? "Cómo se alimenta" : "Qué es"}</b><p class="mini" style="margin:4px 0 0;font-size:14px">${h(que)}</p></div>
@@ -1054,6 +1055,18 @@
   }
 
   // ------------------------------------------------------------ PERFIL
+  // tipo de cuenta: pasar a técnico agrícola necesita aprobación del administrador; volver a agricultor es inmediato
+  function cardTipoCuenta(p) {
+    const fecha = p.rol_solicitado_fecha ? new Date(p.rol_solicitado_fecha).toLocaleDateString("es-EC", { dateStyle: "medium" }) : "";
+    let cuerpo;
+    if (p.rol === "tecnico") cuerpo = `<p class="mini" style="margin:0">Ves la información técnica: grupos químicos funcionales y otras opciones de productos.</p>
+      <button class="btn sec chico" data-rol="agricultor">Cambiar a agricultor</button>`;
+    else if (p.rol_solicitado === "tecnico") cuerpo = `<div class="aviso azul" style="padding:8px 10px">${ic.alerta}<div>Pediste cambiar a <b>Técnico agrícola</b>${fecha ? " el " + h(fecha) : ""}. Tu asesor debe aprobarlo; el cambio se verá al sincronizar.</div></div>
+      <button class="btn sec chico" data-rol="cancelar">Cancelar solicitud</button>`;
+    else cuerpo = `<p class="mini" style="margin:0">Si eres técnico agrícola puedes pedir el cambio. Tu asesor lo revisa y lo aprueba.</p>
+      <button class="btn sec chico" data-rol="tecnico">Solicitar cambio a técnico agrícola</button>`;
+    return `<section class="card"><div class="fila"><span class="mini">Tipo de cuenta</span><b>${p.rol === "tecnico" ? "Técnico agrícola" : "Agricultor"}</b></div>${cuerpo}</section>`;
+  }
   function vPerfil() {
     const p = D.sesion.perfil, cat = D.catalogo || {}, ub = {};
     pintar(`${barra("Mi cuenta", p.rol === "tecnico" ? "Técnico agrícola" : "Agricultor", "#/")}
@@ -1070,6 +1083,7 @@
           <button class="btn" type="submit">Guardar cambios</button>
         </form>
         ${bloqueUbicacion(p)}
+        ${cardTipoCuenta(p)}
         <section class="card">
           <div class="fila"><span class="mini">Información técnica</span><b>Versión ${h(cat.version || "—")}</b></div>
           <div class="fila"><span class="mini">Última sincronización</span><b>${D.ultimaSync ? new Date(D.ultimaSync).toLocaleString("es-EC", { dateStyle: "short", timeStyle: "short" }) : "—"}</b></div>
@@ -1086,6 +1100,15 @@
       catch (er) { toast(er.codigo === "red" ? "Ubicación tomada, pero necesitas internet para guardarla. Vuelve a tocar el botón cuando tengas señal." : er.message); }
     };
     conectarUbicacion(ub);
+    $$("[data-rol]").forEach((b) => b.addEventListener("click", async () => {
+      const rol = b.dataset.rol;
+      if (rol === "agricultor" && !(await UI.confirmar("Dejarás de ver la información técnica de grupos químicos. Para volver a ser técnico agrícola necesitarás otra aprobación. ¿Cambiar a agricultor?", { ok: "Cambiar a agricultor" }))) return;
+      try {
+        await D.solicitarRol(rol);
+        toast(rol === "tecnico" ? "Solicitud enviada. Tu asesor la revisará." : rol === "cancelar" ? "Solicitud cancelada" : "Ahora tu cuenta es de agricultor");
+        vPerfil();
+      } catch (er) { toast(er.codigo === "red" ? "Necesitas internet para cambiar el tipo de cuenta." : er.message); }
+    }));
     $("#fp").addEventListener("submit", async (e) => {
       e.preventDefault(); const f = e.target;
       try { await D.actualizarPerfil({ nombres: f.nombres.value, telefono: f.telefono.value, provincia: f.provincia.value, sector: f.sector.value, cultivo_id: f.cultivo_id.value, hectareas: f.hectareas.value.replace(",", "."), acepta_seguimiento: f.acepta.checked }); toast("Datos guardados"); }

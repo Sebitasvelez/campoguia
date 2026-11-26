@@ -158,7 +158,7 @@
   function marco(seccion, contenido) {
     $("#adm").innerHTML = `<div class="adm">
       <nav class="adm-nav" aria-label="Secciones"><h1 style="display:flex;align-items:center;gap:10px"><img src="icons/logo-admin.svg" alt="" width="36" height="36" style="border-radius:9px;flex-shrink:0">${h(NOMBRE)} · Admin</h1>
-        ${MENU.map(([k, t]) => `<a href="#${k}" class="${k === seccion ? "sel" : ""}" ${k === seccion ? 'aria-current="page"' : ""}>${t}</a>`).join("")}
+        ${MENU.map(([k, t]) => { const nSol = k === "agricultores" ? (DB.agricultores || []).filter((a) => a.rol_solicitado === "tecnico").length : 0; return `<a href="#${k}" class="${k === seccion ? "sel" : ""}" ${k === seccion ? 'aria-current="page"' : ""}>${t}${nSol ? ` <span class="badge-sol" title="Solicitudes de técnico agrícola">${nSol}</span>` : ""}</a>`; }).join("")}
         <div class="pie"><span>${h(usuario && usuario.email)}${A.modoDemo ? " · modo demo" : ""}</span><a href="index.html" style="padding:0;min-height:0;color:#DCE7F1">Abrir la app del agricultor →</a><button id="salir">Cerrar sesión</button></div>
       </nav>
       <main class="adm-main">${contenido}</main></div>`;
@@ -459,6 +459,7 @@
       const ult = mios.map((r) => r.fecha).sort().pop() || null;
       const alertas = [];
       if (mios.some(dosisAlta)) alertas.push(["rojo", "Dosis alta"]);
+      if (a.rol_solicitado === "tecnico") alertas.push(["azul", "Pide ser técnico"]);
       if (!ult || L.diasEntre(ult, hoy) > 30) alertas.push(["claro-ambar", ult ? "Sin actividad 30 días" : "Sin registros"]);
       return Object.assign({}, a, { nRegs: mios.length, ult, alertas, costo: mios.reduce((s, r) => s + (Number(r.costo) || 0) + (Number(r.costo_mano_obra) || 0), 0) });
     });
@@ -471,7 +472,7 @@
   }
   function vAgricultores(q) {
     const lista = infoAgricultores(), busca = (q.q || "").toLowerCase();
-    const vis = lista.filter((a) => (!q.prov || a.provincia === q.prov) && (!busca || [a.nombres, a.cedula, a.telefono, a.comunidad, a.provincia, a.sector].join(" ").toLowerCase().includes(busca))).sort((a, b) => (b.alertas.length - a.alertas.length) || String(b.ult || "").localeCompare(String(a.ult || "")));
+    const vis = lista.filter((a) => (!q.prov || a.provincia === q.prov) && (!busca || [a.nombres, a.cedula, a.telefono, a.comunidad, a.provincia, a.sector].join(" ").toLowerCase().includes(busca))).sort((a, b) => ((b.rol_solicitado ? 1 : 0) - (a.rol_solicitado ? 1 : 0)) || (b.alertas.length - a.alertas.length) || String(b.ult || "").localeCompare(String(a.ult || "")));
     const sel = lista.find((a) => a.id === q.id);
     let panel = `<aside class="adm-panel"><span class="mini">Toca un agricultor para ver sus lotes y registros.</span></aside>`;
     if (sel) {
@@ -479,6 +480,8 @@
       panel = `<aside class="adm-panel"><h3>${h(sel.nombres)}</h3>
         <div class="mini">Cédula ${h(sel.cedula)} · ${h(sel.telefono)} · ${h([sel.sector, sel.provincia].filter(Boolean).join(", "))} · ${sel.rol === "tecnico" ? "Técnico agrícola" : "Agricultor"}${sel.acepta_seguimiento === false ? " · <b>No autorizó seguimiento</b>" : ""}</div>
         <div class="mini">${sel.latitud ? `Finca georreferenciada: ${h(Number(sel.latitud).toFixed(5))}, ${h(Number(sel.longitud).toFixed(5))} (±${h(sel.precision_m)} m) · <a href="https://www.google.com/maps?q=${h(sel.latitud)},${h(sel.longitud)}" target="_blank" rel="noopener">Ver en el mapa</a>` : "Sin ubicación GPS de la finca."}</div>
+        ${sel.rol_solicitado === "tecnico" ? `<div class="aviso-rol"><b>Solicitud de cambio a Técnico agrícola</b>${sel.rol_solicitado_fecha ? `<span class="mini">Enviada el ${h(new Date(sel.rol_solicitado_fecha).toLocaleString("es-EC", { dateStyle: "medium", timeStyle: "short" }))}</span>` : ""}<span class="mini">Al aprobar verá los grupos químicos funcionales y otras opciones de productos.</span><div class="acciones"><button class="btn chico" id="rolAprobar">Aprobar</button><button class="btn sec chico" id="rolRechazar">Rechazar</button></div></div>`
+          : sel.rol === "tecnico" ? `<div class="acciones"><button class="btn sec chico" id="rolQuitar">Quitar acceso de técnico</button></div>` : ""}
         <div class="chips">${sel.alertas.map(([c, t]) => `<span class="pill ${c}">${h(t)}</span>`).join("")}</div>
         <div class="acciones"><a class="btn wa chico" target="_blank" rel="noopener" href="https://wa.me/${h(String(sel.telefono).replace(/^0/, "593"))}">WhatsApp</a><button class="btn sec chico" id="expUno">Exportar Excel</button></div>
         <div class="etq">Lotes (${lotes.length})</div>
@@ -500,6 +503,10 @@
     $("#recargar").addEventListener("click", async () => { await cargarSeguimiento(); router(); toast("Datos actualizados"); });
     if (sel) {
       $("#expUno").addEventListener("click", () => exportarRegistros((DB.registros || []).filter((r) => r.agricultor_id === sel.id), "Registros_" + sel.nombres.replace(/\W+/g, "_") + ".xlsx"));
+      const cambiarRol = async (cambios, msg) => { await A.actualizarAgricultor(sel.id, cambios); await cargarSeguimiento(); router(); toast(msg); };
+      if ($("#rolAprobar")) $("#rolAprobar").addEventListener("click", () => cambiarRol({ rol: "tecnico", rol_solicitado: null, rol_solicitado_fecha: null }, "Aprobado: ahora es técnico agrícola"));
+      if ($("#rolRechazar")) $("#rolRechazar").addEventListener("click", async () => { if (await UI.confirmar("La cuenta seguirá como agricultor. ¿Rechazar la solicitud?", { ok: "Rechazar" })) cambiarRol({ rol_solicitado: null, rol_solicitado_fecha: null }, "Solicitud rechazada"); });
+      if ($("#rolQuitar")) $("#rolQuitar").addEventListener("click", async () => { if (await UI.confirmar("La cuenta pasará a agricultor. ¿Quitar el acceso de técnico agrícola?", { ok: "Quitar acceso", peligro: true })) cambiarRol({ rol: "agricultor", rol_solicitado: null, rol_solicitado_fecha: null }, "Ahora es agricultor"); });
       $("#activo").addEventListener("click", async () => { const nuevo = sel.activo === false; if (!nuevo && !(await UI.confirmar("La persona no podrá ingresar a la app. ¿Desactivar la cuenta?", { ok: "Desactivar", peligro: true }))) return; await A.actualizarAgricultor(sel.id, { activo: nuevo }); await cargarSeguimiento(); router(); });
     }
   }

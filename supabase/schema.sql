@@ -165,6 +165,8 @@ create table if not exists agricultores (
   precision_m numeric,
   ubicacion_fecha timestamptz,
   rol text not null default 'agricultor' check (rol in ('agricultor','tecnico')),
+  rol_solicitado text check (rol_solicitado in ('tecnico')),   -- cambio de cuenta pendiente de aprobación del administrador
+  rol_solicitado_fecha timestamptz,
   acepta_seguimiento boolean not null default true,
   activo boolean not null default true,
   creado timestamptz not null default now(),
@@ -339,7 +341,8 @@ language sql immutable as $$
   select jsonb_build_object('id', a.id, 'cedula', a.cedula, 'nombres', a.nombres, 'telefono', a.telefono,
     'cultivo_id', a.cultivo_id, 'hectareas', a.hectareas, 'provincia', a.provincia, 'sector', a.sector,
     'comunidad', a.comunidad, 'rol', a.rol, 'latitud', a.latitud, 'longitud', a.longitud, 'precision_m', a.precision_m,
-    'ubicacion_fecha', a.ubicacion_fecha, 'acepta_seguimiento', a.acepta_seguimiento);
+    'ubicacion_fecha', a.ubicacion_fecha, 'acepta_seguimiento', a.acepta_seguimiento,
+    'rol_solicitado', a.rol_solicitado, 'rol_solicitado_fecha', a.rol_solicitado_fecha);
 $$;
 
 create or replace function app_registrar(p jsonb) returns jsonb

@@ -80,6 +80,7 @@
     misDatos: (token) => rpc("app_mis_datos", { p_token: token }),
     sincronizar: (token, lotes, registros) => rpc("app_sincronizar", { p_token: token, p_lotes: lotes, p_registros: registros }),
     actualizarPerfil: (token, p) => rpc("app_actualizar_perfil", { p_token: token, p }),
+    solicitarRol: (token, rol) => rpc("app_solicitar_rol", { p_token: token, p_rol: rol }),
     cerrarSesion: (token) => rpc("app_cerrar_sesion", { p_token: token }).catch(() => {}),
   };
 
@@ -108,7 +109,7 @@
       if (db.agricultores.some((a) => a.cedula === ced)) throw error("cedula_ya_registrada");
       const num = (v) => (v === "" || v === undefined || v === null ? null : Number(v));
       const a = { id: uuid(), cedula: ced, nombres: p.nombres.trim(), telefono: tel, cultivo_id: p.cultivo_id, hectareas: num(p.hectareas),
-        provincia: p.provincia, sector: p.sector.trim(), comunidad: p.comunidad || null, rol: p.rol || "agricultor", acepta_seguimiento: p.acepta_seguimiento !== false,
+        provincia: p.provincia, sector: p.sector.trim(), comunidad: p.comunidad || null, rol: "agricultor", rol_solicitado: p.rol === "tecnico" ? "tecnico" : null, rol_solicitado_fecha: p.rol === "tecnico" ? new Date().toISOString() : null, acepta_seguimiento: p.acepta_seguimiento !== false,
         latitud: num(p.latitud), longitud: num(p.longitud), precision_m: num(p.precision_m), ubicacion_fecha: p.latitud ? new Date().toISOString() : null,
         creado: new Date().toISOString(), ultimo_ingreso: new Date().toISOString(), activo: true };
       db.agricultores.push(a); const token = uuid(); db.sesiones[token] = a.id; demoSave(db);
@@ -143,6 +144,14 @@
       if (p.latitud !== undefined && p.latitud !== "") { a.latitud = Number(p.latitud); a.longitud = Number(p.longitud); a.precision_m = Number(p.precision_m); a.ubicacion_fecha = new Date().toISOString(); }
       if (p.hectareas !== undefined && p.hectareas !== "") a.hectareas = Number(p.hectareas);
       if (p.acepta_seguimiento !== undefined) a.acepta_seguimiento = !!p.acepta_seguimiento;
+      demoSave(db); return a;
+    },
+    async solicitarRol(token, rol) {
+      const db = demoDB(), a = db.agricultores.find((x) => x.id === db.sesiones[token]);
+      if (!a) throw error("sesion_invalida");
+      if (rol === "tecnico") { if (a.rol !== "tecnico" && !a.rol_solicitado) { a.rol_solicitado = "tecnico"; a.rol_solicitado_fecha = new Date().toISOString(); } }
+      else if (rol === "agricultor") { a.rol = "agricultor"; a.rol_solicitado = null; a.rol_solicitado_fecha = null; }
+      else if (rol === "cancelar") { a.rol_solicitado = null; a.rol_solicitado_fecha = null; }
       demoSave(db); return a;
     },
     async cerrarSesion(token) { const db = demoDB(); delete db.sesiones[token]; demoSave(db); },
@@ -191,6 +200,10 @@
       if (this.sesion) B.cerrarSesion(this.sesion.token);
       this.sesion = null; Store.del("sesion"); this.mis = { lotes: [], registros: [] }; this.pendientes = { lotes: [], registros: [] }; this.guardarLocal();
       this.avisar("sesion");
+    },
+    async solicitarRol(rol) {
+      const perfil = await B.solicitarRol(this.sesion.token, rol);
+      this.sesion.perfil = perfil; Store.set("sesion", this.sesion); this.avisar("perfil");
     },
     async actualizarPerfil(p) {
       const perfil = await B.actualizarPerfil(this.sesion.token, p);

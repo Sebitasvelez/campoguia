@@ -116,7 +116,7 @@ Para cargar muchos productos de una vez: en **Productos** usa **Exportar Excel**
 
 ## Cuentas de los agricultores
 
-- Para **crear la cuenta** se piden: cédula, nombres, celular, **provincia**, **sector del cultivo**, cultivo principal, hectáreas y si es agricultor o técnico agrícola. Se necesita internet.
+- Para **crear la cuenta** se piden: cédula, nombres, celular, **provincia**, **sector del cultivo**, cultivo principal, hectáreas y si es agricultor o técnico agrícola (ser técnico agrícola requiere aprobación del administrador desde «Agricultores y registros»; desde «Mi cuenta» se puede pedir el cambio o volver a agricultor). Se necesita internet.
 - La cédula se valida con el dígito verificador ecuatoriano para evitar errores de digitación. Una cédula = una cuenta.
 - **Ubicación de la finca (opcional):** si el agricultor está en la finca, toca «Estoy en mi finca: guardar ubicación» y la app guarda el punto GPS. Se puede hacer al crear la cuenta o después desde «Mi cuenta». El GPS funciona sin internet, pero para guardar el punto en «Mi cuenta» sí hace falta señal. En el panel ves el punto en Google Maps, y sale también en el Excel.
 - Para **ingresar** solo se pide el **número de cédula**. Es lo más fácil para el agricultor. Ten en cuenta que quien conozca la cédula de alguien podría entrar a su cuenta. Si más adelante quieres más seguridad, se puede agregar un PIN.

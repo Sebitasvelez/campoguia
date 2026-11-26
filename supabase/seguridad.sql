@@ -96,11 +96,12 @@ begin
   if ha is not null and (ha < 0 or ha > 100000) then ha := null; end if;
   insert into intentos_acceso(clave, tipo) values (ip, 'registro_ip');
   if exists (select 1 from agricultores where cedula = ced) then return jsonb_build_object('error', 'cedula_ya_registrada'); end if;
-  insert into agricultores(cedula, nombres, telefono, cultivo_id, hectareas, provincia, sector, comunidad, rol, acepta_seguimiento,
+  -- toda cuenta nace como agricultor; si pidió ser técnico agrícola queda pendiente de aprobación del administrador
+  insert into agricultores(cedula, nombres, telefono, cultivo_id, hectareas, provincia, sector, comunidad, rol, rol_solicitado, rol_solicitado_fecha, acepta_seguimiento,
                            latitud, longitud, precision_m, ubicacion_fecha, ultimo_ingreso)
   values (ced, _txt(p->>'nombres', 120), tel, (select id from cultivos where id = p->>'cultivo_id'), ha,
           _txt(p->>'provincia', 60), _txt(p->>'sector', 120), _txt(p->>'comunidad', 120),
-          case when p->>'rol' = 'tecnico' then 'tecnico' else 'agricultor' end,
+          'agricultor', case when p->>'rol' = 'tecnico' then 'tecnico' end, case when p->>'rol' = 'tecnico' then now() end,
           coalesce((p->>'acepta_seguimiento')::boolean, true),
           nullif(p->>'latitud','')::numeric, nullif(p->>'longitud','')::numeric, nullif(p->>'precision_m','')::numeric,
           case when nullif(p->>'latitud','') is not null then now() end, now())
@@ -168,6 +169,28 @@ begin
   where id = a.id returning * into a;
   return _perfil(a);
 end $$;
+
+-- Cambio de tipo de cuenta: pasar a técnico agrícola queda pendiente hasta que el administrador lo apruebe;
+-- volver a agricultor o cancelar la solicitud es inmediato.
+create or replace function app_solicitar_rol(p_token uuid, p_rol text) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare a agricultores := _agricultor(p_token);
+begin
+  if p_rol = 'tecnico' then
+    if a.rol <> 'tecnico' and a.rol_solicitado is null then
+      update agricultores set rol_solicitado = 'tecnico', rol_solicitado_fecha = now() where id = a.id returning * into a;
+    end if;
+  elsif p_rol = 'agricultor' then
+    update agricultores set rol = 'agricultor', rol_solicitado = null, rol_solicitado_fecha = null where id = a.id returning * into a;
+  elsif p_rol = 'cancelar' then
+    update agricultores set rol_solicitado = null, rol_solicitado_fecha = null where id = a.id returning * into a;
+  else
+    raise exception 'rol_invalido';
+  end if;
+  return _perfil(a);
+end $$;
+revoke all on function app_solicitar_rol(uuid, text) from public;
+grant execute on function app_solicitar_rol(uuid, text) to anon, authenticated;
 
 grant execute on function app_registrar(jsonb), app_ingresar(text, text), app_mis_datos(uuid),
   app_sincronizar(uuid, jsonb, jsonb), app_actualizar_perfil(uuid, jsonb), app_cerrar_sesion(uuid) to anon, authenticated;

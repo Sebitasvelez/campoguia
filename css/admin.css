@@ -38,3 +38,7 @@
 .unido-adm{display:flex;gap:6px}.unido-adm input{flex:1;min-width:0;min-height:40px;border:1px solid var(--borde-2);border-radius:8px;padding:0 8px;font:inherit;font-size:14px}
 
 .grupo-fijo{min-height:44px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;border:1px dashed var(--borde-2);border-radius:10px;background:var(--fondo,#f4f5f0)}
+
+.aviso-rol{display:flex;flex-direction:column;gap:4px;background:#E8F0FB;border:1px solid #B9CFEF;border-radius:10px;padding:10px 12px}
+.pill.azul{background:#E8F0FB;color:#1F5FAE}
+.badge-sol{display:inline-block;min-width:20px;padding:1px 6px;border-radius:999px;background:#F5C518;color:#3D2E00;font-size:12px;font-weight:700;text-align:center;margin-left:4px}
