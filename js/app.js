@@ -323,13 +323,18 @@
       <a class="btn wa chico" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", tengo este problema" + (cult0 ? " en mi " + cult0 : "") + ": " + q + ". ¿Qué me recomienda?"))}" target="_blank" rel="noopener">${ic.wa}Preguntar a mi asesor</a></div>`;
     const prodsClase = (n) => L.rankearPorClase(r.clase, I.c.productos || []).filter((x) => !x.p.no_sugerir && !/tratamiento de semilla|\brosas?\b|\barroz\b/i.test((x.p.control || "") + " " + (x.p.nota || "")) && !/\bflora\b/i.test(x.p.nombre)).slice(0, n)
       .map((x, i) => item("#/calcular?p=" + x.p.id, `${i + 1}. ${x.p.nombre}`, [x.p.concentracion || x.p.ingrediente_activo, x.grupo.n].filter(Boolean).join(" · ") + " · Calcular dosis")).join("");
-    // especie, plaga o enfermedad que no está en los manuales pero sí se puede ubicar en nuestra clasificación
-    if (r.clase && !r.problemas.length && !r.intencion) {
+    // plaga, enfermedad o especie que se puede ubicar en nuestra clasificación: primero la clase y los productos del
+    // portafolio por eficiencia; luego lo que hay en los manuales (o lo parecido, si no está documentado)
+    if (r.clase && !r.intencion) {
       const ter = q.charAt(0).toUpperCase() + q.slice(1), esEnf = L.CLASES[r.clase.clase].tipo === "enfermedad";
-      box.innerHTML = `<div class="aviso azul" style="padding:8px 10px">${ic.alerta}<div>No tenemos información específica de <b>«${h(ter)}»</b> en los manuales. Por su clasificación es ${r.clase.clase === "Bacteria" ? "una <b>bacteria</b>" : esEnf ? `un hongo <b>${h(r.clase.clase)}</b>` : `una plaga <b>${h(r.clase.clase.toLowerCase())}</b>`}: estos productos de nuestro portafolio sirven para esa clase, del más eficiente (1) al menos.</div></div>
+      const manual = (lista) => lista.map((pr) => item("#/problema/" + pr.id, pr.nombre, "Manual de " + nomC(pr.cultivo_id) + " · " + recDe(pr))).join("");
+      const documentado = r.problemas.length > 0;
+      box.innerHTML = `<div class="aviso azul" style="padding:8px 10px">${ic.alerta}<div>Por su clasificación, <b>«${h(ter)}»</b> ${r.clase.clase === "Bacteria" ? "es una <b>bacteria</b>" : esEnf ? `es un hongo <b>${h(r.clase.clase)}</b>` : `es una plaga <b>${h(r.clase.clase.toLowerCase())}</b>`}. Estos productos de nuestro portafolio podrían servir, del más eficiente (1) al menos:</div></div>
         ${prodsClase(5) || `<span class="mini">Aún no hay productos cargados para esta clase.</span>`}
-        ${r.relacionados.length ? `<div class="mini" style="margin-top:4px"><b>En nuestros manuales, del mismo tipo</b></div>` + r.relacionados.slice(0, 3).map((pr) => item("#/problema/" + pr.id, pr.nombre, "Manual de " + nomC(pr.cultivo_id) + " · " + recDe(pr))).join("") : ""}
-        <span class="mini">Confirma la dosis para tu cultivo en la etiqueta o con tu asesor.</span>${botones()}`;
+        <span class="mini">Confirma la dosis para tu cultivo en la etiqueta o con tu asesor.</span>
+        ${documentado
+          ? `<div class="mini" style="margin-top:4px"><b>En nuestros manuales</b></div>${manual(r.problemas.slice(0, 4))}${r.relacionados.length ? `<div class="mini"><b>También relacionado</b></div>${manual(r.relacionados.slice(0, 3))}` : ""}`
+          : `<div class="aviso ambar" style="padding:8px 10px">${ic.alerta}<div>No tenemos información específica de «${h(ter)}» en los manuales${r.relacionados.length ? ", pero tenemos estos documentos similares:" : "."}</div></div>${manual(r.relacionados.slice(0, 3))}${botones()}`}`;
       return;
     }
     if (r.relacionados.length) html += `<div class="mini" style="margin-top:4px"><b>${r.problemas.length ? "También relacionado" : r.clase ? "Del mismo tipo (" + h(nomClase) + ") en nuestros manuales" : "Relacionado en nuestros manuales"}</b></div>` +
