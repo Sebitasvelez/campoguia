@@ -696,7 +696,7 @@
         <div class="grid2 campos-calc">
           ${cc.modo === "ha" ? `<label class="campo">Área (ha)<span class="unido"><input id="ha" inputmode="decimal" value="${h(cc.ha)}"><span>ha</span></span></label>`
             : `<label class="campo">N.º de plantas<span class="unido"><input id="pl" inputmode="numeric" value="${h(cc.pl || "")}"><span>pl</span></span></label>`}
-          ${d.modo === "tanque" ? (cc.modo === "ha" ? `<label class="campo">Agua por ha<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span></label>`
+          ${d.modo === "tanque" ? (cc.modo === "ha" ? `<label class="campo">Agua utilizada por ha<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span></label>`
             : `<label class="campo">Plantas por ${cc.equipo === "tanque" ? `tanque ${TANQUE()} L` : cc.equipo === "otro" ? `carga ${L.fmt(vol)} L` : `bomba ${BOMBA()} L`}<span class="unido"><input id="${campoPl}" inputmode="numeric" value="${h(cc[campoPl])}"><span>pl</span></span></label>`)
             : `<label class="campo">Plantas por ha<span class="unido"><input id="pha" inputmode="numeric" value="${h(cc.pha || "")}" placeholder="1600"><span>pl/ha</span></span></label>`}
           ${d.modo === "tanque" && esTanque && cc.modo === "plantas" ? `<label class="campo">Plantas por ha<span class="unido"><input id="pha" inputmode="numeric" value="${h(cc.pha || "")}" placeholder="1600"><span>pl/ha</span></span></label>` : ""}
