@@ -562,7 +562,9 @@
     const lhaRef = Number(aj("litros_agua_ha", 400)) || 400;
     // productos de bomba/tanque: se calcula con la dosis por hectárea (editable)
     // solo los técnicos calculan con dosis por hectárea editable; los agricultores usan la dosis por tanque recomendada
-    const esTanque = d.modo === "tanque" && D.sesion.perfil.rol === "tecnico";
+    // por número de plantas no se usa la dosis por hectárea ni el agua por hectárea: se usa la dosis por bomba/tanque
+    // y cuántas plantas cubre el equipo elegido
+    const esTanque = d.modo === "tanque" && D.sesion.perfil.rol === "tecnico" && (cc.modo || "ha") === "ha";
     const dh = esTanque ? L.dosisHaDe(p, lhaRef, TANQUE()) : null;
     if (esTanque && cc.d !== null && cc.d !== undefined && cc.d !== "" && !isNaN(Number(cc.d))) { cc.dha = Math.round(Number(cc.d) * lhaRef / TANQUE() * 10) / 10; cc.d = null; }
     const dhaElegida = esTanque ? (n(cc.dha) !== null && n(cc.dha) > 0 ? n(cc.dha) : cc.usarMax ? dh.max : dh.min) : null;
@@ -615,7 +617,7 @@
         ${cc.modo === "ha" ? `<label class="campo">Área a aplicar (hectáreas)<span class="unido"><input id="ha" inputmode="decimal" value="${h(cc.ha)}"><span>ha</span></span></label>`
           : `<label class="campo">Número de plantas<span class="unido"><input id="pl" inputmode="numeric" value="${h(cc.pl || "")}"><span>plantas</span></span></label>`}
         ${d.modo === "tanque" ? `
-          ${esTanque || cc.modo === "ha" ? `<label class="campo">Agua que usas por hectárea<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span><small>${esTanque ? "Con este dato se reparte la dosis por hectárea en cada bomba o tanque." : "Cámbialo según tu equipo y el tamaño de tus plantas."}</small></label>` : ""}
+          ${cc.modo === "ha" ? `<label class="campo">Agua que usas por hectárea<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span><small>${esTanque ? "Con este dato se reparte la dosis por hectárea en cada bomba o tanque." : "Cámbialo según tu equipo y el tamaño de tus plantas."}</small></label>` : ""}
           ${cc.modo === "plantas" ? `<label class="campo">Plantas que cubres con ${cc.equipo === "tanque" ? `un tanque de ${TANQUE()} L` : cc.equipo === "otro" ? `una carga de ${L.fmt(vol)} L` : `una bomba de ${BOMBA()} L`}<span class="unido"><input id="${campoPl}" inputmode="numeric" value="${h(cc[campoPl])}"><span>plantas</span></span></label>` : ""}
           <div class="etq">Mezcla en</div>
           <div class="seg" role="group" aria-label="Mezcla en"><button data-eq="bomba" class="${cc.equipo === "bomba" ? "sel" : ""}">Bomba ${BOMBA()} L</button><button data-eq="tanque" class="${cc.equipo === "tanque" ? "sel" : ""}">Tanque ${TANQUE()} L</button><button data-eq="otro" class="${cc.equipo === "otro" ? "sel" : ""}">Otro</button></div>
