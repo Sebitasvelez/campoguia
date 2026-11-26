@@ -99,7 +99,9 @@
     } else if (num(producto.contenido) >= 10000 && (producto.contenido_unidad || "g") === "g") saco = { cantidad: num(producto.contenido), precio: num(producto.pvp) };
     if (!saco) return null;
     const kgSaco = saco.cantidad / 1000;
-    const sacos = Math.max(0.25, Math.ceil((totalG / saco.cantidad) * 4 - 1e-9) / 4);
+    // menos de un saco: en cuartos (¼, ½, ¾, 1); desde un saco: en sacos enteros y medios (1½, 2, 2½…)
+    const ex = totalG / saco.cantidad;
+    const sacos = ex <= 1 + 1e-9 ? Math.max(0.25, Math.ceil(ex * 4 - 1e-9) / 4) : Math.ceil(ex * 2 - 1e-9) / 2;
     const fr = textoSacos(sacos);
     const texto = sacos < 1 ? `${fr} de saco de ${fmt(kgSaco)} kg (${fmt(sacos * kgSaco, 1)} kg)` : `${fr} ${sacos === 1 ? "saco" : "sacos"} de ${fmt(kgSaco)} kg${sacos % 1 ? ` (${fmt(sacos * kgSaco, 1)} kg)` : ""}`;
     const precio = saco.precio !== null ? saco.precio : num(producto.pvp);
@@ -163,7 +165,7 @@
       res.presentacion = producto.presentacion;
       if (pvp !== null) { res.costoEnvases = r2(res.envases * pvp); res.costoUsado = r2((totalBase / cont) * pvp); }
     }
-    // fertilizantes en saco: la compra se calcula en fracciones de ¼ de saco (¼, ½, ¾, 1, 1¼, 1½…)
+    // fertilizantes en saco: menos de un saco en cuartos; desde un saco, en enteros y medios
     if (res.kgTotal !== undefined && totalBase > 0) {
       const fs = fraccionSacos(totalBase, producto);
       if (fs) { res.fraccionSaco = fs.sacos; res.kgSaco = fs.kgSaco; res.textoFraccion = fs.fraccion; res.compraTexto = fs.texto; res.envases = fs.sacos; if (fs.costo !== null) res.costoEnvases = fs.costo; }
