@@ -496,7 +496,8 @@
     { re: /babosa|caracol|molusco|limax|sarasinula/, clase: "Raspador (rádula)" },
     { re: /trips|thrips|frankliniella|selenothrips/, clase: "Masticador-lamedor" },
     { re: /hormiga arriera|arriera|\batta\b|acromyrmex|cortadora/, clase: "Masticador", orden: ["IRAC 13", "IRAC 2B", "IRAC 1B", "IRAC 3A"] },
-    { re: /hormiga|solenopsis|comejen|termita|avispa|muruja|polybia/, clase: "Masticador", orden: ["IRAC 3A", "IRAC 1B", "IRAC 4A", "IRAC 2B", "IRAC 13", "IRAC 14"] },
+    { re: /avispa|muruja|polybia|trigona/, clase: "Masticador-lamedor", orden: ["IRAC 3A", "IRAC 1B", "IRAC 14", "IRAC 4A", "IRAC 6"] },
+    { re: /hormiga|solenopsis|comejen|termita/, clase: "Masticador", orden: ["IRAC 3A", "IRAC 1B", "IRAC 4A", "IRAC 2B", "IRAC 13", "IRAC 14"] },
     { re: /mosca blanca|bemisia|trialeurodes|aleurodido|pulgon|afido|aphis|myzus|cochinilla|planococcus|dysmicoccus|pseudococcus|escama|queresa|chinche|monalonion|leptoglossus|chicharrita|empoasca|salivazo|psilido|diaphorina|mosquilla|chupador/, clase: "Picador-chupador" },
     { re: /gusano|oruga|larva|cogollero|spodoptera|helicoverpa|heliothis|tuta|polilla|minador|liriomyza|leucoptera|barrenador|diatraea|perforador|broca|hypothenemus|gallina ciega|phyllophaga|grillo|picudo|cosmopolites|rhynchophorus|metamasius|cucarron|escarabajo|langosta|saltamontes|tierrero|trozador|agrotis|defoliador|masticador|crisomelido|diabrotica|lorito|vaquita|mosca de la fruta|anastrepha|ceratitis/, clase: "Masticador" },
   ];
@@ -521,7 +522,7 @@
     }
     const gf = CLASES[x.clase].grupos, es = (g, c) => g.c === c || g.n === c;
     const orden = x.orden ? x.orden.map((c) => gf.find((g) => es(g, c)) || G(c, NOMBRE_GRUPO[c] || c)).concat(gf.filter((g) => !x.orden.some((c) => es(g, c)))) : gf;
-    return { clase: x.clase, grupos: orden, termino };
+    return { clase: x.clase, grupos: orden, termino, propio: !!x.orden };
   }
   // ---------------- "¿Qué problema tienes?" (inicio del agricultor): interpreta lo que escribe y lo lleva a los manuales
   const PALABRAS_VACIAS = new Set("el la los las un una unos unas de del en mi mis tu y o a al con para por que se me hay tengo tiene tienen problema problemas cultivo cultivos planta plantas mata matas finca lote como hago hacer controlar control combatir eliminar quitar curar ataque atacando atacan esta estan muy mucho mucha sale salen".split(" "));
@@ -597,6 +598,9 @@
     if (!problema) return [];
     const texto = [problema.nombre, problema.descripcion, problema.como_actua].filter(Boolean).join(" ");
     const quitar = new Set(EXCLUSIONES.filter((x) => x.patron.test(texto)).flatMap((x) => x.quitar));
+    // orden propio de eficiencia para plagas o patógenos puntuales (Botrytis, Rhizoctonia, arrieras, hormigas…)
+    const cl = clasesDe(problema.clasificacion), esp = cl.length === 1 ? claseDeBusqueda(problema.nombre) : null;
+    if (esp && esp.propio && esp.clase === cl[0]) return esp.grupos.filter((g) => !quitar.has(g.c));
     return gruposFuncionales(problema.clasificacion).filter((g) => !quitar.has(g.c));
   }
   // "FRAC 1 + 12 + 4 · IRAC 4A" → ["FRAC 1","FRAC 12","FRAC 4","IRAC 4A"]

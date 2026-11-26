@@ -173,3 +173,4 @@ input,select,textarea{font-size:16px}
 .visor{touch-action:none;overflow:hidden}
 .visor img{touch-action:none;transform-origin:center center;will-change:transform;user-select:none;-webkit-user-drag:none}
 .visor-zoom{color:rgba(255,255,255,.7);font-size:12px;margin-top:6px}
+.gf-n{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:50%;background:var(--verde);color:#fff;font-style:normal;font-size:11px;font-weight:700;margin-right:5px}

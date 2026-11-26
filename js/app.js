@@ -470,8 +470,9 @@
       ${tec && pr.ciclo && pr.ciclo_detalle ? `<p class="mini" style="margin:-4px 0 0">${h(pr.ciclo_detalle)}</p>` : ""}
       <div><b style="font-size:15px">${plaga ? "Cómo se alimenta" : "Qué es"}</b><p class="mini" style="margin:4px 0 0;font-size:14px">${h(que)}</p></div>
       ${tec ? clases.map((k) => `<p class="mini" style="margin:0;font-size:14px">${clases.length > 1 ? `<b>${h(k)}:</b> ` : ""}${h(L.CLASES[k].control)}</p>`).join("") : ""}
-      ${tec && gf.length ? `<div><b style="font-size:15px">${plaga ? "Grupos químicos que funcionan mejor" : "Grupos químicos funcionales"}</b>
-        <div class="grupos-f">${gf.map((g) => `<span>${g.c ? `<b>${h(g.c)}</b> ` : ""}${h(g.n)}</span>`).join("")}</div></div>` : ""}
+      ${tec && gf.length ? `<div><b style="font-size:15px">Grupos químicos ${plaga ? "IRAC" : "FRAC"} más eficientes</b>
+        <p class="mini" style="margin:2px 0 6px">Ordenados del más eficiente (1) al menos eficiente para ${plaga ? "esta plaga" : "esta enfermedad"}.</p>
+        <div class="grupos-f">${gf.map((g, i) => `<span><i class="gf-n">${i + 1}</i>${g.c ? `<b>${h(g.c)}</b> ` : ""}${h(g.n)}</span>`).join("")}</div></div>` : ""}
       ${tec && gf.length ? notaRotacion(pr) : ""}
     </article>`;
   }
