@@ -159,9 +159,11 @@
   const conectarVol = (re) => $$("[data-vol]").forEach((b) => b.addEventListener("click", () => { ui.vol = b.dataset.vol; guardarUI(); re(); }));
   const avisoSeguridad = () => `<div class="aviso ambar">${ic.alerta}<div>Usa guantes, mascarilla, gafas y ropa de manga larga. No fumigues con sol, viento fuerte ni antes de lluvia. ${h(aj("aviso_legal", "Recomendación técnica referencial. Lea siempre la etiqueta y verifique con su asesor."))}</div></div>`;
   const SIN_DOSIS = ["Semilla", "Otros"];   // productos de catálogo que no se calculan ni se mezclan
-  function agregarAMezcla(pid, dosisTanque) {
+  // en la mezcla: productos de tanque (dosis por tanque) y fertilizantes al suelo (dosis por hectárea)
+  const itemMezcla = (p, dosis) => (p.modo_aplicacion === "suelo_ha" ? { producto_id: Number(p.id), suelo: true, dosis_ha: dosis } : { producto_id: Number(p.id), dosis_tanque: dosis });
+  function agregarAMezcla(pid, dosis) {
     const m = S.get("mezcla", []);
-    if (!m.some((x) => String(x.producto_id) === String(pid))) { m.push({ producto_id: Number(pid), dosis_tanque: dosisTanque }); S.set("mezcla", m); toast("Agregado a tu mezcla"); }
+    if (!m.some((x) => String(x.producto_id) === String(pid))) { m.push(itemMezcla(P(pid), dosis)); S.set("mezcla", m); toast("Agregado a tu mezcla"); }
     else toast("Ese producto ya está en tu mezcla");
   }
 
@@ -517,13 +519,13 @@
       const p = P(x.producto_id);
       if (x.tipo === "foliar") {
         const dosis = x.dosis_tanque !== null && x.dosis_tanque !== undefined ? Number(x.dosis_tanque) : L.dosisDe(p).min;
-        return `<div class="card"><div class="fila"><div class="tx" style="display:flex;flex-direction:column;gap:2px"><b>${h(p.nombre)}</b><span class="mini">${h(p.ingrediente_activo || "")}${p.concentracion ? " · " + h(p.concentracion) : ""}</span></div><b style="font-size:17px;white-space:nowrap">${h(L.cantidad(dosis * volL() / TANQUE(), p.unidad))}</b></div><span class="mini">por ${h(volTxt())}${x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : ""}${x.nota ? " · " + h(x.nota) : ""}</span></div>`;
+        return `<div class="card"><div class="fila"><div class="tx" style="display:flex;flex-direction:column;gap:2px"><b>${h(p.nombre)}</b><span class="mini">${h(p.concentracion || p.ingrediente_activo || "")}</span></div><b style="font-size:17px;white-space:nowrap">${h(L.cantidad(dosis * volL() / TANQUE(), p.unidad))}</b></div><span class="mini">por ${h(volTxt())}${x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : ""}${x.nota ? " · " + h(x.nota) : ""}</span></div>`;
       }
       const r = L.calcularFertSuelo(x, p, String(ui.calc.ha).replace(",", "."), String(ui.calc.pha).replace(",", "."));
       if (r.costo) totalCosto += r.costo;
       const omitir = x.tipo === "enmienda" && !isNaN(ph) && ph >= phAcido;
       return `<div class="card" style="${omitir ? "opacity:.6" : ""}">
-        <div class="fila" style="align-items:flex-start"><div style="display:flex;flex-direction:column;gap:2px"><b>${h(p.nombre)}</b><span class="mini">${h(p.ingrediente_activo || "")}${p.concentracion ? " · " + h(p.concentracion) : ""}</span></div>
+        <div class="fila" style="align-items:flex-start"><div style="display:flex;flex-direction:column;gap:2px"><b>${h(p.nombre)}</b><span class="mini">${h(p.concentracion || p.ingrediente_activo || "")}</span></div>
         <span class="pill ${x.tipo === "enmienda" ? "gris" : "verde"}">${x.tipo === "enmienda" ? "Enmienda" : "Al suelo"}</span></div>
         <div class="grid3"><div class="dato"><span>Por planta</span><b>${r.gPorPlanta !== null ? L.fmt(r.gPorPlanta, 0) + " g" : "—"}</b></div>
         <div class="dato"><span>Total finca</span><b>${r.kgTotal !== null ? L.fmt(r.kgTotal, 0) + " kg" : "—"}</b></div>
@@ -710,7 +712,7 @@
           ${cc.equipo === "otro" ? `<label class="campo">Capacidad del equipo<span class="unido"><input id="vol" inputmode="decimal" value="${h(cc.vol || 16)}"><span>litros</span></span></label>` : ""}` : ""}
         ${r.avisos.map((a) => `<div class="aviso ambar">${ic.alerta}<div>${h(a)}</div></div>`).join("")}
         ${res ? `<section class="resultado" aria-live="polite"><div class="etq">Resultado</div>${res}${compra}</section>` : ""}
-        <div class="acciones"><button class="btn" id="reg">Registrar aplicación</button>${d.modo === "tanque" ? `<button class="btn sec" id="mez">Agregar a mezcla</button>` : `<a class="btn sec" href="#/fertilizacion/${h(ui.cultivo || "")}">Ver plan de fertilización</a>`}</div>
+        <div class="acciones"><button class="btn" id="reg">Registrar aplicación</button>${d.modo === "tanque" || d.modo === "suelo_ha" ? `<button class="btn sec" id="mez">Agregar a mezcla</button>` : `<a class="btn sec" href="#/fertilizacion/${h(ui.cultivo || "")}">Ver plan de fertilización</a>`}</div>
         ${avisoSeguridad()}
         ${res ? `<a class="btn wa" target="_blank" rel="noopener" href="${h(waLink(msgAsesor()))}">${ic.wa}Verificar dosis con mi asesor</a>` : ""}
       </main>`, "calcular");
@@ -736,6 +738,7 @@
         const n = enBombas ? Math.round(r.equiposExactos * vol / BOMBA() * 10) / 10 : r.bombas;
         ui.mezclaCargas = String(n).replace(".", ","); guardarUI();
       }
+      if (d.modo === "suelo_ha") { const haM = cc.modo === "plantas" ? (n(cc.pl) && n(cc.pha) ? n(cc.pl) / n(cc.pha) : null) : n(cc.ha); if (haM) { ui.mezclaHa = String(Math.round(haM * 100) / 100).replace(".", ","); guardarUI(); } }
       agregarAMezcla(p.id, cc.usarMax ? d.max : d.min);
     });
   }
@@ -748,11 +751,21 @@
     const rev = L.revisarMezcla(prods, I.c.compatibilidad || []);
     const orden = L.ordenMezcla(prods);
     const nombre = (id) => (P(id) || {}).nombre || "";
-    const fmtD = (x) => { const p = P(x.producto_id), dz = x.dosis_tanque !== null && x.dosis_tanque !== undefined ? x.dosis_tanque : L.dosisDe(p).min; return dz === null ? "Ver etiqueta" : L.cantidad(dz * f, p.unidad); };
+    const esSuelo = (x) => !!x.suelo || (P(x.producto_id) || {}).modo_aplicacion === "suelo_ha";
+    const dzDe = (x) => { const v = esSuelo(x) ? x.dosis_ha : x.dosis_tanque; return v !== null && v !== undefined ? v : L.dosisDe(P(x.producto_id)).min; };
+    const fmtD = (x) => { const p = P(x.producto_id), dz = dzDe(x); return dz === null ? "Ver etiqueta" : esSuelo(x) ? L.fmt(dz) + " kg/ha" : L.cantidad(dz * f, p.unidad); };
     const cargas = Number(String(ui.mezclaCargas || "1").replace(",", ".")) || 0;
+    const haSuelo = Number(String(ui.mezclaHa || D.sesion.perfil.hectareas || "1").replace(",", ".")) || 0;
+    const haySuelo = m.some(esSuelo), hayTanque = m.some((x) => !esSuelo(x));
     const compra = m.map((x) => {
-      const p = P(x.producto_id), dz = x.dosis_tanque !== null && x.dosis_tanque !== undefined ? x.dosis_tanque : L.dosisDe(p).min;
+      const p = P(x.producto_id), dz = dzDe(x);
       if (dz === null) return { p, total: null };
+      if (esSuelo(x)) { // fertilizante al suelo: kg/ha × hectáreas, se compra en sacos
+        const g = dz * haSuelo * 1000, c = L.compraOptima(g, "g", p.presentaciones);
+        if (c) return { p, total: g, unidad: "g", envases: c.envases, texto: c.texto, costo: c.costo, costoTanque: null };
+        const cont = Number(p.contenido) || null, envases = cont ? Math.ceil(g / cont - 1e-9) : null;
+        return { p, total: g, unidad: "g", envases, texto: envases ? envases + " × " + (p.presentacion || "saco") : null, costo: envases && p.pvp !== null && p.pvp !== undefined ? envases * Number(p.pvp) : null, costoTanque: null };
+      }
       const total = dz * f * cargas, pu = L.precioUnitario(p);
       const costoTanque = pu !== null ? dz * pu : null;
       const c = L.compraOptima(total, p.unidad, p.presentaciones);
@@ -769,7 +782,7 @@
       <main class="cont">
         ${cajaBuscaProd("Agregar producto")}
         ${segVol()}
-        <div class="lista">${m.map((x, i) => { const p = P(x.producto_id); return `<div class="item" style="cursor:default"><div class="tx"><b>${h(p.nombre)}</b><span>${h(fmtD(x))} en ${h(volTxt())} · ${h(L.ORDEN_FORMULACION[p.formulacion] ? L.ORDEN_FORMULACION[p.formulacion].texto.split(" (")[0] : "Líquido")}</span></div><button class="icono-btn" data-q="${i}" aria-label="Quitar ${h(p.nombre)}">✕</button></div>`; }).join("") || `<div class="vacio">Tu mezcla está vacía. Agrega productos desde una recomendación, el plan sanitario o aquí abajo.</div>`}</div>
+        <div class="lista">${m.map((x, i) => { const p = P(x.producto_id); return `<div class="item" style="cursor:default"><div class="tx"><b>${h(p.nombre)}</b><span>${esSuelo(x) ? `${h(fmtD(x))} · al suelo, no va al tanque` : `${h(fmtD(x))} en ${h(volTxt())} · ${h(L.ORDEN_FORMULACION[p.formulacion] ? L.ORDEN_FORMULACION[p.formulacion].texto.split(" (")[0] : "Líquido")}`}</span></div><button class="icono-btn" data-q="${i}" aria-label="Quitar ${h(p.nombre)}">✕</button></div>`; }).join("") || `<div class="vacio">Tu mezcla está vacía. Agrega productos desde una recomendación, el plan sanitario o aquí abajo.</div>`}</div>
         ${prods.length >= 2 ? (rev.length ? rev.map((r) => `<div class="aviso ${r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde"}"><span class="pill ${r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde"}">${r.nivel === "incompatible" ? "NO MEZCLAR" : r.nivel === "precaucion" ? "PRECAUCIÓN" : "COMPATIBLE"}</span><div>${r.a ? `<b>${h(nombre(r.a))} + ${h(nombre(r.b))}:</b> ` : ""}${h(r.nota || "")}</div></div>`).join("")
           : `<div class="aviso verde"><span class="pill verde">SIN ALERTAS</span><div>No hay incompatibilidades registradas para esta combinación. Igual haz la <b>prueba del frasco</b> antes de llenar el tanque.</div></div>`) : ""}
         ${prods.length ? `<section class="card"><div class="etq">Orden de mezcla</div>
@@ -777,10 +790,11 @@
           ${orden.fuera.length ? `<span class="mini">No van al tanque: ${orden.fuera.map((x) => h(x.nombre)).join(", ")}.</span>` : ""}
           <span class="mini">Agrega un producto a la vez y espera que se disuelva antes del siguiente. Usa agua con pH entre 5 y 6 (con cobres, no acidifiques demasiado).</span></section>` : ""}
         ${prods.length ? `<section class="card"><div class="etq">Para comprar</div>
-          <label class="campo">${ui.vol === "tanque" ? "¿Cuántos tanques de " + TANQUE() : "¿Cuántas bombas de " + BOMBA()} L vas a aplicar?<span class="unido"><input id="cargas" inputmode="decimal" value="${h(ui.mezclaCargas || "1")}"><span>${ui.vol === "tanque" ? "tanques" : "bombas"}</span></span></label>
-          ${compra.map((c) => `<div class="fila" style="font-size:14px;border-top:1px solid var(--borde);padding-top:8px"><span><b>${h(c.p.nombre)}</b><br><span class="mini">${c.total !== null ? h(L.cantidad(c.total, c.p.unidad)) + " en total" : "Ver etiqueta"}</span></span><span style="text-align:right">${c.texto ? h(c.texto) : "—"}${c.costo !== null ? `<br><span class="mini">${dinero(c.costo)}</span>` : ""}</span></div>`).join("")}
+          ${hayTanque ? `<label class="campo">${ui.vol === "tanque" ? "¿Cuántos tanques de " + TANQUE() : "¿Cuántas bombas de " + BOMBA()} L vas a aplicar?<span class="unido"><input id="cargas" inputmode="decimal" value="${h(ui.mezclaCargas || "1")}"><span>${ui.vol === "tanque" ? "tanques" : "bombas"}</span></span></label>` : ""}
+          ${haySuelo ? `<label class="campo">¿Cuántas hectáreas vas a fertilizar al suelo?<span class="unido"><input id="haSuelo" inputmode="decimal" value="${h(ui.mezclaHa || D.sesion.perfil.hectareas || "1")}"><span>ha</span></span></label>` : ""}
+          ${compra.map((c) => `<div class="fila" style="font-size:14px;border-top:1px solid var(--borde);padding-top:8px"><span><b>${h(c.p.nombre)}</b><br><span class="mini">${c.total !== null ? h(L.cantidad(c.total, c.unidad || c.p.unidad)) + " en total" : "Ver etiqueta"}</span></span><span style="text-align:right">${c.texto ? h(c.texto) : "—"}${c.costo !== null ? `<br><span class="mini">${dinero(c.costo)}</span>` : ""}</span></div>`).join("")}
           <div class="fila" style="border-top:1px solid var(--borde);padding-top:8px"><span class="mini">Total de referencia</span><b>${dinero(costoCompra)}</b></div>
-          <div class="fila"><span class="mini">${txtCostoEquipo}</span><b>${dinero(costoEquipoMezcla)}</b></div>
+          ${hayTanque ? `<div class="fila"><span class="mini">${txtCostoEquipo}</span><b>${dinero(costoEquipoMezcla)}</b></div>` : ""}
         </section>
         ${botonesReporte()}
         <div class="acciones"><button class="btn" id="reg">Registrar esta mezcla</button><button class="btn peligro" id="vaciar">Vaciar</button></div>
@@ -788,14 +802,16 @@
       </main>`, "mezcla");
     conectarVol(vMezcla);
     $$("[data-q]").forEach((b) => b.addEventListener("click", () => { m.splice(Number(b.dataset.q), 1); S.set("mezcla", m); vMezcla(); }));
-    conectarBuscaProd((id) => { const p = P(id); m.push({ producto_id: Number(p.id), dosis_tanque: L.dosisDe(p).min }); S.set("mezcla", m); vMezcla(); },
-      (p) => (p.modo_aplicacion || "tanque") === "tanque" && !m.some((x) => String(x.producto_id) === String(p.id)));
+    conectarBuscaProd((id) => { const p = P(id); m.push(itemMezcla(p, L.dosisDe(p).min)); S.set("mezcla", m); vMezcla(); },
+      (p) => ["tanque", "suelo_ha"].includes(p.modo_aplicacion || "tanque") && !m.some((x) => String(x.producto_id) === String(p.id)));
     const reg = $("#reg"); if (reg) reg.addEventListener("click", () => {
-      prefill = { actividad: "Fumigación planta", lineas: m.map((x) => ({ producto_id: x.producto_id, dosis: x.dosis_tanque !== null && x.dosis_tanque !== undefined ? Math.round(x.dosis_tanque * f * 10) / 10 : null, unidad: P(x.producto_id).unidad + "/" + volL() + " L" })) };
+      prefill = { actividad: hayTanque ? "Fumigación planta" : "Fertilización al suelo", lineas: m.map((x) => { const dz = dzDe(x);
+        return esSuelo(x) ? { producto_id: x.producto_id, dosis: dz, unidad: "kg/ha" } : { producto_id: x.producto_id, dosis: dz !== null ? Math.round(dz * f * 10) / 10 : null, unidad: P(x.producto_id).unidad + "/" + volL() + " L" }; }) };
       location.hash = "#/registrar";
     });
     const va = $("#vaciar"); if (va) va.addEventListener("click", () => { S.set("mezcla", []); vMezcla(); });
     const ca = $("#cargas"); if (ca) ca.addEventListener("change", () => { ui.mezclaCargas = ca.value; guardarUI(); vMezcla(); });
+    const hs = $("#haSuelo"); if (hs) hs.addEventListener("change", () => { ui.mezclaHa = hs.value; guardarUI(); vMezcla(); });
     if (prods.length) {
       const pasos = orden.pasos.filter((p) => p.productos.length || p === orden.pasos[0] || p === orden.pasos[orden.pasos.length - 1])
         .map((p, i) => `${i + 1}. ${p.productos.length ? p.productos.map((x) => x.nombre).join(", ") + " · " + p.texto : p.texto}`);
@@ -804,7 +820,7 @@
         destacados: [[String(m.length), "Productos en la mezcla"], [L.fmt(cargas, 1), ui.vol === "tanque" ? `Tanques de ${TANQUE()} L a aplicar` : `Bombas de ${BOMBA()} L a aplicar`]],
         secciones: [
           { titulo: `Dosis por ${volTxt()}`, filas: m.map((x) => [P(x.producto_id).nombre, fmtD(x)]) },
-          { titulo: "Para comprar", filas: compra.map((c) => [c.p.nombre + (c.total !== null ? ` (${L.cantidad(c.total, c.p.unidad)})` : ""), c.texto ? `${c.texto}${c.costo !== null ? " · " + dinero(c.costo) : ""}` : "Ver etiqueta"]).concat([["Total de referencia", dinero(costoCompra)], [txtCostoEquipo, dinero(costoEquipoMezcla)]]) },
+          { titulo: "Para comprar", filas: compra.map((c) => [c.p.nombre + (c.total !== null ? ` (${L.cantidad(c.total, c.unidad || c.p.unidad)})` : ""), c.texto ? `${c.texto}${c.costo !== null ? " · " + dinero(c.costo) : ""}` : "Ver etiqueta"]).concat([["Total de referencia", dinero(costoCompra)], [txtCostoEquipo, dinero(costoEquipoMezcla)]]) },
           { titulo: "Compatibilidad", avisos: prods.length >= 2 ? (rev.length ? rev.map((r) => ({ nivel: r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde", texto: (r.nivel === "incompatible" ? "NO MEZCLAR. " : r.nivel === "precaucion" ? "PRECAUCIÓN. " : "") + (r.a ? nombre(r.a) + " + " + nombre(r.b) + ": " : "") + (r.nota || "") })) : [{ nivel: "verde", texto: "Sin incompatibilidades registradas. Haz la prueba del frasco antes de llenar el tanque." }]) : [] },
           { titulo: "Orden de mezcla", textos: pasos },
         ], pie: pieReporte() });
