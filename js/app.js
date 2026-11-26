@@ -373,6 +373,34 @@
         ${d.modo === "tanque" ? `<button class="btn sec chico" data-mez="${p.id}" data-d="${d.min !== null ? d.min : ""}">Agregar a mezcla</button>` : `<a class="btn sec chico" href="#/registrar?p=${p.id}">Registrar</a>`}
       </div></article>`;
   }
+  // ficha técnica: aparato bucal (plagas) o clase del hongo (enfermedades) y grupos químicos funcionales
+  function fichaClase(pr) {
+    if (!pr.clasificacion || !["plaga", "enfermedad"].includes(pr.tipo)) return "";
+    const clases = L.clasesDe(pr.clasificacion), gf = L.gruposFuncionales(pr.clasificacion), plaga = pr.tipo === "plaga";
+    const que = pr.como_actua || clases.map((k) => L.CLASES[k].resumen).join(" ");
+    return `<article class="card ficha-clase">
+      <div class="fila" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><span class="mini" style="font-weight:600">${plaga ? "Aparato bucal" : "Clase"}</span>${(clases.length ? clases : [pr.clasificacion]).map((k) => `<span class="pill verde" style="font-size:12.5px">${h(k)}</span>`).join("")}</div>
+      <div><b style="font-size:15px">${plaga ? "Cómo se alimenta" : "Qué es"}</b><p class="mini" style="margin:4px 0 0;font-size:14px">${h(que)}</p></div>
+      ${clases.map((k) => `<p class="mini" style="margin:0;font-size:14px">${clases.length > 1 ? `<b>${h(k)}:</b> ` : ""}${h(L.CLASES[k].control)}</p>`).join("")}
+      ${gf.length ? `<div><b style="font-size:15px">${plaga ? "Grupos químicos que funcionan mejor" : "Grupos químicos funcionales"}</b>
+        <div class="grupos-f">${gf.map((g) => `<span>${g.c ? `<b>${h(g.c)}</b> ` : ""}${h(g.n)}</span>`).join("")}</div></div>` : ""}
+    </article>`;
+  }
+  // otras opciones del portafolio que pertenecen a un grupo funcional para esa plaga o enfermedad
+  const CAT_OTRAS = { "Picador-chupador (quelíceros)": /acaric/i, "Raspador (rádula)": /cebo|molusc/i, "Picador-chupador (estilete)": /nematic|insectic/i };
+  function otrasOpciones(pr, recs) {
+    if (!pr.clasificacion || !["plaga", "enfermedad"].includes(pr.tipo)) return "";
+    const gf = L.gruposFuncionales(pr.clasificacion); if (!gf.length) return "";
+    const clases = L.clasesDe(pr.clasificacion);
+    const cat = pr.tipo === "plaga" ? (clases.map((k) => CAT_OTRAS[k]).find(Boolean) || /insectic|acaric|cebo|nematic/i) : /fungic|desinfecc|bactericida/i;
+    const usados = new Set(recs.map((r) => String(r.producto_id)));
+    const lista = (I.c.productos || []).filter((p) => p.activo !== false && cat.test(p.categoria || "") && !usados.has(String(p.id)))
+      .map((p) => ({ p, g: L.coincideGrupos(p, gf) })).filter((x) => x.g.length).sort((a, b) => a.p.nombre.localeCompare(b.p.nombre));
+    if (!lista.length) return "";
+    return `<details class="otras"${lista.length <= 6 ? " open" : ""}><summary class="etq">Otras opciones de productos (${lista.length})</summary>
+      <div class="lista">${lista.map(({ p, g }) => { const d = L.dosisDe(p); const conDosis = d.min !== null || d.max !== null; const tag = conDosis ? "a" : "div"; return `<${tag} class="item"${conDosis ? ` href="#/calcular?p=${p.id}"` : ' style="cursor:default"'}><div class="tx" style="flex:1"><b>${h(p.nombre)}</b><span><b>I.A.:</b> ${h(p.concentracion || p.ingrediente_activo || "")}</span><span>${g.map((x) => h((x.c ? x.c + " · " : "") + x.n)).join(" · ")}</span>${conDosis ? "" : `<span>Dosis no cargada: consulta a tu asesor</span>`}</div>${conDosis ? ic.flecha : ""}</${tag}>`; }).join("")}</div>
+      <p class="mini" style="margin:0">Opciones por su grupo químico. Antes de usarlas, revisa en la etiqueta que el producto esté registrado para tu cultivo.</p></details>`;
+  }
   function vProblema(pid) {
     const pr = (I.c.problemas || []).find((x) => String(x.id) === String(pid)); if (!pr) return vNoEncontrado();
     const c = cultivo(pr.cultivo_id), tipo = (TIPOS.find((t) => t[0] === pr.tipo) || [])[1] || "";
@@ -382,8 +410,10 @@
       <main class="cont">
         ${galeria(pr)}
         ${pr.descripcion ? `<p class="mini" style="margin:0;font-size:14px">${h(pr.descripcion)}</p>` : ""}
+        ${fichaClase(pr)}
         ${segVol()}
         ${recs.length ? `<div class="etq">Productos recomendados</div>` + recs.map((r, i) => tarjetaProducto(P(r.producto_id), r, (i === 0 ? "Opción recomendada" : "Alternativa " + i) + (r.etapa_id && etapa(r.etapa_id) ? " · solo en " + etapa(r.etapa_id).nombre : ""))).join("") : `<div class="vacio">Tu asesor aún no ha cargado recomendaciones para este tema.</div>`}
+        ${otrasOpciones(pr, recs)}
         ${grupos.size > 1 ? `<div class="aviso azul">${ic.alerta}<div>Rota productos de <b>distinto grupo</b> (${[...grupos].map(h).join(", ")}) entre aplicaciones para evitar resistencia.</div></div>` : ""}
         ${avisoSeguridad()}
         <a class="btn wa" target="_blank" rel="noopener" href="${h(waLink(`Hola, tengo una consulta sobre ${pr.nombre} en mi cultivo de ${c ? c.nombre : ""}. ¿Qué me recomienda?`))}">${ic.wa}Consultar por WhatsApp</a>

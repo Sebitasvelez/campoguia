@@ -115,3 +115,15 @@ details.card summary{cursor:pointer;font-weight:600;font-size:14px;min-height:28
 .pill.riesgo-bajo{background:#2E9E4F;color:#fff}
 .pill.riesgo-ligero{background:#F5C518;color:#3D2E00}
 .pill.riesgo-alto{background:#D62E2E;color:#fff}
+
+.ficha-clase{gap:10px}
+.grupos-f{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.grupos-f span{font-size:12.5px;background:var(--verde-claro);color:var(--texto);border-radius:6px;padding:5px 8px;line-height:1.3}
+.grupos-f b{color:var(--verde)}
+.otras{display:flex;flex-direction:column;gap:10px}
+.otras summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;min-height:44px}
+.otras summary::-webkit-details-marker{display:none}
+.otras summary::after{content:'Ver ▾';font-weight:600;color:var(--verde);text-transform:none;letter-spacing:0}
+.otras[open] summary::after{content:'Ocultar ▴'}
+.otras[open]{gap:10px}
+.otras .lista{margin-top:8px}
