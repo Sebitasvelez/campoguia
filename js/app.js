@@ -589,9 +589,13 @@
   // buscador de productos del portafolio (nombre, ingrediente activo, categoría o uso), sin tildes
   const sinTilde = (x) => String(x || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const textoProd = (p) => sinTilde([p.nombre, p.ingrediente_activo, p.concentracion, p.categoria, p.control].filter(Boolean).join(" "));
-  function conectarBuscaProd(elegir) {
+  // cuadro de búsqueda de producto (calculadora y mezcla); filtro opcional y productos a excluir
+  const cajaBuscaProd = (etiqueta) => `<div class="campo busca-prod"><label for="buscaP">${h(etiqueta)}</label>
+          <input id="buscaP" type="search" placeholder="Buscar producto o ingrediente activo…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sugP" aria-autocomplete="list">
+          <div id="sugP" class="sugerencias" role="listbox" hidden></div></div>`;
+  function conectarBuscaProd(elegir, filtro) {
     const inp = $("#buscaP"), sug = $("#sugP"); if (!inp) return;
-    const prods = (I.c.productos || []).filter((p) => p.activo !== false && !SIN_DOSIS.includes(p.categoria));
+    const prods = (I.c.productos || []).filter((p) => p.activo !== false && !SIN_DOSIS.includes(p.categoria)).filter(filtro || (() => true));
     let sel = -1, hall = [];
     const cerrar = () => { sug.hidden = true; inp.setAttribute("aria-expanded", "false"); sel = -1; };
     const marcar = () => [...sug.children].forEach((b, i) => b.classList.toggle("act", i === sel));
@@ -681,9 +685,7 @@
     const compra = r.envases ? `<div class="linea">Necesitas comprar: <b>${h(r.compraTexto || r.envases + " × " + (r.presentacion || "envase"))}</b>${r.costoEnvases !== undefined ? ` · ${dinero(r.costoEnvases)}` : ""}${costoTanque !== null ? `<br><span style="font-size:12.5px">Costo por tanque de ${TANQUE()} L de aplicación: ${dinero(costoTanque)}</span>` + (costoAplic !== null ? `<br><span style="font-size:15px">Costo total de aplicación: <b>${dinero(costoAplic)}</b></span>` : "") : r.costoUsado !== undefined ? `<br><span style="font-size:12.5px">Costo de lo que aplicas: ${dinero(r.costoUsado)}</span>` : ""}</div>` : "";
     pintar(`${barra("Calcular para mi finca", p.nombre, "#/")}
       <main class="cont">
-        <div class="campo busca-prod"><label for="buscaP">Producto</label>
-          <input id="buscaP" type="search" placeholder="Buscar producto o ingrediente activo…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sugP" aria-autocomplete="list">
-          <div id="sugP" class="sugerencias" role="listbox" hidden></div></div>
+        ${cajaBuscaProd("Producto")}
         <div class="prod-sel"><span class="mini">Producto seleccionado</span><b>${h(p.nombre)}</b>
           ${p.concentracion || p.ingrediente_activo ? `<span class="mini">Concentración: <b>${h(p.concentracion || p.ingrediente_activo)}</b></span>` : ""}
           <span class="mini">${h(p.categoria || "")}${p.grupo && /^(IRAC|FRAC|HRAC)/.test(p.grupo) ? " · " + h(p.grupo) : ""}</span></div>
@@ -765,9 +767,9 @@
     let n = 0;
     pintar(`${barra("Mi mezcla", "Revisión de compatibilidad y orden", "#/")}
       <main class="cont">
+        ${cajaBuscaProd("Agregar producto")}
         ${segVol()}
         <div class="lista">${m.map((x, i) => { const p = P(x.producto_id); return `<div class="item" style="cursor:default"><div class="tx"><b>${h(p.nombre)}</b><span>${h(fmtD(x))} en ${h(volTxt())} · ${h(L.ORDEN_FORMULACION[p.formulacion] ? L.ORDEN_FORMULACION[p.formulacion].texto.split(" (")[0] : "Líquido")}</span></div><button class="icono-btn" data-q="${i}" aria-label="Quitar ${h(p.nombre)}">✕</button></div>`; }).join("") || `<div class="vacio">Tu mezcla está vacía. Agrega productos desde una recomendación, el plan sanitario o aquí abajo.</div>`}</div>
-        <label class="campo">Agregar producto<select id="add"><option value="">Elige un producto…</option>${opcionesProductos(null, (p) => (p.modo_aplicacion || "tanque") === "tanque")}</select></label>
         ${prods.length >= 2 ? (rev.length ? rev.map((r) => `<div class="aviso ${r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde"}"><span class="pill ${r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde"}">${r.nivel === "incompatible" ? "NO MEZCLAR" : r.nivel === "precaucion" ? "PRECAUCIÓN" : "COMPATIBLE"}</span><div>${r.a ? `<b>${h(nombre(r.a))} + ${h(nombre(r.b))}:</b> ` : ""}${h(r.nota || "")}</div></div>`).join("")
           : `<div class="aviso verde"><span class="pill verde">SIN ALERTAS</span><div>No hay incompatibilidades registradas para esta combinación. Igual haz la <b>prueba del frasco</b> antes de llenar el tanque.</div></div>`) : ""}
         ${prods.length ? `<section class="card"><div class="etq">Orden de mezcla</div>
@@ -786,7 +788,8 @@
       </main>`, "mezcla");
     conectarVol(vMezcla);
     $$("[data-q]").forEach((b) => b.addEventListener("click", () => { m.splice(Number(b.dataset.q), 1); S.set("mezcla", m); vMezcla(); }));
-    $("#add").addEventListener("change", (e) => { if (!e.target.value) return; const p = P(e.target.value); m.push({ producto_id: Number(p.id), dosis_tanque: L.dosisDe(p).min }); S.set("mezcla", m); vMezcla(); });
+    conectarBuscaProd((id) => { const p = P(id); m.push({ producto_id: Number(p.id), dosis_tanque: L.dosisDe(p).min }); S.set("mezcla", m); vMezcla(); },
+      (p) => (p.modo_aplicacion || "tanque") === "tanque" && !m.some((x) => String(x.producto_id) === String(p.id)));
     const reg = $("#reg"); if (reg) reg.addEventListener("click", () => {
       prefill = { actividad: "Fumigación planta", lineas: m.map((x) => ({ producto_id: x.producto_id, dosis: x.dosis_tanque !== null && x.dosis_tanque !== undefined ? Math.round(x.dosis_tanque * f * 10) / 10 : null, unidad: P(x.producto_id).unidad + "/" + volL() + " L" })) };
       location.hash = "#/registrar";
