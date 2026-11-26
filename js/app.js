@@ -156,7 +156,7 @@
     return { grande: L.rango(d.min, d.max, d.unidad, volL() / TANQUE()), sub: "por " + volTxt() };
   }
   const segVol = () => `<div class="seg" role="group" aria-label="Volumen"><button data-vol="bomba" class="${ui.vol === "bomba" ? "sel" : ""}">Bomba ${BOMBA()} L</button><button data-vol="tanque" class="${ui.vol === "tanque" ? "sel" : ""}">Tanque ${TANQUE()} L</button></div>`;
-  const conectarVol = (re) => $$("[data-vol]").forEach((b) => b.addEventListener("click", () => { ui.vol = b.dataset.vol; guardarUI(); re(); }));
+  const conectarVol = (re) => $$("[data-vol]").forEach((b) => b.addEventListener("click", () => { const y = window.scrollY; ui.vol = b.dataset.vol; guardarUI(); re(); window.scrollTo(0, y); })); // al cambiar bomba/tanque la pantalla no se mueve
   const avisoSeguridad = () => `<div class="aviso ambar">${ic.alerta}<div>Usa guantes, mascarilla, gafas y ropa de manga larga. No fumigues con sol, viento fuerte ni antes de lluvia. ${h(aj("aviso_legal", "Recomendación técnica referencial. Lea siempre la etiqueta y verifique con su asesor."))}</div></div>`;
   const SIN_DOSIS = ["Semilla", "Otros"];   // productos de catálogo que no se calculan ni se mezclan
   // en la mezcla: productos de tanque (dosis por tanque) y fertilizantes al suelo (dosis por hectárea)
@@ -313,7 +313,7 @@
         <label class="campo"><span class="sr">Buscar</span><input id="buscar" type="search" placeholder="Buscar en el manual…"></label>
         <div class="lista" id="probs">${probs.length ? probs.map((p) => `<a class="item" href="#/problema/${p.id}" data-n="${h((p.nombre + " " + (p.descripcion || "")).toLowerCase())}">${fotosDe(p).length ? `<img class="miniatura" src="${h(fotosDe(p)[0].url)}" alt="" loading="lazy">` : ""}<div class="tx" style="flex:1"><b>${h(p.nombre)}</b><span>${h(p.descripcion || "")}</span><span style="color:var(--verde);font-weight:600">${(I.recs[p.id] || []).length ? (I.recs[p.id] || []).length + " productos recomendados" : ""}</span></div>${ic.flecha}</a>`).join("") : `<div class="vacio">Tu asesor aún no ha cargado información en esta sección.</div>`}</div>
       </main>`, "inicio");
-    $$("[data-t]").forEach((b) => b.addEventListener("click", () => { ui.tipo = b.dataset.t; guardarUI(); vCultivo(cid); }));
+    $$("[data-t]").forEach((b) => b.addEventListener("click", () => { const y = window.scrollY; ui.tipo = b.dataset.t; guardarUI(); vCultivo(cid); window.scrollTo(0, y); }));
     $("#buscar").addEventListener("input", (e) => {
       const q = e.target.value.toLowerCase().trim();
       if (q) { // buscar en todos los temas del cultivo
@@ -551,7 +551,7 @@
         <a class="btn wa" target="_blank" rel="noopener" href="${h(waLink("Hola, quiero cotizar para " + ui.calc.ha + " ha de " + c.nombre + ": " + visibles.map((x) => { const p = P(x.producto_id); const r = L.calcularFertSuelo(x, p, ui.calc.ha, ui.calc.pha); return p.nombre + (r.sacos50 ? " (" + r.sacos50 + " sacos)" : ""); }).join(", ")))}">${ic.wa}Cotizar</a></div>
       </main>`, "inicio");
     $$("[data-e]").forEach((b) => b.addEventListener("click", () => { ui.etapa[c.id] = b.dataset.e; guardarUI(); vFert(c.id); }));
-    $$("[data-ft]").forEach((b) => b.addEventListener("click", () => { ui.fertTipo = b.dataset.ft; guardarUI(); vFert(c.id); }));
+    $$("[data-ft]").forEach((b) => b.addEventListener("click", () => { const y = window.scrollY; ui.fertTipo = b.dataset.ft; guardarUI(); vFert(c.id); window.scrollTo(0, y); }));
     conectarVol(() => vFert(c.id));
     const re = (id, k) => { const el = $("#" + id); if (el) el.addEventListener("change", () => { if (k === "ph") ui.ph = el.value; else ui.calc[k] = el.value; guardarUI(); vFert(c.id); }); };
     re("ha", "ha"); re("pha", "pha"); re("ph", "ph");
