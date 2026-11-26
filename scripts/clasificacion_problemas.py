@@ -27,7 +27,7 @@ DATOS = {
   "Ambos mastican: las hormigas cortan hojas y brotes con las mandíbulas, y los comejenes (termitas) roen raíces, corteza y madera desde sus galerías."),
 
  ("pitahaya", "Antracnosis (Colletotrichum) y Alternaria"): ("Ascomiceto",
-  "Colletotrichum (estado sexual Glomerella) y Alternaria son Ascomicetos. Se multiplican por conidias que salpican con la lluvia y entran por heridas o tejido tierno; con humedad alta las manchas crecen rápido."),
+  "Colletotrichum gloeosporioides (estado sexual Glomerella) y Alternaria son Ascomicetos. Se multiplican por conidias que salpican con la lluvia y entran por heridas o tejido tierno; con humedad alta las manchas crecen rápido."),
  ("pitahaya", "Fusarium"): ("Deuteromiceto",
   "Fusarium se maneja como Deuteromiceto: es un hongo especial que solo responde a determinados ingredientes activos. Vive en el suelo y en restos de cosecha, entra por heridas y raíces dañadas, y se dispersa con el agua de riego, la lluvia y las herramientas."),
  ("pitahaya", "Prevención de hongos (amplio espectro)"): ("Amplio espectro (multisitio)",
@@ -62,7 +62,7 @@ CICLOS = {
  ("pitahaya", "Ácaros"): ("7–10 días aprox", "Huevo a adulto de Tetranychus a 25–30 °C; con calor y sequía puede bajar a 7 días."),
  ("pitahaya", "Babosas y caracoles"): ("≈ 125 días aprox", "Huevo a adulto; el huevo tarda unos 17–22 días en eclosionar. Dato de babosas en cultivo de flores."),
  ("pitahaya", "Nematodos"): ("21–28 días aprox", "Huevo a huevo de Meloidogyne (nematodo del nudo) con el suelo a 25–30 °C."),
- ("pitahaya", "Antracnosis (Colletotrichum) y Alternaria"): ("≈ 5 días aprox", "De la infección a los síntomas (incubación) de Colletotrichum: 4–5 días. Dato del género en mango."),
+ ("pitahaya", "Antracnosis (Colletotrichum) y Alternaria"): ("≈ 5 días aprox", "De la infección a los síntomas (incubación) de Colletotrichum gloeosporioides: 4–5 días. Dato de la especie en mango."),
  ("pitahaya", "Bacteriosis / pudrición blanda"): ("≈ 3 días aprox", "De la infección a los síntomas de pudrición blanda en fruto de pitahaya."),
  ("cacao", "Monilia (Moniliophthora roreri)"): ("3–8 semanas aprox", "De la infección a los síntomas, según la edad de la mazorca; pocos días después aparecen las esporas crema."),
  ("cacao", "Escoba de bruja (Moniliophthora perniciosa)"): ("≈ 7–8 meses aprox", "Infección a escoba verde ≈ 46 días, escoba verde ≈ 39 días y secado ≈ 10 días (Manabí, Ecuador). La escoba seca necesita unas 20–23 semanas más antes de formar las setas que liberan esporas con la lluvia: el ciclo es casi anual."),
