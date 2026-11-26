@@ -86,6 +86,7 @@
   }
   const textoEquipos = (v) => (v % 1 ? (Math.floor(v) ? Math.floor(v) + "½" : "½") : String(v));
 
+  const TXT_FRAC = { 0.25: "¼", 0.5: "½", 0.75: "¾", 1: "1" };
   function calcularFinca(producto, dosis, opts) {
     const o = Object.assign({ bombaL: 20, tanqueL: 200, litrosAguaHa: 400, plantasPorBomba: 60, plantasPorHa: null }, opts);
     const d = o.usarMax ? dosis.max : dosis.min !== null ? dosis.min : dosis.max;
@@ -143,6 +144,22 @@
       res.envases = Math.ceil(totalBase / cont - 1e-9);
       res.presentacion = producto.presentacion;
       if (pvp !== null) { res.costoEnvases = r2(res.envases * pvp); res.costoUsado = r2((totalBase / cont) * pvp); }
+    }
+    // fertilizantes en saco: si se necesita menos de un saco, se calcula proporcional en ¼, ½, ¾ o 1 saco
+    if (res.kgTotal !== undefined && totalBase > 0) {
+      const sacos = (producto.presentaciones || []).filter((x) => num(x.cantidad) >= 10000 && (x.unidad || "g") === "g");
+      const menor = (producto.presentaciones || []).reduce((m, x) => (num(x.cantidad) && (m === null || num(x.cantidad) < m) ? num(x.cantidad) : m), null);
+      const saco = sacos.length ? sacos.reduce((m, x) => (num(x.cantidad) < num(m.cantidad) ? x : m)) : (!(producto.presentaciones || []).length && cont >= 10000 ? { cantidad: cont, precio: pvp } : null);
+      if (saco && num(saco.cantidad) === (menor || num(saco.cantidad)) && totalBase < num(saco.cantidad) - 1e-6) {
+        const kgSaco = num(saco.cantidad) / 1000;
+        const frac = Math.min(1, Math.ceil((totalBase / num(saco.cantidad)) * 4 - 1e-9) / 4);
+        res.fraccionSaco = frac; res.kgSaco = kgSaco;
+        res.textoFraccion = TXT_FRAC[frac];
+        res.compraTexto = frac < 1 ? `${TXT_FRAC[frac]} de saco de ${fmt(kgSaco)} kg (${fmt(frac * kgSaco, 1)} kg)` : `1 saco de ${fmt(kgSaco)} kg`;
+        res.envases = frac;
+        const precio = num(saco.precio) !== null ? num(saco.precio) : pvp;
+        if (precio !== null) res.costoEnvases = r2(frac * precio);
+      }
     }
     return res;
   }

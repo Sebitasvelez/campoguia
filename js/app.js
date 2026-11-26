@@ -695,7 +695,7 @@
         <div><div class="n">${h(L.cantidad(r.porBomba, r.unidad))}</div><small>Dosis por ${equipoTxt(false)}</small></div></div>`;
     } else if (r.kgTotal !== undefined) {
       res = `<div class="grid2"><div><div class="n">${L.fmt(r.kgTotal, 1)} kg</div><small>Producto requerido total</small></div>
-        <div><div class="n">${r.sacos50}</div><small>Sacos de 50 kg</small></div>
+        <div><div class="n">${r.textoFraccion ? h(r.textoFraccion) : r.sacos50}</div><small>${r.textoFraccion && r.fraccionSaco < 1 ? `De saco de ${L.fmt(r.kgSaco)} kg` : `Sacos de ${L.fmt(r.kgSaco || 50)} kg`}</small></div>
         ${r.gPorPlanta ? `<div><div class="n">${L.fmt(r.gPorPlanta, 0)} g</div><small>Por planta</small></div>` : ""}
         ${r.sitios ? `<div><div class="n">${L.fmt(r.sitios, 0)}</div><small>Sitios / plantas</small></div>` : ""}</div>`;
     }
