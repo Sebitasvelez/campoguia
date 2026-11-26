@@ -687,18 +687,10 @@
     };
     let res = "";
     if (r.tipo === "tanque" && r.total !== undefined) {
-      res = `<div class="grid2"><div><div class="n">${h(L.cantidad(r.total, r.unidad))}</div><small>Producto requerido total</small></div>
-        <div><div class="n">${L.fmt(r.litrosAgua, 0)} L</div><small>Agua total</small></div>
-        <div><div class="n">${h(L.cantidad(r.porBomba, r.unidad))}</div><small>Dosis por ${equipoTxt(false)}</small></div>
-        <div><div class="n">${L.textoEquipos(r.bombas)}</div><small>${equipoTxt(true)}${Math.abs(r.equiposExactos - r.bombas) > 0.005 ? ` <span style="opacity:.8">(${L.fmt(r.equiposExactos, 2)} exactos)</span>` : ""}</small></div></div>
-        ${esTanque && enM2 && cc.modo === "ha" && lhaM2 && dhaElegida !== null ? `<div class="formula"><span class="mini">Cómo se calcula</span>
-          <b>1) Producto para tus m² = dosis por ha × m² ÷ 10.000</b>
-          <span>${h(L.cantidad(dhaElegida, p.unidad))}/ha × ${L.fmt(m2v, 0)} m² ÷ 10.000 = <b>${h(L.cantidad(r.total, r.unidad))}</b> en ${L.fmt(aguaM2v)} L de agua</span>
-          <b>2) Producto por ${cc.equipo === "tanque" ? "tanque" : "bomba"} = producto total × litros de la ${cc.equipo === "tanque" ? "tanque" : "bomba"} ÷ agua que usas</b>
-          <span>${h(L.cantidad(r.total, r.unidad))} × ${L.fmt(vol)} L ÷ ${L.fmt(aguaM2v)} L = <b>${h(L.cantidad(r.porBomba, r.unidad))}</b> por ${h(equipoTxt(false))}</span></div>`
-        : esTanque && !faltaPha && dhaElegida !== null ? `<div class="formula"><span class="mini">Producto por ${cc.equipo === "tanque" ? "tanque" : "bomba"}</span>
-          <b>Dosis por ha × litros de la ${cc.equipo === "tanque" ? "tanque" : "bomba"} ÷ litros de agua por ha</b>
-          <span>${h(L.cantidad(dhaElegida, p.unidad))}/ha × ${L.fmt(vol)} L ÷ ${L.fmt(lhaUsada, 0)} L/ha = <b>${h(L.cantidad(r.porBomba, r.unidad))}</b> por ${h(equipoTxt(false))}${cc.modo === "plantas" ? " (agua por ha según tus plantas)" : ""}</span></div>` : ""}`;
+      res = `<div class="grid2"><div><div class="n">${L.fmt(r.litrosAgua, r.litrosAgua < 100 ? 1 : 0)} L</div><small>Agua total a aplicar</small></div>
+        <div><div class="n">${h(L.cantidad(r.total, r.unidad))}</div><small>Producto requerido total</small></div>
+        <div><div class="n">${L.textoEquipos(r.bombas)}</div><small>${equipoTxt(true)}${Math.abs(r.equiposExactos - r.bombas) > 0.005 ? ` <span style="opacity:.8">(${L.fmt(r.equiposExactos, 2)} exactos)</span>` : ""}</small></div>
+        <div><div class="n">${h(L.cantidad(r.porBomba, r.unidad))}</div><small>Dosis por ${equipoTxt(false)}</small></div></div>`;
     } else if (r.kgTotal !== undefined) {
       res = `<div class="grid2"><div><div class="n">${L.fmt(r.kgTotal, 1)} kg</div><small>Producto requerido total</small></div>
         <div><div class="n">${r.sacos50}</div><small>Sacos de 50 kg</small></div>
@@ -725,14 +717,12 @@
               : `<label class="campo">Superficie (ha)<span class="unido"><input id="ha" inputmode="decimal" value="${h(cc.ha)}"><span>ha</span></span></label>`)
             : `<label class="campo">N.º de plantas<span class="unido"><input id="pl" inputmode="numeric" value="${h(cc.pl || "")}"><span>pl</span></span></label>`}
           ${d.modo === "tanque" ? (cc.modo === "ha" ? (enM2 ? `<label class="campo">Agua que usas en esos m²<span class="unido"><input id="aguaM2" inputmode="decimal" value="${h(cc.aguaM2)}" placeholder="Ej. 40"><span>L</span></span></label>` : `<label class="campo">Agua utilizada por 1 ha<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span></label>`)
-            : `<label class="campo">Plantas cubiertas por ${cc.equipo === "tanque" ? "tanque" : "bomba"} de ${L.fmt(vol)} L<span class="unido"><input id="${campoPl}" inputmode="numeric" value="${h(cc[campoPl])}"><span>pl</span></span></label>`)
+            : `<label class="campo">Plantas cubiertas por tu ${cc.equipo === "tanque" ? "tanque" : "bomba"} de ${L.fmt(vol)} L<span class="unido"><input id="${campoPl}" inputmode="numeric" value="${h(cc[campoPl])}"><span>pl</span></span></label>`)
             : `<label class="campo">Plantas por ha<span class="unido"><input id="pha" inputmode="numeric" value="${h(cc.pha || "")}" placeholder="1600"><span>pl/ha</span></span></label>`}
           ${d.modo === "tanque" ? `<label class="campo">Litros de tu bomba o tanque<span class="unido"><input id="vol" inputmode="decimal" value="${h(cc.vol)}"><span>L</span></span></label>` : ""}
           ${d.modo === "tanque" && esTanque && cc.modo === "plantas" ? `<label class="campo">Plantas por ha<span class="unido"><input id="pha" inputmode="numeric" value="${h(cc.pha || "")}" placeholder="1600"><span>pl/ha</span></span></label>` : ""}
         </div>
-        ${cc.modo === "ha" ? `<div class="aviso azul info-sup"><b>i</b><div>${haCalc ? `Tu superficie: <b>${enM2 ? h(L.fmt(n(cc.m2), 0)) + " m² = " + h(L.fmt(haCalc, 4)) + " ha" : h(L.fmt(haCalc, 4)) + " ha = " + h(L.fmt(haCalc * 10000, 0)) + " m²"}</b>${d.modo === "tanque" && r.litrosAgua && !enM2 ? ` · agua para esa superficie: <b>${L.fmt(r.litrosAgua, r.litrosAgua < 100 ? 1 : 0)} L</b>` : ""}<br>` : ""}
-          ${enM2 ? `1 ha = 10.000 m². Ejemplos: 1.000 m² = 0,1 ha · 500 m² = 0,05 ha.<br>¿No sabes los m²? Multiplica el largo por el ancho de tu lote en metros (ej. 20 m × 50 m = 1.000 m²).` : `¿Tu lote es pequeño? Cambia a <b>metros cuadrados (m²)</b>. 1 ha = 10.000 m².`}
-          ${d.modo === "tanque" ? (enM2 ? `<br>En <b>agua que usas</b> escribe los litros que gastas para fumigar bien esos m² (por ejemplo: 2½ bombas de 16 L = 40 L).${lhaM2 ? ` Equivale a ${L.fmt(lhaM2, 0)} L por hectárea.` : ""}` : `<br>El agua por ha sirve para repartir la dosis: si mojas bien tu cultivo con ${L.fmt(n(cc.lha) || lhaRef, 0)} L en una hectárea, en tu superficie se usa la parte proporcional.`) : ""}</div></div>` : ""}
+        ${cc.modo === "ha" && enM2 ? `<div class="aviso azul info-sup"><b>i</b><div>¿No sabes los m²? Multiplica el largo por el ancho de tu lote en metros (ej. 20 m × 50 m = 1.000 m²).${d.modo === "tanque" ? `<br>En <b>agua que usas</b> escribe los litros que gastas para fumigar bien esos m² (por ejemplo: 2 bombas de 20 litros = 40 L).` : ""}</div></div>` : ""}
         ${faltaAguaM2 ? `<div class="aviso ambar">${ic.alerta}<div>Escribe cuántos <b>litros de agua usas</b> para fumigar tus ${L.fmt(m2v, 0)} m² para calcular la dosis.</div></div>` : ""}
         ${faltaPha ? `<div class="aviso ambar">${ic.alerta}<div>Escribe las <b>plantas por hectárea</b> para repartir la dosis por hectárea en cada ${cc.equipo === "tanque" ? "tanque" : "bomba"}. Mientras tanto se usa la dosis de etiqueta por tanque.</div></div>` : ""}
         ${r.avisos.map((a) => `<div class="aviso ambar">${ic.alerta}<div>${h(a)}</div></div>`).join("")}
