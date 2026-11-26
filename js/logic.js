@@ -483,28 +483,42 @@
   // eficiencia van los grupos. "orden" (opcional) reemplaza el orden de la clase para plagas muy específicas.
   const BUSCA_CLASE = [
     // enfermedades: géneros, especies y nombres comunes → clase del aplicativo (Botrytis, Fusarium y Rhizoctonia como Deuteromicetos)
-    { re: /oomicet|oomycet|pseudohongo|phytophthora|pythium|peronospora|plasmopara|bremia|pseudoperonospora|albugo|mildiu velloso|mildeo velloso|mazorca negra|pudricion parda|lancha|tizon tardio|gota\b|damping|mal del talluelo/, clase: "Oomiceto" },
-    { re: /botrytis|moho gris/, clase: "Deuteromiceto", orden: ["FRAC 9", "FRAC 12", "FRAC 17", "FRAC 7", "FRAC 2", "FRAC 3", "FRAC 11", "FRAC 1"] },
+    { re: /oomicet|oomycet|pseudohongo|phytophthora|pythium|peronospora|plasmopara|bremia|pseudoperonospora|albugo|mildiu velloso|mildeo velloso|mazorca negra|pudricion parda|lancha|tizon tardio|gota\b|damping|mal del talluelo|late blight|downy mildew|black pod|root rot|crown rot|water mold/, clase: "Oomiceto" },
+    { re: /botrytis|moho gris|gray mold|grey mould|grey mold/, clase: "Deuteromiceto", orden: ["FRAC 9", "FRAC 12", "FRAC 17", "FRAC 7", "FRAC 2", "FRAC 3", "FRAC 11", "FRAC 1"] },
     { re: /rhizoctonia|thanatephorus/, clase: "Deuteromiceto", orden: ["Hidrocarburos aromáticos (PCNB / quintoceno, al suelo)", "FRAC 7", "FRAC 11", "FRAC 3", "FRAC 12", "FRAC 1"] },
-    { re: /deuteromicet|deuteromycet|deutero|imperfect|fusarium|fusariosis|mal de panama|marchitez vascular|pudricion basal|pie negro/, clase: "Deuteromiceto" },
-    { re: /basidiomicet|basidiomycet|basidio|monilia|moniliophthora|moniliasis|escoba de bruja|roya|hemileia|puccinia|uromyces|ustilago|carbon\b|sclerotium|athelia|ceratobasidium|mal de hilachas|marasmius|crinipellis|corticium|mal rosado/, clase: "Basidiomiceto" },
-    { re: /ascomicet|ascomycet|antracnosis|colletotrichum|glomerella|alternaria|oidio|oidium|erysiphe|cenicilla|mildiu polvoso|sigatoka|mycosphaerella|pseudocercospora|cercospora|ojo de pollo|mancha foliar|lasiodiplodia|botryodiplodia|botryosphaeria|neofusicoccum|ascochyta|sclerotinia|moho blanco|monilinia|venturia|sarna|septoria|phoma|corynespora|helminthosporium|bipolaris|pyricularia|magnaporthe|pestalotiopsis|ceratocystis|mal del machete|diplodia|phyllosticta|nectria|verticillium|trichothecium/, clase: "Ascomiceto" },
-    { re: /bacteri|erwinia|pectobacterium|dickeya|xanthomonas|pseudomonas|ralstonia|moko|clavibacter|agrobacterium|pudricion blanda|chancro bacteriano/, clase: "Bacteria" },
+    { re: /deuteromicet|deuteromycet|deutero|imperfect|fusarium|fusariosis|mal de panama|panama disease|fusarium wilt|marchitez vascular|pudricion basal|pie negro/, clase: "Deuteromiceto" },
+    { re: /basidiomicet|basidiomycet|basidio|monilia|moniliophthora|moniliasis|escoba de bruja|roya|hemileia|puccinia|uromyces|ustilago|carbon\b|sclerotium|athelia|ceratobasidium|mal de hilachas|marasmius|crinipellis|corticium|mal rosado|\brust\b|frosty pod|witches broom|witch broom|smut|southern blight|thread blight|pink disease/, clase: "Basidiomiceto" },
+    { re: /ascomicet|ascomycet|antracnosis|colletotrichum|glomerella|alternaria|oidio|oidium|erysiphe|cenicilla|mildiu polvoso|sigatoka|mycosphaerella|pseudocercospora|cercospora|ojo de pollo|mancha foliar|lasiodiplodia|botryodiplodia|botryosphaeria|neofusicoccum|ascochyta|sclerotinia|moho blanco|monilinia|venturia|sarna|septoria|phoma|corynespora|helminthosporium|bipolaris|pyricularia|magnaporthe|pestalotiopsis|ceratocystis|mal del machete|diplodia|phyllosticta|nectria|verticillium|trichothecium|anthracnose|powdery mildew|black sigatoka|leaf spot|early blight|white mold|white mould|\bscab\b|stem end rot|black spot/, clase: "Ascomiceto" },
+    { re: /bacteri|erwinia|pectobacterium|dickeya|xanthomonas|pseudomonas|ralstonia|moko|clavibacter|agrobacterium|pudricion blanda|chancro bacteriano|soft rot|bacterial wilt|bacterial spot|canker|fire blight/, clase: "Bacteria" },
     // plagas: nombres comunes y géneros → tipo de aparato bucal
-    { re: /acaro|aranita|arana roja|arañita|tetranychus|polyphagotarsonemus|eriofido|phyllocoptruta|brevipalpus|oligonychus/, clase: "Picador-chupador (quelíceros)" },
-    { re: /nematod|meloidogyne|radopholus|pratylenchus|helicotylenchus|agallas en raiz/, clase: "Picador-chupador (estilete)" },
-    { re: /babosa|caracol|molusco|limax|sarasinula/, clase: "Raspador (rádula)" },
+    { re: /acaro|aranita|arana roja|arañita|spider mite|\bmites?\b|broad mite|tetranychus|polyphagotarsonemus|eriofido|phyllocoptruta|brevipalpus|oligonychus/, clase: "Picador-chupador (quelíceros)" },
+    { re: /nematod|root knot|meloidogyne|radopholus|pratylenchus|helicotylenchus|agallas en raiz/, clase: "Picador-chupador (estilete)" },
+    { re: /babosa|caracol|molusco|\bslugs?\b|\bsnails?\b|limax|sarasinula/, clase: "Raspador (rádula)" },
     { re: /trips|thrips|frankliniella|selenothrips/, clase: "Masticador-lamedor" },
-    { re: /hormiga arriera|arriera|atta\b|acromyrmex|cortadora/, clase: "Masticador", orden: ["IRAC 13", "IRAC 2B", "IRAC 1B", "IRAC 3A"] },
-    { re: /hormiga|solenopsis|comejen|termita|avispa|muruja|polybia/, clase: "Masticador", orden: ["IRAC 3A", "IRAC 1B", "IRAC 4A", "IRAC 2B", "IRAC 13", "IRAC 14"] },
-    { re: /mosca blanca|bemisia|trialeurodes|aleurodido|pulgon|afido|aphis|myzus|cochinilla|planococcus|dysmicoccus|pseudococcus|escama|queresa|chinche|monalonion|leptoglossus|chicharrita|empoasca|salivazo|psilido|diaphorina|mosquilla|chupador/, clase: "Picador-chupador" },
-    { re: /gusano|oruga|larva|cogollero|spodoptera|helicoverpa|heliothis|tuta|polilla|minador|liriomyza|leucoptera|barrenador|diatraea|perforador|broca|hypothenemus|gallina ciega|phyllophaga|grillo|picudo|cosmopolites|rhynchophorus|metamasius|cucarron|escarabajo|langosta|saltamontes|tierrero|trozador|agrotis|defoliador|masticador|crisomelido|diabrotica|lorito|vaquita|mosca de la fruta|anastrepha|ceratitis/, clase: "Masticador" },
+    { re: /hormiga arriera|arriera|\batta\b|acromyrmex|cortadora|leafcutter|leaf cutter/, clase: "Masticador", orden: ["IRAC 13", "IRAC 2B", "IRAC 1B", "IRAC 3A"] },
+    { re: /hormiga|solenopsis|comejen|termita|avispa|muruja|polybia|\bants?\b|termite|\bwasps?\b/, clase: "Masticador", orden: ["IRAC 3A", "IRAC 1B", "IRAC 4A", "IRAC 2B", "IRAC 13", "IRAC 14"] },
+    { re: /mosca blanca|whitefl|aphid|mealybug|scale insect|leafhopper|psyllid|stink bug|bemisia|trialeurodes|aleurodido|pulgon|afido|aphis|myzus|cochinilla|planococcus|dysmicoccus|pseudococcus|escama|queresa|chinche|monalonion|leptoglossus|chicharrita|empoasca|salivazo|psilido|diaphorina|mosquilla|chupador/, clase: "Picador-chupador" },
+    { re: /gusano|oruga|larva|cogollero|spodoptera|helicoverpa|heliothis|tuta|polilla|minador|liriomyza|leucoptera|barrenador|diatraea|perforador|broca|hypothenemus|gallina ciega|phyllophaga|grillo|picudo|cosmopolites|rhynchophorus|metamasius|cucarron|escarabajo|langosta|saltamontes|tierrero|trozador|agrotis|defoliador|masticador|crisomelido|diabrotica|lorito|vaquita|mosca de la fruta|anastrepha|ceratitis|armyworm|cutworm|caterpillar|\bworms?\b|borer|weevil|beetle|leafminer|leaf miner|fruit fl|grasshopper|cricket|white grub|coffee berry/, clase: "Masticador" },
   ];
   const quitarTildes = (x) => String(x || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  // escritura parecida: Phytophthora = fitoftora, Botrytis = botritis, Pyricularia = piricularia, Xanthomonas = xantomonas,
+  // Colletotrichum = coletotricum: se comparan sin ph/th/y/k/z ni letras dobles
+  const fonetica = (x) => quitarTildes(x).replace(/ph/g, "f").replace(/th/g, "t").replace(/rh/g, "r").replace(/ch(?=[aou])/g, "c").replace(/y/g, "i").replace(/k/g, "c").replace(/z/g, "s").replace(/([a-z])\1+/g, "$1");
+  BUSCA_CLASE.forEach((b) => { b.rf = new RegExp(fonetica(b.re.source)); });
   function claseDeBusqueda(texto) {
-    const t = quitarTildes(texto).trim(); if (t.length < 4) return null;
-    const x = BUSCA_CLASE.find((b) => b.re.test(t)); if (!x) return null;
-    const termino = t.match(x.re)[0];
+    if (String(texto || "").trim().length < 4) return null;
+    const t = fonetica(texto).trim();
+    let x = BUSCA_CLASE.find((b) => b.rf.test(t)), termino = x ? t.match(x.rf)[0] : null;
+    if (!x) { // nombres científicos con un error de escritura (fusariun, moniliopthora, sclerotina)
+      const ws = t.split(/[^a-z]+/).filter((w) => w.length >= 6);
+      let mejor = 9;
+      for (const b of BUSCA_CLASE) {
+        const alt = b.rf.source.split("|").map((a) => a.replace(/\\b/g, "")).filter((a) => /^[a-z]{6,}$/.test(a));
+        ws.forEach((w) => alt.forEach((a) => { const d = a[0] === w[0] ? distancia(w, a) : 9;
+          if (d <= (a.length >= 9 ? 2 : 1) && d < mejor) { mejor = d; x = b; termino = w; } }));
+      }
+      if (!x) return null;
+    }
     const gf = CLASES[x.clase].grupos, es = (g, c) => g.c === c || g.n === c;
     const orden = x.orden ? x.orden.map((c) => gf.find((g) => es(g, c)) || G(c, NOMBRE_GRUPO[c] || c)).concat(gf.filter((g) => !x.orden.some((c) => es(g, c)))) : gf;
     return { clase: x.clase, grupos: orden, termino };
@@ -521,7 +535,7 @@
   }
   const parecida = (w, v) => { if (w === v) return true; if (w.length >= 4 && v.length >= 4 && (v.startsWith(w) || w.startsWith(v))) return true;
     return w.length >= 5 && w[0] === v[0] && distancia(w, v) <= (w.length >= 8 ? 2 : 1); };
-  const palabras = (t) => quitarTildes(t).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter((w) => w.length > 2 && !PALABRAS_VACIAS.has(w)).map(raiz);
+  const palabras = (t) => fonetica(t).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter((w) => w.length > 2 && !PALABRAS_VACIAS.has(w)).map(raiz);
   function interpretarConsulta(texto, cat) {
     const t = quitarTildes(texto), ws = palabras(texto);
     const cultivos = (cat.cultivos || []).filter((c) => c.activo !== false && palabras(c.nombre).some((v) => ws.some((w) => parecida(w, v)))).map((c) => c.id);
