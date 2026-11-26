@@ -726,7 +726,7 @@
         ${faltaAguaM2 ? `<div class="aviso ambar">${ic.alerta}<div>Escribe cuántos <b>litros de agua usas</b> para fumigar tus ${L.fmt(m2v, 0)} m² para calcular la dosis.</div></div>` : ""}
         ${faltaPha ? `<div class="aviso ambar">${ic.alerta}<div>Escribe las <b>plantas por hectárea</b> para repartir la dosis por hectárea en cada ${cc.equipo === "tanque" ? "tanque" : "bomba"}. Mientras tanto se usa la dosis de etiqueta por tanque.</div></div>` : ""}
         ${r.avisos.map((a) => `<div class="aviso ambar">${ic.alerta}<div>${h(a)}</div></div>`).join("")}
-        ${res ? `<section class="resultado" aria-live="polite"><div class="etq">Resultado</div>${res}${compra}</section>` : ""}
+        ${res ? `<section class="resultado" aria-live="polite"><div class="etq">Resultado <span class="res-en">${h(cc.modo === "plantas" ? `en ${L.fmt(n(cc.pl) || 0, 0)} plantas` : enM2 ? `en ${L.fmt(m2v || 0, 0)} m²` : `en ${L.fmt(haCalc || 0, 4)} ${haCalc === 1 ? "hectárea" : "hectáreas"}`)}</span></div>${res}${compra}</section>` : ""}
         <div class="acciones"><button class="btn" id="reg">Registrar aplicación</button>${d.modo === "tanque" || d.modo === "suelo_ha" ? `<button class="btn sec" id="mez">Agregar a mezcla</button>` : `<a class="btn sec" href="#/fertilizacion/${h(ui.cultivo || "")}">Ver plan de fertilización</a>`}</div>
         ${avisoSeguridad()}
         ${res ? `<a class="btn wa" target="_blank" rel="noopener" href="${h(waLink(msgAsesor()))}">${ic.wa}Verificar dosis con mi asesor</a>` : ""}
