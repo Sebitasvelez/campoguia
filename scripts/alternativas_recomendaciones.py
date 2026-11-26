@@ -3,16 +3,17 @@ Elegidas por grupo químico funcional de la clase del problema y revisadas por e
 Enfermedades reordenadas el 26-nov-2026 con la presentación del asesor sobre fungicidas e ingredientes activos
 (espectro por clase de hongo) y ensayos publicados (Colletotrichum, Moniliophthora, Phytophthora).
 Por indicación del asesor, en enfermedades de una clase de hongo solo van productos específicos (no multisitio ni preventivos).
+Plagas reordenadas por eficiencia de grupo IRAC (26-nov-2026).
 Volaton AG (malatión, indicado por el asesor) va en hormigas arrieras; Neem X queda como «no sugerir».
 Uso: python3 alternativas_recomendaciones.py data/catalogo-inicial.json"""
 import json, sys
 
 ORDEN = {  # (cultivo, problema): [recomendada, alt1, alt2, alt3, alt4]
- ("pitahaya", "Avispas / murujas"): ["Engeo", "Ninja Zeon", "Tryclan", "Bala", "Solvigo"],
- ("pitahaya", "Hormigas"): ["Engeo", "Bala", "Curacron", "Flecha", "Solvigo"],
- ("pitahaya", "Hormigas arrieras"): ["Attakill", "Pyrigran", "Volaton AG", "Bala", "Cogollero"],
- ("pitahaya", "Chinches"): ["Engeo", "Voliam Flexi", "Solvigo", "Bala", "Curacron"],
- ("pitahaya", "Ácaros"): ["Solvigo", "Floramite", "Starmite", "Omite", "Theron"],
+ ("pitahaya", "Avispas / murujas"): ["Engeo", "Bala", "Ninja Zeon", "Tryclan", "Curacron"],
+ ("pitahaya", "Hormigas"): ["Engeo", "Bala", "Ninja Zeon", "Flecha", "Curacron"],
+ ("pitahaya", "Hormigas arrieras"): ["Attakill", "Pyrigran", "Volaton AG", "Bala", "Flecha"],
+ ("pitahaya", "Chinches"): ["Solvigo", "Engeo", "Voliam Flexi", "Kamsa 970 SG", "Curacron"],
+ ("pitahaya", "Ácaros"): ["Floramite", "Starmite", "Omite", "Theron", "Vertimec 1.8"],
  ("pitahaya", "Babosas y caracoles"): ["Matababosa", "Tryclan"],
  ("pitahaya", "Nematodos"): ["Solvigo", "Vertimec 1.8", "Agrimec 84", "Amigable"],
  ("pitahaya", "Antracnosis (Colletotrichum) y Alternaria"): ["Score", "Atajo", "Inspire Gold", "Overseas", "Quadris 50 WG"],
@@ -26,8 +27,8 @@ ORDEN = {  # (cultivo, problema): [recomendada, alt1, alt2, alt3, alt4]
  ("cacao", "Monilia (Moniliophthora roreri)"): ["Quadris 50 WG", "Atajo", "Score", "Overseas", "Priori Xtra"],
  ("cacao", "Escoba de bruja (Moniliophthora perniciosa)"): ["Atajo", "Quadris 50 WG", "Priori Xtra", "Score", "Overseas"],
  ("cacao", "Mazorca negra (Phytophthora)"): ["Uniform", "Ridomil Gold", "Acierto", "Fostyl", "Revus"],
- ("cacao", "Chinche del cacao (Monalonion)"): ["Engeo", "Voliam Flexi", "Solvigo", "Bala", "Cogollero"],
- ("cacao", "Hormigas y comejenes"): ["Engeo", "Bala", "Attakill", "Voliam Flexi", "Solvigo"],
+ ("cacao", "Chinche del cacao (Monalonion)"): ["Solvigo", "Engeo", "Voliam Flexi", "Kamsa 970 SG", "Curacron"],
+ ("cacao", "Hormigas y comejenes"): ["Engeo", "Bala", "Ninja Zeon", "Flecha", "Attakill"],
  ("cacao", "Malezas en general (no selectivo)"): ["Guadaña", "Tiro Fijo", "Winquat", "Fascinate 280 SL", "Gramoxone"],
 }
 NR_CACAO = "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
