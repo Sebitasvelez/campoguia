@@ -507,37 +507,53 @@
   // ------------------------------------------------------------ PORTAFOLIO (técnicos): todo el catálogo por categorías, con buscador
   // presentación a la que corresponde el precio mostrado (p. ej. "1 L", "Saco 50 kg")
   const presDe = (p) => (p.contenido ? L.nombrePresentacion({ cantidad: p.contenido, unidad: p.contenido_unidad }) : p.presentacion || "");
+  const CLS_NOM = { Oomiceto: "Oomicetos", Ascomiceto: "Ascomicetos", Basidiomiceto: "Basidiomicetos", Deuteromiceto: "Deuteromicetos", Bacteria: "Bacterias" };
+  // palabras con las que también se encuentra cada clase en el buscador
+  const CLS_TXT = { Oomiceto: "oomicetos oomiceto oomycetes pseudohongos", Ascomiceto: "ascomicetos ascomiceto ascomycetes", Basidiomiceto: "basidiomicetos basidiomiceto basidiomycetes basidio",
+    Deuteromiceto: "deuteromicetos deuteromiceto deuteromycetes deutero hongos imperfectos", Bacteria: "bacterias bacteria bactericida" };
   function vPortafolio() {
     const prods = (I.c.productos || []).filter((p) => p.activo !== false);
     const grupos = {};
     prods.forEach((p) => { const k = p.categoria || "Otros"; (grupos[k] = grupos[k] || []).push(p); });
     const cats = Object.keys(grupos).sort((a, b) => (a === "Otros") - (b === "Otros") || a.localeCompare(b));
-    const fila = (p) => `<details class="card port-item" data-cat="${h(p.categoria || "Otros")}" data-txt="${h(sinTilde([p.nombre, p.ingrediente_activo, p.concentracion, p.categoria, p.control, p.grupo, L.textoBusquedaGrupo(p.grupo)].filter(Boolean).join(" ")))}" style="padding:0">
+    // clases de hongo / bacteria que controla cada fungicida (según sus grupos FRAC), para buscar y filtrar
+    const clsDe = new Map(prods.map((p) => [p.id, L.clasesFuncionales(p)]));
+    const nCls = Object.fromEntries(L.CLASES_HONGO.map((k) => [k, prods.filter((p) => clsDe.get(p.id).includes(k)).length]));
+    const fila = (p) => `<details class="card port-item" data-cat="${h(p.categoria || "Otros")}" data-cls="${h(clsDe.get(p.id).join("|"))}" data-txt="${h(sinTilde([p.nombre, p.ingrediente_activo, p.concentracion, p.categoria, p.control, p.grupo, L.textoBusquedaGrupo(p.grupo), clsDe.get(p.id).map((k) => CLS_TXT[k]).join(" ")].filter(Boolean).join(" ")))}" style="padding:0">
         <summary style="padding:12px 14px;display:flex;justify-content:space-between;gap:10px;align-items:center;cursor:pointer;list-style:none">
-          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><b>${h(p.nombre)}</b>${p.concentracion || p.ingrediente_activo ? `<span class="mini">${h(p.concentracion || p.ingrediente_activo)}</span>` : ""}${L.nombresGrupo(p.grupo).length ? `<span class="mini" style="color:var(--verde)">${h(L.nombresGrupo(p.grupo).map((n) => n.replace(/\s*\(.*\)$/, "")).join(" + "))} · ${h(p.grupo)}</span>` : ""}</span>
+          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><b>${h(p.nombre)}</b>${p.concentracion || p.ingrediente_activo ? `<span class="mini">${h(p.concentracion || p.ingrediente_activo)}</span>` : ""}${L.nombresGrupo(p.grupo).length ? `<span class="mini" style="color:var(--verde)">${h(L.nombresGrupo(p.grupo).map((n) => n.replace(/\s*\(.*\)$/, "")).join(" + "))} · ${h(p.grupo)}</span>` : ""}${clsDe.get(p.id).length ? `<span class="mini"><b>Controla:</b> ${h(clsDe.get(p.id).map((k) => CLS_NOM[k]).join(" · "))}</span>` : ""}</span>
           ${p.pvp !== null && p.pvp !== undefined ? `<span style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex-shrink:0"><b style="white-space:nowrap;font-size:14px">${dinero(p.pvp)}</b>${presDe(p) ? `<span class="mini" style="white-space:nowrap">${h(presDe(p))}</span>` : ""}${(p.presentaciones || []).length > 1 ? `<span class="mini" style="white-space:nowrap">+${p.presentaciones.length - 1} ${p.presentaciones.length > 2 ? "presentaciones" : "presentación"}</span>` : ""}</span>` : ""}</summary>
         <div class="port-ficha" data-id="${p.id}" style="padding:0 6px 6px"></div></details>`;
     pintar(`${barra("Portafolio", prods.length + " productos", "#/")}
       <main class="cont">
         <label class="campo">Buscar producto<input id="pbuscar" type="search" placeholder="Producto, I.A., grupo químico, plaga…" autocomplete="off"></label>
-        <div class="chips" id="pchips" role="group" aria-label="Categoría"><button class="chip sel" data-pc="">Todos (${prods.length})</button>${cats.map((k) => `<button class="chip" data-pc="${h(k)}">${h(k)} (${grupos[k].length})</button>`).join("")}</div>
+        <div id="pfiltros" style="display:flex;flex-direction:column;gap:8px">
+        <div class="mini"><b>Por clase de hongo o bacteria</b> (productos funcionales según su grupo químico FRAC)</div>
+        <div class="chips" role="group" aria-label="Clase de hongo">${L.CLASES_HONGO.filter((k) => nCls[k]).map((k) => `<button class="chip" data-pk="${h(k)}">${h(CLS_NOM[k])} (${nCls[k]})</button>`).join("")}</div>
+        <div class="mini"><b>Por categoría</b></div>
+        <div class="chips" id="pchips" role="group" aria-label="Categoría"><button class="chip sel" data-pc="">Todos (${prods.length})</button>${cats.map((k) => `<button class="chip" data-pc="${h(k)}">${h(k)} (${grupos[k].length})</button>`).join("")}</div></div>
+        <div class="aviso azul" id="pclsinfo" hidden style="padding:8px 10px"></div>
         ${cats.map((k) => `<section class="port-grupo" data-cat="${h(k)}" style="display:flex;flex-direction:column;gap:8px"><h3 style="margin:8px 0 0;font-size:15px;color:var(--verde)">${h(k)}</h3>${grupos[k].sort((a, b) => a.nombre.localeCompare(b.nombre)).map(fila).join("")}</section>`).join("")}
         <div class="vacio" id="pvacio" hidden>No se encontró ningún producto con esa búsqueda.</div>
       </main>`, "portafolio");
-    let cat = "";
+    let cat = "", cls = "";
     const filtrar = () => {
       const t = sinTilde($("#pbuscar").value.trim()).split(/\s+/).filter(Boolean); let vis = 0;
       $$(".port-grupo").forEach((g) => {
         let n = 0;
-        $$(".port-item", g).forEach((it) => { const ok = (!cat || it.dataset.cat === cat) && t.every((w) => it.dataset.txt.includes(w)); it.hidden = !ok; if (ok) n++; });
+        $$(".port-item", g).forEach((it) => { const ok = (!cat || it.dataset.cat === cat) && (!cls || it.dataset.cls.split("|").includes(cls)) && t.every((w) => it.dataset.txt.includes(w)); it.hidden = !ok; if (ok) n++; });
         g.hidden = !n; vis += n;
       });
       $("#pvacio").hidden = vis > 0;
-      $("#pchips").hidden = t.length > 0; // mientras se busca, los resultados aparecen justo debajo del buscador
+      $("#pfiltros").hidden = t.length > 0; // mientras se busca, los resultados aparecen justo debajo del buscador
+      const inf = $("#pclsinfo"); inf.hidden = !cls || t.length > 0;
+      if (cls) inf.innerHTML = `${ic.alerta}<div><b>${h(CLS_NOM[cls])}:</b> ${h(L.CLASES[cls].control)}</div>`;
     };
     const marcarCat = (k) => { cat = k; $$("[data-pc]").forEach((x) => x.classList.toggle("sel", x.dataset.pc === k)); };
+    const marcarCls = (k) => { cls = k; $$("[data-pk]").forEach((x) => x.classList.toggle("sel", x.dataset.pk === k)); };
     // al escribir, se busca en todo el portafolio sin importar la categoría marcada; al tocar una categoría se limpia la búsqueda
-    $("#pbuscar").addEventListener("input", (e) => { if (e.target.value.trim() && cat) marcarCat(""); filtrar(); });
+    $("#pbuscar").addEventListener("input", (e) => { if (e.target.value.trim()) { if (cat) marcarCat(""); if (cls) marcarCls(""); } filtrar(); });
+    $$("[data-pk]").forEach((b) => b.addEventListener("click", () => { $("#pbuscar").value = ""; marcarCls(cls === b.dataset.pk ? "" : b.dataset.pk); filtrar(); }));
     $$("[data-pc]").forEach((b) => b.addEventListener("click", () => { $("#pbuscar").value = ""; marcarCat(b.dataset.pc); filtrar(); }));
     // la ficha completa se arma al abrir el producto
     $$(".port-item").forEach((d) => d.addEventListener("toggle", () => {

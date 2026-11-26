@@ -1,5 +1,7 @@
 """Recomendaciones por problema: opción recomendada + 4 alternativas ordenadas de la más eficiente (1) a la menos (4).
 Elegidas por grupo químico funcional de la clase del problema y revisadas por el asesor (nov 2026).
+Enfermedades reordenadas el 26-nov-2026 con la presentación del asesor sobre fungicidas e ingredientes activos
+(espectro por clase de hongo) y ensayos publicados (Colletotrichum, Moniliophthora, Phytophthora).
 Volaton AG (malatión, indicado por el asesor) va en hormigas arrieras; Neem X queda como «no sugerir».
 Uso: python3 alternativas_recomendaciones.py data/catalogo-inicial.json"""
 import json, sys
@@ -12,17 +14,17 @@ ORDEN = {  # (cultivo, problema): [recomendada, alt1, alt2, alt3, alt4]
  ("pitahaya", "Ácaros"): ["Solvigo", "Floramite", "Starmite", "Omite", "Theron"],
  ("pitahaya", "Babosas y caracoles"): ["Matababosa", "Tryclan"],
  ("pitahaya", "Nematodos"): ["Solvigo", "Vertimec 1.8", "Agrimec 84", "Amigable"],
- ("pitahaya", "Antracnosis (Colletotrichum) y Alternaria"): ["Score", "Atajo", "Uniform", "Tilt", "Daconil"],
- ("pitahaya", "Fusarium"): ["Overseas", "Mertect", "Carbovax", "Aprecio", "Solidaridad"],
- ("pitahaya", "Prevención de hongos (amplio espectro)"): ["Daconil", "Acierto", "Aprecio", "Codicobre", "Caldo Bordeles"],
- ("pitahaya", "Bacteriosis / pudrición blanda"): ["Kasumin", "Solidaridad", "Phyton", "Kocide", "Caldo Bordeles"],
- ("pitahaya", "Hongos del suelo (desinfección)"): ["Terraclor", "Mertect", "Aprecio", "Acierto", "Solidaridad"],
+ ("pitahaya", "Antracnosis (Colletotrichum) y Alternaria"): ["Score", "Atajo", "Inspire Gold", "Overseas", "Daconil"],
+ ("pitahaya", "Fusarium"): ["Mertect", "Inspire Gold", "Overseas", "Atajo", "Aprecio"],
+ ("pitahaya", "Prevención de hongos (amplio espectro)"): ["Daconil", "Acierto", "Aprecio", "Kocide", "Codicobre"],
+ ("pitahaya", "Bacteriosis / pudrición blanda"): ["Kasumin", "Solidaridad", "Kocide", "Phyton", "Caldo Bordeles"],
+ ("pitahaya", "Hongos del suelo (desinfección)"): ["Uniform", "Terraclor", "Mertect", "Aprecio", "Terrazole"],
  ("pitahaya", "Malezas en general (no selectivo)"): ["Guadaña", "Tiro Fijo", "Winquat", "Fascinate 280 SL", "Gramoxone"],
  ("pitahaya", "Malezas de hoja ancha"): ["Ecuamina", "Dacocida EQ", "Galigan 240 EC", "Metrinex 50 EQ"],
  ("pitahaya", "Gramíneas (pastos)"): ["Nicorony", "Dual Gold 960 EC"],
- ("cacao", "Monilia (Moniliophthora roreri)"): ["Daconil", "Atajo", "Overseas", "Kocide", "Acierto"],
- ("cacao", "Escoba de bruja (Moniliophthora perniciosa)"): ["Kocide", "Atajo", "Overseas", "Daconil", "Acierto"],
- ("cacao", "Mazorca negra (Phytophthora)"): ["Uniform", "Acierto", "Kocide", "Atajo", "Daconil"],
+ ("cacao", "Monilia (Moniliophthora roreri)"): ["Quadris 50 WG", "Kocide", "Atajo", "Daconil", "Score"],
+ ("cacao", "Escoba de bruja (Moniliophthora perniciosa)"): ["Kocide", "Atajo", "Quadris 50 WG", "Daconil", "Priori Xtra"],
+ ("cacao", "Mazorca negra (Phytophthora)"): ["Uniform", "Acierto", "Kocide", "Ridomil Gold", "Fostyl"],
  ("cacao", "Chinche del cacao (Monalonion)"): ["Engeo", "Voliam Flexi", "Solvigo", "Bala", "Cogollero"],
  ("cacao", "Hormigas y comejenes"): ["Engeo", "Bala", "Attakill", "Voliam Flexi", "Solvigo"],
  ("cacao", "Malezas en general (no selectivo)"): ["Guadaña", "Tiro Fijo", "Winquat", "Fascinate 280 SL", "Gramoxone"],

@@ -441,28 +441,29 @@
       grupos: [G(null, "Metaldehído", /metaldeh/), G(null, "Fosfato férrico", /fosfato ferric|ferric phosph/), G(null, "Carbamatos molusquicidas (metiocarb)", /metiocarb|methiocarb/), G("IRAC 14", "Nereistoxinas (tiociclam, efecto de contacto)")] },
 
     "Oomiceto": { tipo: "enfermedad", resumen: "Pseudohongo de agua: pared de celulosa, sin ergosterol; se dispersa con zoosporas que nadan en el agua.",
-      control: "Triazoles (FRAC 3), bencimidazoles (FRAC 1) y la mayoría de carboxamidas SDHI (FRAC 7) no lo controlan, porque actúan sobre el ergosterol o la tubulina de hongos verdaderos.",
+      control: "Metalaxil (fenilamidas) tiene excelente actividad; fosfonatos (fosetil-Al), carbamatos (propamocarb) y cimoxanil son específicos para oomicetos; las estrobilurinas tienen buena actividad. Los inhibidores del ergosterol (triazoles, FRAC 3), los bencimidazoles (FRAC 1) y la mayoría de carboxamidas (FRAC 7) no lo controlan, porque el oomiceto no tiene ergosterol.",
       grupos: [G("FRAC 4", "Fenilamidas (metalaxil)"), G("FRAC 40", "Amidas CAA (dimetomorf, mandipropamid)"), G("FRAC 49", "Oxatiapiprolina"),
-        G("FRAC 27", "Cianoacetamida-oximas (cimoxanil)"), G("FRAC 43", "Benzamidas (fluopicolide)"), G("FRAC 28", "Carbamatos (propamocarb)"), G("FRAC 21", "QiI (ciazofamida)"),
-        G("FRAC 45", "QoSI (ametoctradina)"), G("FRAC P07", "Fosfonatos (fosetil-Al)"), G("FRAC 11", "Estrobilurinas (azoxistrobina, piraclostrobina)"), G("FRAC 29", "Fluazinam"),
+        G("FRAC 27", "Cianoacetamida-oximas (cimoxanil)"), G("FRAC P07", "Fosfonatos (fosetil-Al), sistemia hacia la raíz"), G("FRAC 28", "Carbamatos (propamocarb)"),
+        G("FRAC 43", "Benzamidas (fluopicolide)"), G("FRAC 21", "QiI (ciazofamida)"),
+        G("FRAC 45", "QoSI (ametoctradina)"), G("FRAC 11", "Estrobilurinas (azoxistrobina, piraclostrobina)"), G("FRAC 29", "Fluazinam"),
         G(null, "Etridiazol (FRAC 14, al suelo)", /etridiaz/), G("FRAC M03", "Ditiocarbamatos (mancozeb)"), G("FRAC M01", "Cobres"), G("FRAC M05", "Clorotalonil")] },
     "Ascomiceto": { tipo: "enfermedad", resumen: "Hongo verdadero con esporas sexuales en ascas; pared de quitina con ergosterol.",
-      control: "Responde a los grupos que actúan sobre hongos verdaderos; rota modos de acción para evitar resistencia.",
-      grupos: [G("FRAC 11", "Estrobilurinas"), G("FRAC 3", "Triazoles (difenoconazol, propiconazol, tebuconazol)"), G("FRAC 7", "Carboxamidas SDHI (boscalid, fluxapiroxad)"),
+      control: "Los inhibidores del ergosterol (triazoles, FRAC 3) tienen excelente actividad y acción curativa hasta unos 4 días después de la infección; las estrobilurinas y los bencimidazoles también son eficientes. Los multisitio (mancozeb, clorotalonil, captan, cobre) protegen antes de la infección. Rota modos de acción para evitar resistencia.",
+      grupos: [G("FRAC 3", "Triazoles (difenoconazol, propiconazol, tebuconazol)"), G("FRAC 11", "Estrobilurinas"), G("FRAC 7", "Carboxamidas SDHI (boscalid, fluxapiroxad)"),
         G("FRAC 1", "Bencimidazoles (tiabendazol, carbendazim)"), G("FRAC 9", "Anilinopirimidinas (ciprodinil)"), G("FRAC 12", "Fenilpirroles (fludioxonil)"),
         G("FRAC 5", "Aminas (spiroxamina, fenpropidin)"), G("FRAC 2", "Dicarboximidas (iprodiona)"), G("FRAC 17", "Hidroxianilidas (fenhexamida)"), G("FRAC 29", "Fluazinam"),
         G("FRAC M05", "Clorotalonil"), G("FRAC M03", "Ditiocarbamatos (mancozeb)"), G("FRAC M04", "Ftalimidas (captan)"), G("FRAC M01", "Cobres"), G("FRAC M02", "Azufre (oídios)"),
         G("FRAC BM02", "Biológicos (Bacillus subtilis)")] },
     "Deuteromiceto": { tipo: "enfermedad", resumen: "Grupo que se mantiene en la clasificación antigua para Botrytis, Fusarium y Rhizoctonia: hongos especiales que se controlan solo con determinados ingredientes activos.",
-      control: "Botrytis: fenhexamida, ciprodinil, fludioxonil, iprodiona, boscalid. Fusarium: tiabendazol o carbendazim, triazoles y fludioxonil. Rhizoctonia: PCNB, carboxin o flutolanil y azoxistrobina. Rota grupos: Botrytis genera resistencia rápido.",
+      control: "Botrytis: fenhexamida, ciprodinil, fludioxonil, iprodiona, boscalid. Fusarium: tiabendazol o carbendazim, triazoles y fludioxonil. Rhizoctonia: PCNB, carboxin o flutolanil y azoxistrobina. Los bencimidazoles son eficientes para deuteromicetos y ascomicetos, pero generan resistencia: rota grupos, sobre todo con Botrytis.",
       grupos: [G("FRAC 1", "Bencimidazoles (tiabendazol, carbendazim)"), G("FRAC 7", "Carboxamidas SDHI (boscalid, fluopyram, carboxin, flutolanil)"), G("FRAC 12", "Fenilpirroles (fludioxonil)"),
         G("FRAC 9", "Anilinopirimidinas (ciprodinil, pirimetanil)"), G("FRAC 3", "Triazoles (tebuconazol, procloraz, difenoconazol)"), G("FRAC 17", "Hidroxianilidas (fenhexamida)"),
-        G("FRAC 2", "Dicarboximidas (iprodiona)"), G("FRAC 14", "Hidrocarburos aromáticos (PCNB, al suelo)"), G("FRAC 11", "Estrobilurinas (azoxistrobina)"), G("FRAC 29", "Fluazinam"),
-        G("FRAC M04", "Ftalimidas (captan)"), G("FRAC 24", "Kasugamicina (con cobre)"), G("FRAC M01", "Cobres"), G("FRAC BM02", "Biológicos (Bacillus subtilis)")] },
+        G("FRAC 2", "Dicarboximidas (iprodiona)"), G(null, "Hidrocarburos aromáticos (PCNB / quintoceno, al suelo)", /pentacloronitro|quintoceno|pcnb/), G("FRAC 11", "Estrobilurinas (azoxistrobina)"), G("FRAC 29", "Fluazinam"),
+        G("FRAC M04", "Ftalimidas (captan)"), G("FRAC M05", "Clorotalonil (protectante)"), G("FRAC 24", "Kasugamicina (con cobre)"), G("FRAC M01", "Cobres"), G("FRAC BM02", "Biológicos (Bacillus subtilis)")] },
     "Basidiomiceto": { tipo: "enfermedad", resumen: "Hongo verdadero con esporas sexuales en basidios (como royas, Moniliophthora y Sclerotium).",
-      control: "Las carboxamidas (FRAC 7), triazoles y estrobilurinas son las más activas; los multisitio protegen antes de la infección.",
+      control: "Estrobilurinas e inhibidores del ergosterol (triazoles) son los sistémicos más activos; las carboxamidas (carboxin, oxicarboxin) son selectivas para basidiomicetos como royas y carbones. Los cobres y el clorotalonil protegen la mazorca o el tejido antes de la infección. Los bencimidazoles no son eficientes en esta clase.",
       grupos: [G("FRAC 11", "Estrobilurinas (azoxistrobina, piraclostrobina)"), G("FRAC 3", "Triazoles (tebuconazol, propiconazol, difenoconazol)"), G("FRAC 7", "Carboxamidas SDHI (carboxin, flutolanil)"),
-        G("FRAC 14", "Hidrocarburos aromáticos (PCNB, al suelo)"), G("FRAC 1", "Bencimidazoles"), G("FRAC M01", "Cobres"), G("FRAC M05", "Clorotalonil"), G("FRAC M03", "Ditiocarbamatos (mancozeb)")] },
+        G("FRAC M01", "Cobres"), G(null, "Hidrocarburos aromáticos (PCNB / quintoceno, al suelo)", /pentacloronitro|quintoceno|pcnb/), G("FRAC M05", "Clorotalonil"), G("FRAC M03", "Ditiocarbamatos (mancozeb)")] },
     "Bacteria": { tipo: "enfermedad", resumen: "No es un hongo: es una bacteria que entra por heridas y aberturas y se multiplica con humedad y calor.",
       control: "Los fungicidas no la controlan. Funcionan los cobres y los antibióticos agrícolas, junto con eliminar el tejido enfermo y desinfectar herramientas.",
       grupos: [G("FRAC 24", "Kasugamicina"), G("FRAC 25", "Estreptomicina"), G("FRAC 41", "Oxitetraciclina"), G("FRAC M01", "Cobres"), G("FRAC BM02", "Biológicos (Bacillus subtilis)")] },
@@ -481,6 +482,9 @@
   };
   const OPC_CLASE = { plaga: Object.keys(CLASES).filter((k) => CLASES[k].tipo === "plaga"), enfermedad: Object.keys(CLASES).filter((k) => CLASES[k].tipo === "enfermedad"), maleza: Object.keys(CLASES).filter((k) => CLASES[k].tipo === "maleza") };
   // "Oomiceto + Deuteromiceto" → varias clases. Taxonomía actual; Botrytis, Fusarium y Rhizoctonia se mantienen como Deuteromicetos
+  // clases de enfermedad (hongo o bacteria) para las que el producto tiene al menos un grupo funcional
+  const CLASES_HONGO = ["Oomiceto", "Ascomiceto", "Basidiomiceto", "Deuteromiceto", "Bacteria"];
+  const clasesFuncionales = (producto) => (/fungic|bacteric|desinfec/i.test((producto && producto.categoria) || "") ? CLASES_HONGO.filter((k) => coincideGrupos(producto, CLASES[k].grupos).length) : []);
   const clasesDe = (txt) => String(txt || "").split(/\s*\+\s*/).map((s) => s.trim()).filter((s) => CLASES[s]);
   function gruposFuncionales(txt) {
     const out = [], vistos = new Set();
@@ -591,6 +595,6 @@
   }
   const api = { fraccionSacos, textoSacos, ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, nombresGrupo, textoBusquedaGrupo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
-    CLASES, OPC_CLASE, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
+    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);
