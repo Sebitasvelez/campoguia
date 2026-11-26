@@ -103,7 +103,7 @@
     const ex = totalG / saco.cantidad;
     const sacos = ex <= 1 + 1e-9 ? Math.max(0.25, Math.ceil(ex * 4 - 1e-9) / 4) : Math.ceil(ex * 2 - 1e-9) / 2;
     const fr = textoSacos(sacos);
-    const texto = sacos < 1 ? `${fr} de saco de ${fmt(kgSaco)} kg (${fmt(sacos * kgSaco, 1)} kg)` : `${fr} ${sacos === 1 ? "saco" : "sacos"} de ${fmt(kgSaco)} kg${sacos % 1 ? ` (${fmt(sacos * kgSaco, 1)} kg)` : ""}`;
+    const texto = sacos < 1 ? `${fr} de saco de ${fmt(kgSaco)} kg (${fmt(sacos * kgSaco, 1)} kg)` : `${fr} ${sacos === 1 ? "saco" : "sacos"} de ${fmt(kgSaco)} kg`;
     const precio = saco.precio !== null ? saco.precio : num(producto.pvp);
     return { sacos, kgSaco, fraccion: fr, texto, costo: precio !== null ? r2(sacos * precio) : null };
   }
