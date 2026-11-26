@@ -586,6 +586,38 @@
   const nombreSeguro = (t) => String(t || "reporte").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w-]+/g, "_").slice(0, 40);
 
   // ------------------------------------------------------------ CALCULADORA
+  // ------------------------------------------------------------ PORTAFOLIO: buscar o elegir por categoría antes de calcular
+  const textoProd = (p) => [p.nombre, p.ingrediente_activo, p.concentracion, p.categoria, p.control].filter(Boolean).join(" ").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const itemProd = (p) => { const d = L.dosisDe(p), sin = d.min === null && d.max === null;
+    return `<a class="item" href="#/calcular?p=${p.id}"><div class="tx" style="flex:1"><b>${h(p.nombre)}</b>${p.concentracion || p.ingrediente_activo ? `<span><b>I.A.:</b> ${h(p.concentracion || p.ingrediente_activo)}</span>` : ""}<span>${h(p.categoria || "")}${p.grupo && /^(IRAC|FRAC|HRAC)/.test(p.grupo) ? " · " + h(p.grupo) : ""}${sin ? " · Dosis no cargada" : ""}</span></div>${ic.flecha}</a>`; };
+  function vPortafolio() {
+    const prods = (I.c.productos || []).filter((p) => p.activo !== false && !SIN_DOSIS.includes(p.categoria));
+    const cats = {}; prods.forEach((p) => { const k = p.categoria || "Sin categoría"; (cats[k] = cats[k] || []).push(p); });
+    const orden = Object.keys(cats).sort((a, b) => a.localeCompare(b));
+    if (ui.calcCat && !cats[ui.calcCat]) ui.calcCat = null;
+    const ult = ui.calc && ui.calc.p ? P(ui.calc.p) : null;
+    const lista = (arr) => arr.sort((a, b) => a.nombre.localeCompare(b.nombre)).map(itemProd).join("");
+    pintar(`${barra("Calcular dosis", "Elige un producto del portafolio", "#/")}
+      <main class="cont">
+        <label class="campo"><span class="sr">Buscar en el portafolio</span><input id="buscarProd" type="search" placeholder="Buscar en el portafolio…" autocomplete="off"></label>
+        <div id="resBusca" class="lista" hidden></div>
+        <div id="porCat">
+          ${ult ? `<a class="item" href="#/calcular?p=${ult.id}" style="margin-bottom:14px"><div class="tx" style="flex:1"><span>Seguir con el último cálculo</span><b>${h(ult.nombre)}</b></div>${ic.flecha}</a>` : ""}
+          <div class="etq">Categorías del portafolio</div>
+          <div class="cats" role="group" aria-label="Categorías">${orden.map((k) => `<button type="button" class="cat${ui.calcCat === k ? " sel" : ""}" data-cat="${h(k)}" aria-pressed="${ui.calcCat === k}"><b>${h(k)}</b><span>${cats[k].length} producto${cats[k].length === 1 ? "" : "s"}</span></button>`).join("")}</div>
+          ${ui.calcCat ? `<div class="etq" style="margin-top:14px">${h(ui.calcCat)}</div><div class="lista" id="listaCat">${lista(cats[ui.calcCat].slice())}</div>` : `<p class="mini" style="margin:12px 0 0">Toca una categoría para ver sus productos, o busca por nombre o ingrediente activo.</p>`}
+        </div>
+      </main>`, "calcular");
+    $$("[data-cat]").forEach((b) => b.addEventListener("click", () => { ui.calcCat = ui.calcCat === b.dataset.cat ? null : b.dataset.cat; guardarUI(); vPortafolio(); if (ui.calcCat) { const l = $("#listaCat"); if (l) l.previousElementSibling.scrollIntoView({ behavior: "smooth", block: "start" }); } }));
+    $("#buscarProd").addEventListener("input", (e) => {
+      const q = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+      const res = $("#resBusca"), cat = $("#porCat");
+      if (!q) { res.hidden = true; cat.hidden = false; return; }
+      const hall = prods.filter((p) => q.split(/\s+/).every((t) => textoProd(p).includes(t)));
+      res.innerHTML = hall.length ? lista(hall) : `<div class="vacio">No hay productos con «${h(e.target.value)}».</div>`;
+      res.hidden = false; cat.hidden = true;
+    });
+  }
   function vCalcular(q) {
     const cc = ui.calc;
     if (q.p) { cc.p = q.p; cc.d = q.d || null; cc.dha = null; }
@@ -641,7 +673,7 @@
         ${r.sitios ? `<div><div class="n">${L.fmt(r.sitios, 0)}</div><small>Sitios / plantas</small></div>` : ""}</div>`;
     }
     const compra = r.envases ? `<div class="linea">Necesitas comprar: <b>${h(r.compraTexto || r.envases + " × " + (r.presentacion || "envase"))}</b>${r.costoEnvases !== undefined ? ` · ${dinero(r.costoEnvases)}` : ""}${costoTanque !== null ? `<br><span style="font-size:12.5px">Costo por tanque de ${TANQUE()} L de aplicación: ${dinero(costoTanque)}</span>` + (costoAplic !== null ? `<br><span style="font-size:15px">Costo total de aplicación: <b>${dinero(costoAplic)}</b></span>` : "") : r.costoUsado !== undefined ? `<br><span style="font-size:12.5px">Costo de lo que aplicas: ${dinero(r.costoUsado)}</span>` : ""}</div>` : "";
-    pintar(`${barra("Calcular para mi finca", p.nombre, "#/")}
+    pintar(`${barra("Calcular para mi finca", p.nombre, "#/calcular")}
       <main class="cont">
         <label class="campo">Producto<select id="prod">${opcionesProductos(p.id)}</select></label>
         ${p.concentracion ? `<div class="mini" style="margin-top:-6px">Concentración: <b>${h(p.concentracion)}</b></div>` : ""}
@@ -667,7 +699,7 @@
         ${res ? `<a class="btn wa" target="_blank" rel="noopener" href="${h(waLink(msgAsesor()))}">${ic.wa}Verificar dosis con mi asesor</a>` : ""}
       </main>`, "calcular");
     const re = () => vCalcular({});
-    $("#prod").addEventListener("change", (e) => { cc.p = e.target.value; cc.d = null; cc.dha = null; cc.usarMax = false; re(); });
+    $("#prod").addEventListener("change", (e) => { cc.p = e.target.value; cc.d = null; cc.dha = null; cc.usarMax = false; try { history.replaceState(null, "", "#/calcular?p=" + cc.p); } catch (er) {} re(); });
     $$("[data-m]").forEach((b) => b.addEventListener("click", () => { cc.modo = b.dataset.m; re(); }));
     $$("[data-eq]").forEach((b) => b.addEventListener("click", () => { cc.equipo = b.dataset.eq; re(); }));
     $$("[data-dm]").forEach((b) => b.addEventListener("click", () => { cc.usarMax = b.dataset.dm === "max"; cc.dha = null; re(); }));
@@ -1177,7 +1209,7 @@
       case "problema": return vProblema(seg[1]);
       case "plan": return vPlan(seg[1]);
       case "fertilizacion": return vFert(seg[1]);
-      case "calcular": return vCalcular(q);
+      case "calcular": return q.p ? vCalcular(q) : vPortafolio();
       case "mezcla": return vMezcla();
       case "lotes": return vLotes(q);
       case "lote": return vLote(seg[1], q);
