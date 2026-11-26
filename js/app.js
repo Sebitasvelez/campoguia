@@ -156,7 +156,7 @@
     return { grande: L.rango(d.min, d.max, d.unidad, volL() / TANQUE()), sub: "por " + volTxt() };
   }
   const segVol = () => `<div class="seg" role="group" aria-label="Volumen"><button data-vol="bomba" class="${ui.vol === "bomba" ? "sel" : ""}">Bomba ${BOMBA()} L</button><button data-vol="tanque" class="${ui.vol === "tanque" ? "sel" : ""}">Tanque ${TANQUE()} L</button></div>`;
-  const conectarVol = (re) => $$("[data-vol]").forEach((b) => b.addEventListener("click", () => { const y = window.scrollY; ui.vol = b.dataset.vol; guardarUI(); re(); window.scrollTo(0, y); })); // al cambiar bomba/tanque la pantalla no se mueve
+  const conectarVol = (re) => $$("[data-vol]").forEach((b) => b.addEventListener("click", () => { const y = window.scrollY, c0 = $("#carr"), x = c0 ? c0.scrollLeft : 0; ui.vol = b.dataset.vol; guardarUI(); re(); window.scrollTo(0, y); const c1 = $("#carr"); if (c1) c1.scrollTo({ left: x, behavior: "instant" }); })); // al cambiar bomba/tanque la pantalla y la alternativa que se está viendo no se mueven
   const avisoSeguridad = () => `<div class="aviso ambar">${ic.alerta}<div>Usa guantes, mascarilla, gafas y ropa de manga larga. No fumigues con sol, viento fuerte ni antes de lluvia. ${h(aj("aviso_legal", "Recomendación técnica referencial. Lea siempre la etiqueta y verifique con su asesor."))}</div></div>`;
   const SIN_DOSIS = ["Semilla", "Otros"];   // productos de catálogo que no se calculan ni se mezclan
   // en la mezcla: productos de tanque (dosis por tanque) y fertilizantes al suelo (dosis por hectárea)
