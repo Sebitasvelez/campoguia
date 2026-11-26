@@ -334,7 +334,7 @@
         <span class="mini">Confirma la dosis para tu cultivo en la etiqueta o con tu asesor.</span>
         ${documentado
           ? `<div class="mini" style="margin-top:4px"><b>En nuestros manuales</b></div>${manual(r.problemas.slice(0, 4))}${r.relacionados.length ? `<div class="mini"><b>También relacionado</b></div>${manual(r.relacionados.slice(0, 3))}` : ""}`
-          : `<div class="aviso ambar" style="padding:8px 10px">${ic.alerta}<div>No tenemos información específica de «${h(ter)}» en los manuales${r.relacionados.length ? ", pero tenemos estos documentos similares:" : "."}</div></div>${manual(r.relacionados.slice(0, 3))}${botones()}`}`;
+          : `<div class="aviso ambar" style="padding:8px 10px">${ic.alerta}<div>No tenemos información específica de «${h(ter)}» en los manuales${r.relacionados.length ? ", pero tenemos estos similares:" : "."}</div></div>${manual(r.relacionados.slice(0, 3))}${botones()}`}`;
       return;
     }
     if (r.relacionados.length) html += `<div class="mini" style="margin-top:4px"><b>${r.problemas.length ? "También relacionado" : r.clase ? "Del mismo tipo (" + h(nomClase) + ") en nuestros manuales" : "Relacionado en nuestros manuales"}</b></div>` +
