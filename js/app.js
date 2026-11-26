@@ -386,12 +386,35 @@
     const fs = fotosDe(pr); if (!fs.length) return "";
     return `<div class="galeria" role="list" aria-label="Fotografías de ${h(pr.nombre)}">${fs.map((x, i) => `<figure role="listitem"><button type="button" class="foto-btn" data-foto="${i}" aria-label="Ampliar foto ${i + 1}"><img src="${h(x.url)}" alt="${h(pr.nombre)}${x.credito ? " · " + h(x.credito) : ""}" loading="lazy"></button>${x.credito || fs.length > 1 ? `<figcaption>${fs.length > 1 ? `<b>${i + 1}/${fs.length}</b> ` : ""}${h(x.credito || "")}</figcaption>` : ""}</figure>`).join("")}</div>`;
   }
+  // zoom solo dentro del visor de fotos: pellizcar con dos dedos, arrastrar cuando está ampliada y doble toque
+  function zoomFoto(img) {
+    if (!img) return;
+    let esc = 1, x = 0, y = 0, ultimoToque = 0;
+    const pts = new Map(); let ini = null;
+    const aplicar = () => { esc = Math.min(4, Math.max(1, esc)); if (esc === 1) { x = 0; y = 0; } img.style.transform = `translate(${x}px, ${y}px) scale(${esc})`; };
+    const dist = () => { const [a, b] = [...pts.values()]; return Math.hypot(a.x - b.x, a.y - b.y); };
+    img.addEventListener("pointerdown", (e) => {
+      img.setPointerCapture(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      ini = pts.size === 2 ? { d: dist(), esc } : { px: e.clientX, py: e.clientY, x, y };
+      if (pts.size === 1) { const t = Date.now(); if (t - ultimoToque < 300) { esc = esc > 1 ? 1 : 2.5; aplicar(); } ultimoToque = t; }
+    });
+    img.addEventListener("pointermove", (e) => {
+      if (!pts.has(e.pointerId)) return; pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pts.size === 2 && ini && ini.d) { esc = ini.esc * dist() / ini.d; aplicar(); }
+      else if (pts.size === 1 && esc > 1 && ini && ini.px !== undefined) { x = ini.x + e.clientX - ini.px; y = ini.y + e.clientY - ini.py; aplicar(); }
+    });
+    const soltar = (e) => { pts.delete(e.pointerId); const p = [...pts.values()][0]; ini = p ? { px: p.x, py: p.y, x, y } : null; };
+    img.addEventListener("pointerup", soltar); img.addEventListener("pointercancel", soltar);
+    img.addEventListener("click", (e) => e.stopPropagation()); // tocar la foto no cierra el visor
+  }
+  // iPhone: bloquea el zoom nativo por pellizco en toda la app (en el visor de fotos el zoom lo hace zoomFoto)
+  ["gesturestart", "gesturechange", "gestureend"].forEach((ev) => document.addEventListener(ev, (e) => e.preventDefault(), { passive: false }));
   function conectarGaleria(pr) {
     const fs = fotosDe(pr);
     $$("[data-foto]").forEach((b) => b.addEventListener("click", () => {
       let i = Number(b.dataset.foto);
       const v = document.createElement("div"); v.className = "visor"; v.setAttribute("role", "dialog"); v.setAttribute("aria-modal", "true"); v.setAttribute("aria-label", "Foto ampliada");
-      const pintarV = () => { v.innerHTML = `<button type="button" class="visor-cerrar" aria-label="Cerrar">✕</button><img src="${h(fs[i].url)}" alt="${h(pr.nombre)}"><div class="visor-pie">${fs.length > 1 ? `<button type="button" data-v="-1" aria-label="Foto anterior">‹</button>` : ""}<span>${h(pr.nombre)}${fs[i].credito ? " · " + h(fs[i].credito) : ""}${fs.length > 1 ? ` (${i + 1}/${fs.length})` : ""}</span>${fs.length > 1 ? `<button type="button" data-v="1" aria-label="Foto siguiente">›</button>` : ""}</div>`; };
+      const pintarV = () => { v.innerHTML = `<button type="button" class="visor-cerrar" aria-label="Cerrar">✕</button><img src="${h(fs[i].url)}" alt="${h(pr.nombre)}" draggable="false"><div class="visor-pie">${fs.length > 1 ? `<button type="button" data-v="-1" aria-label="Foto anterior">‹</button>` : ""}<span>${h(pr.nombre)}${fs[i].credito ? " · " + h(fs[i].credito) : ""}${fs.length > 1 ? ` (${i + 1}/${fs.length})` : ""}</span>${fs.length > 1 ? `<button type="button" data-v="1" aria-label="Foto siguiente">›</button>` : ""}</div><div class="visor-zoom">Pellizca o toca dos veces la foto para acercar</div>`; zoomFoto(v.querySelector("img")); };
       const cerrar = () => { v.remove(); document.removeEventListener("keydown", tecla); };
       const mover = (d) => { i = (i + d + fs.length) % fs.length; pintarV(); };
       const tecla = (e) => { if (e.key === "Escape") cerrar(); else if (e.key === "ArrowRight") mover(1); else if (e.key === "ArrowLeft") mover(-1); };

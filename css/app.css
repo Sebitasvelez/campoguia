@@ -48,7 +48,7 @@ h1,h2,h3{margin:0;font-family:"Space Grotesk",Inter,system-ui,sans-serif;letter-
 .acciones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .campo{display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:600}
 .campo small{font-weight:400;color:var(--suave);font-size:12px}
-.campo input,.campo select,.campo textarea{border:1px solid var(--borde-2);border-radius:12px;padding:0 12px;min-height:48px;background:#fff;font-weight:400;font-size:15px;width:100%}
+.campo input,.campo select,.campo textarea{border:1px solid var(--borde-2);border-radius:12px;padding:0 12px;min-height:48px;background:#fff;font-weight:400;font-size:16px;width:100%}
 .campo textarea{padding:10px 12px;min-height:80px;resize:vertical}
 .campo input:focus,.campo select:focus,.campo textarea:focus{outline:2px solid var(--verde);outline-offset:0;border-color:var(--verde)}
 .unido{display:flex;align-items:center;background:#fff;border:1px solid var(--borde-2);border-radius:12px;padding-right:12px}
@@ -166,3 +166,10 @@ details.card summary{cursor:pointer;font-weight:600;font-size:14px;min-height:28
 .resultado .n-kg{font-size:16px;font-weight:600;opacity:.9}
 #pbuscar::placeholder{font-size:13px}
 .port-rank{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--verde);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+
+/* sin zoom en la interfaz (solo en el visor de fotos); 16px en campos evita el zoom automático del iPhone */
+html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+input,select,textarea{font-size:16px}
+.visor{touch-action:none;overflow:hidden}
+.visor img{touch-action:none;transform-origin:center center;will-change:transform;user-select:none;-webkit-user-drag:none}
+.visor-zoom{color:rgba(255,255,255,.7);font-size:12px;margin-top:6px}
