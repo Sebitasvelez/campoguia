@@ -606,7 +606,16 @@
           total: r.total !== undefined ? r.total : r.kgTotal !== undefined ? r.kgTotal * 1000 : null }] };
       location.hash = "#/registrar";
     });
-    const mz = $("#mez"); if (mz) mz.addEventListener("click", () => agregarAMezcla(p.id, cc.usarMax ? d.max : d.min));
+    const mz = $("#mez"); if (mz) mz.addEventListener("click", () => {
+      // pasa también el equipo y cuántos tanques o bombas se aplicarán, para calcular la compra y el costo en Mezcla
+      if (r.tipo === "tanque" && r.bombas) {
+        const enBombas = cc.equipo === "otro";   // un equipo de otra capacidad se convierte a bombas de BOMBA() L
+        ui.vol = cc.equipo === "tanque" ? "tanque" : "bomba";
+        const n = enBombas ? Math.round(r.equiposExactos * vol / BOMBA() * 10) / 10 : r.bombas;
+        ui.mezclaCargas = String(n).replace(".", ","); guardarUI();
+      }
+      agregarAMezcla(p.id, cc.usarMax ? d.max : d.min);
+    });
   }
 
   // ------------------------------------------------------------ MEZCLA
