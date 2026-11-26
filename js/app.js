@@ -730,7 +730,7 @@
           })()}
         </div>
         ${cc.modo === "ha" && enM2 ? `<div class="aviso azul info-sup"><b>i</b><div>¿No sabes los m²? Multiplica el largo por el ancho de tu lote en metros (ej. 20 m × 50 m = 1.000 m²).${d.modo === "tanque" ? `<br>En <b>agua que usas</b> escribe los litros que gastas para fumigar bien esos m² (por ejemplo: 2 bombas de 20 litros = 40 L).` : ""}</div></div>` : ""}
-        ${cc.modo === "ha" && esTec ? `<div class="aviso azul info-sup"><b>i</b><div>${haCalc ? `Superficie: <b>${h(L.fmt(haCalc, 4))} ha = ${h(L.fmt(haCalc * 10000, 0))} m²</b><br>` : ""}1 ha = 10.000 m². Si el lote es menor a 1 ha, pásalo a hectáreas dividiendo los m² ÷ 10.000: 5.000 m² = 0,5 ha · 1.000 m² = 0,1 ha · 500 m² = 0,05 ha.</div></div>` : ""}
+        ${cc.modo === "ha" && esTec && haCalc ? `<div class="aviso azul info-sup"><b>i</b><div>Superficie: <b>${h(L.fmt(haCalc, 4))} ha = ${h(L.fmt(haCalc * 10000, 0))} m²</b></div></div>` : ""}
         ${faltaAguaM2 ? `<div class="aviso ambar">${ic.alerta}<div>Escribe cuántos <b>litros de agua usas</b> para fumigar tus ${L.fmt(m2v, 0)} m² para calcular la dosis.</div></div>` : ""}
         ${faltaPha ? `<div class="aviso ambar">${ic.alerta}<div>Escribe las <b>plantas por hectárea</b> para repartir la dosis por hectárea en cada ${cc.equipo === "tanque" ? "tanque" : "bomba"}. Mientras tanto se usa la dosis de etiqueta por tanque.</div></div>` : ""}
         ${r.avisos.map((a) => `<div class="aviso ambar">${ic.alerta}<div>${h(a)}</div></div>`).join("")}
