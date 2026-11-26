@@ -7922,7 +7922,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Masticador-lamedor",
-   "como_actua": "Con sus mandíbulas raspan y desgarran la cáscara de botones, flores y frutos, y con la lengua lamen el néctar, el polen y los jugos que brotan de la herida. Las heridas quedan como cicatrices y puerta de entrada de hongos."
+   "como_actua": "Con sus mandíbulas raspan y desgarran la cáscara de botones, flores y frutos, y con la lengua lamen el néctar, el polen y los jugos que brotan de la herida. Las heridas quedan como cicatrices y puerta de entrada de hongos.",
+   "ciclo": "≈ 37 días aprox",
+   "ciclo_detalle": "Huevo a adulto en abejas sin aguijón (Trigona). Dato del género, no medido en pitahaya."
   },
   {
    "id": 2,
@@ -7934,7 +7936,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Masticador",
-   "como_actua": "Con mandíbulas fuertes cortan y mastican raíces, flores y frutos. Además cuidan a insectos chupadores (cochinillas, pulgones) para tomar la melaza que producen, por eso aumentan otras plagas."
+   "como_actua": "Con mandíbulas fuertes cortan y mastican raíces, flores y frutos. Además cuidan a insectos chupadores (cochinillas, pulgones) para tomar la melaza que producen, por eso aumentan otras plagas.",
+   "ciclo": "≈ 40 días aprox",
+   "ciclo_detalle": "Huevo a obrera adulta: huevo ≈ 14 días, larva ≈ 14 días y luego pupa. Dato general de hormigas."
   },
   {
    "id": 3,
@@ -7946,7 +7950,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Masticador",
-   "como_actua": "Cortan pedazos de tejido con las mandíbulas y los llevan al nido para cultivar el hongo del que se alimentan; casi no comen el tejido. Por eso funcionan los cebos que la obrera lleva al nido y la aplicación directa en la boca del hormiguero."
+   "como_actua": "Cortan pedazos de tejido con las mandíbulas y los llevan al nido para cultivar el hongo del que se alimentan; casi no comen el tejido. Por eso funcionan los cebos que la obrera lleva al nido y la aplicación directa en la boca del hormiguero.",
+   "ciclo": "≈ 40 días aprox",
+   "ciclo_detalle": "Huevo a obrera adulta. Dato general de hormigas; la colonia vive años mientras la reina siga viva."
   },
   {
    "id": 4,
@@ -7958,7 +7964,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Picador-chupador",
-   "como_actua": "Clavan su pico (estilete) en tallos, botones y frutos, inyectan saliva que digiere el tejido y succionan los jugos. La saliva deja manchas, deformaciones y caída de botones."
+   "como_actua": "Clavan su pico (estilete) en tallos, botones y frutos, inyectan saliva que digiere el tejido y succionan los jugos. La saliva deja manchas, deformaciones y caída de botones.",
+   "ciclo": "≈ 110 días aprox",
+   "ciclo_detalle": "Huevo a adulto de Leptoglossus zonatus (chinche patón de la pitahaya) a unos 25 °C; con más calor el ciclo se acorta."
   },
   {
    "id": 5,
@@ -7970,7 +7978,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Picador-chupador (quelíceros)",
-   "como_actua": "No son insectos sino arácnidos. Con sus quelíceros en forma de estilete perforan una por una las células de la cáscara y succionan su contenido; las células vacías se ven como manchas plateadas, bronceadas o raspadas."
+   "como_actua": "No son insectos sino arácnidos. Con sus quelíceros en forma de estilete perforan una por una las células de la cáscara y succionan su contenido; las células vacías se ven como manchas plateadas, bronceadas o raspadas.",
+   "ciclo": "7–10 días aprox",
+   "ciclo_detalle": "Huevo a adulto de Tetranychus a 25–30 °C; con calor y sequía puede bajar a 7 días."
   },
   {
    "id": 6,
@@ -7982,7 +7992,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Raspador (rádula)",
-   "como_actua": "Son moluscos, no insectos. Raspan el tejido tierno con la rádula, una lengua cubierta de dientecillos, y dejan mordeduras irregulares y rastros de baba brillante. Comen de noche y en días húmedos."
+   "como_actua": "Son moluscos, no insectos. Raspan el tejido tierno con la rádula, una lengua cubierta de dientecillos, y dejan mordeduras irregulares y rastros de baba brillante. Comen de noche y en días húmedos.",
+   "ciclo": "≈ 125 días aprox",
+   "ciclo_detalle": "Huevo a adulto; el huevo tarda unos 17–22 días en eclosionar. Dato de babosas en cultivo de flores."
   },
   {
    "id": 7,
@@ -7994,7 +8006,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Picador-chupador (estilete)",
-   "como_actua": "Gusanos microscópicos del suelo. Con un estilete bucal perforan las células de la raíz, inyectan saliva y succionan su contenido. Unos forman nudos (agallas) y otros dejan lesiones por donde entran hongos como Fusarium."
+   "como_actua": "Gusanos microscópicos del suelo. Con un estilete bucal perforan las células de la raíz, inyectan saliva y succionan su contenido. Unos forman nudos (agallas) y otros dejan lesiones por donde entran hongos como Fusarium.",
+   "ciclo": "21–28 días aprox",
+   "ciclo_detalle": "Huevo a huevo de Meloidogyne (nematodo del nudo) con el suelo a 25–30 °C."
   },
   {
    "id": 8,
@@ -8006,7 +8020,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Ascomiceto",
-   "como_actua": "Colletotrichum (estado sexual Glomerella) y Alternaria son Ascomicetos. Se multiplican por conidias que salpican con la lluvia y entran por heridas o tejido tierno; con humedad alta las manchas crecen rápido."
+   "como_actua": "Colletotrichum (estado sexual Glomerella) y Alternaria son Ascomicetos. Se multiplican por conidias que salpican con la lluvia y entran por heridas o tejido tierno; con humedad alta las manchas crecen rápido.",
+   "ciclo": "≈ 5 días aprox",
+   "ciclo_detalle": "De la infección a los síntomas (incubación) de Colletotrichum: 4–5 días. Dato del género en mango."
   },
   {
    "id": 9,
@@ -8018,7 +8034,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Deuteromiceto",
-   "como_actua": "Fusarium se maneja como Deuteromiceto: es un hongo especial que solo responde a determinados ingredientes activos. Vive en el suelo y en restos de cosecha, entra por heridas y raíces dañadas, y se dispersa con el agua de riego, la lluvia y las herramientas."
+   "como_actua": "Fusarium se maneja como Deuteromiceto: es un hongo especial que solo responde a determinados ingredientes activos. Vive en el suelo y en restos de cosecha, entra por heridas y raíces dañadas, y se dispersa con el agua de riego, la lluvia y las herramientas.",
+   "ciclo": null,
+   "ciclo_detalle": null
   },
   {
    "id": 10,
@@ -8030,7 +8048,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Amplio espectro (multisitio)",
-   "como_actua": "Antes de que aparezcan síntomas no se sabe qué hongo atacará, por eso se usan productos multisitio que protegen contra hongos de todas las clases."
+   "como_actua": "Antes de que aparezcan síntomas no se sabe qué hongo atacará, por eso se usan productos multisitio que protegen contra hongos de todas las clases.",
+   "ciclo": null,
+   "ciclo_detalle": null
   },
   {
    "id": 11,
@@ -8042,7 +8062,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Bacteria",
-   "como_actua": "La causan bacterias (Erwinia / Pectobacterium), no hongos. Entran por heridas y deshacen las paredes de las células, por eso el tejido se vuelve acuoso y huele mal."
+   "como_actua": "La causan bacterias (Erwinia / Pectobacterium), no hongos. Entran por heridas y deshacen las paredes de las células, por eso el tejido se vuelve acuoso y huele mal.",
+   "ciclo": "≈ 3 días aprox",
+   "ciclo_detalle": "De la infección a los síntomas de pudrición blanda en fruto de pitahaya."
   },
   {
    "id": 12,
@@ -8054,7 +8076,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Oomiceto + Deuteromiceto + Basidiomiceto",
-   "como_actua": "En el suelo actúan oomicetos (Pythium, Phytophthora), Fusarium y Rhizoctonia (manejados como Deuteromicetos) y Sclerotium rolfsii (Basidiomiceto, hoy Athelia rolfsii). Como responden a grupos químicos distintos, la desinfección combina productos para las tres clases."
+   "como_actua": "En el suelo actúan oomicetos (Pythium, Phytophthora), Fusarium y Rhizoctonia (manejados como Deuteromicetos) y Sclerotium rolfsii (Basidiomiceto, hoy Athelia rolfsii). Como responden a grupos químicos distintos, la desinfección combina productos para las tres clases.",
+   "ciclo": null,
+   "ciclo_detalle": null
   },
   {
    "id": 13,
@@ -8066,7 +8090,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "No selectivo (control total)",
-   "como_actua": "Control de toda la maleza de las calles con herbicidas no selectivos, aplicados dirigidos al suelo y sin mojar los tallos de la pitahaya."
+   "como_actua": "Control de toda la maleza de las calles con herbicidas no selectivos, aplicados dirigidos al suelo y sin mojar los tallos de la pitahaya.",
+   "ciclo": null,
+   "ciclo_detalle": null
   },
   {
    "id": 14,
@@ -8078,7 +8104,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Hoja ancha",
-   "como_actua": "Malezas de hoja ancha con nervaduras en red (dicotiledóneas). Compiten por agua y nutrientes y hospedan plagas."
+   "como_actua": "Malezas de hoja ancha con nervaduras en red (dicotiledóneas). Compiten por agua y nutrientes y hospedan plagas.",
+   "ciclo": null,
+   "ciclo_detalle": null
   },
   {
    "id": 15,
@@ -8090,7 +8118,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": "Gramíneas",
-   "como_actua": "Pastos de hoja angosta con nervaduras paralelas. Cierran las calles, compiten por agua y nutrientes y guardan humedad que favorece hongos."
+   "como_actua": "Pastos de hoja angosta con nervaduras paralelas. Cierran las calles, compiten por agua y nutrientes y guardan humedad que favorece hongos.",
+   "ciclo": null,
+   "ciclo_detalle": null
   },
   {
    "id": 16,
@@ -8102,7 +8132,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": null,
-   "como_actua": null
+   "como_actua": null,
+   "ciclo": null,
+   "ciclo_detalle": null
   },
   {
    "id": 17,
@@ -8114,7 +8146,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": null,
-   "como_actua": null
+   "como_actua": null,
+   "ciclo": null,
+   "ciclo_detalle": null
   },
   {
    "id": 18,
@@ -8126,7 +8160,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": null,
-   "como_actua": null
+   "como_actua": null,
+   "ciclo": null,
+   "ciclo_detalle": null
   },
   {
    "id": 19,
@@ -8138,7 +8174,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": null,
-   "como_actua": null
+   "como_actua": null,
+   "ciclo": null,
+   "ciclo_detalle": null
   },
   {
    "id": 20,
@@ -8150,7 +8188,9 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
    "clasificacion": null,
-   "como_actua": null
+   "como_actua": null,
+   "ciclo": null,
+   "ciclo_detalle": null
   },
   {
    "id": 21,
@@ -8162,7 +8202,9 @@
    "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
    "fotos": [],
    "clasificacion": "Basidiomiceto",
-   "como_actua": "Moniliophthora roreri es un Basidiomiceto. Infecta la mazorca joven en las primeras semanas y sus esporas secas se dispersan con el viento: la clave es proteger la mazorca pequeña y retirar las enfermas."
+   "como_actua": "Moniliophthora roreri es un Basidiomiceto. Infecta la mazorca joven en las primeras semanas y sus esporas secas se dispersan con el viento: la clave es proteger la mazorca pequeña y retirar las enfermas.",
+   "ciclo": "3–8 semanas aprox",
+   "ciclo_detalle": "De la infección a los síntomas, según la edad de la mazorca; pocos días después aparecen las esporas crema."
   },
   {
    "id": 22,
@@ -8174,7 +8216,9 @@
    "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
    "fotos": [],
    "clasificacion": "Basidiomiceto",
-   "como_actua": "Moniliophthora perniciosa es un Basidiomiceto. Infecta brotes, cojines florales y mazorcas en crecimiento; en las escobas secas forma pequeños hongos (setas) que liberan esporas con la lluvia."
+   "como_actua": "Moniliophthora perniciosa es un Basidiomiceto. Infecta brotes, cojines florales y mazorcas en crecimiento; en las escobas secas forma pequeños hongos (setas) que liberan esporas con la lluvia.",
+   "ciclo": "≈ 95 días aprox",
+   "ciclo_detalle": "Síntomas ≈ 46 días después de la esporulación, fase parásita ≈ 39 días y necrosis ≈ 10 días (estudio en Manabí, Ecuador)."
   },
   {
    "id": 23,
@@ -8186,7 +8230,9 @@
    "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
    "fotos": [],
    "clasificacion": "Oomiceto",
-   "como_actua": "Phytophthora es un oomiceto: no es un hongo verdadero sino un pseudohongo (reino Stramenopila), con pared de celulosa y sin ergosterol. Produce zoosporas que nadan en el agua y salpican desde el suelo con la lluvia, por eso avanza rápido en épocas lluviosas y con mal drenaje."
+   "como_actua": "Phytophthora es un oomiceto: no es un hongo verdadero sino un pseudohongo (reino Stramenopila), con pared de celulosa y sin ergosterol. Produce zoosporas que nadan en el agua y salpican desde el suelo con la lluvia, por eso avanza rápido en épocas lluviosas y con mal drenaje.",
+   "ciclo": "2–3 días aprox",
+   "ciclo_detalle": "De la infección a los primeros síntomas en la mazorca (estudio en Manabí y Esmeraldas, Ecuador); luego la mancha cubre la mazorca en pocos días."
   },
   {
    "id": 24,
@@ -8198,7 +8244,9 @@
    "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
    "fotos": [],
    "clasificacion": "Picador-chupador",
-   "como_actua": "Pica mazorcas y brotes tiernos con su estilete, inyecta saliva tóxica y succiona los jugos. Alrededor de cada picadura muere el tejido y queda una mancha negra hundida; los brotes atacados se secan."
+   "como_actua": "Pica mazorcas y brotes tiernos con su estilete, inyecta saliva tóxica y succiona los jugos. Alrededor de cada picadura muere el tejido y queda una mancha negra hundida; los brotes atacados se secan.",
+   "ciclo": "≈ 56 días aprox",
+   "ciclo_detalle": "Huevo a adulto: huevo ≈ 15 días y ninfa ≈ 27 días. Dato del género Monalonion en café."
   },
   {
    "id": 25,
@@ -8210,7 +8258,9 @@
    "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
    "fotos": [],
    "clasificacion": "Masticador",
-   "como_actua": "Ambos mastican: las hormigas cortan hojas y brotes con las mandíbulas, y los comejenes (termitas) roen raíces, corteza y madera desde sus galerías."
+   "como_actua": "Ambos mastican: las hormigas cortan hojas y brotes con las mandíbulas, y los comejenes (termitas) roen raíces, corteza y madera desde sus galerías.",
+   "ciclo": "≈ 40 días aprox",
+   "ciclo_detalle": "Huevo a obrera adulta en hormigas. Dato general de hormigas."
   },
   {
    "id": 26,
@@ -8222,7 +8272,9 @@
    "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
    "fotos": [],
    "clasificacion": "No selectivo (control total)",
-   "como_actua": "Control de toda la maleza de las calles con herbicidas no selectivos, aplicados dirigidos al suelo y sin tocar el tronco ni las hojas del cacao."
+   "como_actua": "Control de toda la maleza de las calles con herbicidas no selectivos, aplicados dirigidos al suelo y sin tocar el tronco ni las hojas del cacao.",
+   "ciclo": null,
+   "ciclo_detalle": null
   },
   {
    "id": 27,
@@ -8234,7 +8286,9 @@
    "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
    "fotos": [],
    "clasificacion": null,
-   "como_actua": null
+   "como_actua": null,
+   "ciclo": null,
+   "ciclo_detalle": null
   },
   {
    "id": 28,
@@ -8246,7 +8300,9 @@
    "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
    "fotos": [],
    "clasificacion": null,
-   "como_actua": null
+   "como_actua": null,
+   "ciclo": null,
+   "ciclo_detalle": null
   }
  ],
  "recomendaciones": [

@@ -381,7 +381,11 @@
     const que = pr.como_actua || clases.map((k) => L.CLASES[k].resumen).join(" ");
     const tec = esTecnico(); // grupos químicos funcionales: solo para técnicos agrícolas
     return `<article class="card ficha-clase">
-      <div class="fila" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><span class="mini" style="font-weight:600">${plaga ? "Aparato bucal" : "Clase"}</span>${(clases.length ? clases : [pr.clasificacion]).map((k) => `<span class="pill verde" style="font-size:12.5px">${h(k)}</span>`).join("")}</div>
+      <div class="info-clase">
+        <div><span class="mini">${plaga ? "Aparato bucal" : "Clase"}</span><b>${(clases.length ? clases : [pr.clasificacion]).map(h).join(" + ")}</b></div>
+        ${pr.ciclo ? `<div><span class="mini">Ciclo de vida</span><b>${h(pr.ciclo)}</b></div>` : ""}
+      </div>
+      ${pr.ciclo && pr.ciclo_detalle ? `<p class="mini" style="margin:-4px 0 0">${h(pr.ciclo_detalle)}</p>` : ""}
       <div><b style="font-size:15px">${plaga ? "Cómo se alimenta" : "Qué es"}</b><p class="mini" style="margin:4px 0 0;font-size:14px">${h(que)}</p></div>
       ${tec ? clases.map((k) => `<p class="mini" style="margin:0;font-size:14px">${clases.length > 1 ? `<b>${h(k)}:</b> ` : ""}${h(L.CLASES[k].control)}</p>`).join("") : ""}
       ${tec && gf.length ? `<div><b style="font-size:15px">${plaga ? "Grupos químicos que funcionan mejor" : "Grupos químicos funcionales"}</b>
@@ -405,6 +409,23 @@
       <div class="lista">${lista.map(({ p, g }) => { const d = L.dosisDe(p); const conDosis = d.min !== null || d.max !== null; const tag = conDosis ? "a" : "div"; return `<${tag} class="item"${conDosis ? ` href="#/calcular?p=${p.id}"` : ' style="cursor:default"'}><div class="tx" style="flex:1"><b>${h(p.nombre)}</b><span><b>I.A.:</b> ${h(p.concentracion || p.ingrediente_activo || "")}</span><span>${g.map((x) => h((x.c ? x.c + " · " : "") + x.n)).join(" · ")}</span>${conDosis ? "" : `<span>Dosis no cargada: consulta a tu asesor</span>`}</div>${conDosis ? ic.flecha : ""}</${tag}>`; }).join("")}</div>
       <p class="mini" style="margin:0">Opciones por su grupo químico. Antes de usarlas, revisa en la etiqueta que el producto esté registrado para tu cultivo.</p></details>`;
   }
+  // recomendación y alternativas en carrusel: se desliza de lado (recomendada → 1 → 2 → 3 → 4)
+  function carruselRecs(recs) {
+    const tarjeta = (r, i) => tarjetaProducto(P(r.producto_id), r, (i === 0 ? "Opción recomendada" : "Alternativa " + i) + (r.etapa_id && etapa(r.etapa_id) ? " · solo en " + etapa(r.etapa_id).nombre : ""));
+    if (recs.length === 1) return `<div class="etq">Producto recomendado</div>` + tarjeta(recs[0], 0);
+    return `<div class="etq fila" style="justify-content:space-between"><span>Productos recomendados</span><span class="desliza">Desliza →</span></div>
+      <div class="carrusel" id="carr" role="region" aria-label="Producto recomendado y alternativas">${recs.map((r, i) => `<div class="slide" aria-label="${i === 0 ? "Opción recomendada" : "Alternativa " + i}">${tarjeta(r, i)}</div>`).join("")}</div>
+      <div class="puntos" id="puntos">${recs.map((r, i) => `<button type="button" data-ir="${i}" class="${i === 0 ? "sel" : ""}" aria-label="${i === 0 ? "Ver opción recomendada" : "Ver alternativa " + i}">${i === 0 ? "Rec." : i}</button>`).join("")}</div>`;
+  }
+  function conectarCarrusel() {
+    const c = $("#carr"); if (!c) return;
+    const slides = [...c.children], botones = $$("#puntos button");
+    const marcar = () => { const centro = c.scrollLeft + c.clientWidth / 2; let k = 0, mejor = Infinity;
+      slides.forEach((s, i) => { const d = Math.abs(s.offsetLeft + s.offsetWidth / 2 - centro); if (d < mejor) { mejor = d; k = i; } });
+      botones.forEach((b, i) => b.classList.toggle("sel", i === k)); };
+    let t; c.addEventListener("scroll", () => { clearTimeout(t); t = setTimeout(marcar, 60); }, { passive: true });
+    botones.forEach((b) => b.addEventListener("click", () => { const s = slides[Number(b.dataset.ir)]; c.scrollTo({ left: s.offsetLeft - (c.clientWidth - s.offsetWidth) / 2, behavior: "smooth" }); }));
+  }
   function vProblema(pid) {
     const pr = (I.c.problemas || []).find((x) => String(x.id) === String(pid)); if (!pr) return vNoEncontrado();
     const c = cultivo(pr.cultivo_id), tipo = (TIPOS.find((t) => t[0] === pr.tipo) || [])[1] || "";
@@ -416,7 +437,7 @@
         ${pr.descripcion ? `<p class="mini" style="margin:0;font-size:14px">${h(pr.descripcion)}</p>` : ""}
         ${fichaClase(pr)}
         ${segVol()}
-        ${recs.length ? `<div class="etq">Productos recomendados</div>` + recs.map((r, i) => tarjetaProducto(P(r.producto_id), r, (i === 0 ? "Opción recomendada" : "Alternativa " + i) + (r.etapa_id && etapa(r.etapa_id) ? " · solo en " + etapa(r.etapa_id).nombre : ""))).join("") : `<div class="vacio">Tu asesor aún no ha cargado recomendaciones para este tema.</div>`}
+        ${recs.length ? carruselRecs(recs) : `<div class="vacio">Tu asesor aún no ha cargado recomendaciones para este tema.</div>`}
         ${otrasOpciones(pr, recs)}
         ${grupos.size > 1 ? `<div class="aviso azul">${ic.alerta}<div>Rota productos de <b>distinto grupo</b> (${[...grupos].map(h).join(", ")}) entre aplicaciones para evitar resistencia.</div></div>` : ""}
         ${avisoSeguridad()}
@@ -424,6 +445,7 @@
       </main>`, "inicio");
     conectarVol(() => vProblema(pid));
     conectarGaleria(pr);
+    conectarCarrusel();
     $$("[data-mez]").forEach((b) => b.addEventListener("click", () => agregarAMezcla(b.dataset.mez, b.dataset.d === "" ? null : Number(b.dataset.d))));
   }
 

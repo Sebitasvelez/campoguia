@@ -73,6 +73,8 @@
           opciones: () => [...L.OPC_CLASE.plaga.map((k) => [k, "Plaga · " + k]), ...L.OPC_CLASE.enfermedad.map((k) => [k, "Enfermedad · " + k]), ["Deuteromiceto + Ascomiceto", "Enfermedad · Deuteromiceto + Ascomiceto"], ["Oomiceto + Deuteromiceto", "Enfermedad · Oomiceto + Deuteromiceto"], ["Oomiceto + Deuteromiceto + Basidiomiceto", "Enfermedad · Oomiceto + Deuteromiceto + Basidiomiceto"]],
           ayuda: "Define los grupos químicos funcionales y las «otras opciones de productos» que ve el agricultor. Taxonomía actual (Oomiceto, Ascomiceto, Basidiomiceto); Botrytis, Fusarium y Rhizoctonia se clasifican como Deuteromiceto." },
         { k: "como_actua", t: "Cómo se alimenta la plaga / qué es el hongo (explicación breve)", tipo: "area" },
+        { k: "ciclo", t: "Ciclo de vida aproximado", ph: "≈ 5 días aprox", ayuda: "Se muestra junto a la clasificación. Usa el dato de la especie en el cultivo; si no hay, el del género." },
+        { k: "ciclo_detalle", t: "Detalle del ciclo (qué mide y de dónde sale el dato)", tipo: "area" },
         { k: "fotos", t: "Fotografías referenciales", tipo: "fotos" },
         { k: "orden", t: "Orden en la lista", tipo: "num", def: 0 }, { k: "fuente", t: "Fuente", tipo: "area" },
       ],

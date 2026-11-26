@@ -52,6 +52,25 @@ DATOS = {
   "Control de toda la maleza de las calles con herbicidas no selectivos, aplicados dirigidos al suelo y sin tocar el tronco ni las hojas del cacao."),
 }
 
+# ciclo de vida aproximado: (cultivo, problema) → (ciclo, detalle). Dato de la especie en el cultivo cuando existe;
+# si no, del género (o del género en un cultivo afín). Revisado en internet (nov 2026).
+CICLOS = {
+ ("pitahaya", "Avispas / murujas"): ("≈ 37 días aprox", "Huevo a adulto en abejas sin aguijón (Trigona). Dato del género, no medido en pitahaya."),
+ ("pitahaya", "Hormigas"): ("≈ 40 días aprox", "Huevo a obrera adulta: huevo ≈ 14 días, larva ≈ 14 días y luego pupa. Dato general de hormigas."),
+ ("pitahaya", "Hormigas arrieras"): ("≈ 40 días aprox", "Huevo a obrera adulta. Dato general de hormigas; la colonia vive años mientras la reina siga viva."),
+ ("pitahaya", "Chinches"): ("≈ 110 días aprox", "Huevo a adulto de Leptoglossus zonatus (chinche patón de la pitahaya) a unos 25 °C; con más calor el ciclo se acorta."),
+ ("pitahaya", "Ácaros"): ("7–10 días aprox", "Huevo a adulto de Tetranychus a 25–30 °C; con calor y sequía puede bajar a 7 días."),
+ ("pitahaya", "Babosas y caracoles"): ("≈ 125 días aprox", "Huevo a adulto; el huevo tarda unos 17–22 días en eclosionar. Dato de babosas en cultivo de flores."),
+ ("pitahaya", "Nematodos"): ("21–28 días aprox", "Huevo a huevo de Meloidogyne (nematodo del nudo) con el suelo a 25–30 °C."),
+ ("pitahaya", "Antracnosis (Colletotrichum) y Alternaria"): ("≈ 5 días aprox", "De la infección a los síntomas (incubación) de Colletotrichum: 4–5 días. Dato del género en mango."),
+ ("pitahaya", "Bacteriosis / pudrición blanda"): ("≈ 3 días aprox", "De la infección a los síntomas de pudrición blanda en fruto de pitahaya."),
+ ("cacao", "Monilia (Moniliophthora roreri)"): ("3–8 semanas aprox", "De la infección a los síntomas, según la edad de la mazorca; pocos días después aparecen las esporas crema."),
+ ("cacao", "Escoba de bruja (Moniliophthora perniciosa)"): ("≈ 95 días aprox", "Síntomas ≈ 46 días después de la esporulación, fase parásita ≈ 39 días y necrosis ≈ 10 días (estudio en Manabí, Ecuador)."),
+ ("cacao", "Mazorca negra (Phytophthora)"): ("2–3 días aprox", "De la infección a los primeros síntomas en la mazorca (estudio en Manabí y Esmeraldas, Ecuador); luego la mancha cubre la mazorca en pocos días."),
+ ("cacao", "Chinche del cacao (Monalonion)"): ("≈ 56 días aprox", "Huevo a adulto: huevo ≈ 15 días y ninfa ≈ 27 días. Dato del género Monalonion en café."),
+ ("cacao", "Hormigas y comejenes"): ("≈ 40 días aprox", "Huevo a obrera adulta en hormigas. Dato general de hormigas."),
+}
+
 def main(path):
     c = json.load(open(path, encoding="utf-8"))
     hechos = 0
@@ -59,6 +78,8 @@ def main(path):
         d = DATOS.get((pr["cultivo_id"], pr["nombre"]))
         pr["clasificacion"], pr["como_actua"] = (d if d else (pr.get("clasificacion"), pr.get("como_actua")))
         hechos += bool(d)
+        cy = CICLOS.get((pr["cultivo_id"], pr["nombre"]))
+        pr["ciclo"], pr["ciclo_detalle"] = cy if cy else (pr.get("ciclo"), pr.get("ciclo_detalle"))
     faltan = [p["nombre"] for p in c["problemas"] if p["tipo"] in ("plaga", "enfermedad", "maleza") and not p.get("clasificacion")]
     json.dump(c, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(hechos, "clasificados; sin clasificar:", faltan)
