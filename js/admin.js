@@ -353,12 +353,11 @@
     const principal = recs[0];
     const alts = L.sugerirAlternativas(pr, DB.productos || [], principal.producto_id, 4, nomCultivo(pr.cultivo_id), recs.slice(1).map((r) => r.producto_id));
     if (!alts.length) return toast("No hay productos del portafolio en los grupos químicos de esta clase.");
-    if (!(await UI.confirmar(`Se mantiene «${nomProducto(principal.producto_id)}» como opción recomendada y las alternativas pasan a ser, de la más eficiente a la menos: ${alts.map((p, i) => `${i + 1}. ${p.nombre}`).join(", ")}. ¿Continuar?`, { ok: "Aplicar sugerencia" }))) return;
     try {
       for (const r of recs.slice(1)) await A.borrar("recomendaciones", r.id);
       const nota = pr.cultivo_id === "pitahaya" ? null : `Sugerencia de manual técnico: confirma la dosis para ${nomCultivo(pr.cultivo_id).toLowerCase()} en la etiqueta.`;
       for (let i = 0; i < alts.length; i++) await A.guardar("recomendaciones", { problema_id: pr.id, producto_id: alts[i].id, etapa_id: null, prioridad: i + 2, dosis_min: null, dosis_max: null, nota });
-      await cargarTodo(); marcarCambio(); toast("Alternativas sugeridas en orden de eficiencia. Revisa y publica."); router();
+      await cargarTodo(); marcarCambio(); toast(`Alternativas aplicadas: ${alts.map((p, i) => `${i + 1}. ${p.nombre}`).join(", ")}. Publica para enviarlas a la app.`); router();
     } catch (er) { toast(er.message); }
   }
   async function nuevoCultivo() {
