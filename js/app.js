@@ -505,6 +505,8 @@
   }
 
   // ------------------------------------------------------------ PORTAFOLIO (técnicos): todo el catálogo por categorías, con buscador
+  // presentación a la que corresponde el precio mostrado (p. ej. "1 L", "Saco 50 kg")
+  const presDe = (p) => (p.contenido ? L.nombrePresentacion({ cantidad: p.contenido, unidad: p.contenido_unidad }) : p.presentacion || "");
   function vPortafolio() {
     const prods = (I.c.productos || []).filter((p) => p.activo !== false);
     const grupos = {};
@@ -513,7 +515,7 @@
     const fila = (p) => `<details class="card port-item" data-cat="${h(p.categoria || "Otros")}" data-txt="${h(sinTilde([p.nombre, p.ingrediente_activo, p.concentracion, p.categoria, p.control, p.grupo].filter(Boolean).join(" ")))}" style="padding:0">
         <summary style="padding:12px 14px;display:flex;justify-content:space-between;gap:10px;align-items:center;cursor:pointer;list-style:none">
           <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><b>${h(p.nombre)}</b>${p.concentracion || p.ingrediente_activo ? `<span class="mini">${h(p.concentracion || p.ingrediente_activo)}</span>` : ""}</span>
-          <b style="white-space:nowrap;font-size:14px">${p.pvp !== null && p.pvp !== undefined ? dinero(p.pvp) : ""}</b></summary>
+          ${p.pvp !== null && p.pvp !== undefined ? `<span style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex-shrink:0"><b style="white-space:nowrap;font-size:14px">${dinero(p.pvp)}</b>${presDe(p) ? `<span class="mini" style="white-space:nowrap">${h(presDe(p))}</span>` : ""}${(p.presentaciones || []).length > 1 ? `<span class="mini" style="white-space:nowrap">+${p.presentaciones.length - 1} ${p.presentaciones.length > 2 ? "presentaciones" : "presentación"}</span>` : ""}</span>` : ""}</summary>
         <div class="port-ficha" data-id="${p.id}" style="padding:0 6px 6px"></div></details>`;
     pintar(`${barra("Portafolio", prods.length + " productos", "#/")}
       <main class="cont">
