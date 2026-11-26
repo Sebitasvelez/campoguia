@@ -500,6 +500,33 @@
     return gruposFuncionales(problema.clasificacion).filter((g) => !quitar.has(g.c));
   }
   // "FRAC 1 + 12 + 4 · IRAC 4A" → ["FRAC 1","FRAC 12","FRAC 4","IRAC 4A"]
+  // nombre del grupo químico por código FRAC / IRAC / HRAC (para buscar en el portafolio por "triazoles", "piretroides"…)
+  const NOMBRE_GRUPO = {
+    "FRAC 1": "Bencimidazoles", "FRAC 2": "Dicarboximidas", "FRAC 3": "Triazoles (IBE / DMI, conazoles, imidazoles)", "FRAC 4": "Fenilamidas (metalaxil)",
+    "FRAC 5": "Aminas / morfolinas (espiroxamina)", "FRAC 7": "Carboxamidas SDHI", "FRAC 9": "Anilinopirimidinas", "FRAC 11": "Estrobilurinas (QoI)",
+    "FRAC 12": "Fenilpirroles (fludioxonil)", "FRAC 14": "Hidrocarburos aromáticos", "FRAC 17": "Hidroxianilidas", "FRAC 21": "QiI (ciazofamida)",
+    "FRAC 24": "Antibióticos (kasugamicina)", "FRAC 27": "Cianoacetamida oximas (cimoxanil)", "FRAC 28": "Carbamatos (propamocarb)", "FRAC 29": "Fluazinam (desacoplador)",
+    "FRAC 40": "Amidas del ácido carboxílico CAA (dimetomorf, mandipropamid)", "FRAC 43": "Benzamidas (fluopicolide)", "FRAC 45": "QoSI (ametoctradina)",
+    "FRAC 49": "OSBPI (oxatiapiprolina)", "FRAC M01": "Cúpricos (cobres, inorgánicos)", "FRAC M02": "Azufres (inorgánicos)", "FRAC M03": "Ditiocarbamatos (mancozeb)",
+    "FRAC M04": "Ftalimidas (captan)", "FRAC M05": "Cloronitrilos (clorotalonil)", "FRAC P07": "Fosfonatos", "FRAC BM01": "Extractos de plantas (biológico)",
+    "FRAC BM02": "Microbianos (biológico)",
+    "IRAC 1A": "Carbamatos", "IRAC 1B": "Organofosforados", "IRAC 2A": "Ciclodienos organoclorados", "IRAC 2B": "Fenilpirazoles (fipronil)", "IRAC 3A": "Piretroides",
+    "IRAC 4A": "Neonicotinoides", "IRAC 5": "Espinosinas", "IRAC 6": "Avermectinas y milbemicinas (abamectina, emamectina)", "IRAC 7": "Juvenoides",
+    "IRAC 9": "Piridina azometinas (pimetrozina)", "IRAC 10": "Inhibidores de crecimiento de ácaros", "IRAC 11A": "Bacillus thuringiensis (biológico)",
+    "IRAC 12A": "Diafentiurón", "IRAC 12C": "Propargita", "IRAC 12D": "Tetradifón", "IRAC 13": "Desacopladores (clorfenapir, sulfluramida)",
+    "IRAC 14": "Nereistoxinas (cartap, tiociclam)", "IRAC 15": "Benzoilureas (reguladores de crecimiento)", "IRAC 16": "Buprofezina", "IRAC 17": "Ciromazina",
+    "IRAC 18": "Diacilhidrazinas", "IRAC 20D": "Bifenazato", "IRAC 21A": "METI (acaricidas)", "IRAC 22": "Oxadiazinas (indoxacarb)",
+    "IRAC 23": "Ácidos tetrónicos y tetrámicos (espirotetramat)", "IRAC 25A": "Beta-cetonitrilos", "IRAC 28": "Diamidas", "IRAC 29": "Flonicamida",
+    "IRAC 30": "Metadiamidas e isoxazolinas", "IRAC UN": "Modo de acción desconocido (botánicos, azadiractina)",
+    "HRAC 1": "Inhibidores ACCasa (fop, dim)", "HRAC 2": "Inhibidores ALS (sulfonilureas, imidazolinonas)", "HRAC 3": "Dinitroanilinas",
+    "HRAC 4": "Auxinas sintéticas (fenoxis, 2,4-D)", "HRAC 5": "Triazinas y ureas (fotosistema II)", "HRAC 6": "Nitrilos / benzotiadiazinas (fotosistema II)",
+    "HRAC 9": "Glicinas (glifosato, EPSPS)", "HRAC 10": "Fosfinicos (glufosinato)", "HRAC 13": "Isoxazolidinonas (clomazona)", "HRAC 14": "Inhibidores PPO (difeniléteres)",
+    "HRAC 15": "Cloroacetamidas (VLCFA)", "HRAC 22": "Bipiridilos (paraquat, diquat)", "HRAC 27": "Inhibidores HPPD (tricetonas, isoxazoles)", "HRAC 29": "Alquilazinas (indaziflam)",
+  };
+  // variantes comunes al escribir, para que la búsqueda igual encuentre
+  const ALIAS_GRUPO = { "FRAC 11": "estrobirulinas", "FRAC 3": "triasoles conazol", "IRAC 3A": "piretrinas piretroide", "IRAC 1B": "fosforados", "IRAC 4A": "neonicotinoide", "FRAC M01": "cobre", "FRAC M02": "azufre" };
+  const nombresGrupo = (grupo) => codigosGrupo(grupo).map((c) => NOMBRE_GRUPO[c]).filter(Boolean);
+  const textoBusquedaGrupo = (grupo) => codigosGrupo(grupo).map((c) => [NOMBRE_GRUPO[c], ALIAS_GRUPO[c]].filter(Boolean).join(" ")).join(" ");
   function codigosGrupo(grupo) {
     const out = [];
     String(grupo || "").split("·").forEach((seg) => {
@@ -562,7 +589,7 @@
       .sort((a, b) => a.ef - b.ef || a.ef2 - b.ef2 || b.n - a.n || (b.dosis ? 1 : 0) - (a.dosis ? 1 : 0) || (a.ef === 999 ? a.i - b.i : a.p.nombre.localeCompare(b.p.nombre)))
       .map((x) => x.p);
   }
-  const api = { fraccionSacos, textoSacos, ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, compraOptima, precioUnitario, nombrePresentacion,
+  const api = { fraccionSacos, textoSacos, ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, nombresGrupo, textoBusquedaGrupo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
     CLASES, OPC_CLASE, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;

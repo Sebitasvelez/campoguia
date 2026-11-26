@@ -512,14 +512,14 @@
     const grupos = {};
     prods.forEach((p) => { const k = p.categoria || "Otros"; (grupos[k] = grupos[k] || []).push(p); });
     const cats = Object.keys(grupos).sort((a, b) => (a === "Otros") - (b === "Otros") || a.localeCompare(b));
-    const fila = (p) => `<details class="card port-item" data-cat="${h(p.categoria || "Otros")}" data-txt="${h(sinTilde([p.nombre, p.ingrediente_activo, p.concentracion, p.categoria, p.control, p.grupo].filter(Boolean).join(" ")))}" style="padding:0">
+    const fila = (p) => `<details class="card port-item" data-cat="${h(p.categoria || "Otros")}" data-txt="${h(sinTilde([p.nombre, p.ingrediente_activo, p.concentracion, p.categoria, p.control, p.grupo, L.textoBusquedaGrupo(p.grupo)].filter(Boolean).join(" ")))}" style="padding:0">
         <summary style="padding:12px 14px;display:flex;justify-content:space-between;gap:10px;align-items:center;cursor:pointer;list-style:none">
-          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><b>${h(p.nombre)}</b>${p.concentracion || p.ingrediente_activo ? `<span class="mini">${h(p.concentracion || p.ingrediente_activo)}</span>` : ""}</span>
+          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><b>${h(p.nombre)}</b>${p.concentracion || p.ingrediente_activo ? `<span class="mini">${h(p.concentracion || p.ingrediente_activo)}</span>` : ""}${L.nombresGrupo(p.grupo).length ? `<span class="mini" style="color:var(--verde)">${h(L.nombresGrupo(p.grupo).map((n) => n.replace(/\s*\(.*\)$/, "")).join(" + "))} · ${h(p.grupo)}</span>` : ""}</span>
           ${p.pvp !== null && p.pvp !== undefined ? `<span style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex-shrink:0"><b style="white-space:nowrap;font-size:14px">${dinero(p.pvp)}</b>${presDe(p) ? `<span class="mini" style="white-space:nowrap">${h(presDe(p))}</span>` : ""}${(p.presentaciones || []).length > 1 ? `<span class="mini" style="white-space:nowrap">+${p.presentaciones.length - 1} ${p.presentaciones.length > 2 ? "presentaciones" : "presentación"}</span>` : ""}</span>` : ""}</summary>
         <div class="port-ficha" data-id="${p.id}" style="padding:0 6px 6px"></div></details>`;
     pintar(`${barra("Portafolio", prods.length + " productos", "#/")}
       <main class="cont">
-        <label class="campo">Buscar producto<input id="pbuscar" type="search" placeholder="Nombre, ingrediente activo, plaga…" autocomplete="off"></label>
+        <label class="campo">Buscar producto<input id="pbuscar" type="search" placeholder="Nombre, ingrediente activo o grupo químico (ej. triazoles)…" autocomplete="off"></label>
         <div class="chips" id="pchips" role="group" aria-label="Categoría"><button class="chip sel" data-pc="">Todos (${prods.length})</button>${cats.map((k) => `<button class="chip" data-pc="${h(k)}">${h(k)} (${grupos[k].length})</button>`).join("")}</div>
         ${cats.map((k) => `<section class="port-grupo" data-cat="${h(k)}" style="display:flex;flex-direction:column;gap:8px"><h3 style="margin:8px 0 0;font-size:15px;color:var(--verde)">${h(k)}</h3>${grupos[k].sort((a, b) => a.nombre.localeCompare(b.nombre)).map(fila).join("")}</section>`).join("")}
         <div class="vacio" id="pvacio" hidden>No se encontró ningún producto con esa búsqueda.</div>
