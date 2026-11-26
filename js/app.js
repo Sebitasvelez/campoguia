@@ -373,22 +373,25 @@
         ${d.modo === "tanque" ? `<button class="btn sec chico" data-mez="${p.id}" data-d="${d.min !== null ? d.min : ""}">Agregar a mezcla</button>` : `<a class="btn sec chico" href="#/registrar?p=${p.id}">Registrar</a>`}
       </div></article>`;
   }
-  // ficha técnica: aparato bucal (plagas) o clase del hongo (enfermedades) y grupos químicos funcionales
+  // ficha técnica: aparato bucal (plagas) o clase del hongo (enfermedades); los grupos químicos funcionales y las otras opciones solo los ve el técnico de almacén
   function fichaClase(pr) {
     if (!pr.clasificacion || !["plaga", "enfermedad"].includes(pr.tipo)) return "";
     const clases = L.clasesDe(pr.clasificacion), gf = L.gruposFuncionales(pr.clasificacion), plaga = pr.tipo === "plaga";
     const que = pr.como_actua || clases.map((k) => L.CLASES[k].resumen).join(" ");
+    const tec = esTecnico(); // grupos químicos funcionales: solo para técnicos de almacén
     return `<article class="card ficha-clase">
       <div class="fila" style="justify-content:flex-start;gap:8px;flex-wrap:wrap"><span class="mini" style="font-weight:600">${plaga ? "Aparato bucal" : "Clase"}</span>${(clases.length ? clases : [pr.clasificacion]).map((k) => `<span class="pill verde" style="font-size:12.5px">${h(k)}</span>`).join("")}</div>
       <div><b style="font-size:15px">${plaga ? "Cómo se alimenta" : "Qué es"}</b><p class="mini" style="margin:4px 0 0;font-size:14px">${h(que)}</p></div>
-      ${clases.map((k) => `<p class="mini" style="margin:0;font-size:14px">${clases.length > 1 ? `<b>${h(k)}:</b> ` : ""}${h(L.CLASES[k].control)}</p>`).join("")}
-      ${gf.length ? `<div><b style="font-size:15px">${plaga ? "Grupos químicos que funcionan mejor" : "Grupos químicos funcionales"}</b>
+      ${tec ? clases.map((k) => `<p class="mini" style="margin:0;font-size:14px">${clases.length > 1 ? `<b>${h(k)}:</b> ` : ""}${h(L.CLASES[k].control)}</p>`).join("") : ""}
+      ${tec && gf.length ? `<div><b style="font-size:15px">${plaga ? "Grupos químicos que funcionan mejor" : "Grupos químicos funcionales"}</b>
         <div class="grupos-f">${gf.map((g) => `<span>${g.c ? `<b>${h(g.c)}</b> ` : ""}${h(g.n)}</span>`).join("")}</div></div>` : ""}
     </article>`;
   }
   // otras opciones del portafolio que pertenecen a un grupo funcional para esa plaga o enfermedad
   const CAT_OTRAS = { "Picador-chupador (quelíceros)": /acaric/i, "Raspador (rádula)": /cebo|molusc/i, "Picador-chupador (estilete)": /nematic|insectic/i };
+  const esTecnico = () => !!(D.sesion && D.sesion.perfil && D.sesion.perfil.rol === "tecnico");
   function otrasOpciones(pr, recs) {
+    if (!esTecnico()) return "";
     if (!pr.clasificacion || !["plaga", "enfermedad"].includes(pr.tipo)) return "";
     const gf = L.gruposFuncionales(pr.clasificacion); if (!gf.length) return "";
     const clases = L.clasesDe(pr.clasificacion);
