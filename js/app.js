@@ -518,7 +518,7 @@
     pintar(`${barra("Portafolio", prods.length + " productos", "#/")}
       <main class="cont">
         <label class="campo">Buscar producto<input id="pbuscar" type="search" placeholder="Nombre, ingrediente activo, plaga…" autocomplete="off"></label>
-        <div class="chips" role="group" aria-label="Categoría"><button class="chip sel" data-pc="">Todos (${prods.length})</button>${cats.map((k) => `<button class="chip" data-pc="${h(k)}">${h(k)} (${grupos[k].length})</button>`).join("")}</div>
+        <div class="chips" id="pchips" role="group" aria-label="Categoría"><button class="chip sel" data-pc="">Todos (${prods.length})</button>${cats.map((k) => `<button class="chip" data-pc="${h(k)}">${h(k)} (${grupos[k].length})</button>`).join("")}</div>
         ${cats.map((k) => `<section class="port-grupo" data-cat="${h(k)}" style="display:flex;flex-direction:column;gap:8px"><h3 style="margin:8px 0 0;font-size:15px;color:var(--verde)">${h(k)}</h3>${grupos[k].sort((a, b) => a.nombre.localeCompare(b.nombre)).map(fila).join("")}</section>`).join("")}
         <div class="vacio" id="pvacio" hidden>No se encontró ningún producto con esa búsqueda.</div>
       </main>`, "portafolio");
@@ -531,6 +531,7 @@
         g.hidden = !n; vis += n;
       });
       $("#pvacio").hidden = vis > 0;
+      $("#pchips").hidden = t.length > 0; // mientras se busca, los resultados aparecen justo debajo del buscador
     };
     const marcarCat = (k) => { cat = k; $$("[data-pc]").forEach((x) => x.classList.toggle("sel", x.dataset.pc === k)); };
     // al escribir, se busca en todo el portafolio sin importar la categoría marcada; al tocar una categoría se limpia la búsqueda
