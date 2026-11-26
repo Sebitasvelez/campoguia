@@ -586,37 +586,36 @@
   const nombreSeguro = (t) => String(t || "reporte").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w-]+/g, "_").slice(0, 40);
 
   // ------------------------------------------------------------ CALCULADORA
-  // ------------------------------------------------------------ PORTAFOLIO: buscar o elegir por categoría antes de calcular
-  const textoProd = (p) => [p.nombre, p.ingrediente_activo, p.concentracion, p.categoria, p.control].filter(Boolean).join(" ").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  const itemProd = (p) => { const d = L.dosisDe(p), sin = d.min === null && d.max === null;
-    return `<a class="item" href="#/calcular?p=${p.id}"><div class="tx" style="flex:1"><b>${h(p.nombre)}</b>${p.concentracion || p.ingrediente_activo ? `<span><b>I.A.:</b> ${h(p.concentracion || p.ingrediente_activo)}</span>` : ""}<span>${h(p.categoria || "")}${p.grupo && /^(IRAC|FRAC|HRAC)/.test(p.grupo) ? " · " + h(p.grupo) : ""}${sin ? " · Dosis no cargada" : ""}</span></div>${ic.flecha}</a>`; };
-  function vPortafolio() {
+  // buscador de productos del portafolio (nombre, ingrediente activo, categoría o uso), sin tildes
+  const sinTilde = (x) => String(x || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const textoProd = (p) => sinTilde([p.nombre, p.ingrediente_activo, p.concentracion, p.categoria, p.control].filter(Boolean).join(" "));
+  function conectarBuscaProd(elegir) {
+    const inp = $("#buscaP"), sug = $("#sugP"); if (!inp) return;
     const prods = (I.c.productos || []).filter((p) => p.activo !== false && !SIN_DOSIS.includes(p.categoria));
-    const cats = {}; prods.forEach((p) => { const k = p.categoria || "Sin categoría"; (cats[k] = cats[k] || []).push(p); });
-    const orden = Object.keys(cats).sort((a, b) => a.localeCompare(b));
-    if (ui.calcCat && !cats[ui.calcCat]) ui.calcCat = null;
-    const ult = ui.calc && ui.calc.p ? P(ui.calc.p) : null;
-    const lista = (arr) => arr.sort((a, b) => a.nombre.localeCompare(b.nombre)).map(itemProd).join("");
-    pintar(`${barra("Calcular dosis", "Elige un producto del portafolio", "#/")}
-      <main class="cont">
-        <label class="campo"><span class="sr">Buscar en el portafolio</span><input id="buscarProd" type="search" placeholder="Buscar en el portafolio…" autocomplete="off"></label>
-        <div id="resBusca" class="lista" hidden></div>
-        <div id="porCat">
-          ${ult ? `<a class="item" href="#/calcular?p=${ult.id}" style="margin-bottom:14px"><div class="tx" style="flex:1"><span>Seguir con el último cálculo</span><b>${h(ult.nombre)}</b></div>${ic.flecha}</a>` : ""}
-          <div class="etq">Categorías del portafolio</div>
-          <div class="cats" role="group" aria-label="Categorías">${orden.map((k) => `<button type="button" class="cat${ui.calcCat === k ? " sel" : ""}" data-cat="${h(k)}" aria-pressed="${ui.calcCat === k}"><b>${h(k)}</b><span>${cats[k].length} producto${cats[k].length === 1 ? "" : "s"}</span></button>`).join("")}</div>
-          ${ui.calcCat ? `<div class="etq" style="margin-top:14px">${h(ui.calcCat)}</div><div class="lista" id="listaCat">${lista(cats[ui.calcCat].slice())}</div>` : `<p class="mini" style="margin:12px 0 0">Toca una categoría para ver sus productos, o busca por nombre o ingrediente activo.</p>`}
-        </div>
-      </main>`, "calcular");
-    $$("[data-cat]").forEach((b) => b.addEventListener("click", () => { ui.calcCat = ui.calcCat === b.dataset.cat ? null : b.dataset.cat; guardarUI(); vPortafolio(); if (ui.calcCat) { const l = $("#listaCat"); if (l) l.previousElementSibling.scrollIntoView({ behavior: "smooth", block: "start" }); } }));
-    $("#buscarProd").addEventListener("input", (e) => {
-      const q = e.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
-      const res = $("#resBusca"), cat = $("#porCat");
-      if (!q) { res.hidden = true; cat.hidden = false; return; }
-      const hall = prods.filter((p) => q.split(/\s+/).every((t) => textoProd(p).includes(t)));
-      res.innerHTML = hall.length ? lista(hall) : `<div class="vacio">No hay productos con «${h(e.target.value)}».</div>`;
-      res.hidden = false; cat.hidden = true;
+    let sel = -1, hall = [];
+    const cerrar = () => { sug.hidden = true; inp.setAttribute("aria-expanded", "false"); sel = -1; };
+    const marcar = () => [...sug.children].forEach((b, i) => b.classList.toggle("act", i === sel));
+    const pintarSug = () => {
+      const q = sinTilde(inp.value).trim(); if (!q) return cerrar();
+      const t = q.split(/\s+/);
+      hall = prods.filter((p) => t.every((x) => textoProd(p).includes(x)))
+        .sort((a, b) => (sinTilde(a.nombre).startsWith(q) ? 0 : 1) - (sinTilde(b.nombre).startsWith(q) ? 0 : 1) || a.nombre.localeCompare(b.nombre)).slice(0, 12);
+      sug.innerHTML = hall.length ? hall.map((p) => { const d = L.dosisDe(p), sin = d.min === null && d.max === null;
+        return `<button type="button" role="option" data-id="${p.id}"><b>${h(p.nombre)}</b>${p.concentracion || p.ingrediente_activo ? `<span>${h(p.concentracion || p.ingrediente_activo)}</span>` : ""}<small>${h(p.categoria || "")}${sin ? " · Dosis no cargada" : ""}</small></button>`; }).join("")
+        : `<div class="sin">No hay productos con «${h(inp.value)}».</div>`;
+      sug.hidden = false; inp.setAttribute("aria-expanded", "true"); sel = -1;
+      $$("#sugP [data-id]").forEach((b) => b.addEventListener("click", () => elegir(b.dataset.id)));
+    };
+    inp.addEventListener("input", pintarSug);
+    inp.addEventListener("keydown", (e) => {
+      if (sug.hidden || !hall.length) return;
+      if (e.key === "ArrowDown") { sel = Math.min(sel + 1, hall.length - 1); marcar(); e.preventDefault(); }
+      else if (e.key === "ArrowUp") { sel = Math.max(sel - 1, 0); marcar(); e.preventDefault(); }
+      else if (e.key === "Enter") { e.preventDefault(); elegir(hall[Math.max(sel, 0)].id); }
+      else if (e.key === "Escape") cerrar();
     });
+    sug.addEventListener("mousedown", (e) => e.preventDefault()); // que el toque en una sugerencia no cierre la lista antes de elegir
+    inp.addEventListener("blur", () => setTimeout(cerrar, 150));
   }
   function vCalcular(q) {
     const cc = ui.calc;
@@ -673,10 +672,14 @@
         ${r.sitios ? `<div><div class="n">${L.fmt(r.sitios, 0)}</div><small>Sitios / plantas</small></div>` : ""}</div>`;
     }
     const compra = r.envases ? `<div class="linea">Necesitas comprar: <b>${h(r.compraTexto || r.envases + " × " + (r.presentacion || "envase"))}</b>${r.costoEnvases !== undefined ? ` · ${dinero(r.costoEnvases)}` : ""}${costoTanque !== null ? `<br><span style="font-size:12.5px">Costo por tanque de ${TANQUE()} L de aplicación: ${dinero(costoTanque)}</span>` + (costoAplic !== null ? `<br><span style="font-size:15px">Costo total de aplicación: <b>${dinero(costoAplic)}</b></span>` : "") : r.costoUsado !== undefined ? `<br><span style="font-size:12.5px">Costo de lo que aplicas: ${dinero(r.costoUsado)}</span>` : ""}</div>` : "";
-    pintar(`${barra("Calcular para mi finca", p.nombre, "#/calcular")}
+    pintar(`${barra("Calcular para mi finca", p.nombre, "#/")}
       <main class="cont">
-        <label class="campo">Producto<select id="prod">${opcionesProductos(p.id)}</select></label>
-        ${p.concentracion ? `<div class="mini" style="margin-top:-6px">Concentración: <b>${h(p.concentracion)}</b></div>` : ""}
+        <div class="campo busca-prod"><label for="buscaP">Producto</label>
+          <input id="buscaP" type="search" placeholder="Buscar producto o ingrediente activo…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sugP" aria-autocomplete="list">
+          <div id="sugP" class="sugerencias" role="listbox" hidden></div></div>
+        <div class="prod-sel"><span class="mini">Producto seleccionado</span><b>${h(p.nombre)}</b>
+          ${p.concentracion || p.ingrediente_activo ? `<span class="mini">Concentración: <b>${h(p.concentracion || p.ingrediente_activo)}</b></span>` : ""}
+          <span class="mini">${h(p.categoria || "")}${p.grupo && /^(IRAC|FRAC|HRAC)/.test(p.grupo) ? " · " + h(p.grupo) : ""}</span></div>
         ${esTanque ? `<label class="campo">Dosis por hectárea<span class="unido"><input id="dha" inputmode="decimal" value="${h(dhaElegida !== null ? L.fmt(dhaElegida) : "")}" placeholder="Escribe la dosis"><span>${h(p.unidad || "")}/ha</span></span>
           <small>${dh.min !== null ? `Recomendada: <b>${h(L.rango(dh.min, dh.max, p.unidad + "/ha"))}</b>${dh.derivada ? ` (equivale a ${h(L.rango(L.dosisDe(p).min, L.dosisDe(p).max, p.unidad))} por tanque de ${TANQUE()} L con ${L.fmt(lhaRef, 0)} L de agua/ha)` : ""}. Puedes cambiarla.` : "Este producto no tiene dosis por hectárea cargada: escríbela según la etiqueta."}${n(cc.dha) !== null && dh.min !== null && (n(cc.dha) < dh.min * 0.999 || n(cc.dha) > dh.max * 1.001) ? ` <span style="color:var(--rojo,#b3261e)">Está fuera del rango recomendado.</span>` : ""}</small></label>` : ""}
         <div class="mini" ${esTanque ? 'style="display:none"' : ""}>Dosis de etiqueta: <b>${h(d.modo === "tanque" ? L.rango(L.dosisDe(p).min, L.dosisDe(p).max, d.unidad) + " por tanque de " + TANQUE() + " L" : d.modo === "sitio" ? L.rango(d.min, d.max, "g") + " por sitio" : L.rango(d.min, d.max, "kg") + " por ha")}</b>${p.dosis_texto && d.modo === "tanque" ? "" : ""}</div>
@@ -699,7 +702,7 @@
         ${res ? `<a class="btn wa" target="_blank" rel="noopener" href="${h(waLink(msgAsesor()))}">${ic.wa}Verificar dosis con mi asesor</a>` : ""}
       </main>`, "calcular");
     const re = () => vCalcular({});
-    $("#prod").addEventListener("change", (e) => { cc.p = e.target.value; cc.d = null; cc.dha = null; cc.usarMax = false; try { history.replaceState(null, "", "#/calcular?p=" + cc.p); } catch (er) {} re(); });
+    conectarBuscaProd((id) => { cc.p = id; cc.d = null; cc.dha = null; cc.usarMax = false; try { history.replaceState(null, "", "#/calcular?p=" + id); } catch (er) {} re(); });
     $$("[data-m]").forEach((b) => b.addEventListener("click", () => { cc.modo = b.dataset.m; re(); }));
     $$("[data-eq]").forEach((b) => b.addEventListener("click", () => { cc.equipo = b.dataset.eq; re(); }));
     $$("[data-dm]").forEach((b) => b.addEventListener("click", () => { cc.usarMax = b.dataset.dm === "max"; cc.dha = null; re(); }));
@@ -1209,7 +1212,7 @@
       case "problema": return vProblema(seg[1]);
       case "plan": return vPlan(seg[1]);
       case "fertilizacion": return vFert(seg[1]);
-      case "calcular": return q.p ? vCalcular(q) : vPortafolio();
+      case "calcular": return vCalcular(q);
       case "mezcla": return vMezcla();
       case "lotes": return vLotes(q);
       case "lote": return vLote(seg[1], q);
