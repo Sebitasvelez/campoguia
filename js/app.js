@@ -328,9 +328,14 @@
     if (r.clase && !r.intencion) {
       const ter = q.charAt(0).toUpperCase() + q.slice(1), esEnf = L.CLASES[r.clase.clase].tipo === "enfermedad";
       const manual = (lista) => lista.map((pr) => item("#/problema/" + pr.id, pr.nombre, "Manual de " + nomC(pr.cultivo_id) + " · " + recDe(pr))).join("");
-      const documentado = r.problemas.length > 0;
-      box.innerHTML = `<div class="aviso azul" style="padding:8px 10px">${ic.alerta}<div>Por su clasificación, <b>«${h(ter)}»</b> ${r.clase.clase === "Bacteria" ? "es una <b>bacteria</b>" : esEnf ? `es un hongo <b>${h(r.clase.clase)}</b>` : `es una plaga <b>${h(r.clase.clase.toLowerCase())}</b>`}. Estos productos de nuestro portafolio podrían servir, del más eficiente (1) al menos:</div></div>
-        ${prodsClase(5) || `<span class="mini">Aún no hay productos cargados para esta clase.</span>`}
+      const documentado = r.problemas.length > 0, pr0 = r.problemas[0];
+      // documentado: los productos en el orden que el asesor definió en el manual; si no, el orden por eficiencia del grupo químico
+      const recs0 = documentado ? (I.recs[pr0.id] || []).filter((x) => P(x.producto_id)) : [];
+      const listaManual = recs0.map((x, i) => { const p = P(x.producto_id);
+        return item("#/calcular?p=" + p.id + (x.dosis_min !== null && x.dosis_min !== undefined ? "&d=" + x.dosis_min : ""), `${i + 1}. ${p.nombre}`, [i === 0 ? "Recomendado" : "Alternativa " + i, p.concentracion || p.ingrediente_activo].filter(Boolean).join(" · ") + " · Calcular dosis"); }).join("");
+      const claseTxt = r.clase.clase === "Bacteria" ? "es una <b>bacteria</b>" : esEnf ? `es un hongo <b>${h(r.clase.clase)}</b>` : `es una plaga <b>${h(r.clase.clase.toLowerCase())}</b>`;
+      box.innerHTML = `<div class="aviso azul" style="padding:8px 10px">${ic.alerta}<div>Por su clasificación, <b>«${h(ter)}»</b> ${claseTxt}. ${listaManual ? `Estos son los productos de nuestro manual de ${h(nomC(pr0.cultivo_id))} para <b>${h(pr0.nombre)}</b>, en el orden recomendado:` : "Estos productos de nuestro portafolio podrían servir, del más eficiente (1) al menos:"}</div></div>
+        ${listaManual || prodsClase(5) || `<span class="mini">Aún no hay productos cargados para esta clase.</span>`}
         <span class="mini">Confirma la dosis para tu cultivo en la etiqueta o con tu asesor.</span>
         ${documentado
           ? `<div class="mini" style="margin-top:4px"><b>En nuestros manuales</b></div>${manual(r.problemas.slice(0, 4))}${r.relacionados.length ? `<div class="mini"><b>También relacionado</b></div>${manual(r.relacionados.slice(0, 3))}` : ""}`
