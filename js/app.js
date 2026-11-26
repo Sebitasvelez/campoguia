@@ -921,9 +921,10 @@
         const receta = { marca: NOMBRE, titulo: "Receta técnica", fecha: ahora.toLocaleDateString("es-EC", { day: "numeric", month: "long", year: "numeric" }),
           tecnico: [per.nombres, per.apellidos].filter(Boolean).join(" "), telefonoTecnico: tel ? "Cel. " + tel : "", agricultor: (ui.recAgr || "").trim(), cultivo: (ui.recCult || "").trim(),
           equipo: [hayTanque ? `${L.fmt(cargas, 1)} ${cargas === 1 ? equipo.replace(/^tanques/, "tanque").replace(/^bombas/, "bomba") : equipo}` : "", haySuelo ? `${L.fmt(haSuelo, 2)} ha al suelo` : ""].filter(Boolean).join(" · "),
-          productos: m.map((x, i) => { const p = P(x.producto_id), c = compra[i];
-            return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: esSuelo(x) ? fmtD(x) + " (al suelo)" : `${fmtD(x)} por ${volTxt()}`,
-              total: c.total !== null ? L.cantidad(c.total, c.unidad || p.unidad) + (esSuelo(x) ? "" : " en total") : "Ver etiqueta" }; }),
+          productos: m.map((x, i) => [x, compra[i]]).filter(([x]) => !esSuelo(x)).map(([x, c]) => { const p = P(x.producto_id);
+            return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: `${fmtD(x)} por ${volTxt()}`, total: c.total !== null ? L.cantidad(c.total, p.unidad) + " en total" : "Ver etiqueta" }; }),
+          fertilizantes: m.map((x, i) => [x, compra[i]]).filter(([x]) => esSuelo(x)).map(([x, c]) => { const p = P(x.producto_id);
+            return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: fmtD(x) + " al suelo", total: c.texto ? c.texto + ` (${L.fmt(haSuelo, 2)} ha)` : c.total !== null ? L.cantidad(c.total, "g") : "Ver etiqueta" }; }),
           pasos, avisos: datos().secciones[2].avisos || [],
           precauciones: prods.filter((p) => (p.carencia_dias !== null && p.carencia_dias !== undefined) || (p.reingreso_horas !== null && p.reingreso_horas !== undefined))
             .map((p) => `${p.nombre}: ${p.carencia_dias !== null && p.carencia_dias !== undefined ? "carencia " + p.carencia_dias + " días" : ""}${p.carencia_dias !== null && p.carencia_dias !== undefined && p.reingreso_horas !== null && p.reingreso_horas !== undefined ? " · " : ""}${p.reingreso_horas !== null && p.reingreso_horas !== undefined ? "reingreso " + p.reingreso_horas + " h" : ""}`)
