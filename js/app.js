@@ -390,7 +390,22 @@
       ${tec ? clases.map((k) => `<p class="mini" style="margin:0;font-size:14px">${clases.length > 1 ? `<b>${h(k)}:</b> ` : ""}${h(L.CLASES[k].control)}</p>`).join("") : ""}
       ${tec && gf.length ? `<div><b style="font-size:15px">${plaga ? "Grupos químicos que funcionan mejor" : "Grupos químicos funcionales"}</b>
         <div class="grupos-f">${gf.map((g) => `<span>${g.c ? `<b>${h(g.c)}</b> ` : ""}${h(g.n)}</span>`).join("")}</div></div>` : ""}
+      ${tec && gf.length ? notaRotacion(pr) : ""}
     </article>`;
+  }
+  // nota para técnicos: rotar el grupo químico (IA) por cada ciclo de vida de la plaga o del patógeno
+  function diasCiclo(txt) {
+    const t = String(txt || "").toLowerCase(), nums = (t.match(/\d+(?:[.,]\d+)?/g) || []).map((x) => Number(x.replace(",", ".")));
+    if (!nums.length) return null;
+    const mult = /mes/.test(t) ? 30 : /semana/.test(t) ? 7 : 1;
+    return { min: Math.min(...nums) * mult, max: Math.max(...nums) * mult };
+  }
+  function notaRotacion(pr) {
+    const quien = pr.tipo === "plaga" ? "de la plaga" : "del patógeno", cod = pr.tipo === "plaga" ? "IRAC" : "FRAC", d = diasCiclo(pr.ciclo);
+    let practica = "";
+    if (d && d.max <= 7) practica = `Como su ciclo es corto (${h(pr.ciclo)}), en la práctica cambia de grupo en cada aplicación.`;
+    else if (d) practica = `Su ciclo es de ${h(pr.ciclo)}: aplica el mismo grupo químico durante ese tiempo y, al empezar el siguiente ciclo, cambia a otro grupo.`;
+    return `<div class="aviso azul" style="padding:10px 12px">${ic.alerta}<div><b>Rota por ciclo de vida.</b> Se recomienda rotar el grupo químico (ingrediente activo de distinto grupo ${cod}) en cada ciclo de vida ${quien} para evitar resistencias. ${practica} Respeta siempre el número máximo de aplicaciones por ciclo de cultivo que indica la etiqueta.</div></div>`;
   }
   // otras opciones del portafolio que pertenecen a un grupo funcional para esa plaga o enfermedad
   const CAT_OTRAS = { "Picador-chupador (quelíceros)": /acaric/i, "Raspador (rádula)": /cebo|molusc/i, "Picador-chupador (estilete)": /nematic|insectic/i };
