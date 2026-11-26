@@ -9778,7 +9778,7 @@
   },
   {
    "problema_id": 8,
-   "producto_id": 18,
+   "producto_id": 142,
    "etapa_id": null,
    "prioridad": 5,
    "dosis_min": null,
@@ -9828,7 +9828,7 @@
   },
   {
    "problema_id": 9,
-   "producto_id": 34,
+   "producto_id": 22,
    "etapa_id": null,
    "prioridad": 5,
    "dosis_min": null,
@@ -9968,7 +9968,7 @@
   },
   {
    "problema_id": 12,
-   "producto_id": 34,
+   "producto_id": 27,
    "etapa_id": null,
    "prioridad": 4,
    "dosis_min": null,
@@ -10238,7 +10238,7 @@
   },
   {
    "problema_id": 21,
-   "producto_id": 21,
+   "producto_id": 24,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
@@ -10248,7 +10248,7 @@
   },
   {
    "problema_id": 21,
-   "producto_id": 24,
+   "producto_id": 22,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
@@ -10258,7 +10258,7 @@
   },
   {
    "problema_id": 21,
-   "producto_id": 18,
+   "producto_id": 27,
    "etapa_id": null,
    "prioridad": 4,
    "dosis_min": null,
@@ -10268,7 +10268,7 @@
   },
   {
    "problema_id": 21,
-   "producto_id": 22,
+   "producto_id": 140,
    "etapa_id": null,
    "prioridad": 5,
    "dosis_min": null,
@@ -10278,7 +10278,7 @@
   },
   {
    "problema_id": 22,
-   "producto_id": 21,
+   "producto_id": 24,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
@@ -10288,7 +10288,7 @@
   },
   {
    "problema_id": 22,
-   "producto_id": 24,
+   "producto_id": 142,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
@@ -10298,7 +10298,7 @@
   },
   {
    "problema_id": 22,
-   "producto_id": 142,
+   "producto_id": 140,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
@@ -10308,7 +10308,7 @@
   },
   {
    "problema_id": 22,
-   "producto_id": 18,
+   "producto_id": 22,
    "etapa_id": null,
    "prioridad": 4,
    "dosis_min": null,
@@ -10318,7 +10318,7 @@
   },
   {
    "problema_id": 22,
-   "producto_id": 140,
+   "producto_id": 27,
    "etapa_id": null,
    "prioridad": 5,
    "dosis_min": null,
@@ -10338,7 +10338,7 @@
   },
   {
    "problema_id": 23,
-   "producto_id": 62,
+   "producto_id": 149,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
@@ -10348,7 +10348,7 @@
   },
   {
    "problema_id": 23,
-   "producto_id": 21,
+   "producto_id": 62,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
@@ -10358,7 +10358,7 @@
   },
   {
    "problema_id": 23,
-   "producto_id": 149,
+   "producto_id": 101,
    "etapa_id": null,
    "prioridad": 4,
    "dosis_min": null,
@@ -10368,7 +10368,7 @@
   },
   {
    "problema_id": 23,
-   "producto_id": 101,
+   "producto_id": 147,
    "etapa_id": null,
    "prioridad": 5,
    "dosis_min": null,
