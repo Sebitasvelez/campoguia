@@ -180,3 +180,12 @@ sw.js, manifest.webmanifest, icons/   Instalación y uso sin internet
 ```
 
 Si `js/config.js` está vacío, la app funciona en **modo demostración**: todo se guarda solo en ese equipo. Sirve para probarla sin crear nada.
+
+## Regenerar el catálogo inicial (para desarrolladores)
+
+```
+python3 scripts/build_catalog.py <Excel productos> <Excel plan> data/catalogo-inicial.json
+python3 scripts/agregar_lista_nov2026.py <LISTA_PRODUCTOS_ECUAQUIMICA.xlsx> data/catalogo-inicial.json
+node scripts/aplicar_grupos.js .   # grupos IRAC/FRAC/HRAC según ingrediente activo
+python3 scripts/build_seed.py data/catalogo-inicial.json supabase/seed.sql
+```

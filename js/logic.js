@@ -345,13 +345,18 @@
     [/lambda|cihalotr|cyhalothr/, "IRAC", "3A"], [/cipermetr|cypermethr/, "IRAC", "3A"],
     [/tiametox|thiametox/, "IRAC", "4A"], [/clorantranil|chlorantranil/, "IRAC", "28"], [/abamect/, "IRAC", "6"],
     [/azadirac/, "IRAC", "UN"], [/profenof|diazin|clorpirif|chlorpyrif/, "IRAC", "1B"], [/tiocicl|thiocycl/, "IRAC", "14"],
-    [/sulflur/, "IRAC", "13"], [/tetradif/, "IRAC", "12D"], [/propargit/, "IRAC", "12C"], [/bifenaz/, "IRAC", "20D"], [/cyenopyr|cienopir/, "IRAC", "25A"],
+    [/sulflur/, "IRAC", "13"], [/emamectin/, "IRAC", "6"], [/diafentiur|diafenthiur/, "IRAC", "12A"], [/lufenur/, "IRAC", "15"],
+    [/ciromaz|cyromaz/, "IRAC", "17"], [/acefat|acephat/, "IRAC", "1B"], [/foxim|phoxim/, "IRAC", "1B"], [/thuringiensis/, "IRAC", "11A"],
+    [/isociclos|isocyclos/, "IRAC", "30"], [/ciantranil|cyantranil/, "IRAC", "28"], [/tetradif/, "IRAC", "12D"], [/propargit/, "IRAC", "12C"], [/bifenaz/, "IRAC", "20D"], [/cyenopyr|cienopir/, "IRAC", "25A"],
     [/cobre|copper/, "FRAC", "M01"], [/clorotal|chlorothal/, "FRAC", "M05"], [/thiram|tiram/, "FRAC", "M03"], [/captan/, "FRAC", "M04"],
     [/difenocon|propicon|epoxicon|tebucon/, "FRAC", "3"], [/azoxistrob|azoxystrob|piraclostrob|pyraclostrob/, "FRAC", "11"],
     [/metalax|mefenox/, "FRAC", "4"], [/boscal|carboxin/, "FRAC", "7"], [/tiabend|thiabend/, "FRAC", "1"], [/ciprodin|cyprodin/, "FRAC", "9"],
-    [/kasug/, "FRAC", "24"], [/pentacloronitro|quintoc|pcnb/, "FRAC", "14"],
+    [/kasug/, "FRAC", "24"], [/fluazinam/, "FRAC", "29"], [/ciprocon|cyprocon|penconaz/, "FRAC", "3"], [/isopyraz|isopiraz|pidiflumet|pydiflumet/, "FRAC", "7"],
+    [/mandipropam/, "FRAC", "40"], [/fludioxon/, "FRAC", "12"], [/cimoxan|cymoxan/, "FRAC", "27"], [/mancozeb/, "FRAC", "M03"], [/fosetil|fosetyl/, "FRAC", "P07"],
+    [/azufre|\bsulfur\b/, "FRAC", "M02"], [/fenpropid/, "FRAC", "5"], [/etridiaz/, "FRAC", "14"], [/pentacloronitro|quintoc|pcnb/, "FRAC", "14"],
     [/metaldeh/, null, "Molusquicida: sin grupo IRAC"],
-    [/glufos/, "HRAC", "10"], [/glifos|glyphos/, "HRAC", "9"], [/paraquat/, "HRAC", "22"], [/nicosulf/, "HRAC", "2"], [/2,?4[- ]?d\b|2,4 dim|2,4-d/, "HRAC", "4"],
+    [/glufos/, "HRAC", "10"], [/metolacl|pretilacl/, "HRAC", "15"], [/atrazin/, "HRAC", "5"], [/oxifluorf|oxyfluorf/, "HRAC", "14"],
+    [/isoxaflut/, "HRAC", "27"], [/tiencarbaz|thiencarbaz/, "HRAC", "2"], [/glifos|glyphos/, "HRAC", "9"], [/paraquat/, "HRAC", "22"], [/nicosulf/, "HRAC", "2"], [/2,?4[- ]?d\b|2,4 dim|2,4-d/, "HRAC", "4"],
   ];
   const CAT_PLAGUICIDA = /insectic|acaric|cebo|fungic|desinfecc|herbic|bactericida|nematic/i;
   // Devuelve { grupo, aplica, faltan } — grupo: "IRAC 3A + 4A" / "FRAC 7 + M03"; faltan: componentes sin clasificar

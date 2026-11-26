@@ -13,7 +13,7 @@
   function toast(msg) { const t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 3500); }
 
   // ------------------------------------------------------------ opciones
-  const CATEGORIAS = ["Insecticida", "Acaricida", "Fungicida preventivo", "Fungicida", "Desinfección de suelo", "Herbicida", "Bioestimulante", "Fertilizante foliar", "Fertilizante edáfico", "Enmienda", "Coadyuvante", "Cebo"];
+  const CATEGORIAS = ["Insecticida", "Acaricida", "Fungicida preventivo", "Fungicida", "Desinfección de suelo", "Herbicida", "Bioestimulante", "Fertilizante foliar", "Fertilizante edáfico", "Enmienda", "Coadyuvante", "Cebo", "Semilla", "Otros"];
   const FORMULACIONES = [["corrector_ph", "Corrector de pH"], ["polvo", "Polvo / WG / WP"], ["suspension", "Suspensión concentrada (SC)"], ["liquido", "Líquido (sin definir)"], ["emulsion", "Emulsionable (EC)"], ["soluble", "Soluble (SL)"], ["liquido_foliar", "Fertilizante / estimulante líquido"], ["aceite_adherente", "Aceite / adherente"], ["siliconado", "Siliconado"], ["granulado", "Granulado al suelo"], ["cebo", "Cebo"]];
   const optCultivos = () => (DB.cultivos || []).map((c) => [c.id, c.nombre]);
   const nomCultivo = (id) => ((DB.cultivos || []).find((c) => c.id === id) || {}).nombre || id || "";

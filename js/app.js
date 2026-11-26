@@ -145,7 +145,7 @@
   }
   const opcionesProductos = (selId, filtro) => {
     const grupos = {};
-    (I.c.productos || []).filter(filtro || (() => true)).forEach((p) => { (grupos[p.categoria] = grupos[p.categoria] || []).push(p); });
+    (I.c.productos || []).filter((p) => !SIN_DOSIS.includes(p.categoria)).filter(filtro || (() => true)).forEach((p) => { (grupos[p.categoria] = grupos[p.categoria] || []).push(p); });
     return Object.keys(grupos).sort().map((g) => `<optgroup label="${h(g)}">${grupos[g].sort((a, b) => a.nombre.localeCompare(b.nombre)).map((p) => `<option value="${p.id}" ${String(selId) === String(p.id) ? "selected" : ""}>${h(p.nombre)}${p.ingrediente_activo ? " · " + h(p.ingrediente_activo) : ""}</option>`).join("")}</optgroup>`).join("");
   };
   function dosisVol(p, rec) {
@@ -158,6 +158,7 @@
   const segVol = () => `<div class="seg" role="group" aria-label="Volumen"><button data-vol="bomba" class="${ui.vol === "bomba" ? "sel" : ""}">Bomba ${BOMBA()} L</button><button data-vol="tanque" class="${ui.vol === "tanque" ? "sel" : ""}">Tanque ${TANQUE()} L</button></div>`;
   const conectarVol = (re) => $$("[data-vol]").forEach((b) => b.addEventListener("click", () => { ui.vol = b.dataset.vol; guardarUI(); re(); }));
   const avisoSeguridad = () => `<div class="aviso ambar">${ic.alerta}<div>Usa guantes, mascarilla, gafas y ropa de manga larga. No fumigues con sol, viento fuerte ni antes de lluvia. ${h(aj("aviso_legal", "Recomendación técnica referencial. Lea siempre la etiqueta y verifique con su asesor."))}</div></div>`;
+  const SIN_DOSIS = ["Semilla", "Otros"];   // productos de catálogo que no se calculan ni se mezclan
   function agregarAMezcla(pid, dosisTanque) {
     const m = S.get("mezcla", []);
     if (!m.some((x) => String(x.producto_id) === String(pid))) { m.push({ producto_id: Number(pid), dosis_tanque: dosisTanque }); S.set("mezcla", m); toast("Agregado a tu mezcla"); }
