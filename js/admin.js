@@ -477,7 +477,7 @@
     if (sel) {
       const lotes = (DB.lotes || []).filter((l) => l.agricultor_id === sel.id && !l.borrado), regs = (DB.registros || []).filter((r) => r.agricultor_id === sel.id && !r.borrado).sort((a, b) => (a.fecha < b.fecha ? 1 : -1));
       panel = `<aside class="adm-panel"><h3>${h(sel.nombres)}</h3>
-        <div class="mini">Cédula ${h(sel.cedula)} · ${h(sel.telefono)} · ${h([sel.sector, sel.provincia].filter(Boolean).join(", "))} · ${sel.rol === "tecnico" ? "Técnico de almacén" : "Agricultor"}${sel.acepta_seguimiento === false ? " · <b>No autorizó seguimiento</b>" : ""}</div>
+        <div class="mini">Cédula ${h(sel.cedula)} · ${h(sel.telefono)} · ${h([sel.sector, sel.provincia].filter(Boolean).join(", "))} · ${sel.rol === "tecnico" ? "Técnico agrícola" : "Agricultor"}${sel.acepta_seguimiento === false ? " · <b>No autorizó seguimiento</b>" : ""}</div>
         <div class="mini">${sel.latitud ? `Finca georreferenciada: ${h(Number(sel.latitud).toFixed(5))}, ${h(Number(sel.longitud).toFixed(5))} (±${h(sel.precision_m)} m) · <a href="https://www.google.com/maps?q=${h(sel.latitud)},${h(sel.longitud)}" target="_blank" rel="noopener">Ver en el mapa</a>` : "Sin ubicación GPS de la finca."}</div>
         <div class="chips">${sel.alertas.map(([c, t]) => `<span class="pill ${c}">${h(t)}</span>`).join("")}</div>
         <div class="acciones"><a class="btn wa chico" target="_blank" rel="noopener" href="https://wa.me/${h(String(sel.telefono).replace(/^0/, "593"))}">WhatsApp</a><button class="btn sec chico" id="expUno">Exportar Excel</button></div>

@@ -216,7 +216,7 @@
         <label class="campo">Sector del cultivo<input name="sector" placeholder="Comunidad o parroquia" required></label></div>
         <div class="grid2"><label class="campo">Cultivo principal<select name="cultivo_id">${cultOpts}</select></label>
         <label class="campo">Hectáreas<input name="hectareas" inputmode="decimal" placeholder="Ej. 2"></label></div>
-        <label class="campo">Soy<select name="rol"><option value="agricultor">Agricultor</option><option value="tecnico">Técnico de almacén</option></select></label>
+        <label class="campo">Soy<select name="rol"><option value="agricultor">Agricultor</option><option value="tecnico">Técnico agrícola</option></select></label>
         ${bloqueUbicacion(null)}
         <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--suave)"><input type="checkbox" name="acepta" checked style="width:22px;height:22px;margin:0;accent-color:var(--verde)"> Acepto que mi asesor vea mis registros y la ubicación de mi finca para darme seguimiento técnico.</label>
         <p class="mini" id="err" role="alert" style="color:var(--rojo);margin:0"></p>
@@ -373,7 +373,7 @@
         ${d.modo === "tanque" ? `<button class="btn sec chico" data-mez="${p.id}" data-d="${d.min !== null ? d.min : ""}">Agregar a mezcla</button>` : `<a class="btn sec chico" href="#/registrar?p=${p.id}">Registrar</a>`}
       </div></article>`;
   }
-  // ficha técnica: aparato bucal (plagas) o clase del hongo (enfermedades); los grupos químicos funcionales y las otras opciones solo los ve el técnico de almacén
+  // ficha técnica: aparato bucal (plagas) o clase del hongo (enfermedades); los grupos químicos funcionales y las otras opciones solo los ve el técnico agrícola
   function fichaClase(pr) {
     if (!pr.clasificacion || !["plaga", "enfermedad"].includes(pr.tipo)) return "";
     const clases = L.clasesDe(pr.clasificacion), gf = L.gruposFuncionales(pr.clasificacion), plaga = pr.tipo === "plaga";
@@ -1056,7 +1056,7 @@
   // ------------------------------------------------------------ PERFIL
   function vPerfil() {
     const p = D.sesion.perfil, cat = D.catalogo || {}, ub = {};
-    pintar(`${barra("Mi cuenta", p.rol === "tecnico" ? "Técnico de almacén" : "Agricultor", "#/")}
+    pintar(`${barra("Mi cuenta", p.rol === "tecnico" ? "Técnico agrícola" : "Agricultor", "#/")}
       <main class="cont">
         <form class="card" id="fp">
           <div class="dato"><span>Cédula (para ingresar)</span><b>${h(p.cedula)}</b></div>
