@@ -402,11 +402,11 @@
   }
   function notaRotacion(pr) {
     const quien = pr.tipo === "plaga" ? "de la plaga" : "del patógeno", cod = pr.tipo === "plaga" ? "IRAC" : "FRAC", d = diasCiclo(pr.ciclo);
-    let practica = "";
-    if (d && d.max <= 7) practica = `Como su ciclo es corto (${h(pr.ciclo)}), en la práctica cambia de grupo en cada aplicación.`;
-    else if (d) practica = `Su ciclo es de ${h(pr.ciclo)}: aplica el mismo grupo químico durante ese tiempo y, al empezar el siguiente ciclo, cambia a otro grupo.`;
-    return `<div class="aviso azul" style="padding:10px 12px">${ic.alerta}<div><b>Rota por ciclo de vida.</b> Se recomienda rotar el grupo químico (ingrediente activo de distinto grupo ${cod}) en cada ciclo de vida ${quien} para evitar resistencias. ${practica} Respeta siempre el número máximo de aplicaciones por ciclo de cultivo que indica la etiqueta.</div></div>`;
+    const practica = d && d.max <= 7 ? ` Su ciclo es corto (${h(pr.ciclo)}): cambia de grupo en cada aplicación.`
+      : d ? ` Su ciclo es de ${h(pr.ciclo)}: usa el mismo grupo como máximo ese tiempo y luego cambia.` : "";
+    return `<div class="aviso azul" style="padding:10px 12px">${ic.alerta}<div><b>Evita resistencias.</b> Rota el grupo químico ${cod} al menos en cada ciclo de vida ${quien}.${practica} Respeta el máximo de aplicaciones de la etiqueta.</div></div>`;
   }
+
   // otras opciones del portafolio que pertenecen a un grupo funcional para esa plaga o enfermedad
   const CAT_OTRAS = { "Picador-chupador (quelíceros)": /acaric/i, "Raspador (rádula)": /cebo|molusc/i, "Picador-chupador (estilete)": /nematic|insectic/i };
   const esTecnico = () => !!(D.sesion && D.sesion.perfil && D.sesion.perfil.rol === "tecnico");
