@@ -712,7 +712,7 @@
         ${avisoSeguridad()}
         ${res ? `<a class="btn wa" target="_blank" rel="noopener" href="${h(waLink(msgAsesor()))}">${ic.wa}Verificar dosis con mi asesor</a>` : ""}
       </main>`, "calcular");
-    const re = () => vCalcular({});
+    const re = () => { const y = window.scrollY; vCalcular({}); window.scrollTo(0, y); }; // al cambiar botones o datos, la vista se queda donde estaba
     conectarBuscaProd((id) => { cc.p = id; cc.d = null; cc.dha = null; cc.usarMax = false; try { history.replaceState(null, "", "#/calcular?p=" + id); } catch (er) {} re(); });
     $$("[data-m]").forEach((b) => b.addEventListener("click", () => { cc.modo = b.dataset.m; re(); }));
     $$("[data-eq]").forEach((b) => b.addEventListener("click", () => { cc.equipo = b.dataset.eq; re(); }));
