@@ -154,3 +154,6 @@ details.card summary{cursor:pointer;font-weight:600;font-size:14px;min-height:28
 .campos-calc{align-items:end;gap:10px}
 .campos-calc .campo{font-size:13px;min-width:0}
 .campos-calc .unido input{min-width:0}
+.formula{display:flex;flex-direction:column;gap:4px;margin-top:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.12);font-size:13.5px;line-height:1.35}
+.formula b{font-size:14.5px}
+.formula .mini{color:inherit;opacity:.85}

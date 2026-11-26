@@ -629,7 +629,10 @@
     if (!cc.p || !P(cc.p)) cc.p = ((I.c.productos || [])[0] || {}).id;
     const p = P(cc.p); if (!p) return pintar(`${barra("Calcular dosis", "", "#/")}<main class="cont"><div class="vacio">No hay productos cargados.</div></main>`, "calcular");
     cc.modo = cc.modo || "ha"; cc.ha = cc.ha !== undefined ? cc.ha : D.sesion.perfil.hectareas || "";
-    cc.equipo = cc.equipo || "bomba"; cc.lha = cc.lha || aj("litros_agua_ha", 400); cc.ppb = cc.ppb || aj("plantas_por_bomba", 60);
+    cc.lha = cc.lha || aj("litros_agua_ha", 400); cc.ppb = cc.ppb || aj("plantas_por_bomba", 60);
+    // litros de la bomba o tanque que usa cada uno (antes botones 20 L / 200 L / Otro)
+    if (cc.vol === undefined || cc.vol === null || cc.vol === "") cc.vol = cc.equipo === "tanque" ? TANQUE() : cc.equipo === "otro" ? 16 : BOMBA();
+    { const v0 = Number(String(cc.vol).replace(",", ".")) || BOMBA(); cc.equipo = v0 === TANQUE() ? "tanque" : v0 === BOMBA() ? "bomba" : "otro"; }
     guardarUI();
     const d = L.dosisDe(p);
     const n = (v) => (v === "" || v === undefined || v === null ? null : Number(String(v).replace(",", ".")));
@@ -639,11 +642,14 @@
     // por número de plantas no se usa la dosis por hectárea ni el agua por hectárea: se usa la dosis por bomba/tanque
     // y cuántas plantas cubre el equipo elegido
     // técnico: dosis por hectárea editable también por número de plantas (se reparte con las plantas por ha)
-    const esTanque = d.modo === "tanque" && D.sesion.perfil.rol === "tecnico";
+    // por hectáreas todos calculan con la fórmula: producto por bomba = dosis por ha × litros de la bomba ÷ litros de agua por ha
+    // (el técnico puede editar la dosis por ha; el agricultor usa la recomendada). Por plantas, solo el técnico usa dosis por ha.
+    const esTec = D.sesion.perfil.rol === "tecnico";
+    const esTanque = d.modo === "tanque" && (esTec || (cc.modo || "ha") === "ha");
     const dh = esTanque ? L.dosisHaDe(p, lhaRef, TANQUE()) : null;
     if (esTanque && cc.d !== null && cc.d !== undefined && cc.d !== "" && !isNaN(Number(cc.d))) { cc.dha = Math.round(Number(cc.d) * lhaRef / TANQUE() * 10) / 10; cc.d = null; }
-    const dhaElegida = esTanque ? (n(cc.dha) !== null && n(cc.dha) > 0 ? n(cc.dha) : cc.usarMax ? dh.max : dh.min) : null;
-    const vol0 = cc.equipo === "tanque" ? TANQUE() : cc.equipo === "otro" ? Number(cc.vol || 16) : BOMBA();
+    const dhaElegida = esTanque ? (esTec && n(cc.dha) !== null && n(cc.dha) > 0 ? n(cc.dha) : cc.usarMax ? dh.max : dh.min) : null;
+    const vol0 = Number(String(cc.vol).replace(",", ".")) || BOMBA();
     const campo0 = cc.equipo === "tanque" ? "ppt" : cc.equipo === "otro" ? "ppo" : "ppb";
     // por plantas, el agua por ha equivale a: plantas por ha × litros del equipo ÷ plantas que cubre el equipo
     const ppe0 = n(cc[campo0]) || (campo0 === "ppb" ? n(cc.ppb) : Math.round((n(cc.ppb) || 60) * vol0 / BOMBA()));
@@ -652,14 +658,14 @@
     const faltaPha = esTanque && cc.modo === "plantas" && !lhaPlantas;
     if (esTanque && dhaElegida !== null && lhaUsada) { d.min = d.max = dhaElegida * TANQUE() / lhaUsada; }
     else if (cc.d !== null && cc.d !== undefined && cc.d !== "" && !isNaN(Number(cc.d))) { d.min = Number(cc.d); }
-    const vol = cc.equipo === "tanque" ? TANQUE() : cc.equipo === "otro" ? Number(cc.vol || 16) : BOMBA();
+    const vol = vol0;
     // plantas que se cubren con el equipo elegido (bomba, tanque u otro)
     const campoPl = cc.equipo === "tanque" ? "ppt" : cc.equipo === "otro" ? "ppo" : "ppb";
     if (cc[campoPl] === undefined || cc[campoPl] === null || cc[campoPl] === "") cc[campoPl] = campoPl === "ppb" ? cc.ppb : Math.round((n(cc.ppb) || 60) * vol / BOMBA());
     const ppe = n(cc[campoPl]);
     const r = L.calcularFinca(p, d, { modo: cc.modo, hectareas: n(cc.ha), plantas: n(cc.pl), plantasPorHa: n(cc.pha), litrosAguaHa: n(cc.lha), plantasPorBomba: ppe, bombaL: vol, tanqueL: TANQUE(), usarMax: esTanque && !faltaPha ? false : cc.usarMax });
     const rangoTxt = esTanque ? dh.min !== null && dh.max !== null && dh.min !== dh.max : d.min !== null && d.max !== null && d.min !== d.max;
-    const equipoTxt = (plural) => cc.equipo === "tanque" ? (plural ? `Tanques de ${vol} L` : `tanque de ${vol} L`) : cc.equipo === "bomba" ? (plural ? `Bombas de ${vol} L` : `bomba de ${vol} L`) : (plural ? `Cargas de ${vol} L` : `carga de ${vol} L`);
+    const equipoTxt = (plural) => cc.equipo === "tanque" ? (plural ? `Tanques de ${L.fmt(vol)} L` : `tanque de ${L.fmt(vol)} L`) : (plural ? `Bombas de ${L.fmt(vol)} L` : `bomba de ${L.fmt(vol)} L`);
     const pu = L.precioUnitario(p);
     const costoTanque = r.tipo === "tanque" && r.porTanque !== undefined && pu !== null ? Math.round(r.porTanque * pu * 100) / 100 : null;
     // costo total de aplicación = tanques o bombas a preparar × costo de producto por equipo
@@ -677,7 +683,9 @@
         <div><div class="n">${L.fmt(r.litrosAgua, 0)} L</div><small>Agua total</small></div>
         <div><div class="n">${h(L.cantidad(r.porBomba, r.unidad))}</div><small>Dosis por ${equipoTxt(false)}</small></div>
         <div><div class="n">${L.textoEquipos(r.bombas)}</div><small>${equipoTxt(true)}${Math.abs(r.equiposExactos - r.bombas) > 0.005 ? ` <span style="opacity:.8">(${L.fmt(r.equiposExactos, 2)} exactos)</span>` : ""}</small></div></div>
-        ${esTanque && !faltaPha ? `<div class="linea">Dosis usada: <b>${h(L.cantidad(dhaElegida, p.unidad))} por ha</b> con ${L.fmt(lhaUsada, 0)} L de agua/ha${cc.modo === "plantas" ? " (según tus plantas por ha)" : ""}${cc.equipo !== "tanque" ? ` · ${h(L.cantidad(r.porTanque, r.unidad))} por tanque de ${TANQUE()} L` : ""}</div>` : ""}`;
+        ${esTanque && !faltaPha && dhaElegida !== null ? `<div class="formula"><span class="mini">Producto por ${cc.equipo === "tanque" ? "tanque" : "bomba"}</span>
+          <b>Dosis por ha × litros de la ${cc.equipo === "tanque" ? "tanque" : "bomba"} ÷ litros de agua por ha</b>
+          <span>${h(L.cantidad(dhaElegida, p.unidad))}/ha × ${L.fmt(vol)} L ÷ ${L.fmt(lhaUsada, 0)} L/ha = <b>${h(L.cantidad(r.porBomba, r.unidad))}</b> por ${h(equipoTxt(false))}${cc.modo === "plantas" ? " (agua por ha según tus plantas)" : ""}</span></div>` : ""}`;
     } else if (r.kgTotal !== undefined) {
       res = `<div class="grid2"><div><div class="n">${L.fmt(r.kgTotal, 1)} kg</div><small>Producto requerido total</small></div>
         <div><div class="n">${r.sacos50}</div><small>Sacos de 50 kg</small></div>
@@ -691,25 +699,23 @@
         <div class="prod-sel"><span class="mini">Producto seleccionado</span><b>${h(p.nombre)}</b>
           ${p.concentracion || p.ingrediente_activo ? `<span class="mini">Concentración: <b>${h(p.concentracion || p.ingrediente_activo)}</b></span>` : ""}
           <span class="mini">${h(p.categoria || "")}${p.grupo && /^(IRAC|FRAC|HRAC)/.test(p.grupo) ? " · " + h(p.grupo) : ""}</span></div>
-        ${esTanque ? `<label class="campo">Dosis por hectárea<span class="unido"><input id="dha" inputmode="decimal" value="${h(dhaElegida !== null ? L.fmt(dhaElegida) : "")}" placeholder="Escribe la dosis"><span>${h(p.unidad || "")}/ha</span></span>
+        ${esTanque && !esTec ? `<div class="mini">Dosis por hectárea: <b>${dh.min !== null ? h(L.rango(dh.min, dh.max, p.unidad + "/ha")) : "sin dosis cargada"}</b>${dh.derivada ? ` (etiqueta: ${h(L.rango(L.dosisDe(p).min, L.dosisDe(p).max, p.unidad))} por tanque de ${TANQUE()} L)` : ""}</div>` : ""}
+        ${esTanque && esTec ? `<label class="campo">Dosis por hectárea<span class="unido"><input id="dha" inputmode="decimal" value="${h(dhaElegida !== null ? L.fmt(dhaElegida) : "")}" placeholder="Escribe la dosis"><span>${h(p.unidad || "")}/ha</span></span>
           <small>${dh.min !== null ? `Recomendada: <b>${h(L.rango(dh.min, dh.max, p.unidad + "/ha"))}</b>${dh.derivada ? ` (equivale a ${h(L.rango(L.dosisDe(p).min, L.dosisDe(p).max, p.unidad))} por tanque de ${TANQUE()} L con ${L.fmt(lhaRef, 0)} L de agua/ha)` : ""}. Puedes cambiarla.` : "Este producto no tiene dosis por hectárea cargada: escríbela según la etiqueta."}${n(cc.dha) !== null && dh.min !== null && (n(cc.dha) < dh.min * 0.999 || n(cc.dha) > dh.max * 1.001) ? ` <span style="color:var(--rojo,#b3261e)">Está fuera del rango recomendado.</span>` : ""}</small></label>` : ""}
         <div class="mini" ${esTanque ? 'style="display:none"' : ""}>Dosis de etiqueta: <b>${h(d.modo === "tanque" ? L.rango(L.dosisDe(p).min, L.dosisDe(p).max, d.unidad) + " por tanque de " + TANQUE() + " L" : d.modo === "sitio" ? L.rango(d.min, d.max, "g") + " por sitio" : L.rango(d.min, d.max, "kg") + " por ha")}</b>${p.dosis_texto && d.modo === "tanque" ? "" : ""}</div>
-        ${rangoTxt && !(cc.d) && !(esTanque && n(cc.dha) !== null) ? `<div class="seg" role="group" aria-label="Dosis"><button data-dm="min" class="${!cc.usarMax ? "sel" : ""}">Dosis mínima</button><button data-dm="max" class="${cc.usarMax ? "sel" : ""}">Dosis alta</button></div>` : ""}
+        ${rangoTxt && !(cc.d) && !(esTanque && esTec && n(cc.dha) !== null) ? `<div class="seg" role="group" aria-label="Dosis"><button data-dm="min" class="${!cc.usarMax ? "sel" : ""}">Dosis mínima</button><button data-dm="max" class="${cc.usarMax ? "sel" : ""}">Dosis alta</button></div>` : ""}
         <div class="etq">Calcular por</div>
         <div class="seg" role="group" aria-label="Calcular por"><button data-m="ha" class="${cc.modo === "ha" ? "sel" : ""}">Hectáreas</button><button data-m="plantas" class="${cc.modo === "plantas" ? "sel" : ""}">N.º de plantas</button></div>
         <div class="grid2 campos-calc">
           ${cc.modo === "ha" ? `<label class="campo">Área (ha)<span class="unido"><input id="ha" inputmode="decimal" value="${h(cc.ha)}"><span>ha</span></span></label>`
             : `<label class="campo">N.º de plantas<span class="unido"><input id="pl" inputmode="numeric" value="${h(cc.pl || "")}"><span>pl</span></span></label>`}
           ${d.modo === "tanque" ? (cc.modo === "ha" ? `<label class="campo">Agua utilizada por ha<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span></label>`
-            : `<label class="campo">Plantas por ${cc.equipo === "tanque" ? `tanque ${TANQUE()} L` : cc.equipo === "otro" ? `carga ${L.fmt(vol)} L` : `bomba ${BOMBA()} L`}<span class="unido"><input id="${campoPl}" inputmode="numeric" value="${h(cc[campoPl])}"><span>pl</span></span></label>`)
+            : `<label class="campo">Plantas por ${cc.equipo === "tanque" ? "tanque" : "bomba"} de ${L.fmt(vol)} L<span class="unido"><input id="${campoPl}" inputmode="numeric" value="${h(cc[campoPl])}"><span>pl</span></span></label>`)
             : `<label class="campo">Plantas por ha<span class="unido"><input id="pha" inputmode="numeric" value="${h(cc.pha || "")}" placeholder="1600"><span>pl/ha</span></span></label>`}
+          ${d.modo === "tanque" ? `<label class="campo">Litros de tu bomba o tanque<span class="unido"><input id="vol" inputmode="decimal" value="${h(cc.vol)}"><span>L</span></span></label>` : ""}
           ${d.modo === "tanque" && esTanque && cc.modo === "plantas" ? `<label class="campo">Plantas por ha<span class="unido"><input id="pha" inputmode="numeric" value="${h(cc.pha || "")}" placeholder="1600"><span>pl/ha</span></span></label>` : ""}
         </div>
-        ${faltaPha ? `<div class="aviso ambar">${ic.alerta}<div>Escribe las <b>plantas por hectárea</b> para repartir la dosis por hectárea en cada ${cc.equipo === "tanque" ? "tanque" : cc.equipo === "otro" ? "carga" : "bomba"}. Mientras tanto se usa la dosis de etiqueta por tanque.</div></div>` : ""}
-        ${d.modo === "tanque" ? `
-          <div class="etq">Mezcla en</div>
-          <div class="seg" role="group" aria-label="Mezcla en"><button data-eq="bomba" class="${cc.equipo === "bomba" ? "sel" : ""}">Bomba ${BOMBA()} L</button><button data-eq="tanque" class="${cc.equipo === "tanque" ? "sel" : ""}">Tanque ${TANQUE()} L</button><button data-eq="otro" class="${cc.equipo === "otro" ? "sel" : ""}">Otro</button></div>
-          ${cc.equipo === "otro" ? `<label class="campo">Capacidad del equipo<span class="unido"><input id="vol" inputmode="decimal" value="${h(cc.vol || 16)}"><span>litros</span></span></label>` : ""}` : ""}
+        ${faltaPha ? `<div class="aviso ambar">${ic.alerta}<div>Escribe las <b>plantas por hectárea</b> para repartir la dosis por hectárea en cada ${cc.equipo === "tanque" ? "tanque" : "bomba"}. Mientras tanto se usa la dosis de etiqueta por tanque.</div></div>` : ""}
         ${r.avisos.map((a) => `<div class="aviso ambar">${ic.alerta}<div>${h(a)}</div></div>`).join("")}
         ${res ? `<section class="resultado" aria-live="polite"><div class="etq">Resultado</div>${res}${compra}</section>` : ""}
         <div class="acciones"><button class="btn" id="reg">Registrar aplicación</button>${d.modo === "tanque" || d.modo === "suelo_ha" ? `<button class="btn sec" id="mez">Agregar a mezcla</button>` : `<a class="btn sec" href="#/fertilizacion/${h(ui.cultivo || "")}">Ver plan de fertilización</a>`}</div>
@@ -721,7 +727,7 @@
     $$("[data-m]").forEach((b) => b.addEventListener("click", () => { cc.modo = b.dataset.m; re(); }));
     $$("[data-eq]").forEach((b) => b.addEventListener("click", () => { cc.equipo = b.dataset.eq; re(); }));
     $$("[data-dm]").forEach((b) => b.addEventListener("click", () => { cc.usarMax = b.dataset.dm === "max"; cc.dha = null; re(); }));
-    ["dha", "ha", "pl", "vol", "lha", "ppb", "ppt", "ppo", "pha"].forEach((k) => { const el = $("#" + k); if (el) el.addEventListener("change", () => { cc[k] = el.value; re(); }); });
+    ["dha", "ha", "pl", "vol", "lha", "ppb", "ppt", "ppo", "pha"].forEach((k) => { const el = $("#" + k); if (el) el.addEventListener("change", () => { cc[k] = el.value; if (k === "vol") cc.ppo = ""; re(); }); });
     $("#reg").addEventListener("click", () => {
       const dosisUsada = cc.usarMax ? d.max : d.min;
       prefill = { cargas: r.bombas ? String(r.bombas).replace(".", ",") : "", actividad: p.categoria && /Fertiliz|Enmienda|Bioestim/.test(p.categoria) ? (d.modo === "tanque" ? "Fertilización foliar" : p.categoria === "Enmienda" ? "Enmienda" : "Fertilización al suelo") : p.categoria === "Herbicida" ? "Herbicida" : "Fumigación planta",
