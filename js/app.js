@@ -529,10 +529,33 @@
         <label class="campo">Buscar producto<input id="pbuscar" type="search" placeholder="Producto, I.A., grupo químico, plaga, grupo hongo…" autocomplete="off"></label>
         <div id="pfiltros"><div class="chips" id="pchips" role="group" aria-label="Categoría"><button class="chip sel" data-pc="">Todos (${prods.length})</button>${cats.map((k) => `<button class="chip" data-pc="${h(k)}">${h(k)} (${grupos[k].length})</button>`).join("")}</div></div>
         ${cats.map((k) => `<section class="port-grupo" data-cat="${h(k)}" style="display:flex;flex-direction:column;gap:8px"><h3 style="margin:8px 0 0;font-size:15px;color:var(--verde)">${h(k)}</h3>${grupos[k].sort((a, b) => a.nombre.localeCompare(b.nombre)).map(fila).join("")}</section>`).join("")}
+        <section id="prank" hidden style="display:flex;flex-direction:column;gap:8px"><div class="aviso azul" id="prankinfo" style="padding:8px 10px"></div><div id="pranklista" style="display:flex;flex-direction:column;gap:8px"></div></section>
         <div class="vacio" id="pvacio" hidden>No se encontró ningún producto con esa búsqueda.</div>
       </main>`, "portafolio");
     let cat = "";
+    // posición original de cada producto, para devolverlo a su categoría al salir del orden por eficiencia
+    const origen = $$(".port-grupo").map((g) => [g, $$(".port-item", g)]);
+    const porId = new Map($$(".port-item").map((it) => [$(".port-ficha", it).dataset.id, it]));
+    const restaurar = () => { origen.forEach(([g, items]) => items.forEach((it) => { g.appendChild(it); const b = $(".port-rank", it); if (b) b.remove(); })); $("#prank").hidden = true; };
+    // búsqueda por plaga, enfermedad o clase de hongo: lista única, del producto más eficiente al menos eficiente
+    const rankear = (q) => {
+      const info = L.claseDeBusqueda(q); if (!info) return false;
+      const t = sinTilde(q).split(/\s+/).filter(Boolean);
+      const orden = L.rankearPorClase(info, prods), ids = new Set(orden.map((x) => String(x.p.id)));
+      const extra = prods.filter((p) => !ids.has(String(p.id)) && t.every((w) => porId.get(String(p.id)).dataset.txt.includes(w))).sort((a, b) => a.nombre.localeCompare(b.nombre));
+      restaurar(); $$(".port-grupo").forEach((g) => { g.hidden = true; });
+      const lista = $("#pranklista");
+      orden.forEach((x, i) => { const it = porId.get(String(x.p.id)); it.hidden = false; lista.appendChild(it);
+        $("summary", it).insertAdjacentHTML("afterbegin", `<span class="port-rank" title="Orden de eficiencia">${i + 1}</span>`); });
+      extra.forEach((p) => { const it = porId.get(String(p.id)); it.hidden = false; lista.appendChild(it); });
+      const c = L.CLASES[info.clase], nom = CLS_NOM[info.clase] || info.clase;
+      $("#prankinfo").innerHTML = `${ic.alerta}<div><b>${h(nom)}</b>: ${orden.length} productos ordenados del <b>más eficiente</b> (1) al menos eficiente, según el grupo químico.${extra.length ? ` Al final, ${extra.length} que mencionan tu búsqueda sin un grupo específico para esta clase.` : ""}<br><span class="mini">${h(c.control)}</span></div>`;
+      $("#prank").hidden = false; $("#pvacio").hidden = orden.length + extra.length > 0; $("#pfiltros").hidden = true;
+      return true;
+    };
     const filtrar = () => {
+      if (rankear($("#pbuscar").value.trim())) return;
+      if (!$("#prank").hidden) restaurar();
       const t = sinTilde($("#pbuscar").value.trim()).split(/\s+/).filter(Boolean); let vis = 0;
       $$(".port-grupo").forEach((g) => {
         let n = 0;

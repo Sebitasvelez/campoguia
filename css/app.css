@@ -163,3 +163,4 @@ details.card summary{cursor:pointer;font-weight:600;font-size:14px;min-height:28
 .resultado .res-en{text-transform:none;letter-spacing:0;font-weight:700;font-size:15px;color:#fff;margin-left:6px}
 .resultado .n-kg{font-size:16px;font-weight:600;opacity:.9}
 #pbuscar::placeholder{font-size:13px}
+.port-rank{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--verde);color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}

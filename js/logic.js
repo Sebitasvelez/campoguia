@@ -414,22 +414,22 @@
   const CLASES = {
     "Masticador": { tipo: "plaga", resumen: "Muerde, corta y tritura el tejido con mandíbulas.",
       control: "Funcionan mejor los insecticidas de contacto y de ingestión aplicados sobre el órgano que come.",
-      grupos: [G("IRAC 1B", "Organofosforados"), G("IRAC 3A", "Piretroides"), G("IRAC 28", "Diamidas"), G("IRAC 13", "Desacopladores (sulfluramida, clorfenapir)"),
-        G("IRAC 2B", "Fenilpirazoles (fipronil)"), G("IRAC 6", "Avermectinas"), G("IRAC 5", "Espinosinas"), G("IRAC 22A", "Oxadiazinas (indoxacarb)"), G("IRAC 30", "Meta-diamidas e isoxazolinas"),
-        G("IRAC 1A", "Carbamatos"), G("IRAC 4A", "Neonicotinoides (contacto e ingestión)"), G("IRAC 14", "Nereistoxinas (tiociclam)"), G("IRAC UN", "Botánicos (azadiractina)")] },
+      grupos: [G("IRAC 28", "Diamidas"), G("IRAC 5", "Espinosinas"), G("IRAC 6", "Avermectinas (emamectina, abamectina)"), G("IRAC 22A", "Oxadiazinas (indoxacarb)"),
+        G("IRAC 30", "Meta-diamidas e isoxazolinas"), G("IRAC 3A", "Piretroides"), G("IRAC 1B", "Organofosforados"), G("IRAC 13", "Desacopladores (sulfluramida, clorfenapir)"),
+        G("IRAC 2B", "Fenilpirazoles (fipronil)"), G("IRAC 1A", "Carbamatos"), G("IRAC 4A", "Neonicotinoides (contacto e ingestión)"), G("IRAC 14", "Nereistoxinas (tiociclam)"), G("IRAC UN", "Botánicos (azadiractina)")] },
     "Masticador-lamedor": { tipo: "plaga", resumen: "Raspa el tejido con mandíbulas y lame los jugos que brotan.",
       control: "No succiona savia, por eso los sistémicos actúan poco: funcionan mejor los de contacto e ingestión sobre botones, flores y frutos.",
-      grupos: [G("IRAC 3A", "Piretroides"), G("IRAC 14", "Nereistoxinas (tiociclam)"), G("IRAC 1B", "Organofosforados"), G("IRAC 6", "Avermectinas"),
-        G("IRAC 4A", "Neonicotinoides (contacto e ingestión)"), G("IRAC UN", "Botánicos (azadiractina, repelente)")] },
+      grupos: [G("IRAC 5", "Espinosinas (spinosad, spinetoram)"), G("IRAC 6", "Avermectinas (abamectina)"), G("IRAC 14", "Nereistoxinas (tiociclam)"), G("IRAC 4A", "Neonicotinoides (contacto e ingestión)"),
+        G("IRAC 3A", "Piretroides"), G("IRAC 1B", "Organofosforados"), G("IRAC UN", "Botánicos (azadiractina, repelente)")] },
     "Picador-chupador": { tipo: "plaga", resumen: "Clava un estilete en el tejido y succiona la savia o los jugos.",
       control: "Funcionan los sistémicos y translaminares que viajan en la savia; los de contacto ayudan a bajar la población.",
-      grupos: [G("IRAC 4A", "Neonicotinoides (sistémicos)"), G("IRAC 28", "Diamidas (ciantraniliprol, sistémico)"), G("IRAC 6", "Avermectinas (abamectina, translaminar)"),
+      grupos: [G("IRAC 4A", "Neonicotinoides (sistémicos)"), G(null, "Diamidas sistémicas (ciantraniliprol)", /ciantranil|cyantranil/), G(null, "Avermectinas (abamectina, translaminar)", /abamect/),
         G("IRAC 4C", "Sulfoximinas (sulfoxaflor)"), G("IRAC 29", "Flonicamid"), G("IRAC 9B", "Piridinas azometinas (pimetrozina)"), G("IRAC 23", "Ácidos tetrónicos (spirotetramat)"),
         G("IRAC 12A", "Diafentiurón"), G("IRAC 1B", "Organofosforados (acefato, dimetoato)"), G("IRAC 3A", "Piretroides (contacto)")] },
     "Picador-chupador (quelíceros)": { tipo: "plaga", resumen: "Ácaro: perfora las células con quelíceros en forma de estilete y succiona su contenido.",
       control: "Necesita acaricidas específicos. Evita piretroides solos: pueden aumentar los ácaros.",
       grupos: [G("IRAC 20D", "Bifenazato"), G("IRAC 25A", "Beta-cetonitrilos (cienopirafén)"), G("IRAC 12C", "Propargite"), G("IRAC 12D", "Tetradifón"),
-        G("IRAC 6", "Avermectinas (abamectina)"), G("IRAC 21A", "METI (piridabén, fenpiroximato)"), G("IRAC 23", "Ácidos tetrónicos (spiromesifén)"), G("IRAC 10A", "Hexitiazox / clofentezina"),
+        G(null, "Avermectinas (abamectina)", /abamect/), G("IRAC 21A", "METI (piridabén, fenpiroximato)"), G("IRAC 23", "Ácidos tetrónicos (spiromesifén)"), G("IRAC 10A", "Hexitiazox / clofentezina"),
         G("IRAC 10B", "Etoxazol"), G("IRAC 12B", "Organoestánnicos"), G("FRAC M02", "Azufre (acción acaricida)")] },
     "Picador-chupador (estilete)": { tipo: "plaga", resumen: "Nematodo: perfora las células de la raíz con un estilete y succiona su contenido.",
       control: "Se controla con nematicidas al suelo o productos con acción nematicida, junto con materia orgánica y biológicos.",
@@ -479,6 +479,41 @@
   };
   const OPC_CLASE = { plaga: Object.keys(CLASES).filter((k) => CLASES[k].tipo === "plaga"), enfermedad: Object.keys(CLASES).filter((k) => CLASES[k].tipo === "enfermedad"), maleza: Object.keys(CLASES).filter((k) => CLASES[k].tipo === "maleza") };
   // "Oomiceto + Deuteromiceto" → varias clases. Taxonomía actual; Botrytis, Fusarium y Rhizoctonia se mantienen como Deuteromicetos
+  // ---------------- búsqueda por plaga, enfermedad o clase de hongo en el portafolio: qué clase es y en qué orden de
+  // eficiencia van los grupos. "orden" (opcional) reemplaza el orden de la clase para plagas muy específicas.
+  const BUSCA_CLASE = [
+    { re: /oomicet|oomycet|pseudohongo|phytophthora|pythium|mildiu velloso|mildeo velloso|peronospora|mazorca negra|pudricion parda|lancha|tizon tardio|gota/, clase: "Oomiceto" },
+    { re: /deuteromicet|deuteromycet|deutero|imperfect|fusarium|botrytis|moho gris|rhizoctonia|marchitez|pudricion basal/, clase: "Deuteromiceto" },
+    { re: /basidiomicet|basidiomycet|basidio|monilia|moniliophthora|escoba de bruja|roya|sclerotium|carbon|mal de hilachas/, clase: "Basidiomiceto" },
+    { re: /ascomicet|ascomycet|antracnosis|colletotrichum|alternaria|oidio|cenicilla|mildiu polvoso|sigatoka|mycosphaerella|cercospora|ojo de pollo|mancha foliar|lasiodiplodia|botryodiplodia|ascochyta/, clase: "Ascomiceto" },
+    { re: /bacteri|erwinia|pectobacterium|xanthomonas|pseudomonas|ralstonia|pudricion blanda/, clase: "Bacteria" },
+    { re: /acaro|aranita|arana roja|arañita|tetranychus|eriofido/, clase: "Picador-chupador (quelíceros)" },
+    { re: /nematod|meloidogyne|agallas en raiz/, clase: "Picador-chupador (estilete)" },
+    { re: /babosa|caracol|molusco/, clase: "Raspador (rádula)" },
+    { re: /trips|thrips/, clase: "Masticador-lamedor" },
+    { re: /hormiga arriera|arriera|atta\b|cortadora/, clase: "Masticador", orden: ["IRAC 13", "IRAC 2B", "IRAC 1B", "IRAC 3A"] },
+    { re: /hormiga|comejen|termita|avispa|muruja/, clase: "Masticador", orden: ["IRAC 3A", "IRAC 1B", "IRAC 4A", "IRAC 2B", "IRAC 13", "IRAC 14"] },
+    { re: /mosca blanca|pulgon|afido|cochinilla|escama|queresa|chinche|monalonion|chicharrita|salivazo|psilido|picudo negro|mosquilla|chupador/, clase: "Picador-chupador" },
+    { re: /gusano|oruga|larva|cogollero|spodoptera|minador|barrenador|perforador|gallina ciega|hormiga|grillo|picudo|cucarron|escarabajo|avispa|muruja|comejen|termita|langosta|saltamontes|tierrero|trozador|polilla|defoliador|masticador|crisomelido|diabrotica|lorito|vaquita/, clase: "Masticador" },
+  ];
+  const quitarTildes = (x) => String(x || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  function claseDeBusqueda(texto) {
+    const t = quitarTildes(texto).trim(); if (t.length < 4) return null;
+    const x = BUSCA_CLASE.find((b) => b.re.test(t)); if (!x) return null;
+    const gf = CLASES[x.clase].grupos, orden = x.orden ? x.orden.map((c) => gf.find((g) => g.c === c) || G(c, NOMBRE_GRUPO[c] || c)).concat(gf.filter((g) => !x.orden.includes(g.c))) : gf;
+    return { clase: x.clase, grupos: orden };
+  }
+  // ordena los productos que sirven para la clase, del más eficiente al menos: mejor grupo, segundo grupo, más grupos
+  function rankearPorClase(info, productos) {
+    const k = info.clase, tipo = CLASES[k].tipo, pos = new Map(info.grupos.map((g, i) => [g.c || g.n, i]));
+    const cat = tipo === "plaga" ? (CAT_ESPECIAL[k] || /insectic|acaric|cebo|nematic/i) : /fungic|bacteric|desinfec/i;
+    return productos.filter((p) => p.activo !== false && cat.test(p.categoria || "") && (tipo !== "enfermedad" || clasesFuncionales(p).includes(k)))
+      .map((p) => { const idx = coincideGrupos(p, info.grupos).map((g) => pos.get(g.c || g.n)).sort((a, b) => a - b); return { p, idx }; })
+      .filter((x) => x.idx.length)
+      .sort((a, b) => a.idx[0] - b.idx[0] || (a.idx[1] ?? 99) - (b.idx[1] ?? 99) || b.idx.length - a.idx.length || a.p.nombre.localeCompare(b.p.nombre))
+      .map((x) => ({ p: x.p, grupo: info.grupos[x.idx[0]] }));
+  }
+
   // clases de enfermedad (hongo o bacteria) para las que el producto tiene al menos un grupo funcional
   const CLASES_HONGO = ["Oomiceto", "Ascomiceto", "Basidiomiceto", "Deuteromiceto", "Bacteria"];
   // Los multisitio (FRAC M) y los fungicidas preventivos controlan todas las clases: no llevan especificidad por clase
@@ -600,6 +635,6 @@
   }
   const api = { fraccionSacos, textoSacos, ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, nombresGrupo, textoBusquedaGrupo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
-    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
+    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, claseDeBusqueda, rankearPorClase, esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);

@@ -1,5 +1,5 @@
 /* CampoGuía · funciona sin internet: guarda la app en el teléfono */
-const VERSION = "campoguia-v102";
+const VERSION = "campoguia-v103";
 const FOTOS = "campoguia-fotos"; // fotos del manual: se guardan aparte y no se borran al actualizar la app
 const ARCHIVOS = ["./", "index.html", "css/app.css", "js/config.js", "js/ui.js", "js/logic.js", "js/data.js", "js/reporte.js", "js/receta.js", "js/vendor/jspdf.umd.min.js", "js/app.js",
   "js/vendor/supabase.js", "js/vendor/xlsx.mini.min.js", "data/catalogo-inicial.json", "manifest.webmanifest",
