@@ -2990,10 +2990,10 @@
   {
    "id": 67,
    "nombre": "Agresor",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
+   "ingrediente_activo": "IMIDACLOPRID",
+   "grupo": "IRAC 4A",
+   "categoria": "Insecticida",
+   "formulacion": "soluble",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
    "dosis_max": null,
@@ -3003,12 +3003,12 @@
    "contenido": 1000,
    "contenido_unidad": "cc",
    "pvp": 30,
-   "control": null,
+   "control": "Insecticida sistémico para insectos chupadores y masticadores vectores de virus",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -3035,7 +3035,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Imidacloprid"
   },
   {
    "id": 68,
@@ -3277,10 +3277,10 @@
   {
    "id": 74,
    "nombre": "Amigable",
-   "ingrediente_activo": null,
+   "ingrediente_activo": "PAECILOMYCES SPP.",
    "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
+   "categoria": "Bioestimulante",
+   "formulacion": "polvo",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
    "dosis_max": null,
@@ -3290,12 +3290,12 @@
    "contenido": 1000,
    "contenido_unidad": "g",
    "pvp": 228,
-   "control": null,
+   "control": "Inoculante biológico inductor de resistencia a patógenos",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -3315,7 +3315,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Paecilomyces spp. (inoculante biológico)"
   },
   {
    "id": 75,
@@ -3356,10 +3356,10 @@
   {
    "id": 76,
    "nombre": "Audax",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
+   "ingrediente_activo": "IMIDACLOPRID + TIODICARB",
+   "grupo": "IRAC 4A + 1A",
+   "categoria": "Insecticida",
+   "formulacion": "suspension",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
    "dosis_max": null,
@@ -3369,12 +3369,12 @@
    "contenido": 250,
    "contenido_unidad": "cc",
    "pvp": 28,
-   "control": null,
+   "control": "Insecticida para tratamiento de semilla, sistémico y por ingestión",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Uso en tratamiento de semilla. Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -3387,14 +3387,14 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Imidacloprid + Tiodicarb (tratamiento de semilla)"
   },
   {
    "id": 77,
    "nombre": "Avirtul",
    "ingrediente_activo": null,
    "grupo": null,
-   "categoria": "Otros",
+   "categoria": "Fungicida",
    "formulacion": "liquido",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
@@ -3405,12 +3405,12 @@
    "contenido": 500,
    "contenido_unidad": "cc",
    "pvp": 44,
-   "control": null,
+   "control": "Fungicida sistémico curativo para mildiú polvoso en rosas",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: ingrediente activo, concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -3428,10 +3428,10 @@
   {
    "id": 78,
    "nombre": "Axanta",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
+   "ingrediente_activo": "MANDIPROPAMID + OXATIAPIPROLINA",
+   "grupo": "FRAC 40 + 49",
+   "categoria": "Fungicida",
+   "formulacion": "suspension",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
    "dosis_max": null,
@@ -3441,12 +3441,12 @@
    "contenido": 1000,
    "contenido_unidad": "cc",
    "pvp": 195,
-   "control": null,
+   "control": "Fungicida para enfermedades causadas por oomicetos en rosas",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -3459,7 +3459,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Mandipropamid 250 g/L + Oxatiapiprolina 30 g/L"
   },
   {
    "id": 79,
@@ -3527,7 +3527,7 @@
    "contenido": 946,
    "contenido_unidad": "cc",
    "pvp": 21.5,
-   "control": null,
+   "control": "Adhesivo para monitoreo de insectos y plagas",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
@@ -3648,49 +3648,6 @@
    "concentracion": "B 10% + Zn 10%"
   },
   {
-   "id": 83,
-   "nombre": "Semilla brócoli Beany",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Semilla",
-   "formulacion": "liquido",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": null,
-   "dosis_texto": null,
-   "presentacion": "25.000 SEMILLAS",
-   "contenido": 1,
-   "contenido_unidad": "u",
-   "pvp": 330,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": null,
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "25.000 SEMILLAS",
-     "cantidad": 1,
-     "unidad": "u",
-     "precio": 330
-    },
-    {
-     "codigo": null,
-     "empaque": "5.000 SEMILLAS",
-     "cantidad": 1,
-     "unidad": "u",
-     "precio": 69.3
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": null
-  },
-  {
    "id": 84,
    "nombre": "Calcimend granulado",
    "ingrediente_activo": "SULFATO DE CALCIO DIHIDRATADO",
@@ -3801,10 +3758,10 @@
   {
    "id": 87,
    "nombre": "Confort",
-   "ingrediente_activo": null,
+   "ingrediente_activo": "EDTA TETRASODICO",
    "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
+   "categoria": "Coadyuvante",
+   "formulacion": "corrector_ph",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
    "dosis_max": null,
@@ -3814,12 +3771,12 @@
    "contenido": 1000,
    "contenido_unidad": "g",
    "pvp": 12.9,
-   "control": null,
+   "control": "Corrector de dureza del agua: neutraliza calcio y magnesio",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -3846,7 +3803,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Etilendiamino tetraacético tetrasódico (EDTA)"
   },
   {
    "id": 88,
@@ -4094,9 +4051,9 @@
   {
    "id": 93,
    "nombre": "Damocles",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
+   "ingrediente_activo": "BACILLUS THURINGIENSIS",
+   "grupo": "IRAC 11A",
+   "categoria": "Insecticida",
    "formulacion": "liquido",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
@@ -4107,12 +4064,12 @@
    "contenido": 1000,
    "contenido_unidad": "cc",
    "pvp": 20,
-   "control": null,
+   "control": "Control de lepidópteros (gusanos)",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -4125,7 +4082,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Bacillus thuringiensis (insecticida biológico)"
   },
   {
    "id": 94,
@@ -4307,42 +4264,6 @@
    "concentracion": "Ésteres metilados de ácidos grasos 100%"
   },
   {
-   "id": 99,
-   "nombre": "Express Universal 300",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "polvo",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": "g",
-   "dosis_texto": null,
-   "presentacion": "1000 SOBRES 10 GRAMOS",
-   "contenido": 10000,
-   "contenido_unidad": "g",
-   "pvp": 82.5,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "1000 SOBRES 10 GRAMOS",
-     "cantidad": 10000,
-     "unidad": "g",
-     "precio": 82.5
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": null
-  },
-  {
    "id": 100,
    "nombre": "Fascinate 280 SL",
    "ingrediente_activo": "GLUFOSINATO DE AMONIO",
@@ -4438,9 +4359,9 @@
   {
    "id": 102,
    "nombre": "Furtive",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
+   "ingrediente_activo": "BACILLUS SUBTILIS",
+   "grupo": "FRAC BM02",
+   "categoria": "Fungicida",
    "formulacion": "liquido",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
@@ -4451,12 +4372,12 @@
    "contenido": 1000,
    "contenido_unidad": "cc",
    "pvp": 18.2,
-   "control": null,
+   "control": "Fungicida biológico para control y rotación de sigatoka negra en banano",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -4469,14 +4390,14 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Bacillus subtilis (fungicida biológico)"
   },
   {
    "id": 103,
    "nombre": "Gaia",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
+   "ingrediente_activo": "FLONICAMID",
+   "grupo": "IRAC 29",
+   "categoria": "Insecticida",
    "formulacion": "polvo",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
@@ -4487,12 +4408,12 @@
    "contenido": 100,
    "contenido_unidad": "g",
    "pvp": 14.8,
-   "control": null,
+   "control": "Insecticida sistémico y translaminar para insectos chupadores",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -4505,7 +4426,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Flonicamid"
   },
   {
    "id": 104,
@@ -4553,10 +4474,10 @@
   {
    "id": 105,
    "nombre": "Genius AG",
-   "ingrediente_activo": null,
+   "ingrediente_activo": "NANOPARTICULAS DE PLATA",
    "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
+   "categoria": "Bioestimulante",
+   "formulacion": "liquido_foliar",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
    "dosis_max": null,
@@ -4566,12 +4487,12 @@
    "contenido": 1000,
    "contenido_unidad": "cc",
    "pvp": 95,
-   "control": null,
+   "control": "Mejora crecimiento, vigor, rendimiento y respuesta al estrés",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -4598,7 +4519,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Plata en nanopartículas 6000 ppm"
   },
   {
    "id": 106,
@@ -4725,10 +4646,10 @@
   {
    "id": 109,
    "nombre": "Helix Adva",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
+   "ingrediente_activo": "TIABENDAZOL + FLUDIOXONIL + TIAMETOXAM + METALAXIL-M",
+   "grupo": "FRAC 1 + 12 + 4 · IRAC 4A",
+   "categoria": "Fungicida",
+   "formulacion": "suspension",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
    "dosis_max": null,
@@ -4738,12 +4659,12 @@
    "contenido": 1000,
    "contenido_unidad": "cc",
    "pvp": 138.5,
-   "control": null,
+   "control": "Tratamiento de semillas (fungicida + insecticida)",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Uso en tratamiento de semilla. Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -4770,7 +4691,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Tiabendazol + Fludioxonil + Tiametoxam + Metalaxil-M (FS, tratamiento de semillas)"
   },
   {
    "id": 110,
@@ -4890,9 +4811,9 @@
   {
    "id": 115,
    "nombre": "Inmortal",
-   "ingrediente_activo": null,
+   "ingrediente_activo": "TRICHODERMA SPP.",
    "grupo": null,
-   "categoria": "Otros",
+   "categoria": "Bioestimulante",
    "formulacion": "polvo",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
@@ -4903,12 +4824,12 @@
    "contenido": 1000,
    "contenido_unidad": "g",
    "pvp": 138,
-   "control": null,
+   "control": "Inoculante biológico promotor de crecimiento vegetal",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -4928,7 +4849,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Trichoderma spp. (inoculante biológico)"
   },
   {
    "id": 116,
@@ -5025,11 +4946,11 @@
   },
   {
    "id": 118,
-   "nombre": "Lapo",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
+   "nombre": "Lapo 400",
+   "ingrediente_activo": "BISPYRIBAC SODIO",
+   "grupo": "HRAC 2",
+   "categoria": "Herbicida",
+   "formulacion": "suspension",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
    "dosis_max": null,
@@ -5039,12 +4960,12 @@
    "contenido": 100,
    "contenido_unidad": "cc",
    "pvp": 3.5,
-   "control": null,
+   "control": "Herbicida para arroz: col de agua, clavo de agua, moco de pavo, paja de burro, cortadera",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -5057,16 +4978,16 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Bispyribac sodio 400 g/L (referencial, verificar etiqueta)"
   },
   {
    "id": 119,
-   "nombre": "Magma",
-   "ingrediente_activo": null,
+   "nombre": "Magma HQ-Massó",
+   "ingrediente_activo": "HIERRO (HBED) + MANGANESO + ZINC",
    "grupo": null,
-   "categoria": "Otros",
+   "categoria": "Fertilizante edáfico",
    "formulacion": "polvo",
-   "modo_aplicacion": "tanque",
+   "modo_aplicacion": "suelo_ha",
    "dosis_min": null,
    "dosis_max": null,
    "unidad": "g",
@@ -5075,12 +4996,12 @@
    "contenido": 5000,
    "contenido_unidad": "g",
    "pvp": 96,
-   "control": null,
+   "control": "Corrector de carencias de hierro, manganeso y zinc",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -5093,7 +5014,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Hierro quelatado HBED + Mn + Zn"
   },
   {
    "id": 120,
@@ -5184,9 +5105,9 @@
   {
    "id": 122,
    "nombre": "Maxfun",
-   "ingrediente_activo": null,
+   "ingrediente_activo": "EXTRACTOS VEGETALES FERMENTADOS",
    "grupo": null,
-   "categoria": "Otros",
+   "categoria": "Fungicida",
    "formulacion": "liquido",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
@@ -5197,12 +5118,12 @@
    "contenido": 1000,
    "contenido_unidad": "cc",
    "pvp": 17,
-   "control": null,
+   "control": "Fungicida orgánico, bioenergizante vegetal",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -5215,15 +5136,15 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Extractos vegetales fermentados (100% orgánico)"
   },
   {
    "id": 123,
    "nombre": "Metrinex 50 EQ",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
+   "ingrediente_activo": "AMETRINA",
+   "grupo": "HRAC 5",
+   "categoria": "Herbicida",
+   "formulacion": "suspension",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
    "dosis_max": null,
@@ -5233,12 +5154,12 @@
    "contenido": 1000,
    "contenido_unidad": "cc",
    "pvp": 9.6,
-   "control": null,
+   "control": "Herbicida selectivo pre y postemergente temprano en caña, banano y piña (gramíneas y hoja ancha)",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -5251,7 +5172,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Ametrina 500 g/L (referencial, verificar etiqueta)"
   },
   {
    "id": 124,
@@ -5558,9 +5479,9 @@
   {
    "id": 132,
    "nombre": "Palystra Duo",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
+   "ingrediente_activo": "CIANTRANILIPROL + TIAMETOXAM",
+   "grupo": "IRAC 28 + 4A",
+   "categoria": "Insecticida",
    "formulacion": "polvo",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
@@ -5571,12 +5492,12 @@
    "contenido": 600,
    "contenido_unidad": "g",
    "pvp": 166.2,
-   "control": null,
+   "control": "Insecticida de doble modo de acción",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -5596,15 +5517,15 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Ciantraniliprol 200 g/kg + Tiametoxam 200 g/kg"
   },
   {
    "id": 133,
    "nombre": "Patada",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
+   "ingrediente_activo": "PROPANIL",
+   "grupo": "HRAC 5",
+   "categoria": "Herbicida",
+   "formulacion": "emulsion",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
    "dosis_max": null,
@@ -5614,12 +5535,12 @@
    "contenido": 1000,
    "contenido_unidad": "cc",
    "pvp": 8,
-   "control": null,
+   "control": "Herbicida selectivo de contacto, postemergencia temprana en arroz",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -5632,7 +5553,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Propanil"
   },
   {
    "id": 134,
@@ -5712,78 +5633,6 @@
    "dosis_ha_max": null,
    "activo": true,
    "concentracion": "Pidiflumetofen + Fludioxonil (SC)"
-  },
-  {
-   "id": 136,
-   "nombre": "Semilla pimiento Marielle (1.000 semillas)",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Semilla",
-   "formulacion": "liquido",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": null,
-   "dosis_texto": null,
-   "presentacion": "1000 SEMILLAS",
-   "contenido": 1,
-   "contenido_unidad": "u",
-   "pvp": 118.5,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": null,
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "1000 SEMILLAS",
-     "cantidad": 1,
-     "unidad": "u",
-     "precio": 118.5
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": null
-  },
-  {
-   "id": 137,
-   "nombre": "Semilla pimiento Shitara (1.000 semillas)",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Semilla",
-   "formulacion": "liquido",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": null,
-   "dosis_texto": null,
-   "presentacion": "1.000 SEMILLAS",
-   "contenido": 1,
-   "contenido_unidad": "u",
-   "pvp": 118.5,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": null,
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "1.000 SEMILLAS",
-     "cantidad": 1,
-     "unidad": "u",
-     "precio": 118.5
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": null
   },
   {
    "id": 138,
@@ -6046,9 +5895,9 @@
   {
    "id": 144,
    "nombre": "Queen",
-   "ingrediente_activo": null,
+   "ingrediente_activo": "QUINCLORAC",
    "grupo": null,
-   "categoria": "Otros",
+   "categoria": "Herbicida",
    "formulacion": "liquido",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
@@ -6059,12 +5908,12 @@
    "contenido": 1000,
    "contenido_unidad": "cc",
    "pvp": 27.5,
-   "control": null,
+   "control": "Herbicida sistémico postemergente para Echinochloa y algunas hojas anchas en arroz",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -6077,7 +5926,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Quinclorac"
   },
   {
    "id": 146,
@@ -6276,9 +6125,9 @@
   {
    "id": 151,
    "nombre": "Runs",
-   "ingrediente_activo": null,
+   "ingrediente_activo": "PQQ (PIRROLOQUINOLINA QUINONA)",
    "grupo": null,
-   "categoria": "Otros",
+   "categoria": "Bioestimulante",
    "formulacion": "polvo",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
@@ -6289,12 +6138,12 @@
    "contenido": 125,
    "contenido_unidad": "g",
    "pvp": 14.5,
-   "control": null,
+   "control": "Bioestimulante a base de coenzimas y compuestos vitamínicos",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -6307,7 +6156,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Pirroloquinolina quinona (PQQ)"
   },
   {
    "id": 152,
@@ -6598,11 +6447,11 @@
   {
    "id": 158,
    "nombre": "Soil Activator",
-   "ingrediente_activo": null,
+   "ingrediente_activo": "MICROORGANISMOS BENEFICOS",
    "grupo": null,
-   "categoria": "Otros",
+   "categoria": "Bioestimulante",
    "formulacion": "polvo",
-   "modo_aplicacion": "tanque",
+   "modo_aplicacion": "suelo_ha",
    "dosis_min": null,
    "dosis_max": null,
    "unidad": "g",
@@ -6611,12 +6460,12 @@
    "contenido": 4000,
    "contenido_unidad": "g",
    "pvp": 82.5,
-   "control": null,
+   "control": "Bio-inoculante de suelo",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: composición, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -6629,14 +6478,14 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Bio-inoculante para agricultura orgánica"
   },
   {
    "id": 159,
    "nombre": "Solidaridad",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
+   "ingrediente_activo": "SULFATO DE COBRE PENTAHIDRATADO + KASUGAMICINA",
+   "grupo": "FRAC M01 + 24",
+   "categoria": "Fungicida",
    "formulacion": "polvo",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
@@ -6647,12 +6496,12 @@
    "contenido": 1000,
    "contenido_unidad": "g",
    "pvp": 29.2,
-   "control": null,
+   "control": "Bactericida de absorción foliar, preventivo y curativo (tropicales y ornamentales)",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -6672,7 +6521,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Sulfato de cobre pentahidratado + Kasugamicina"
   },
   {
    "id": 160,
@@ -6713,10 +6562,10 @@
   {
    "id": 161,
    "nombre": "Soplete",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
+   "ingrediente_activo": "DIQUAT",
+   "grupo": "HRAC 22",
+   "categoria": "Herbicida",
+   "formulacion": "soluble",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
    "dosis_max": null,
@@ -6726,12 +6575,12 @@
    "contenido": 1000,
    "contenido_unidad": "cc",
    "pvp": 15,
-   "control": null,
+   "control": "Herbicida de contacto no selectivo; desecante y defoliante",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -6744,7 +6593,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Diquat"
   },
   {
    "id": 162,
@@ -6948,186 +6797,6 @@
    "concentracion": "Etridiazol 35% (WP) (referencial, verificar etiqueta)"
   },
   {
-   "id": 167,
-   "nombre": "Semilla tomate Charleston (2.500 semillas)",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Semilla",
-   "formulacion": "liquido",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": null,
-   "dosis_texto": null,
-   "presentacion": "2500 SEMILLAS",
-   "contenido": 1,
-   "contenido_unidad": "u",
-   "pvp": 325,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": null,
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "2500 SEMILLAS",
-     "cantidad": 1,
-     "unidad": "u",
-     "precio": 325
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": null
-  },
-  {
-   "id": 168,
-   "nombre": "Semilla tomate El Paye (1.000 semillas)",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Semilla",
-   "formulacion": "liquido",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": null,
-   "dosis_texto": null,
-   "presentacion": "1000 SEMILLAS",
-   "contenido": 1,
-   "contenido_unidad": "u",
-   "pvp": 135,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": null,
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "1000 SEMILLAS",
-     "cantidad": 1,
-     "unidad": "u",
-     "precio": 135
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": null
-  },
-  {
-   "id": 169,
-   "nombre": "Semilla tomate Petros (1.000 semillas)",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Semilla",
-   "formulacion": "liquido",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": null,
-   "dosis_texto": null,
-   "presentacion": "1000 SEMILLAS",
-   "contenido": 1,
-   "contenido_unidad": "u",
-   "pvp": 125,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": null,
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "1000 SEMILLAS",
-     "cantidad": 1,
-     "unidad": "u",
-     "precio": 125
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": null
-  },
-  {
-   "id": 170,
-   "nombre": "Semilla tomate Torry",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Semilla",
-   "formulacion": "liquido",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": null,
-   "dosis_texto": null,
-   "presentacion": "UNIDAD",
-   "contenido": 1,
-   "contenido_unidad": "u",
-   "pvp": 135,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": null,
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "UNIDAD",
-     "cantidad": 1,
-     "unidad": "u",
-     "precio": 135
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": null
-  },
-  {
-   "id": 171,
-   "nombre": "Semilla tomate Vento (1.000 semillas)",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Semilla",
-   "formulacion": "liquido",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": null,
-   "dosis_texto": null,
-   "presentacion": "1.000 SEMILLAS",
-   "contenido": 1,
-   "contenido_unidad": "u",
-   "pvp": 130,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": null,
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "1.000 SEMILLAS",
-     "cantidad": 1,
-     "unidad": "u",
-     "precio": 130
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": null
-  },
-  {
    "id": 172,
    "nombre": "Topas 100 EC",
    "ingrediente_activo": "PENCONAZOL",
@@ -7187,9 +6856,9 @@
   {
    "id": 174,
    "nombre": "Tricar 90 WDG",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
+   "ingrediente_activo": "ATRAZINA",
+   "grupo": "HRAC 5",
+   "categoria": "Herbicida",
    "formulacion": "polvo",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
@@ -7200,12 +6869,12 @@
    "contenido": 900,
    "contenido_unidad": "g",
    "pvp": 10,
-   "control": null,
+   "control": "Herbicida a base de atrazina",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -7218,7 +6887,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Atrazina 900 g/kg (WG)"
   },
   {
    "id": 175,
@@ -7352,10 +7021,10 @@
   {
    "id": 178,
    "nombre": "Tutan",
-   "ingrediente_activo": null,
+   "ingrediente_activo": "AMINOACIDOS",
    "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
+   "categoria": "Bioestimulante",
+   "formulacion": "liquido_foliar",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
    "dosis_max": null,
@@ -7365,12 +7034,12 @@
    "contenido": 1000,
    "contenido_unidad": "cc",
    "pvp": 15,
-   "control": null,
+   "control": "Fertilizante a base de aminoácidos: apertura de estomas; vía fertirriego estimula raíces",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: composición, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -7383,7 +7052,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Aminoácidos"
   },
   {
    "id": 179,
@@ -7725,9 +7394,9 @@
   {
    "id": 187,
    "nombre": "Welgro",
-   "ingrediente_activo": null,
+   "ingrediente_activo": "ACIDOS HUMICOS",
    "grupo": null,
-   "categoria": "Otros",
+   "categoria": "Bioestimulante",
    "formulacion": "polvo",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
@@ -7738,12 +7407,12 @@
    "contenido": 1000,
    "contenido_unidad": "g",
    "pvp": 27.5,
-   "control": null,
+   "control": "Mejora la asimilación de nutrientes del suelo (agente quelante)",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -7763,14 +7432,14 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Ácidos húmicos solubles"
   },
   {
    "id": 188,
    "nombre": "Fogata",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
+   "ingrediente_activo": "METSULFURON METIL",
+   "grupo": "HRAC 2",
+   "categoria": "Herbicida",
    "formulacion": "polvo",
    "modo_aplicacion": "tanque",
    "dosis_min": null,
@@ -7781,12 +7450,12 @@
    "contenido": 15,
    "contenido_unidad": "g",
    "pvp": 6.4,
-   "control": null,
+   "control": "Herbicida postemergente para arroz",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "nota": "Completar: concentración, dosis",
+   "fuente": "Lista de precios Ecuaquímica División Agro (octubre 2025) | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -7799,7 +7468,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": "Metsulfuron metil"
   },
   {
    "id": 189,
