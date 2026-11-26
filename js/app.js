@@ -652,7 +652,8 @@
     const esTanque = d.modo === "tanque" && (esTec || (cc.modo || "ha") === "ha");
     const dh = esTanque ? L.dosisHaDe(p, lhaRef, TANQUE()) : null;
     if (esTanque && cc.d !== null && cc.d !== undefined && cc.d !== "" && !isNaN(Number(cc.d))) { cc.dha = Math.round(Number(cc.d) * lhaRef / TANQUE() * 10) / 10; cc.d = null; }
-    const dhaElegida = esTanque ? (esTec && n(cc.dha) !== null && n(cc.dha) > 0 ? n(cc.dha) : cc.usarMax ? dh.max : dh.min) : null;
+    // técnico: la dosis por ha es editable, sin botones de dosis mínima/alta (vacía = dosis mínima recomendada)
+    const dhaElegida = esTanque ? (esTec && n(cc.dha) !== null && n(cc.dha) > 0 ? n(cc.dha) : cc.usarMax && !esTec ? dh.max : dh.min) : null;
     const vol0 = Number(String(cc.vol).replace(",", ".")) || BOMBA();
     const campo0 = cc.equipo === "tanque" ? "ppt" : cc.equipo === "otro" ? "ppo" : "ppb";
     // por plantas, el agua por ha equivale a: plantas por ha × litros del equipo ÷ plantas que cubre el equipo
@@ -708,7 +709,7 @@
         ${esTanque && esTec ? `<label class="campo">Dosis por hectárea<span class="unido"><input id="dha" inputmode="decimal" value="${h(dhaElegida !== null ? L.fmt(dhaElegida) : "")}" placeholder="Escribe la dosis"><span>${h(p.unidad || "")}/ha</span></span>
           <small>${dh.min !== null ? `Recomendada: <b>${h(L.rango(dh.min, dh.max, p.unidad + "/ha"))}</b>${dh.derivada ? ` (equivale a ${h(L.rango(L.dosisDe(p).min, L.dosisDe(p).max, p.unidad))} por tanque de ${TANQUE()} L con ${L.fmt(lhaRef, 0)} L de agua/ha)` : ""}. Puedes cambiarla.` : "Este producto no tiene dosis por hectárea cargada: escríbela según la etiqueta."}${n(cc.dha) !== null && dh.min !== null && (n(cc.dha) < dh.min * 0.999 || n(cc.dha) > dh.max * 1.001) ? ` <span style="color:var(--rojo,#b3261e)">Está fuera del rango recomendado.</span>` : ""}</small></label>` : ""}
         <div class="mini" ${esTanque ? 'style="display:none"' : ""}>Dosis de etiqueta: <b>${h(d.modo === "tanque" ? L.rango(L.dosisDe(p).min, L.dosisDe(p).max, d.unidad) + " por tanque de " + TANQUE() + " L" : d.modo === "sitio" ? L.rango(d.min, d.max, "g") + " por sitio" : L.rango(d.min, d.max, "kg") + " por ha")}</b>${p.dosis_texto && d.modo === "tanque" ? "" : ""}</div>
-        ${rangoTxt && !(cc.d) && !(esTanque && esTec && n(cc.dha) !== null) ? `<div class="seg" role="group" aria-label="Dosis"><button data-dm="min" class="${!cc.usarMax ? "sel" : ""}">Dosis mínima</button><button data-dm="max" class="${cc.usarMax ? "sel" : ""}">Dosis alta</button></div>` : ""}
+        ${rangoTxt && !(cc.d) && !(esTanque && esTec) ? `<div class="seg" role="group" aria-label="Dosis"><button data-dm="min" class="${!cc.usarMax ? "sel" : ""}">Dosis mínima</button><button data-dm="max" class="${cc.usarMax ? "sel" : ""}">Dosis alta</button></div>` : ""}
         <div class="etq">Calcular por</div>
         <div class="seg" role="group" aria-label="Calcular por"><button data-m="ha" class="${cc.modo === "ha" ? "sel" : ""}">Superficie</button><button data-m="plantas" class="${cc.modo === "plantas" ? "sel" : ""}">N.º de plantas</button></div>
         ${cc.modo === "ha" ? `<div class="seg seg-chico" role="group" aria-label="Unidad de superficie"><button data-us="ha" class="${!enM2 ? "sel" : ""}">Hectáreas (ha)</button><button data-us="m2" class="${enM2 ? "sel" : ""}">Metros cuadrados (m²)</button></div>` : ""}
