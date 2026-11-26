@@ -1193,7 +1193,7 @@
       if (rol === "agricultor" && !(await UI.confirmar("Dejarás de ver la información técnica de grupos químicos. Para volver a ser técnico agrícola necesitarás otra aprobación. ¿Cambiar a agricultor?", { ok: "Cambiar a agricultor" }))) return;
       try {
         await D.solicitarRol(rol);
-        toast(rol === "tecnico" ? "Solicitud enviada. Tu asesor la revisará." : rol === "cancelar" ? "Solicitud cancelada" : "Ahora tu cuenta es de agricultor");
+        toast(rol === "tecnico" ? (D.sesion.perfil.rol === "tecnico" ? "Ahora tu cuenta es de técnico agrícola" : "Solicitud enviada. Tu asesor la revisará.") : rol === "cancelar" ? "Solicitud cancelada" : "Ahora tu cuenta es de agricultor");
         vPerfil();
       } catch (er) { toast(er.codigo === "red" ? "Necesitas internet para cambiar el tipo de cuenta." : er.message); }
     }));

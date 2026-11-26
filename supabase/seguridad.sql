@@ -170,6 +170,9 @@ begin
   return _perfil(a);
 end $$;
 
+-- Cuentas de prueba: agricultores.cambio_rol_libre = true pasan a técnico sin aprobación
+-- (se activa desde SQL: update agricultores set cambio_rol_libre = true where cedula = '...').
+alter table agricultores add column if not exists cambio_rol_libre boolean not null default false;
 -- Cambio de tipo de cuenta: pasar a técnico agrícola queda pendiente hasta que el administrador lo apruebe;
 -- volver a agricultor o cancelar la solicitud es inmediato.
 create or replace function app_solicitar_rol(p_token uuid, p_rol text) returns jsonb
@@ -177,7 +180,9 @@ language plpgsql security definer set search_path = public as $$
 declare a agricultores := _agricultor(p_token);
 begin
   if p_rol = 'tecnico' then
-    if a.rol <> 'tecnico' and a.rol_solicitado is null then
+    if a.cambio_rol_libre then  -- cuenta de prueba del administrador: cambia sin aprobación
+      update agricultores set rol = 'tecnico', rol_solicitado = null, rol_solicitado_fecha = null where id = a.id returning * into a;
+    elsif a.rol <> 'tecnico' and a.rol_solicitado is null then
       update agricultores set rol_solicitado = 'tecnico', rol_solicitado_fecha = now() where id = a.id returning * into a;
     end if;
   elsif p_rol = 'agricultor' then
