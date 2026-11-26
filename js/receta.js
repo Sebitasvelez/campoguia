@@ -43,19 +43,20 @@
     // cuerpo de la receta: tabla de productos (mezcla al tanque y/o fertilización al suelo)
     const tabla = (tit, lista, colTotal) => {
       titulo(tit);
-      const cols = [{ t: "#", w: 8 }, { t: "Producto e ingrediente activo", w: 72 }, { t: "Dosis", w: 58 }, { t: colTotal, w: AN - 138 }];
-      espacio(14); fill(CLARO); doc.rect(M, y - 4, AN, 7, "F"); fuente("bold", 9); color(TEXTO);
+      const cols = [{ t: "#", w: 7 }, { t: "Producto e ingrediente activo", w: 60 }, { t: "Dosis", w: 44 }, { t: "Vía de aplicación", w: 32 }, { t: colTotal, w: AN - 143 }];
+      espacio(14); fill(CLARO); doc.rect(M, y - 4, AN, 7, "F"); fuente("bold", 8.5); color(TEXTO);
       let x = M; cols.forEach((c) => { doc.text(c.t, x + 2, y + 0.5); x += c.w; }); y += 6;
       lista.forEach((p, i) => {
         fuente("bold", 10); const ln = lineas(p.nombre, cols[1].w - 4); fuente("normal", 8.5); const li = p.ia ? lineas(p.ia, cols[1].w - 4) : [];
-        const ld = lineas(p.dosis, cols[2].w - 4), lt = lineas(p.total, cols[3].w - 4);
-        const h = Math.max(alto(ln.length, 10) + alto(li.length, 8.5), alto(ld.length, 10), alto(lt.length, 10)) + 2;
+        fuente("bold", 10); const ld = lineas(p.dosis, cols[2].w - 4); fuente("normal", 10); const lt = lineas(p.total, cols[4].w - 4); fuente("bold", 9.5); const lv = lineas(p.via || "", cols[3].w - 4);
+        const h = Math.max(alto(ln.length, 10) + alto(li.length, 8.5), alto(ld.length, 10), alto(lv.length, 9.5), alto(lt.length, 10)) + 2;
         espacio(h + 2);
         x = M; fuente("bold", 10); color(VERDE); doc.text(String(i + 1), x + 2, y + 1);
         x += cols[0].w; color(TEXTO); doc.text(ln, x + 2, y + 1);
         if (li.length) { fuente("normal", 8.5); color(SUAVE); doc.text(li, x + 2, y + 1 + alto(ln.length, 10)); }
         x += cols[1].w; fuente("bold", 10); color(TEXTO); doc.text(ld, x + 2, y + 1);
-        x += cols[2].w; fuente("normal", 10); doc.text(lt, x + 2, y + 1);
+        x += cols[2].w; fuente("bold", 9.5); color(VERDE); doc.text(lv, x + 2, y + 1);
+        x += cols[3].w; fuente("normal", 10); color(TEXTO); doc.text(lt, x + 2, y + 1);
         y += h; doc.setDrawColor(BORDE[0], BORDE[1], BORDE[2]); doc.setLineWidth(0.2); doc.line(M, y - 2, W - M, y - 2); y += 1;
       });
       y += 4;
@@ -88,7 +89,7 @@
         const h = Math.max(alto(la.length, 10), alto(lb.length, 10)) + 1.5; espacio(h);
         color(esTot ? VERDE : TEXTO); doc.text(la, M, y); doc.text(lb, W - M, y, { align: "right" }); y += h;
       });
-      y += 1; texto("Nota: precios referenciales según el PVP (precio de venta al público) de los insumos. No son los precios reales de cada punto de venta; pueden variar según el almacén.", 8.5, "italic", SUAVE);
+      y += 1; texto("Nota: precios referenciales según el PVP (precio de venta al público) de los insumos. No son los precios oficiales de cada punto de venta; pueden variar según el almacén.", 8.5, "italic", SUAVE);
       y += 2;
     }
 

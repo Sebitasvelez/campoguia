@@ -834,6 +834,10 @@
     const cargas = Number(String(ui.mezclaCargas || "1").replace(",", ".")) || 0;
     const haSuelo = Number(String(ui.mezclaHa || D.sesion.perfil.hectareas || "1").replace(",", ".")) || 0;
     const haySuelo = m.some(esSuelo), hayTanque = m.some((x) => !esSuelo(x));
+    // vía de aplicación para la receta (técnicos): follaje, drench al suelo o al suelo
+    const VIAS = ["Foliar", "Drench al suelo", "Al suelo (voleo / corona)"];
+    ui.recVia = ui.recVia || {};
+    const viaDe = (x) => ui.recVia[x.producto_id] || (esSuelo(x) ? VIAS[2] : VIAS[0]);
     const compra = m.map((x) => {
       const p = P(x.producto_id), dz = dzDe(x);
       if (dz === null) return { p, total: null };
@@ -878,6 +882,8 @@
         ${esTecnico() ? `<section class="card"><div class="etq">Receta para el agricultor (PDF)</div>
           <div class="grid2"><label class="campo">Agricultor<input id="recAgr" value="${h(ui.recAgr || "")}" placeholder="Nombre"></label>
           <label class="campo">Cultivo / lote<input id="recCult" value="${h(ui.recCult || "")}" placeholder="Ej. Pitahaya, lote 2"></label></div>
+          <div class="campo"><span>Vía de aplicación de cada producto</span>${m.map((x) => { const p = P(x.producto_id), v = viaDe(x);
+            return `<div class="fila" style="gap:8px;padding:4px 0"><span style="font-size:14px;min-width:0">${h(p.nombre)}</span><select data-via="${p.id}" style="max-width:170px">${VIAS.map((o) => `<option ${o === v ? "selected" : ""}>${o}</option>`).join("")}</select></div>`; }).join("")}</div>
           <label class="campo">Indicaciones y recomendaciones<textarea id="recInd" rows="3" placeholder="Ej. Aplicar en la tarde, cubrir bien el envés. Repetir a los 8 días.">${h(ui.recInd || "")}</textarea></label>
           <button class="btn wa" id="recetar">${ic.wa}Recetar</button>
           <span class="mini">Se crea un PDF con la mezcla, el orden, las dosis y tus indicaciones para enviarlo por WhatsApp.</span></section>` : botonesReporte()}
@@ -914,6 +920,7 @@
       conectarReporte(datos, () => `Mezcla_${new Date().toISOString().slice(0, 10)}.png`, texto);
       // receta en PDF (técnicos)
       [["recAgr", "recAgr"], ["recCult", "recCult"], ["recInd", "recInd"]].forEach(([id, k]) => { const el = $("#" + id); if (el) el.addEventListener("input", () => { ui[k] = el.value; guardarUI(); }); });
+      $$("[data-via]").forEach((sel) => sel.addEventListener("change", () => { ui.recVia[sel.dataset.via] = sel.value; guardarUI(); }));
       const bRec = $("#recetar");
       if (bRec) bRec.addEventListener("click", async () => {
         const per = D.sesion.perfil, ahora = new Date();
@@ -922,9 +929,9 @@
           tecnico: [per.nombres, per.apellidos].filter(Boolean).join(" "), telefonoTecnico: tel ? "Cel. " + tel : "", agricultor: (ui.recAgr || "").trim(), cultivo: (ui.recCult || "").trim(),
           equipo: [hayTanque ? `${L.fmt(cargas, 1)} ${cargas === 1 ? equipo.replace(/^tanques/, "tanque").replace(/^bombas/, "bomba") : equipo}` : "", haySuelo ? `${L.fmt(haSuelo, 2)} ha al suelo` : ""].filter(Boolean).join(" · "),
           productos: m.map((x, i) => [x, compra[i]]).filter(([x]) => !esSuelo(x)).map(([x, c]) => { const p = P(x.producto_id);
-            return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: `${fmtD(x)} por ${volTxt()}`, total: c.total !== null ? L.cantidad(c.total, p.unidad) + " en total" : "Ver etiqueta" }; }),
+            return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: `${fmtD(x)} por ${volTxt()}`, via: viaDe(x), total: c.total !== null ? L.cantidad(c.total, p.unidad) + " en total" : "Ver etiqueta" }; }),
           fertilizantes: m.map((x, i) => [x, compra[i]]).filter(([x]) => esSuelo(x)).map(([x, c]) => { const p = P(x.producto_id);
-            return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: fmtD(x) + " al suelo", total: c.texto ? c.texto + ` (${L.fmt(haSuelo, 2)} ha)` : c.total !== null ? L.cantidad(c.total, "g") : "Ver etiqueta" }; }),
+            return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: fmtD(x), via: viaDe(x), total: c.texto ? c.texto + ` (${L.fmt(haSuelo, 2)} ha)` : c.total !== null ? L.cantidad(c.total, "g") : "Ver etiqueta" }; }),
           pasos, avisos: datos().secciones[2].avisos || [],
           precauciones: prods.filter((p) => (p.carencia_dias !== null && p.carencia_dias !== undefined) || (p.reingreso_horas !== null && p.reingreso_horas !== undefined))
             .map((p) => `${p.nombre}: ${p.carencia_dias !== null && p.carencia_dias !== undefined ? "carencia " + p.carencia_dias + " días" : ""}${p.carencia_dias !== null && p.carencia_dias !== undefined && p.reingreso_horas !== null && p.reingreso_horas !== undefined ? " · " : ""}${p.reingreso_horas !== null && p.reingreso_horas !== undefined ? "reingreso " + p.reingreso_horas + " h" : ""}`)
