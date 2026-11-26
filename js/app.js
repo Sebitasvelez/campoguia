@@ -383,9 +383,9 @@
     return `<article class="card ficha-clase">
       <div class="info-clase">
         <div><span class="mini">${plaga ? "Aparato bucal" : "Clase"}</span><b>${(clases.length ? clases : [pr.clasificacion]).map(h).join(" + ")}</b></div>
-        ${pr.ciclo ? `<div><span class="mini">Ciclo de vida</span><b>${h(pr.ciclo)}</b></div>` : ""}
+        ${tec && pr.ciclo ? `<div><span class="mini">Ciclo de vida</span><b>${h(pr.ciclo)}</b></div>` : ""}
       </div>
-      ${pr.ciclo && pr.ciclo_detalle ? `<p class="mini" style="margin:-4px 0 0">${h(pr.ciclo_detalle)}</p>` : ""}
+      ${tec && pr.ciclo && pr.ciclo_detalle ? `<p class="mini" style="margin:-4px 0 0">${h(pr.ciclo_detalle)}</p>` : ""}
       <div><b style="font-size:15px">${plaga ? "Cómo se alimenta" : "Qué es"}</b><p class="mini" style="margin:4px 0 0;font-size:14px">${h(que)}</p></div>
       ${tec ? clases.map((k) => `<p class="mini" style="margin:0;font-size:14px">${clases.length > 1 ? `<b>${h(k)}:</b> ` : ""}${h(L.CLASES[k].control)}</p>`).join("") : ""}
       ${tec && gf.length ? `<div><b style="font-size:15px">${plaga ? "Grupos químicos que funcionan mejor" : "Grupos químicos funcionales"}</b>
