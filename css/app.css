@@ -151,3 +151,6 @@ details.card summary{cursor:pointer;font-weight:600;font-size:14px;min-height:28
 .prod-sel{display:flex;flex-direction:column;gap:2px;background:var(--verde-claro);border-radius:10px;padding:10px 12px;margin-top:-4px}
 .prod-sel b{font-size:17px}
 .prod-sel .mini b{font-size:inherit}
+.campos-calc{align-items:end;gap:10px}
+.campos-calc .campo{font-size:13px;min-width:0}
+.campos-calc .unido input{min-width:0}
