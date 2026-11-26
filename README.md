@@ -188,6 +188,7 @@ python3 scripts/build_catalog.py <Excel productos> <Excel plan> data/catalogo-in
 python3 scripts/agregar_lista_nov2026.py <LISTA_PRODUCTOS_ECUAQUIMICA.xlsx> data/catalogo-inicial.json
 python3 scripts/otros_lista_agro.py data/catalogo-inicial.json   # quita semillas y completa "Otros" con la Lista Agro Única
 python3 scripts/clasificacion_problemas.py data/catalogo-inicial.json   # aparato bucal / clase del hongo de plagas y enfermedades
+python3 scripts/alternativas_recomendaciones.py data/catalogo-inicial.json   # opción recomendada + 4 alternativas ordenadas por eficiencia
 node scripts/aplicar_grupos.js .   # grupos IRAC/FRAC/HRAC según ingrediente activo
 python3 scripts/build_seed.py data/catalogo-inicial.json supabase/seed.sql
 ```

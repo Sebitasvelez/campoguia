@@ -42,6 +42,14 @@ DATOS = {
   "Moniliophthora perniciosa es un Basidiomiceto. Infecta brotes, cojines florales y mazorcas en crecimiento; en las escobas secas forma pequeños hongos (setas) que liberan esporas con la lluvia."),
  ("cacao", "Mazorca negra (Phytophthora)"): ("Oomiceto",
   "Phytophthora es un oomiceto: no es un hongo verdadero sino un pseudohongo (reino Stramenopila), con pared de celulosa y sin ergosterol. Produce zoosporas que nadan en el agua y salpican desde el suelo con la lluvia, por eso avanza rápido en épocas lluviosas y con mal drenaje."),
+ ("pitahaya", "Malezas en general (no selectivo)"): ("No selectivo (control total)",
+  "Control de toda la maleza de las calles con herbicidas no selectivos, aplicados dirigidos al suelo y sin mojar los tallos de la pitahaya."),
+ ("pitahaya", "Malezas de hoja ancha"): ("Hoja ancha",
+  "Malezas de hoja ancha con nervaduras en red (dicotiledóneas). Compiten por agua y nutrientes y hospedan plagas."),
+ ("pitahaya", "Gramíneas (pastos)"): ("Gramíneas",
+  "Pastos de hoja angosta con nervaduras paralelas. Cierran las calles, compiten por agua y nutrientes y guardan humedad que favorece hongos."),
+ ("cacao", "Malezas en general (no selectivo)"): ("No selectivo (control total)",
+  "Control de toda la maleza de las calles con herbicidas no selectivos, aplicados dirigidos al suelo y sin tocar el tronco ni las hojas del cacao."),
 }
 
 def main(path):
@@ -51,7 +59,7 @@ def main(path):
         d = DATOS.get((pr["cultivo_id"], pr["nombre"]))
         pr["clasificacion"], pr["como_actua"] = (d if d else (pr.get("clasificacion"), pr.get("como_actua")))
         hechos += bool(d)
-    faltan = [p["nombre"] for p in c["problemas"] if p["tipo"] in ("plaga", "enfermedad") and not p.get("clasificacion")]
+    faltan = [p["nombre"] for p in c["problemas"] if p["tipo"] in ("plaga", "enfermedad", "maleza") and not p.get("clasificacion")]
     json.dump(c, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(hechos, "clasificados; sin clasificar:", faltan)
 

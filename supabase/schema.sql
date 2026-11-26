@@ -73,6 +73,7 @@ create table if not exists problemas (
 alter table productos add column if not exists dosis_ha_min numeric;
 alter table productos add column if not exists dosis_ha_max numeric;
 alter table productos add column if not exists concentracion text;
+alter table productos add column if not exists no_sugerir boolean not null default false;  -- excluido de las alternativas automáticas
 alter table problemas add column if not exists fotos jsonb not null default '[]';
 -- plagas: tipo de aparato bucal; enfermedades: clase del hongo (taxonomía actual; Botrytis, Fusarium y Rhizoctonia como Deuteromiceto). Define los grupos químicos funcionales (js/logic.js CLASES)
 alter table problemas add column if not exists clasificacion text;

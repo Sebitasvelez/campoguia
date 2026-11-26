@@ -15,7 +15,7 @@ COLS = {
     "etapas": ["id", "cultivo_id", "nombre", "uso", "semanas", "riesgo_hongos", "notas", "costo_ref_texto", "orden"],
     "productos": ["id", "nombre", "ingrediente_activo", "grupo", "categoria", "formulacion", "modo_aplicacion", "dosis_min",
                   "dosis_max", "unidad", "dosis_texto", "presentacion", "contenido", "contenido_unidad", "pvp", "control",
-                  "carencia_dias", "reingreso_horas", "categoria_tox", "nota", "fuente", "presentaciones", "dosis_ha_min", "dosis_ha_max", "concentracion", "activo"],
+                  "carencia_dias", "reingreso_horas", "categoria_tox", "nota", "fuente", "presentaciones", "dosis_ha_min", "dosis_ha_max", "concentracion", "activo", "no_sugerir"],
     "problemas": ["id", "cultivo_id", "tipo", "nombre", "descripcion", "orden", "fuente", "fotos", "clasificacion", "como_actua"],
     "recomendaciones": ["id", "problema_id", "producto_id", "etapa_id", "prioridad", "dosis_min", "dosis_max", "nota"],
     "plan_sanitario": ["id", "etapa_id", "producto_id", "dosis_tanque", "unidad", "alternar", "orden"],

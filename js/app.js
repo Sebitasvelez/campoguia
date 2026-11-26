@@ -398,7 +398,7 @@
     const clases = L.clasesDe(pr.clasificacion);
     const cat = pr.tipo === "plaga" ? (clases.map((k) => CAT_OTRAS[k]).find(Boolean) || /insectic|acaric|cebo|nematic/i) : /fungic|desinfecc|bactericida/i;
     const usados = new Set(recs.map((r) => String(r.producto_id)));
-    const lista = (I.c.productos || []).filter((p) => p.activo !== false && cat.test(p.categoria || "") && !usados.has(String(p.id)))
+    const lista = (I.c.productos || []).filter((p) => p.activo !== false && !p.no_sugerir && cat.test(p.categoria || "") && !usados.has(String(p.id)))
       .map((p) => ({ p, g: L.coincideGrupos(p, gf) })).filter((x) => x.g.length).sort((a, b) => a.p.nombre.localeCompare(b.p.nombre));
     if (!lista.length) return "";
     return `<details class="otras"${lista.length <= 6 ? " open" : ""}><summary class="etq">Otras opciones de productos (${lista.length})</summary>

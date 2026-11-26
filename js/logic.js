@@ -407,7 +407,8 @@
         G("IRAC 23", "Ácidos tetrónicos (spiromesifén)"), G("IRAC 25A", "Beta-cetonitrilos (cienopirafén)"), G("FRAC M02", "Azufre (acción acaricida)")] },
     "Picador-chupador (estilete)": { tipo: "plaga", resumen: "Nematodo: perfora las células de la raíz con un estilete y succiona su contenido.",
       control: "Se controla con nematicidas al suelo o productos con acción nematicida, junto con materia orgánica y biológicos.",
-      grupos: [G("IRAC 1A", "Carbamatos (oxamil)"), G("IRAC 1B", "Organofosforados (etoprofos, fenamifós)"), G("IRAC 6", "Avermectinas (abamectina)"),
+      grupos: [G(null, "Carbamatos nematicidas (oxamil, carbofurán)", /oxamil|oxamyl|carbofur/), G(null, "Organofosforados nematicidas (etoprofos, fenamifós, cadusafós)", /etoprof|ethoprop|fenamif|cadusaf|terbuf|fostiaz/),
+        G(null, "Avermectinas (abamectina)", /abamect/),
         G(null, "Fluopyram (SDHI nematicida)", /fluopyr/), G(null, "Biológicos (Paecilomyces, Purpureocillium)", /paecilom|purpureoc/)] },
     "Raspador (rádula)": { tipo: "plaga", resumen: "Molusco: raspa el tejido tierno con la rádula, una lengua con dientecillos.",
       control: "Los insecticidas comunes no funcionan: se usan cebos molusquicidas.",
@@ -442,8 +443,17 @@
     "Amplio espectro (multisitio)": { tipo: "enfermedad", resumen: "Protección preventiva contra hongos de todas las clases.",
       control: "Los multisitio actúan en varios puntos de la célula del hongo: casi no generan resistencia y sirven de base para rotar con los sistémicos.",
       grupos: [G("FRAC M01", "Cobres"), G("FRAC M02", "Azufre"), G("FRAC M03", "Ditiocarbamatos (mancozeb)"), G("FRAC M04", "Ftalimidas (captan)"), G("FRAC M05", "Clorotalonil")] },
+    "No selectivo (control total)": { tipo: "maleza", resumen: "Herbicidas que eliminan toda la vegetación que tocan: se aplican dirigidos a las calles, sin mojar el cultivo.",
+      control: "Rota entre sistémicos (glifosato) y de contacto (glufosinato, paraquat, diquat). Usa pantalla o campana y nunca toques tallos ni hojas del cultivo.",
+      grupos: [G("HRAC 9", "Glicinas (glifosato, sistémico)"), G("HRAC 10", "Glufosinato (contacto)"), G("HRAC 22", "Bipiridilos (paraquat, diquat; contacto)")] },
+    "Hoja ancha": { tipo: "maleza", resumen: "Malezas dicotiledóneas: hojas anchas con nervaduras en red.",
+      control: "Herbicidas selectivos para hoja ancha, aplicados dirigidos. Revisa en la etiqueta que el cultivo tolere el producto.",
+      grupos: [G("HRAC 4", "Auxinas sintéticas (2,4-D)"), G(null, "Inhibidores ALS (metsulfurón)", /metsulf/), G("HRAC 14", "Inhibidores PPO (oxifluorfén)"), G(null, "Triazinas (ametrina)", /ametrin/)] },
+    "Gramíneas": { tipo: "maleza", resumen: "Pastos: hojas angostas con nervaduras paralelas y tallos con nudos.",
+      control: "Graminicidas selectivos o preemergentes para pastos. Revisa en la etiqueta que el cultivo tolere el producto.",
+      grupos: [G("HRAC 1", "Inhibidores ACCasa (fluazifop, cletodim)"), G(null, "Inhibidores ALS (nicosulfurón)", /nicosulf/), G(null, "Cloroacetamidas (S-metolacloro, preemergente)", /metolacl/)] },
   };
-  const OPC_CLASE = { plaga: Object.keys(CLASES).filter((k) => CLASES[k].tipo === "plaga"), enfermedad: Object.keys(CLASES).filter((k) => CLASES[k].tipo === "enfermedad") };
+  const OPC_CLASE = { plaga: Object.keys(CLASES).filter((k) => CLASES[k].tipo === "plaga"), enfermedad: Object.keys(CLASES).filter((k) => CLASES[k].tipo === "enfermedad"), maleza: Object.keys(CLASES).filter((k) => CLASES[k].tipo === "maleza") };
   // "Oomiceto + Deuteromiceto" → varias clases. Taxonomía actual; Botrytis, Fusarium y Rhizoctonia se mantienen como Deuteromicetos
   const clasesDe = (txt) => String(txt || "").split(/\s*\+\s*/).map((s) => s.trim()).filter((s) => CLASES[s]);
   function gruposFuncionales(txt) {
@@ -466,8 +476,41 @@
     return grupos.filter((g) => (g.c && cods.includes(g.c)) || (g.ia && g.ia.test(ia)));
   }
 
+
+  // ---------------- alternativas sugeridas para un problema: grupos químicos funcionales de su clase + portafolio
+  // Mantiene la opción recomendada y elige hasta n alternativas que sumen grupos distintos (rotación), prefiriendo
+  // productos con dosis cargada. Evita productos de uso específico en otro cultivo (arroz, rosas), de tratamiento
+  // de semilla o de la línea para flores.
+  const CAT_CLASE = { plaga: /insectic|acaric|cebo|nematic/i, enfermedad: /fungic|desinfecc|bactericida/i, maleza: /herbic/i };
+  const CAT_ESPECIAL = { "Picador-chupador (quelíceros)": /acaric|insectic/i, "Raspador (rádula)": /cebo|molusc|insectic/i, "Picador-chupador (estilete)": /nematic|insectic|acaric|bioestim/i };
+  // previos: productos que el asesor ya recomendaba para ese problema (se prefieren si aportan rotación)
+  function sugerirAlternativas(problema, productos, principalId, n, cultivoNombre, previos) {
+    const prev = new Set((previos || []).map(String));
+    n = n || 4;
+    const gf = gruposFuncionales(problema && problema.clasificacion); if (!gf.length) return [];
+    const clases = clasesDe(problema.clasificacion);
+    const cat = clases.map((k) => CAT_ESPECIAL[k]).find(Boolean) || CAT_CLASE[problema.tipo] || /./;
+    const cult = String(cultivoNombre || problema.cultivo_id || "").toLowerCase();
+    const ajeno = (p) => { const t = ((p.control || "") + " " + (p.nota || "")).toLowerCase();
+      return (/\barroz\b/.test(t) && !cult.includes("arroz")) || (/\brosas?\b/.test(t) && !cult.includes("rosa")) || /tratamiento de semilla/.test(t) || /\bflora\b/i.test(p.nombre || ""); };
+    const tieneDosis = (p) => [p.dosis_min, p.dosis_max, p.dosis_ha_min, p.dosis_ha_max].some((v) => v !== null && v !== undefined && v !== "");
+    const principal = productos.find((p) => String(p.id) === String(principalId));
+    const cubiertos = new Set(principal ? coincideGrupos(principal, gf).map((g) => g.c || g.n) : []);
+    let cand = productos.filter((p) => p.activo !== false && !p.no_sugerir && String(p.id) !== String(principalId) && cat.test(p.categoria || "") && !ajeno(p))
+      .map((p) => ({ p, g: coincideGrupos(p, gf).map((g) => g.c || g.n), dosis: tieneDosis(p) })).filter((x) => x.g.length);
+    // mismo grupo químico exacto que la principal no aporta rotación
+    const firmaPrincipal = principal ? codigosGrupo(principal.grupo).sort().join("|") : null;
+    const elegidos = [], firmas = new Set(firmaPrincipal ? [firmaPrincipal] : []);
+    while (elegidos.length < n && cand.length) {
+      cand.forEach((x) => { const nuevos = x.g.filter((g) => !cubiertos.has(g)).length, firma = codigosGrupo(x.p.grupo).sort().join("|");
+        x.score = (x.dosis ? 100 : 0) + nuevos * 12 + (firmas.has(firma) ? -30 : 0) + Math.min(x.g.length, 2) * 2 + (prev.has(String(x.p.id)) ? 15 : 0); });
+      cand.sort((a, b) => b.score - a.score || a.p.nombre.localeCompare(b.p.nombre));
+      const x = cand.shift(); elegidos.push(x.p); x.g.forEach((g) => cubiertos.add(g)); firmas.add(codigosGrupo(x.p.grupo).sort().join("|"));
+    }
+    return elegidos;
+  }
   const api = { ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
-    CLASES, OPC_CLASE, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos };
+    CLASES, OPC_CLASE, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);

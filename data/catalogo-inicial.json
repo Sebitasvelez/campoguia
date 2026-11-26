@@ -265,7 +265,8 @@
      "unidad": "cc",
      "precio": 89
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 2,
@@ -306,7 +307,8 @@
      "unidad": "cc",
      "precio": 188
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 3,
@@ -354,7 +356,8 @@
      "unidad": "cc",
      "precio": 78
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 4,
@@ -402,7 +405,8 @@
      "unidad": "cc",
      "precio": 45.95
     }
-   ]
+   ],
+   "no_sugerir": true
   },
   {
    "id": 5,
@@ -443,7 +447,8 @@
      "unidad": "cc",
      "precio": 39.9
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 6,
@@ -498,7 +503,8 @@
      "unidad": "cc",
      "precio": 28.8
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 7,
@@ -546,7 +552,8 @@
      "unidad": "cc",
      "precio": 24
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 8,
@@ -580,7 +587,8 @@
      "unidad": "g",
      "precio": 1.2
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 9,
@@ -635,7 +643,8 @@
      "unidad": "cc",
      "precio": 15.8
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 10,
@@ -676,7 +685,8 @@
      "unidad": "g",
      "precio": 69
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 11,
@@ -717,7 +727,8 @@
      "unidad": "g",
      "precio": 14.5
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 12,
@@ -758,7 +769,8 @@
      "unidad": "g",
      "precio": 142
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 13,
@@ -792,7 +804,8 @@
      "unidad": "cc",
      "precio": 21
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 14,
@@ -833,7 +846,8 @@
      "unidad": "g",
      "precio": 275
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 15,
@@ -874,7 +888,8 @@
      "unidad": "cc",
      "precio": 487.55
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 16,
@@ -908,7 +923,8 @@
      "unidad": "g",
      "precio": 7.5
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 17,
@@ -956,7 +972,8 @@
      "unidad": "cc",
      "precio": 46
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 18,
@@ -1011,7 +1028,8 @@
      "unidad": "cc",
      "precio": 295.7
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 19,
@@ -1045,7 +1063,8 @@
      "unidad": "cc",
      "precio": 13.2
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 20,
@@ -1086,7 +1105,8 @@
      "unidad": "g",
      "precio": 273
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 21,
@@ -1127,7 +1147,8 @@
      "unidad": "g",
      "precio": 474.4
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 22,
@@ -1182,7 +1203,8 @@
      "unidad": "cc",
      "precio": 76
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 23,
@@ -1223,7 +1245,8 @@
      "unidad": "cc",
      "precio": 86.55
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 24,
@@ -1264,7 +1287,8 @@
      "unidad": "cc",
      "precio": 50
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 25,
@@ -1298,7 +1322,8 @@
      "unidad": "cc",
      "precio": 48
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 26,
@@ -1346,7 +1371,8 @@
      "unidad": "cc",
      "precio": 39
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 27,
@@ -1380,7 +1406,8 @@
      "unidad": "cc",
      "precio": 15.5
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 28,
@@ -1435,7 +1462,8 @@
      "unidad": "cc",
      "precio": 105
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 29,
@@ -1476,7 +1504,8 @@
      "unidad": "cc",
      "precio": 59.5
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 30,
@@ -1524,7 +1553,8 @@
      "unidad": "cc",
      "precio": 968.6
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 31,
@@ -1558,7 +1588,8 @@
      "unidad": "g",
      "precio": 148
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 32,
@@ -1599,7 +1630,8 @@
      "unidad": "cc",
      "precio": 19.9
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 33,
@@ -1640,7 +1672,8 @@
      "unidad": "g",
      "precio": 630
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 34,
@@ -1674,7 +1707,8 @@
      "unidad": "g",
      "precio": 12
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 35,
@@ -1715,7 +1749,8 @@
      "unidad": "cc",
      "precio": 165
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 36,
@@ -1777,7 +1812,8 @@
      "unidad": "cc",
      "precio": 119
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 37,
@@ -1832,7 +1868,8 @@
      "unidad": "cc",
      "precio": 85
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 38,
@@ -1880,7 +1917,8 @@
      "unidad": "cc",
      "precio": 106
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 39,
@@ -1914,7 +1952,8 @@
      "unidad": "g",
      "precio": 4
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 40,
@@ -1955,7 +1994,8 @@
      "unidad": "g",
      "precio": 28.3
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 41,
@@ -2010,7 +2050,8 @@
      "unidad": "cc",
      "precio": 320
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 42,
@@ -2044,7 +2085,8 @@
      "unidad": "g",
      "precio": 2.1
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 43,
@@ -2092,7 +2134,8 @@
      "unidad": "g",
      "precio": 99
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 44,
@@ -2126,7 +2169,8 @@
      "unidad": "cc",
      "precio": 13.6
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 45,
@@ -2160,7 +2204,8 @@
      "unidad": "g",
      "precio": 13.5
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 46,
@@ -2208,7 +2253,8 @@
      "unidad": "cc",
      "precio": 23.9
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 47,
@@ -2256,7 +2302,8 @@
      "unidad": "cc",
      "precio": 16.8
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 48,
@@ -2290,7 +2337,8 @@
      "unidad": "cc",
      "precio": 22.9
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 49,
@@ -2331,7 +2379,8 @@
      "unidad": "cc",
      "precio": 58.8
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 50,
@@ -2379,7 +2428,8 @@
      "unidad": "cc",
      "precio": 9.8
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 51,
@@ -2427,7 +2477,8 @@
      "unidad": "cc",
      "precio": 13.6
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 52,
@@ -2475,7 +2526,8 @@
      "unidad": "g",
      "precio": 95
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 53,
@@ -2509,7 +2561,8 @@
      "unidad": "g",
      "precio": 80
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 54,
@@ -2535,7 +2588,8 @@
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor) | No figura en la lista de precios Ecuaquímica de octubre 2025 (precio del Excel). | No figura en la lista de noviembre 2026: se mantiene el precio anterior.",
    "activo": true,
    "concentracion": null,
-   "presentaciones": []
+   "presentaciones": [],
+   "no_sugerir": false
   },
   {
    "id": 55,
@@ -2569,7 +2623,8 @@
      "unidad": "g",
      "precio": 52.4
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 56,
@@ -2603,7 +2658,8 @@
      "unidad": "g",
      "precio": 64
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 57,
@@ -2637,7 +2693,8 @@
      "unidad": "g",
      "precio": 61.5
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 58,
@@ -2671,7 +2728,8 @@
      "unidad": "g",
      "precio": 38.4
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 59,
@@ -2705,7 +2763,8 @@
      "unidad": "g",
      "precio": 57.9
     }
-   ]
+   ],
+   "no_sugerir": false
   },
   {
    "id": 60,
@@ -2748,7 +2807,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Ácidos húmicos 12%"
+   "concentracion": "Ácidos húmicos 12%",
+   "no_sugerir": false
   },
   {
    "id": 61,
@@ -2784,7 +2844,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Ácido húmico 75% mín + ácido fúlvico 12–14%"
+   "concentracion": "Ácido húmico 75% mín + ácido fúlvico 12–14%",
+   "no_sugerir": false
   },
   {
    "id": 62,
@@ -2827,7 +2888,8 @@
    "dosis_ha_min": 2000,
    "dosis_ha_max": 2000,
    "activo": true,
-   "concentracion": "Mancozeb 640 g/kg + Cimoxanil 80 g/kg (WP)"
+   "concentracion": "Mancozeb 640 g/kg + Cimoxanil 80 g/kg (WP)",
+   "no_sugerir": false
   },
   {
    "id": 63,
@@ -2870,7 +2932,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Tiametoxam 250 g/kg (WG)"
+   "concentracion": "Tiametoxam 250 g/kg (WG)",
+   "no_sugerir": false
   },
   {
    "id": 64,
@@ -2906,7 +2969,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Isoxaflutol 225 g/L + Tiencarbazona-metil 90 g/L + Ciprosulfamida (SC) (referencial, verificar etiqueta)"
+   "concentracion": "Isoxaflutol 225 g/L + Tiencarbazona-metil 90 g/L + Ciprosulfamida (SC) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 65,
@@ -2942,7 +3006,8 @@
    "dosis_ha_min": 150,
    "dosis_ha_max": 150,
    "activo": true,
-   "concentracion": "Emamectina benzoato 50 g/kg (SG)"
+   "concentracion": "Emamectina benzoato 50 g/kg (SG)",
+   "no_sugerir": false
   },
   {
    "id": 66,
@@ -2985,7 +3050,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Nonilfenol etoxilado 90% (referencial, verificar etiqueta)"
+   "concentracion": "Nonilfenol etoxilado 90% (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 67,
@@ -3035,7 +3101,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Imidacloprid"
+   "concentracion": "Imidacloprid",
+   "no_sugerir": false
   },
   {
    "id": 68,
@@ -3071,7 +3138,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 69,
@@ -3107,7 +3175,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 70,
@@ -3157,7 +3226,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 71,
@@ -3193,7 +3263,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 72,
@@ -3229,7 +3300,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Fluazinam 500 g/L (SC) (referencial, verificar etiqueta)"
+   "concentracion": "Fluazinam 500 g/L (SC) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 73,
@@ -3272,7 +3344,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Ciproconazol 100 g/L (SL) (referencial, verificar etiqueta)"
+   "concentracion": "Ciproconazol 100 g/L (SL) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 74,
@@ -3315,7 +3388,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Paecilomyces spp. (inoculante biológico)"
+   "concentracion": "Paecilomyces spp. (inoculante biológico)",
+   "no_sugerir": false
   },
   {
    "id": 75,
@@ -3351,7 +3425,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 76,
@@ -3387,7 +3462,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Imidacloprid + Tiodicarb (tratamiento de semilla)"
+   "concentracion": "Imidacloprid + Tiodicarb (tratamiento de semilla)",
+   "no_sugerir": false
   },
   {
    "id": 77,
@@ -3423,7 +3499,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 78,
@@ -3459,7 +3536,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Mandipropamid 250 g/L + Oxatiapiprolina 30 g/L"
+   "concentracion": "Mandipropamid 250 g/L + Oxatiapiprolina 30 g/L",
+   "no_sugerir": false
   },
   {
    "id": 79,
@@ -3509,7 +3587,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Azufre 80% (WP) (referencial, verificar etiqueta)"
+   "concentracion": "Azufre 80% (WP) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 80,
@@ -3552,7 +3631,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Polibuteno 100% (adhesivo para trampas de insectos)"
+   "concentracion": "Polibuteno 100% (adhesivo para trampas de insectos)",
+   "no_sugerir": false
   },
   {
    "id": 81,
@@ -3609,7 +3689,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 82,
@@ -3645,7 +3726,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "B 10% + Zn 10%"
+   "concentracion": "B 10% + Zn 10%",
+   "no_sugerir": false
   },
   {
    "id": 84,
@@ -3681,7 +3763,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Sulfato de calcio dihidratado (yeso agrícola)"
+   "concentracion": "Sulfato de calcio dihidratado (yeso agrícola)",
+   "no_sugerir": false
   },
   {
    "id": 85,
@@ -3717,7 +3800,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 86,
@@ -3753,7 +3837,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Cipermetrina 200 g/L (EC)"
+   "concentracion": "Cipermetrina 200 g/L (EC)",
+   "no_sugerir": false
   },
   {
    "id": 87,
@@ -3803,7 +3888,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Etilendiamino tetraacético tetrasódico (EDTA)"
+   "concentracion": "Etilendiamino tetraacético tetrasódico (EDTA)",
+   "no_sugerir": false
   },
   {
    "id": 88,
@@ -3853,7 +3939,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "N 4% · P₂O₅ 2% · K₂O 41% + S 12,8%"
+   "concentracion": "N 4% · P₂O₅ 2% · K₂O 41% + S 12,8%",
+   "no_sugerir": false
   },
   {
    "id": 89,
@@ -3896,7 +3983,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Mancozeb 300 g/kg + Cobre 120 g/kg (WG)"
+   "concentracion": "Mancozeb 300 g/kg + Cobre 120 g/kg (WG)",
+   "no_sugerir": false
   },
   {
    "id": 90,
@@ -3932,7 +4020,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Cipermetrina (sobre 20 g) (referencial, verificar etiqueta)"
+   "concentracion": "Cipermetrina (sobre 20 g) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 91,
@@ -3989,7 +4078,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Cipermetrina (EC)"
+   "concentracion": "Cipermetrina (EC)",
+   "no_sugerir": false
   },
   {
    "id": 92,
@@ -4046,7 +4136,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "2,4-D butil éster (EC)"
+   "concentracion": "2,4-D butil éster (EC)",
+   "no_sugerir": false
   },
   {
    "id": 93,
@@ -4082,7 +4173,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Bacillus thuringiensis (insecticida biológico)"
+   "concentracion": "Bacillus thuringiensis (insecticida biológico)",
+   "no_sugerir": false
   },
   {
    "id": 94,
@@ -4118,7 +4210,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "S-metolacloro 960 g/L (EC)"
+   "concentracion": "S-metolacloro 960 g/L (EC)",
+   "no_sugerir": false
   },
   {
    "id": 95,
@@ -4168,7 +4261,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Éter fenol poliglicólico"
+   "concentracion": "Éter fenol poliglicólico",
+   "no_sugerir": false
   },
   {
    "id": 96,
@@ -4211,7 +4305,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Etefón 480 g/L (SL) (referencial, verificar etiqueta)"
+   "concentracion": "Etefón 480 g/L (SL) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 98,
@@ -4261,7 +4356,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Ésteres metilados de ácidos grasos 100%"
+   "concentracion": "Ésteres metilados de ácidos grasos 100%",
+   "no_sugerir": false
   },
   {
    "id": 100,
@@ -4311,7 +4407,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Glufosinato de amonio 280 g/L (SL) (referencial, verificar etiqueta)"
+   "concentracion": "Glufosinato de amonio 280 g/L (SL) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 101,
@@ -4354,7 +4451,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Fosetil aluminio 80% (WP)"
+   "concentracion": "Fosetil aluminio 80% (WP)",
+   "no_sugerir": false
   },
   {
    "id": 102,
@@ -4390,7 +4488,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Bacillus subtilis (fungicida biológico)"
+   "concentracion": "Bacillus subtilis (fungicida biológico)",
+   "no_sugerir": false
   },
   {
    "id": 103,
@@ -4426,7 +4525,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Flonicamid"
+   "concentracion": "Flonicamid",
+   "no_sugerir": false
   },
   {
    "id": 104,
@@ -4469,7 +4569,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Oxifluorfen 240 g/L (EC) (referencial, verificar etiqueta)"
+   "concentracion": "Oxifluorfen 240 g/L (EC) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 105,
@@ -4519,7 +4620,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Plata en nanopartículas 6000 ppm"
+   "concentracion": "Plata en nanopartículas 6000 ppm",
+   "no_sugerir": false
   },
   {
    "id": 106,
@@ -4555,7 +4657,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Atrazina 900 g/kg (WG) (referencial, verificar etiqueta)"
+   "concentracion": "Atrazina 900 g/kg (WG) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 107,
@@ -4605,7 +4708,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Paraquat 200 g/L (SL) (referencial, verificar etiqueta)"
+   "concentracion": "Paraquat 200 g/L (SL) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 108,
@@ -4641,7 +4745,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Mg 5–9% · N 3% · B 0,5% · Cu 1,5% · Fe 4% + otros micronutrientes"
+   "concentracion": "Mg 5–9% · N 3% · B 0,5% · Cu 1,5% · Fe 4% + otros micronutrientes",
+   "no_sugerir": false
   },
   {
    "id": 109,
@@ -4691,7 +4796,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Tiabendazol + Fludioxonil + Tiametoxam + Metalaxil-M (FS, tratamiento de semillas)"
+   "concentracion": "Tiabendazol + Fludioxonil + Tiametoxam + Metalaxil-M (FS, tratamiento de semillas)",
+   "no_sugerir": false
   },
   {
    "id": 110,
@@ -4727,7 +4833,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 111,
@@ -4763,7 +4870,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 112,
@@ -4806,7 +4914,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Ácido naftalenacético (ANA) (referencial, verificar etiqueta)"
+   "concentracion": "Ácido naftalenacético (ANA) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 115,
@@ -4849,7 +4958,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Trichoderma spp. (inoculante biológico)"
+   "concentracion": "Trichoderma spp. (inoculante biológico)",
+   "no_sugerir": false
   },
   {
    "id": 116,
@@ -4899,7 +5009,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Acefato 970 g/kg (SG)"
+   "concentracion": "Acefato 970 g/kg (SG)",
+   "no_sugerir": false
   },
   {
    "id": 117,
@@ -4942,7 +5053,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Mancozeb 640 g/kg + Cimoxanil 80 g/kg (WP)"
+   "concentracion": "Mancozeb 640 g/kg + Cimoxanil 80 g/kg (WP)",
+   "no_sugerir": false
   },
   {
    "id": 118,
@@ -4978,7 +5090,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Bispyribac sodio 400 g/L (referencial, verificar etiqueta)"
+   "concentracion": "Bispyribac sodio 400 g/L (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 119,
@@ -5014,7 +5127,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Hierro quelatado HBED + Mn + Zn"
+   "concentracion": "Hierro quelatado HBED + Mn + Zn",
+   "no_sugerir": false
   },
   {
    "id": 120,
@@ -5050,7 +5164,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Ciantraniliprol (referencial, verificar etiqueta)"
+   "concentracion": "Ciantraniliprol (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 121,
@@ -5100,7 +5215,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Lufenurón 50 g/L (EC) (referencial, verificar etiqueta)"
+   "concentracion": "Lufenurón 50 g/L (EC) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 122,
@@ -5136,7 +5252,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Extractos vegetales fermentados (100% orgánico)"
+   "concentracion": "Extractos vegetales fermentados (100% orgánico)",
+   "no_sugerir": false
   },
   {
    "id": 123,
@@ -5172,7 +5289,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Ametrina 500 g/L (referencial, verificar etiqueta)"
+   "concentracion": "Ametrina 500 g/L (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 124,
@@ -5208,7 +5326,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Mandipropamid (SC) (referencial, verificar etiqueta)"
+   "concentracion": "Mandipropamid (SC) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 125,
@@ -5244,7 +5363,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Bacillus thuringiensis (insecticida biológico)"
+   "concentracion": "Bacillus thuringiensis (insecticida biológico)",
+   "no_sugerir": false
   },
   {
    "id": 126,
@@ -5280,7 +5400,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 127,
@@ -5316,7 +5437,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 128,
@@ -5352,7 +5474,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Ácido giberélico 90% (PS)"
+   "concentracion": "Ácido giberélico 90% (PS)",
+   "no_sugerir": false
   },
   {
    "id": 129,
@@ -5402,7 +5525,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "N 20% · P₂O₅ 20% · K₂O 20% + micronutrientes"
+   "concentracion": "N 20% · P₂O₅ 20% · K₂O 20% + micronutrientes",
+   "no_sugerir": false
   },
   {
    "id": 130,
@@ -5438,7 +5562,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 131,
@@ -5474,7 +5599,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 132,
@@ -5517,7 +5643,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Ciantraniliprol 200 g/kg + Tiametoxam 200 g/kg"
+   "concentracion": "Ciantraniliprol 200 g/kg + Tiametoxam 200 g/kg",
+   "no_sugerir": false
   },
   {
    "id": 133,
@@ -5553,7 +5680,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Propanil"
+   "concentracion": "Propanil",
+   "no_sugerir": false
   },
   {
    "id": 134,
@@ -5596,7 +5724,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 135,
@@ -5632,7 +5761,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Pidiflumetofen + Fludioxonil (SC)"
+   "concentracion": "Pidiflumetofen + Fludioxonil (SC)",
+   "no_sugerir": false
   },
   {
    "id": 138,
@@ -5668,7 +5798,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Azoxistrobina 28,2% + Mefenoxam 10,9% (SE) (referencial, verificar etiqueta)"
+   "concentracion": "Azoxistrobina 28,2% + Mefenoxam 10,9% (SE) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 139,
@@ -5704,7 +5835,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Diafentiurón 500 g/L (SC) (referencial, verificar etiqueta)"
+   "concentracion": "Diafentiurón 500 g/L (SC) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 140,
@@ -5747,7 +5879,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Azoxistrobina 200 g/L + Ciproconazol 80 g/L (SC) (referencial, verificar etiqueta)"
+   "concentracion": "Azoxistrobina 200 g/L + Ciproconazol 80 g/L (SC) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 141,
@@ -5804,7 +5937,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Clorpirifos (EC)"
+   "concentracion": "Clorpirifos (EC)",
+   "no_sugerir": false
   },
   {
    "id": 142,
@@ -5847,7 +5981,8 @@
    "dosis_ha_min": 400,
    "dosis_ha_max": 400,
    "activo": true,
-   "concentracion": "Azoxistrobina 500 g/kg (WG)"
+   "concentracion": "Azoxistrobina 500 g/kg (WG)",
+   "no_sugerir": false
   },
   {
    "id": 143,
@@ -5890,7 +6025,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Azoxistrobina 200 g/L + Difenoconazol 125 g/L (SC)"
+   "concentracion": "Azoxistrobina 200 g/L + Difenoconazol 125 g/L (SC)",
+   "no_sugerir": false
   },
   {
    "id": 144,
@@ -5926,7 +6062,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Quinclorac"
+   "concentracion": "Quinclorac",
+   "no_sugerir": false
   },
   {
    "id": 146,
@@ -5962,7 +6099,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Isopyrazam 125 g/L (EC) (referencial, verificar etiqueta)"
+   "concentracion": "Isopyrazam 125 g/L (EC) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 147,
@@ -6005,7 +6143,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Mandipropamid 250 g/L (SC)"
+   "concentracion": "Mandipropamid 250 g/L (SC)",
+   "no_sugerir": false
   },
   {
    "id": 148,
@@ -6041,7 +6180,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Mandipropamid + Clorotalonil (SC) (referencial, verificar etiqueta)"
+   "concentracion": "Mandipropamid + Clorotalonil (SC) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 149,
@@ -6084,7 +6224,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Mancozeb 640 g/kg + Metalaxil-M 40 g/kg (WP)"
+   "concentracion": "Mancozeb 640 g/kg + Metalaxil-M 40 g/kg (WP)",
+   "no_sugerir": false
   },
   {
    "id": 150,
@@ -6120,7 +6261,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Pretilacloro 500 g/L (EC) (referencial, verificar etiqueta)"
+   "concentracion": "Pretilacloro 500 g/L (EC) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 151,
@@ -6156,7 +6298,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Pirroloquinolina quinona (PQQ)"
+   "concentracion": "Pirroloquinolina quinona (PQQ)",
+   "no_sugerir": false
   },
   {
    "id": 152,
@@ -6206,7 +6349,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 153,
@@ -6256,7 +6400,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 154,
@@ -6292,7 +6437,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Fenpropidina (EC)"
+   "concentracion": "Fenpropidina (EC)",
+   "no_sugerir": false
   },
   {
    "id": 155,
@@ -6335,7 +6481,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Azufre 825 g/L (SC) (referencial, verificar etiqueta)"
+   "concentracion": "Azufre 825 g/L (SC) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 156,
@@ -6392,7 +6539,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "CaO 20%"
+   "concentracion": "CaO 20%",
+   "no_sugerir": false
   },
   {
    "id": 157,
@@ -6442,7 +6590,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "K₂O 44%"
+   "concentracion": "K₂O 44%",
+   "no_sugerir": false
   },
   {
    "id": 158,
@@ -6478,7 +6627,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Bio-inoculante para agricultura orgánica"
+   "concentracion": "Bio-inoculante para agricultura orgánica",
+   "no_sugerir": false
   },
   {
    "id": 159,
@@ -6521,7 +6671,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Sulfato de cobre pentahidratado + Kasugamicina"
+   "concentracion": "Sulfato de cobre pentahidratado + Kasugamicina",
+   "no_sugerir": false
   },
   {
    "id": 160,
@@ -6557,7 +6708,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Penconazol 50 g/L + Fenpropidina (EW)"
+   "concentracion": "Penconazol 50 g/L + Fenpropidina (EW)",
+   "no_sugerir": false
   },
   {
    "id": 161,
@@ -6593,7 +6745,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Diquat"
+   "concentracion": "Diquat",
+   "no_sugerir": false
   },
   {
    "id": 162,
@@ -6643,7 +6796,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "N 4% · P₂O₅ 10% · K₂O 40%"
+   "concentracion": "N 4% · P₂O₅ 10% · K₂O 40%",
+   "no_sugerir": false
   },
   {
    "id": 163,
@@ -6679,7 +6833,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Sulfato de calcio dihidratado (yeso agrícola)"
+   "concentracion": "Sulfato de calcio dihidratado (yeso agrícola)",
+   "no_sugerir": false
   },
   {
    "id": 164,
@@ -6715,7 +6870,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Isopyrazam 125 g/L (EC)"
+   "concentracion": "Isopyrazam 125 g/L (EC)",
+   "no_sugerir": false
   },
   {
    "id": 165,
@@ -6758,7 +6914,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Difenoconazol 250 g/L + Propiconazol 250 g/L (EC) (referencial, verificar etiqueta)"
+   "concentracion": "Difenoconazol 250 g/L + Propiconazol 250 g/L (EC) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 166,
@@ -6794,7 +6951,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Etridiazol 35% (WP) (referencial, verificar etiqueta)"
+   "concentracion": "Etridiazol 35% (WP) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 172,
@@ -6851,7 +7009,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Penconazol 100 g/L (EC) (referencial, verificar etiqueta)"
+   "concentracion": "Penconazol 100 g/L (EC) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 174,
@@ -6887,7 +7046,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Atrazina 900 g/kg (WG)"
+   "concentracion": "Atrazina 900 g/kg (WG)",
+   "no_sugerir": false
   },
   {
    "id": 175,
@@ -6923,7 +7083,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Ciromazina 750 g/kg (WP) (referencial, verificar etiqueta)"
+   "concentracion": "Ciromazina 750 g/kg (WP) (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 176,
@@ -6980,7 +7141,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Mancozeb 800 g/kg (WP)"
+   "concentracion": "Mancozeb 800 g/kg (WP)",
+   "no_sugerir": false
   },
   {
    "id": 177,
@@ -7016,7 +7178,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 178,
@@ -7052,7 +7215,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Aminoácidos"
+   "concentracion": "Aminoácidos",
+   "no_sugerir": false
   },
   {
    "id": 179,
@@ -7088,7 +7252,8 @@
    "dosis_ha_min": 600,
    "dosis_ha_max": 600,
    "activo": true,
-   "concentracion": "Abamectina 18 g/L (EC)"
+   "concentracion": "Abamectina 18 g/L (EC)",
+   "no_sugerir": false
   },
   {
    "id": 180,
@@ -7138,7 +7303,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "N 30% · P₂O₅ 10% · K₂O 10%"
+   "concentracion": "N 30% · P₂O₅ 10% · K₂O 10%",
+   "no_sugerir": false
   },
   {
    "id": 181,
@@ -7181,7 +7347,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "N 10% · P₂O₅ 20% · K₂O 30% + Mg 0,5% + S 1%"
+   "concentracion": "N 10% · P₂O₅ 20% · K₂O 30% + Mg 0,5% + S 1%",
+   "no_sugerir": false
   },
   {
    "id": 182,
@@ -7224,7 +7391,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "N 10% · P₂O₅ 40% · K₂O 10% + Mg 0,5% + S 1%"
+   "concentracion": "N 10% · P₂O₅ 40% · K₂O 10% + Mg 0,5% + S 1%",
+   "no_sugerir": false
   },
   {
    "id": 183,
@@ -7267,7 +7435,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "N 20% · P₂O₅ 20% · K₂O 20% + Mg 0,5% + S 1%"
+   "concentracion": "N 20% · P₂O₅ 20% · K₂O 20% + Mg 0,5% + S 1%",
+   "no_sugerir": false
   },
   {
    "id": 184,
@@ -7310,7 +7479,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "N 30% · P₂O₅ 10% · K₂O 10% + Mg 0,5% + S 1%"
+   "concentracion": "N 30% · P₂O₅ 10% · K₂O 10% + Mg 0,5% + S 1%",
+   "no_sugerir": false
   },
   {
    "id": 185,
@@ -7353,7 +7523,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Foxim (referencial, verificar etiqueta)"
+   "concentracion": "Foxim (referencial, verificar etiqueta)",
+   "no_sugerir": false
   },
   {
    "id": 186,
@@ -7389,7 +7560,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Isocicloseram"
+   "concentracion": "Isocicloseram",
+   "no_sugerir": false
   },
   {
    "id": 187,
@@ -7432,7 +7604,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Ácidos húmicos solubles"
+   "concentracion": "Ácidos húmicos solubles",
+   "no_sugerir": false
   },
   {
    "id": 188,
@@ -7468,7 +7641,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Metsulfuron metil"
+   "concentracion": "Metsulfuron metil",
+   "no_sugerir": false
   },
   {
    "id": 189,
@@ -7504,7 +7678,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 190,
@@ -7540,7 +7715,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 191,
@@ -7576,7 +7752,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 192,
@@ -7619,7 +7796,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 193,
@@ -7655,7 +7833,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 194,
@@ -7691,7 +7870,8 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": null
+   "concentracion": null,
+   "no_sugerir": false
   },
   {
    "id": 195,
@@ -7727,7 +7907,35 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Abamectina 84 g/L (referencial, verificar etiqueta)"
+   "concentracion": "Abamectina 84 g/L (referencial, verificar etiqueta)",
+   "no_sugerir": false
+  },
+  {
+   "id": 196,
+   "nombre": "Malathion 57 EC",
+   "ingrediente_activo": "MALATION",
+   "grupo": "IRAC 1B",
+   "categoria": "Insecticida",
+   "formulacion": "emulsion",
+   "modo_aplicacion": "tanque",
+   "dosis_min": null,
+   "dosis_max": null,
+   "unidad": "cc",
+   "dosis_texto": null,
+   "presentacion": null,
+   "contenido": null,
+   "contenido_unidad": null,
+   "pvp": null,
+   "control": "Insecticida organofosforado de contacto, ingestión e inhalación; amplio espectro (hormigas, chupadores y masticadores).",
+   "carencia_dias": null,
+   "reingreso_horas": null,
+   "categoria_tox": null,
+   "nota": "Completar: nombre comercial, dosis, precio",
+   "fuente": "Pedido del asesor; ficha técnica de Malathion 57% EC (referencial)",
+   "activo": true,
+   "concentracion": "Malatión 570 g/L (EC) (referencial, verificar etiqueta)",
+   "presentaciones": [],
+   "no_sugerir": false
   }
  ],
  "problemas": [
@@ -7884,8 +8092,8 @@
    "orden": 13,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
-   "clasificacion": null,
-   "como_actua": null
+   "clasificacion": "No selectivo (control total)",
+   "como_actua": "Control de toda la maleza de las calles con herbicidas no selectivos, aplicados dirigidos al suelo y sin mojar los tallos de la pitahaya."
   },
   {
    "id": 14,
@@ -7896,8 +8104,8 @@
    "orden": 14,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
-   "clasificacion": null,
-   "como_actua": null
+   "clasificacion": "Hoja ancha",
+   "como_actua": "Malezas de hoja ancha con nervaduras en red (dicotiledóneas). Compiten por agua y nutrientes y hospedan plagas."
   },
   {
    "id": 15,
@@ -7908,8 +8116,8 @@
    "orden": 15,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
-   "clasificacion": null,
-   "como_actua": null
+   "clasificacion": "Gramíneas",
+   "como_actua": "Pastos de hoja angosta con nervaduras paralelas. Cierran las calles, compiten por agua y nutrientes y guardan humedad que favorece hongos."
   },
   {
    "id": 16,
@@ -8040,8 +8248,8 @@
    "orden": 26,
    "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
    "fotos": [],
-   "clasificacion": null,
-   "como_actua": null
+   "clasificacion": "No selectivo (control total)",
+   "como_actua": "Control de toda la maleza de las calles con herbicidas no selectivos, aplicados dirigidos al suelo y sin tocar el tronco ni las hojas del cacao."
   },
   {
    "id": 27,
@@ -8070,517 +8278,677 @@
  ],
  "recomendaciones": [
   {
-   "id": 1,
    "problema_id": 1,
    "producto_id": 1,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 1
   },
   {
-   "id": 2,
    "problema_id": 1,
-   "producto_id": 3,
+   "producto_id": 5,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 2
   },
   {
-   "id": 3,
    "problema_id": 1,
-   "producto_id": 5,
+   "producto_id": 10,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 3
   },
   {
-   "id": 4,
    "problema_id": 1,
-   "producto_id": 4,
+   "producto_id": 9,
    "etapa_id": null,
    "prioridad": 4,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 4
   },
   {
-   "id": 5,
    "problema_id": 1,
-   "producto_id": 10,
+   "producto_id": 3,
    "etapa_id": null,
    "prioridad": 5,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 5
   },
   {
-   "id": 6,
    "problema_id": 2,
    "producto_id": 1,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 6
   },
   {
-   "id": 7,
    "problema_id": 2,
    "producto_id": 9,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 7
   },
   {
-   "id": 8,
    "problema_id": 2,
    "producto_id": 6,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 8
   },
   {
-   "id": 9,
    "problema_id": 2,
    "producto_id": 7,
    "etapa_id": null,
    "prioridad": 4,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 9
   },
   {
-   "id": 10,
    "problema_id": 2,
-   "producto_id": 4,
+   "producto_id": 3,
    "etapa_id": null,
    "prioridad": 5,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 10
   },
   {
-   "id": 11,
    "problema_id": 3,
    "producto_id": 11,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 11
   },
   {
-   "id": 12,
    "problema_id": 3,
    "producto_id": 8,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 12
   },
   {
-   "id": 13,
+   "problema_id": 3,
+   "producto_id": 196,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 13
+  },
+  {
+   "problema_id": 3,
+   "producto_id": 9,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 14
+  },
+  {
+   "problema_id": 3,
+   "producto_id": 86,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 15
+  },
+  {
    "problema_id": 4,
    "producto_id": 1,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 16
   },
   {
-   "id": 14,
    "problema_id": 4,
-   "producto_id": 3,
+   "producto_id": 2,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 17
   },
   {
-   "id": 15,
    "problema_id": 4,
-   "producto_id": 6,
+   "producto_id": 3,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 18
   },
   {
-   "id": 16,
+   "problema_id": 4,
+   "producto_id": 9,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 19
+  },
+  {
+   "problema_id": 4,
+   "producto_id": 6,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 20
+  },
+  {
    "problema_id": 5,
    "producto_id": 3,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 21
   },
   {
-   "id": 17,
    "problema_id": 5,
    "producto_id": 14,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 22
   },
   {
-   "id": 18,
    "problema_id": 5,
-   "producto_id": 16,
+   "producto_id": 15,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 23
   },
   {
-   "id": 19,
    "problema_id": 5,
-   "producto_id": 13,
+   "producto_id": 16,
    "etapa_id": null,
    "prioridad": 4,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 24
   },
   {
-   "id": 20,
    "problema_id": 5,
-   "producto_id": 15,
+   "producto_id": 13,
    "etapa_id": null,
    "prioridad": 5,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 25
   },
   {
-   "id": 21,
    "problema_id": 6,
    "producto_id": 12,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 26
   },
   {
-   "id": 22,
    "problema_id": 6,
    "producto_id": 10,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 27
   },
   {
-   "id": 23,
    "problema_id": 7,
    "producto_id": 3,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 28
   },
   {
-   "id": 24,
+   "problema_id": 7,
+   "producto_id": 179,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 29
+  },
+  {
+   "problema_id": 7,
+   "producto_id": 195,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 30
+  },
+  {
+   "problema_id": 7,
+   "producto_id": 74,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 31
+  },
+  {
    "problema_id": 8,
    "producto_id": 22,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 32
   },
   {
-   "id": 25,
    "problema_id": 8,
    "producto_id": 24,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 33
   },
   {
-   "id": 26,
    "problema_id": 8,
    "producto_id": 23,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 34
   },
   {
-   "id": 27,
    "problema_id": 8,
-   "producto_id": 25,
+   "producto_id": 26,
    "etapa_id": null,
    "prioridad": 4,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 35
   },
   {
-   "id": 28,
    "problema_id": 8,
-   "producto_id": 26,
+   "producto_id": 18,
    "etapa_id": null,
    "prioridad": 5,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 36
   },
   {
-   "id": 29,
-   "problema_id": 8,
-   "producto_id": 18,
-   "etapa_id": null,
-   "prioridad": 6,
-   "dosis_min": null,
-   "dosis_max": null,
-   "nota": null
-  },
-  {
-   "id": 30,
    "problema_id": 9,
    "producto_id": 27,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 37
   },
   {
-   "id": 31,
    "problema_id": 9,
    "producto_id": 28,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 38
   },
   {
-   "id": 32,
    "problema_id": 9,
-   "producto_id": 29,
+   "producto_id": 30,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 39
   },
   {
-   "id": 33,
    "problema_id": 9,
-   "producto_id": 30,
+   "producto_id": 34,
    "etapa_id": null,
    "prioridad": 4,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 40
   },
   {
-   "id": 34,
+   "problema_id": 9,
+   "producto_id": 159,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 41
+  },
+  {
    "problema_id": 10,
    "producto_id": 18,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 42
   },
   {
-   "id": 35,
    "problema_id": 10,
-   "producto_id": 21,
+   "producto_id": 62,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 43
   },
   {
-   "id": 36,
    "problema_id": 10,
-   "producto_id": 17,
+   "producto_id": 34,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 44
   },
   {
-   "id": 37,
    "problema_id": 10,
    "producto_id": 19,
    "etapa_id": null,
    "prioridad": 4,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 45
   },
   {
-   "id": 38,
    "problema_id": 10,
    "producto_id": 20,
    "etapa_id": null,
    "prioridad": 5,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 46
   },
   {
-   "id": 39,
    "problema_id": 11,
    "producto_id": 32,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 47
   },
   {
-   "id": 40,
+   "problema_id": 11,
+   "producto_id": 159,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 48
+  },
+  {
    "problema_id": 11,
    "producto_id": 17,
    "etapa_id": null,
-   "prioridad": 2,
+   "prioridad": 3,
    "dosis_min": 400,
    "dosis_max": 400,
-   "nota": null
+   "nota": null,
+   "id": 49
   },
   {
-   "id": 41,
    "problema_id": 11,
    "producto_id": 21,
    "etapa_id": null,
-   "prioridad": 3,
+   "prioridad": 4,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 50
   },
   {
-   "id": 42,
+   "problema_id": 11,
+   "producto_id": 20,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 51
+  },
+  {
    "problema_id": 12,
    "producto_id": 33,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 52
   },
   {
-   "id": 43,
-   "problema_id": 12,
-   "producto_id": 34,
-   "etapa_id": null,
-   "prioridad": 2,
-   "dosis_min": null,
-   "dosis_max": null,
-   "nota": null
-  },
-  {
-   "id": 44,
    "problema_id": 12,
    "producto_id": 28,
    "etapa_id": null,
-   "prioridad": 3,
+   "prioridad": 2,
    "dosis_min": 250,
    "dosis_max": 250,
-   "nota": null
+   "nota": null,
+   "id": 53
   },
   {
-   "id": 45,
    "problema_id": 12,
-   "producto_id": 17,
+   "producto_id": 34,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 54
+  },
+  {
+   "problema_id": 12,
+   "producto_id": 62,
    "etapa_id": null,
    "prioridad": 4,
-   "dosis_min": 400,
-   "dosis_max": 400,
-   "nota": null
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 55
   },
   {
-   "id": 46,
    "problema_id": 12,
-   "producto_id": 32,
+   "producto_id": 159,
    "etapa_id": null,
    "prioridad": 5,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 56
   },
   {
-   "id": 47,
    "problema_id": 13,
    "producto_id": 36,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 57
   },
   {
-   "id": 48,
    "problema_id": 13,
    "producto_id": 35,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 58
   },
   {
-   "id": 49,
    "problema_id": 13,
    "producto_id": 38,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 59
   },
   {
-   "id": 50,
+   "problema_id": 13,
+   "producto_id": 100,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 60
+  },
+  {
+   "problema_id": 13,
+   "producto_id": 107,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 61
+  },
+  {
    "problema_id": 14,
    "producto_id": 37,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 62
   },
   {
-   "id": 51,
+   "problema_id": 14,
+   "producto_id": 92,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 63
+  },
+  {
+   "problema_id": 14,
+   "producto_id": 104,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 64
+  },
+  {
+   "problema_id": 14,
+   "producto_id": 123,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 65
+  },
+  {
    "problema_id": 15,
    "producto_id": 39,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": null
+   "nota": null,
+   "id": 66
   },
   {
-   "id": 52,
+   "problema_id": 15,
+   "producto_id": 94,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": null,
+   "id": 67
+  },
+  {
+   "id": 68,
    "problema_id": 16,
    "producto_id": 40,
    "etapa_id": null,
@@ -8590,7 +8958,7 @@
    "nota": null
   },
   {
-   "id": 53,
+   "id": 69,
    "problema_id": 16,
    "producto_id": 44,
    "etapa_id": null,
@@ -8600,7 +8968,7 @@
    "nota": null
   },
   {
-   "id": 54,
+   "id": 70,
    "problema_id": 16,
    "producto_id": 45,
    "etapa_id": null,
@@ -8610,7 +8978,7 @@
    "nota": null
   },
   {
-   "id": 55,
+   "id": 71,
    "problema_id": 16,
    "producto_id": 43,
    "etapa_id": null,
@@ -8620,7 +8988,7 @@
    "nota": null
   },
   {
-   "id": 56,
+   "id": 72,
    "problema_id": 17,
    "producto_id": 41,
    "etapa_id": null,
@@ -8630,7 +8998,7 @@
    "nota": null
   },
   {
-   "id": 57,
+   "id": 73,
    "problema_id": 17,
    "producto_id": 42,
    "etapa_id": null,
@@ -8640,7 +9008,7 @@
    "nota": null
   },
   {
-   "id": 58,
+   "id": 74,
    "problema_id": 17,
    "producto_id": 43,
    "etapa_id": null,
@@ -8650,7 +9018,7 @@
    "nota": null
   },
   {
-   "id": 59,
+   "id": 75,
    "problema_id": 17,
    "producto_id": 45,
    "etapa_id": null,
@@ -8660,7 +9028,7 @@
    "nota": null
   },
   {
-   "id": 60,
+   "id": 76,
    "problema_id": 18,
    "producto_id": 46,
    "etapa_id": null,
@@ -8670,7 +9038,7 @@
    "nota": null
   },
   {
-   "id": 61,
+   "id": 77,
    "problema_id": 19,
    "producto_id": 53,
    "etapa_id": null,
@@ -8680,7 +9048,7 @@
    "nota": null
   },
   {
-   "id": 62,
+   "id": 78,
    "problema_id": 19,
    "producto_id": 59,
    "etapa_id": null,
@@ -8690,7 +9058,7 @@
    "nota": null
   },
   {
-   "id": 63,
+   "id": 79,
    "problema_id": 20,
    "producto_id": 54,
    "etapa_id": null,
@@ -8700,7 +9068,7 @@
    "nota": null
   },
   {
-   "id": 64,
+   "id": 80,
    "problema_id": 20,
    "producto_id": 52,
    "etapa_id": null,
@@ -8710,147 +9078,307 @@
    "nota": null
   },
   {
-   "id": 65,
    "problema_id": 21,
    "producto_id": 18,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 81
   },
   {
-   "id": 66,
    "problema_id": 21,
-   "producto_id": 21,
+   "producto_id": 24,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 82
   },
   {
-   "id": 67,
    "problema_id": 21,
-   "producto_id": 17,
+   "producto_id": 27,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 83
   },
   {
-   "id": 68,
+   "problema_id": 21,
+   "producto_id": 21,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 84
+  },
+  {
+   "problema_id": 21,
+   "producto_id": 62,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 85
+  },
+  {
    "problema_id": 22,
    "producto_id": 21,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 86
   },
   {
-   "id": 69,
    "problema_id": 22,
-   "producto_id": 17,
+   "producto_id": 24,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 87
   },
   {
-   "id": 70,
+   "problema_id": 22,
+   "producto_id": 27,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 88
+  },
+  {
+   "problema_id": 22,
+   "producto_id": 18,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 89
+  },
+  {
+   "problema_id": 22,
+   "producto_id": 62,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 90
+  },
+  {
    "problema_id": 23,
    "producto_id": 23,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 91
   },
   {
-   "id": 71,
    "problema_id": 23,
-   "producto_id": 21,
+   "producto_id": 62,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 92
   },
   {
-   "id": 72,
    "problema_id": 23,
-   "producto_id": 17,
+   "producto_id": 21,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 93
   },
   {
-   "id": 73,
+   "problema_id": 23,
+   "producto_id": 24,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 94
+  },
+  {
+   "problema_id": 23,
+   "producto_id": 18,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 95
+  },
+  {
    "problema_id": 24,
    "producto_id": 1,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 96
   },
   {
-   "id": 74,
+   "problema_id": 24,
+   "producto_id": 2,
+   "etapa_id": null,
+   "prioridad": 2,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 97
+  },
+  {
    "problema_id": 24,
    "producto_id": 3,
    "etapa_id": null,
-   "prioridad": 2,
+   "prioridad": 3,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 98
   },
   {
-   "id": 75,
+   "problema_id": 24,
+   "producto_id": 9,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 99
+  },
+  {
+   "problema_id": 24,
+   "producto_id": 86,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 100
+  },
+  {
    "problema_id": 25,
    "producto_id": 1,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 101
   },
   {
-   "id": 76,
    "problema_id": 25,
-   "producto_id": 11,
+   "producto_id": 9,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 102
   },
   {
-   "id": 77,
+   "problema_id": 25,
+   "producto_id": 11,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 103
+  },
+  {
+   "problema_id": 25,
+   "producto_id": 2,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 104
+  },
+  {
+   "problema_id": 25,
+   "producto_id": 3,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 105
+  },
+  {
    "problema_id": 26,
    "producto_id": 36,
    "etapa_id": null,
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 106
   },
   {
-   "id": 78,
    "problema_id": 26,
    "producto_id": 35,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 107
   },
   {
-   "id": 79,
+   "problema_id": 26,
+   "producto_id": 38,
+   "etapa_id": null,
+   "prioridad": 3,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 108
+  },
+  {
+   "problema_id": 26,
+   "producto_id": 100,
+   "etapa_id": null,
+   "prioridad": 4,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 109
+  },
+  {
+   "problema_id": 26,
+   "producto_id": 107,
+   "etapa_id": null,
+   "prioridad": 5,
+   "dosis_min": null,
+   "dosis_max": null,
+   "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta.",
+   "id": 110
+  },
+  {
+   "id": 111,
    "problema_id": 27,
    "producto_id": 54,
    "etapa_id": null,
@@ -8860,7 +9388,7 @@
    "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
   },
   {
-   "id": 80,
+   "id": 112,
    "problema_id": 28,
    "producto_id": 43,
    "etapa_id": null,
@@ -8870,7 +9398,7 @@
    "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
   },
   {
-   "id": 81,
+   "id": 113,
    "problema_id": 28,
    "producto_id": 45,
    "etapa_id": null,
@@ -8880,7 +9408,7 @@
    "nota": "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
   },
   {
-   "id": 82,
+   "id": 114,
    "problema_id": 28,
    "producto_id": 46,
    "etapa_id": null,
