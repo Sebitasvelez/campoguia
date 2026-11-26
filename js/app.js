@@ -318,19 +318,24 @@
     html += r.problemas.slice(0, 5).map((pr) => item("#/problema/" + pr.id, pr.nombre, "Manual de " + nomC(pr.cultivo_id) + " · " + recDe(pr))).join("");
     if (!html && !r.relacionados.length && r.cultivos.length) html += r.cultivos.map((id) => item("#/cultivo/" + id, "Manual técnico de " + nomC(id), "Plagas, enfermedades, malezas y nutrición")).join("");
     const nomClase = r.clase ? (CLS_NOM[r.clase.clase] || r.clase.clase.toLowerCase()) : "";
+    const cult0 = r.cultivos.length ? nomC(r.cultivos[0]) : "";
+    const botones = () => `<div class="acciones">${navigator.onLine !== false ? `<a class="btn sec chico" href="${h("https://www.google.com/search?q=" + encodeURIComponent(q + " control" + (cult0 ? " en " + cult0 : "") + " Ecuador"))}" target="_blank" rel="noopener">Buscar en internet</a>` : ""}
+      <a class="btn wa chico" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", tengo este problema" + (cult0 ? " en mi " + cult0 : "") + ": " + q + ". ¿Qué me recomienda?"))}" target="_blank" rel="noopener">${ic.wa}Preguntar a mi asesor</a></div>`;
+    const prodsClase = (n) => L.rankearPorClase(r.clase, I.c.productos || []).filter((x) => !x.p.no_sugerir && !/tratamiento de semilla|\brosas?\b|\barroz\b/i.test((x.p.control || "") + " " + (x.p.nota || "")) && !/\bflora\b/i.test(x.p.nombre)).slice(0, n)
+      .map((x, i) => item("#/calcular?p=" + x.p.id, `${i + 1}. ${x.p.nombre}`, [x.p.concentracion || x.p.ingrediente_activo, x.grupo.n].filter(Boolean).join(" · ") + " · Calcular dosis")).join("");
+    // especie, plaga o enfermedad que no está en los manuales pero sí se puede ubicar en nuestra clasificación
+    if (r.clase && !r.problemas.length && !r.intencion) {
+      const ter = q.charAt(0).toUpperCase() + q.slice(1), esEnf = L.CLASES[r.clase.clase].tipo === "enfermedad";
+      box.innerHTML = `<div class="aviso azul" style="padding:8px 10px">${ic.alerta}<div>No tenemos información específica de <b>«${h(ter)}»</b> en los manuales. Por su clasificación es ${r.clase.clase === "Bacteria" ? "una <b>bacteria</b>" : esEnf ? `un hongo <b>${h(r.clase.clase)}</b>` : `una plaga <b>${h(r.clase.clase.toLowerCase())}</b>`}: estos productos de nuestro portafolio sirven para esa clase, del más eficiente (1) al menos.</div></div>
+        ${prodsClase(5) || `<span class="mini">Aún no hay productos cargados para esta clase.</span>`}
+        ${r.relacionados.length ? `<div class="mini" style="margin-top:4px"><b>En nuestros manuales, del mismo tipo</b></div>` + r.relacionados.slice(0, 3).map((pr) => item("#/problema/" + pr.id, pr.nombre, "Manual de " + nomC(pr.cultivo_id) + " · " + recDe(pr))).join("") : ""}
+        <span class="mini">Confirma la dosis para tu cultivo en la etiqueta o con tu asesor.</span>${botones()}`;
+      return;
+    }
     if (r.relacionados.length) html += `<div class="mini" style="margin-top:4px"><b>${r.problemas.length ? "También relacionado" : r.clase ? "Del mismo tipo (" + h(nomClase) + ") en nuestros manuales" : "Relacionado en nuestros manuales"}</b></div>` +
       r.relacionados.slice(0, 4).map((pr) => item("#/problema/" + pr.id, pr.nombre, "Manual de " + nomC(pr.cultivo_id) + " · " + recDe(pr))).join("");
-    if (r.clase && !r.problemas.length) {
-      const top = L.rankearPorClase(r.clase, I.c.productos || []).filter((x) => !x.p.no_sugerir && !/tratamiento de semilla|\brosas?\b|\barroz\b/i.test((x.p.control || "") + " " + (x.p.nota || "")) && !/\bflora\b/i.test(x.p.nombre)).slice(0, 4);
-      if (top.length) html += `<div class="mini" style="margin-top:4px"><b>Productos de nuestro portafolio para ${h(nomClase)}</b> (del más eficiente)</div>` +
-        top.map((x, i) => item("#/calcular?p=" + x.p.id, `${i + 1}. ${x.p.nombre}`, [x.p.concentracion || x.p.ingrediente_activo, x.grupo.n].filter(Boolean).join(" · ") + " · Calcular dosis")).join("");
-    }
     const directo = r.problemas.length || r.intencion;
-    const cult = r.cultivos.length ? nomC(r.cultivos[0]) : "";
-    const web = "https://www.google.com/search?q=" + encodeURIComponent(q + " control" + (cult ? " en " + cult : "") + " Ecuador");
-    html += directo ? "" : `<div class="aviso ambar" style="padding:8px 10px">${ic.alerta}<div>${html ? "No encontramos exactamente «" + h(q) + "» en los manuales; revisa lo relacionado o consulta." : "Aún no tenemos «" + h(q) + "» documentado en los manuales."}</div></div>
-      <div class="acciones">${navigator.onLine !== false ? `<a class="btn sec chico" href="${h(web)}" target="_blank" rel="noopener">Buscar en internet</a>` : ""}
-      <a class="btn wa chico" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", tengo este problema" + (cult ? " en mi " + cult : "") + ": " + q + ". ¿Qué me recomienda?"))}" target="_blank" rel="noopener">${ic.wa}Preguntar a mi asesor</a></div>`;
+    html += directo ? "" : `<div class="aviso ambar" style="padding:8px 10px">${ic.alerta}<div>${html ? "No encontramos exactamente «" + h(q) + "» en los manuales; revisa lo relacionado o consulta." : "Aún no tenemos «" + h(q) + "» documentado en los manuales."}</div></div>${botones()}`;
     box.innerHTML = html;
   }
 
