@@ -875,7 +875,12 @@
           <div class="fila" style="border-top:1px solid var(--borde);padding-top:8px"><span class="mini">Total de referencia</span><b>${dinero(costoCompra)}</b></div>
           ${hayTanque ? `<div class="fila"><span class="mini">${txtCostoEquipo}</span><b>${dinero(costoEquipoMezcla)}</b></div>` : ""}
         </section>
-        ${botonesReporte()}
+        ${esTecnico() ? `<section class="card"><div class="etq">Receta para el agricultor (PDF)</div>
+          <div class="grid2"><label class="campo">Agricultor<input id="recAgr" value="${h(ui.recAgr || "")}" placeholder="Nombre"></label>
+          <label class="campo">Cultivo / lote<input id="recCult" value="${h(ui.recCult || "")}" placeholder="Ej. Pitahaya, lote 2"></label></div>
+          <label class="campo">Indicaciones y recomendaciones<textarea id="recInd" rows="3" placeholder="Ej. Aplicar en la tarde, cubrir bien el envés. Repetir a los 8 días.">${h(ui.recInd || "")}</textarea></label>
+          <button class="btn wa" id="recetar">${ic.wa}Recetar</button>
+          <span class="mini">Se crea un PDF con la mezcla, el orden, las dosis y tus indicaciones para enviarlo por WhatsApp.</span></section>` : botonesReporte()}
         <div class="acciones"><button class="btn" id="reg">Registrar esta mezcla</button><button class="btn peligro" id="vaciar">Vaciar</button></div>
         <a class="btn wa" target="_blank" rel="noopener" href="${h(waLink("Hola, quiero validar esta mezcla para " + volTxt() + ": " + m.map((x) => P(x.producto_id).nombre + " " + fmtD(x)).join(", ") + ". ¿Está bien?"))}">${ic.wa}Validar mezcla con mi asesor</a>` : ""}
       </main>`, "mezcla");
@@ -907,6 +912,31 @@
         .concat(["", "*Para comprar:*"]).concat(compra.map((c) => `• ${c.p.nombre}: ${c.texto || "ver etiqueta"}`))
         .concat([`Total de referencia: ${dinero(costoCompra)}`, "", "*Orden de mezcla:*"]).concat(pasos).join("\n");
       conectarReporte(datos, () => `Mezcla_${new Date().toISOString().slice(0, 10)}.png`, texto);
+      // receta en PDF (técnicos)
+      [["recAgr", "recAgr"], ["recCult", "recCult"], ["recInd", "recInd"]].forEach(([id, k]) => { const el = $("#" + id); if (el) el.addEventListener("input", () => { ui[k] = el.value; guardarUI(); }); });
+      const bRec = $("#recetar");
+      if (bRec) bRec.addEventListener("click", async () => {
+        const per = D.sesion.perfil, ahora = new Date();
+        const tel = String(per.telefono || "").replace(/\D/g, "");
+        const receta = { marca: NOMBRE, titulo: "Receta técnica", fecha: ahora.toLocaleDateString("es-EC", { day: "numeric", month: "long", year: "numeric" }),
+          tecnico: [per.nombres, per.apellidos].filter(Boolean).join(" "), telefonoTecnico: tel ? "Cel. " + tel : "", agricultor: (ui.recAgr || "").trim(), cultivo: (ui.recCult || "").trim(),
+          equipo: [hayTanque ? `${L.fmt(cargas, 1)} ${cargas === 1 ? equipo.replace(/^tanques/, "tanque").replace(/^bombas/, "bomba") : equipo}` : "", haySuelo ? `${L.fmt(haSuelo, 2)} ha al suelo` : ""].filter(Boolean).join(" · "),
+          productos: m.map((x, i) => { const p = P(x.producto_id), c = compra[i];
+            return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: esSuelo(x) ? fmtD(x) + " (al suelo)" : `${fmtD(x)} por ${volTxt()}`,
+              total: c.total !== null ? L.cantidad(c.total, c.unidad || p.unidad) + (esSuelo(x) ? "" : " en total") : "Ver etiqueta" }; }),
+          pasos, avisos: datos().secciones[2].avisos || [],
+          precauciones: prods.filter((p) => (p.carencia_dias !== null && p.carencia_dias !== undefined) || (p.reingreso_horas !== null && p.reingreso_horas !== undefined))
+            .map((p) => `${p.nombre}: ${p.carencia_dias !== null && p.carencia_dias !== undefined ? "carencia " + p.carencia_dias + " días" : ""}${p.carencia_dias !== null && p.carencia_dias !== undefined && p.reingreso_horas !== null && p.reingreso_horas !== undefined ? " · " : ""}${p.reingreso_horas !== null && p.reingreso_horas !== undefined ? "reingreso " + p.reingreso_horas + " h" : ""}`)
+            .concat(["Lea siempre la etiqueta. Use equipo de protección personal (guantes, mascarilla, gafas y ropa larga).", "No fumigue con viento fuerte ni antes de lluvia. Lave el equipo y no contamine fuentes de agua."]),
+          compras: compra.map((c) => [c.p.nombre, c.texto ? `${c.texto}${c.costo !== null && c.costo !== undefined ? " · " + dinero(c.costo) : ""}` : "Ver etiqueta"]),
+          totales: [["Total de referencia", dinero(costoCompra)]].concat(hayTanque ? [[txtCostoEquipo, dinero(costoEquipoMezcla)]] : []),
+          indicaciones: (ui.recInd || "").trim(), pie: pieReporte().replace(/^Reporte generado/, "Receta generada") };
+        const nom = `Receta_${nombreSeguro(receta.agricultor || "mezcla")}_${ahora.toISOString().slice(0, 10)}.pdf`;
+        bRec.disabled = true;
+        try { const r = await Receta.compartir(receta, nom, texto()); if (r === "descargado") toast("PDF descargado. Adjúntalo en el chat de WhatsApp del agricultor."); }
+        catch (e) { toast("No se pudo crear el PDF en este teléfono."); }
+        bRec.disabled = false;
+      });
     }
   }
 
