@@ -718,11 +718,16 @@
           ${cc.modo === "ha" ? (enM2 ? `<label class="campo">Superficie (m²)<span class="unido"><input id="m2" inputmode="numeric" value="${h(cc.m2)}" placeholder="1000"><span>m²</span></span></label>`
               : `<label class="campo">Superficie (ha)<span class="unido"><input id="ha" inputmode="decimal" value="${h(cc.ha)}"><span>ha</span></span></label>`)
             : `<label class="campo">N.º de plantas<span class="unido"><input id="pl" inputmode="numeric" value="${h(cc.pl || "")}"><span>pl</span></span></label>`}
-          ${d.modo === "tanque" ? (cc.modo === "ha" ? (enM2 ? `<label class="campo">Agua que usas en esos m²<span class="unido"><input id="aguaM2" inputmode="decimal" value="${h(cc.aguaM2)}" placeholder="Ej. 40"><span>L</span></span></label>` : `<label class="campo">Agua utilizada por 1 ha<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span></label>`)
-            : `<label class="campo">Plantas cubiertas por tu ${cc.equipo === "tanque" ? "tanque" : "bomba"} de ${L.fmt(vol)} L<span class="unido"><input id="${campoPl}" inputmode="numeric" value="${h(cc[campoPl])}"><span>pl</span></span></label>`)
-            : `<label class="campo">${esTec ? "Plantas promedio por ha" : "Plantas por ha"}<span class="unido"><input id="pha" inputmode="numeric" value="${h(cc.pha || "")}" placeholder="1600"><span>pl/ha</span></span></label>`}
-          ${d.modo === "tanque" ? `<label class="campo">Litros de tu bomba o tanque<span class="unido"><input id="vol" inputmode="decimal" value="${h(cc.vol)}"><span>L</span></span></label>` : ""}
-          ${d.modo === "tanque" && esTanque && cc.modo === "plantas" ? `<label class="campo">${esTec ? "Plantas promedio por ha" : "Plantas por ha"}<span class="unido"><input id="pha" inputmode="numeric" value="${h(cc.pha || "")}" placeholder="1600"><span>pl/ha</span></span></label>` : ""}
+          ${(() => {
+            const fPha = `<label class="campo">${esTec ? "Plantas promedio por ha" : "Plantas por ha"}<span class="unido"><input id="pha" inputmode="numeric" value="${h(cc.pha || "")}" placeholder="1600"><span>pl/ha</span></span></label>`;
+            const fVol = `<label class="campo">Litros de tu bomba o tanque<span class="unido"><input id="vol" inputmode="decimal" value="${h(cc.vol)}"><span>L</span></span></label>`;
+            const fCub = `<label class="campo">Plantas cubiertas por ${esTec ? "" : "tu "}${cc.equipo === "tanque" ? "tanque" : "bomba"} de ${L.fmt(vol)} L<span class="unido"><input id="${campoPl}" inputmode="numeric" value="${h(cc[campoPl])}"><span>pl</span></span></label>`;
+            if (d.modo !== "tanque") return fPha;
+            if (cc.modo === "ha") return (enM2 ? `<label class="campo">Agua que usas en esos m²<span class="unido"><input id="aguaM2" inputmode="decimal" value="${h(cc.aguaM2)}" placeholder="Ej. 40"><span>L</span></span></label>` : `<label class="campo">Agua utilizada por 1 ha<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span></label>`) + fVol;
+            // técnico por plantas: arriba plantas promedio por ha; abajo litros de la bomba y plantas cubiertas
+            if (esTanque) return fPha + fVol + fCub;
+            return fCub + fVol;
+          })()}
         </div>
         ${cc.modo === "ha" && enM2 ? `<div class="aviso azul info-sup"><b>i</b><div>¿No sabes los m²? Multiplica el largo por el ancho de tu lote en metros (ej. 20 m × 50 m = 1.000 m²).${d.modo === "tanque" ? `<br>En <b>agua que usas</b> escribe los litros que gastas para fumigar bien esos m² (por ejemplo: 2 bombas de 20 litros = 40 L).` : ""}</div></div>` : ""}
         ${cc.modo === "ha" && esTec ? `<div class="aviso azul info-sup"><b>i</b><div>${haCalc ? `Superficie: <b>${h(L.fmt(haCalc, 4))} ha = ${h(L.fmt(haCalc * 10000, 0))} m²</b><br>` : ""}1 ha = 10.000 m². Si el lote es menor a 1 ha, pásalo a hectáreas dividiendo los m² ÷ 10.000: 5.000 m² = 0,5 ha · 1.000 m² = 0,1 ha · 500 m² = 0,05 ha.</div></div>` : ""}
