@@ -461,6 +461,18 @@
     clasesDe(txt).forEach((k) => CLASES[k].grupos.forEach((g) => { const id = g.c || g.n; if (!vistos.has(id)) { vistos.add(id); out.push(g); } }));
     return out;
   }
+  // Excepciones por patógeno: grupos de la clase que no se recomiendan para ciertos géneros (se buscan en el nombre,
+  // la descripción y la explicación del problema). Bencimidazoles (FRAC 1): Alternaria y antracnosis (Colletotrichum)
+  // por tolerancia natural de algunas especies y resistencia frecuente; decisión del asesor (nov 2026).
+  const EXCLUSIONES = [
+    { patron: /colletotrichum|antracnosis|alternaria/i, quitar: ["FRAC 1"] },
+  ];
+  function gruposDelProblema(problema) {
+    if (!problema) return [];
+    const texto = [problema.nombre, problema.descripcion, problema.como_actua].filter(Boolean).join(" ");
+    const quitar = new Set(EXCLUSIONES.filter((x) => x.patron.test(texto)).flatMap((x) => x.quitar));
+    return gruposFuncionales(problema.clasificacion).filter((g) => !quitar.has(g.c));
+  }
   // "FRAC 1 + 12 + 4 · IRAC 4A" → ["FRAC 1","FRAC 12","FRAC 4","IRAC 4A"]
   function codigosGrupo(grupo) {
     const out = [];
@@ -488,7 +500,7 @@
   function sugerirAlternativas(problema, productos, principalId, n, cultivoNombre, previos) {
     const prev = new Set((previos || []).map(String));
     n = n || 4;
-    const gf = gruposFuncionales(problema && problema.clasificacion); if (!gf.length) return [];
+    const gf = gruposDelProblema(problema); if (!gf.length) return [];
     const clases = clasesDe(problema.clasificacion);
     const cat = clases.map((k) => CAT_ESPECIAL[k]).find(Boolean) || CAT_CLASE[problema.tipo] || /./;
     const cult = String(cultivoNombre || problema.cultivo_id || "").toLowerCase();
@@ -517,7 +529,7 @@
   // segundo grupo, más grupos funcionales y con dosis cargada. Sin clasificación o sin grupo funcional, van al final
   // en el orden recibido.
   function ordenarPorEficiencia(problema, lista) {
-    const gf = gruposFuncionales(problema && problema.clasificacion), pos = new Map(gf.map((g, i) => [g.c || g.n, i]));
+    const gf = gruposDelProblema(problema), pos = new Map(gf.map((g, i) => [g.c || g.n, i]));
     const tieneDosis = (p) => [p.dosis_min, p.dosis_max, p.dosis_ha_min, p.dosis_ha_max].some((v) => v !== null && v !== undefined && v !== "");
     return lista.map((p, i) => { const g = coincideGrupos(p, gf).map((x) => x.c || x.n), idx = g.map((x) => pos.get(x)).sort((a, b) => a - b);
       return { p, i, n: g.length, ef: idx.length ? idx[0] : 999, ef2: idx.length > 1 ? idx[1] : 999, dosis: tieneDosis(p) }; })
@@ -526,6 +538,6 @@
   }
   const api = { ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
-    CLASES, OPC_CLASE, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia };
+    CLASES, OPC_CLASE, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);

@@ -377,7 +377,7 @@
   // ficha técnica: aparato bucal (plagas) o clase del hongo (enfermedades); los grupos químicos funcionales y las otras opciones solo los ve el técnico agrícola
   function fichaClase(pr) {
     if (!pr.clasificacion || !["plaga", "enfermedad"].includes(pr.tipo)) return "";
-    const clases = L.clasesDe(pr.clasificacion), gf = L.gruposFuncionales(pr.clasificacion), plaga = pr.tipo === "plaga";
+    const clases = L.clasesDe(pr.clasificacion), gf = L.gruposDelProblema(pr), plaga = pr.tipo === "plaga";
     const que = pr.como_actua || clases.map((k) => L.CLASES[k].resumen).join(" ");
     const tec = esTecnico(); // grupos químicos funcionales: solo para técnicos agrícolas
     return `<article class="card ficha-clase">
@@ -413,7 +413,7 @@
   function otrasOpciones(pr, recs) {
     if (!esTecnico()) return "";
     if (!pr.clasificacion || !["plaga", "enfermedad"].includes(pr.tipo)) return "";
-    const gf = L.gruposFuncionales(pr.clasificacion); if (!gf.length) return "";
+    const gf = L.gruposDelProblema(pr); if (!gf.length) return "";
     const clases = L.clasesDe(pr.clasificacion);
     const cat = pr.tipo === "plaga" ? (clases.map((k) => CAT_OTRAS[k]).find(Boolean) || /insectic|acaric|cebo|nematic/i) : /fungic|desinfecc|bactericida/i;
     const usados = new Set(recs.map((r) => String(r.producto_id)));
