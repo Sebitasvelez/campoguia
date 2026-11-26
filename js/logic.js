@@ -462,10 +462,10 @@
     return out;
   }
   // Excepciones por patógeno: grupos de la clase que no se recomiendan para ciertos géneros (se buscan en el nombre,
-  // la descripción y la explicación del problema). Bencimidazoles (FRAC 1): Alternaria (sin respaldo de eficacia) y
-  // Colletotrichum acutatum (tolerante); C. gloeosporioides sí es sensible. Decisión del asesor (nov 2026).
+  // la descripción y la explicación del problema). Bencimidazoles (FRAC 1): nunca para antracnosis (Colletotrichum,
+  // cualquier especie) ni Alternaria, en cualquier cultivo. Decisión del asesor (nov 2026).
   const EXCLUSIONES = [
-    { patron: /alternaria|colletotrichum acutatum|c\. acutatum/i, quitar: ["FRAC 1"] },
+    { patron: /colletotrichum|antracnosis|alternaria/i, quitar: ["FRAC 1"] },
   ];
   function gruposDelProblema(problema) {
     if (!problema) return [];
