@@ -28,8 +28,8 @@ DATOS = {
 
  ("pitahaya", "Antracnosis (Colletotrichum) y Alternaria"): ("Ascomiceto",
   "Colletotrichum (estado sexual Glomerella) y Alternaria son Ascomicetos. Se multiplican por conidias que salpican con la lluvia y entran por heridas o tejido tierno; con humedad alta las manchas crecen rápido."),
- ("pitahaya", "Fusarium / sarna fúngica"): ("Deuteromiceto + Ascomiceto",
-  "Fusarium se maneja como Deuteromiceto: es un hongo especial que solo responde a ciertos ingredientes activos. El hongo de la sarna (Neoscytalidium) es un Ascomiceto. Ambos viven en el suelo y en restos de cosecha, entran por heridas y se dispersan con el agua y las herramientas."),
+ ("pitahaya", "Fusarium"): ("Deuteromiceto",
+  "Fusarium se maneja como Deuteromiceto: es un hongo especial que solo responde a determinados ingredientes activos. Vive en el suelo y en restos de cosecha, entra por heridas y raíces dañadas, y se dispersa con el agua de riego, la lluvia y las herramientas."),
  ("pitahaya", "Prevención de hongos (amplio espectro)"): ("Amplio espectro (multisitio)",
   "Antes de que aparezcan síntomas no se sabe qué hongo atacará, por eso se usan productos multisitio que protegen contra hongos de todas las clases."),
  ("pitahaya", "Bacteriosis / pudrición blanda"): ("Bacteria",

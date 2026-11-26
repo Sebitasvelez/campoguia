@@ -7831,13 +7831,13 @@
    "id": 9,
    "cultivo_id": "pitahaya",
    "tipo": "enfermedad",
-   "nombre": "Fusarium / sarna fúngica",
-   "descripcion": "Pudrición de flor, manchado y sarna en fruto; pudrición de tallo.",
+   "nombre": "Fusarium",
+   "descripcion": "Pudrición de flor y fruto, pudrición de tallo y raíz; la planta se marchita.",
    "orden": 9,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
-   "clasificacion": "Deuteromiceto + Ascomiceto",
-   "como_actua": "Fusarium se maneja como Deuteromiceto: es un hongo especial que solo responde a ciertos ingredientes activos. El hongo de la sarna (Neoscytalidium) es un Ascomiceto. Ambos viven en el suelo y en restos de cosecha, entran por heridas y se dispersan con el agua y las herramientas."
+   "clasificacion": "Deuteromiceto",
+   "como_actua": "Fusarium se maneja como Deuteromiceto: es un hongo especial que solo responde a determinados ingredientes activos. Vive en el suelo y en restos de cosecha, entra por heridas y raíces dañadas, y se dispersa con el agua de riego, la lluvia y las herramientas."
   },
   {
    "id": 10,

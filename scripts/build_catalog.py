@@ -181,7 +181,7 @@ prob("plaga", "Babosas y caracoles", "Mordeduras en brotes tiernos y botones.", 
 prob("plaga", "Nematodos", "Raíces con nudos o lesiones; planta débil.", ["Solvigo"])
 prob("enfermedad", "Antracnosis (Colletotrichum) y Alternaria", "Manchas hundidas en cladodios, flores y frutos.",
      ["Score", "Atajo", "Uniform", "Sico", "Tilt", "Daconil"])
-prob("enfermedad", "Fusarium / sarna fúngica", "Pudrición de flor, manchado y sarna en fruto; pudrición de tallo.",
+prob("enfermedad", "Fusarium", "Pudrición de flor y fruto, pudrición de tallo y raíz; la planta se marchita.",
      ["Overseas", "Mertect", "Inspire Gold", "Carbovax"])
 prob("enfermedad", "Prevención de hongos (amplio espectro)", "Aplicaciones preventivas, sobre todo en épocas de lluvia.",
      ["Daconil", "Kocide", "Phyton", "Codicobre", "Caldo Bordeles"])
