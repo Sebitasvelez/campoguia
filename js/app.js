@@ -715,7 +715,7 @@
           ${cc.modo === "ha" ? (enM2 ? `<label class="campo">Superficie (m²)<span class="unido"><input id="m2" inputmode="numeric" value="${h(cc.m2)}" placeholder="1000"><span>m²</span></span></label>`
               : `<label class="campo">Superficie (ha)<span class="unido"><input id="ha" inputmode="decimal" value="${h(cc.ha)}"><span>ha</span></span></label>`)
             : `<label class="campo">N.º de plantas<span class="unido"><input id="pl" inputmode="numeric" value="${h(cc.pl || "")}"><span>pl</span></span></label>`}
-          ${d.modo === "tanque" ? (cc.modo === "ha" ? `<label class="campo">Agua utilizada por ha<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span></label>`
+          ${d.modo === "tanque" ? (cc.modo === "ha" ? `<label class="campo">Agua utilizada por 1 ha<span class="unido"><input id="lha" inputmode="numeric" value="${h(cc.lha)}"><span>L/ha</span></span></label>`
             : `<label class="campo">Plantas cubiertas por ${cc.equipo === "tanque" ? "tanque" : "bomba"} de ${L.fmt(vol)} L<span class="unido"><input id="${campoPl}" inputmode="numeric" value="${h(cc[campoPl])}"><span>pl</span></span></label>`)
             : `<label class="campo">Plantas por ha<span class="unido"><input id="pha" inputmode="numeric" value="${h(cc.pha || "")}" placeholder="1600"><span>pl/ha</span></span></label>`}
           ${d.modo === "tanque" ? `<label class="campo">Litros de tu bomba o tanque<span class="unido"><input id="vol" inputmode="decimal" value="${h(cc.vol)}"><span>L</span></span></label>` : ""}
