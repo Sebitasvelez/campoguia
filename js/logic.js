@@ -86,7 +86,25 @@
   }
   const textoEquipos = (v) => (v % 1 ? (Math.floor(v) ? Math.floor(v) + "½" : "½") : String(v));
 
-  const TXT_FRAC = { 0.25: "¼", 0.5: "½", 0.75: "¾", 1: "1" };
+  // cantidad en sacos redondeada hacia arriba al ¼ de saco; solo para productos cuya presentación más pequeña es un saco (≥ 10 kg)
+  const FRAC = { 0: "", 0.25: "¼", 0.5: "½", 0.75: "¾" };
+  function textoSacos(v) { const ent = Math.floor(v + 1e-9), fr = Math.round((v - ent) * 4) / 4; return (ent ? String(ent) : "") + FRAC[fr] || "0"; }
+  function fraccionSacos(totalG, producto) {
+    totalG = num(totalG); if (!totalG || totalG <= 0) return null;
+    const pres = (producto.presentaciones || []).filter((x) => num(x.cantidad));
+    let saco = null;
+    if (pres.length) {
+      const menor = pres.reduce((m, x) => (num(x.cantidad) < num(m.cantidad) ? x : m));
+      if ((menor.unidad || "g") === "g" && num(menor.cantidad) >= 10000) saco = { cantidad: num(menor.cantidad), precio: num(menor.precio) };
+    } else if (num(producto.contenido) >= 10000 && (producto.contenido_unidad || "g") === "g") saco = { cantidad: num(producto.contenido), precio: num(producto.pvp) };
+    if (!saco) return null;
+    const kgSaco = saco.cantidad / 1000;
+    const sacos = Math.max(0.25, Math.ceil((totalG / saco.cantidad) * 4 - 1e-9) / 4);
+    const fr = textoSacos(sacos);
+    const texto = sacos < 1 ? `${fr} de saco de ${fmt(kgSaco)} kg (${fmt(sacos * kgSaco, 1)} kg)` : `${fr} ${sacos === 1 ? "saco" : "sacos"} de ${fmt(kgSaco)} kg${sacos % 1 ? ` (${fmt(sacos * kgSaco, 1)} kg)` : ""}`;
+    const precio = saco.precio !== null ? saco.precio : num(producto.pvp);
+    return { sacos, kgSaco, fraccion: fr, texto, costo: precio !== null ? r2(sacos * precio) : null };
+  }
   function calcularFinca(producto, dosis, opts) {
     const o = Object.assign({ bombaL: 20, tanqueL: 200, litrosAguaHa: 400, plantasPorBomba: 60, plantasPorHa: null }, opts);
     const d = o.usarMax ? dosis.max : dosis.min !== null ? dosis.min : dosis.max;
@@ -145,21 +163,10 @@
       res.presentacion = producto.presentacion;
       if (pvp !== null) { res.costoEnvases = r2(res.envases * pvp); res.costoUsado = r2((totalBase / cont) * pvp); }
     }
-    // fertilizantes en saco: si se necesita menos de un saco, se calcula proporcional en ¼, ½, ¾ o 1 saco
+    // fertilizantes en saco: la compra se calcula en fracciones de ¼ de saco (¼, ½, ¾, 1, 1¼, 1½…)
     if (res.kgTotal !== undefined && totalBase > 0) {
-      const sacos = (producto.presentaciones || []).filter((x) => num(x.cantidad) >= 10000 && (x.unidad || "g") === "g");
-      const menor = (producto.presentaciones || []).reduce((m, x) => (num(x.cantidad) && (m === null || num(x.cantidad) < m) ? num(x.cantidad) : m), null);
-      const saco = sacos.length ? sacos.reduce((m, x) => (num(x.cantidad) < num(m.cantidad) ? x : m)) : (!(producto.presentaciones || []).length && cont >= 10000 ? { cantidad: cont, precio: pvp } : null);
-      if (saco && num(saco.cantidad) === (menor || num(saco.cantidad)) && totalBase < num(saco.cantidad) - 1e-6) {
-        const kgSaco = num(saco.cantidad) / 1000;
-        const frac = Math.min(1, Math.ceil((totalBase / num(saco.cantidad)) * 4 - 1e-9) / 4);
-        res.fraccionSaco = frac; res.kgSaco = kgSaco;
-        res.textoFraccion = TXT_FRAC[frac];
-        res.compraTexto = frac < 1 ? `${TXT_FRAC[frac]} de saco de ${fmt(kgSaco)} kg (${fmt(frac * kgSaco, 1)} kg)` : `1 saco de ${fmt(kgSaco)} kg`;
-        res.envases = frac;
-        const precio = num(saco.precio) !== null ? num(saco.precio) : pvp;
-        if (precio !== null) res.costoEnvases = r2(frac * precio);
-      }
+      const fs = fraccionSacos(totalBase, producto);
+      if (fs) { res.fraccionSaco = fs.sacos; res.kgSaco = fs.kgSaco; res.textoFraccion = fs.fraccion; res.compraTexto = fs.texto; res.envases = fs.sacos; if (fs.costo !== null) res.costoEnvases = fs.costo; }
     }
     return res;
   }
@@ -553,7 +560,7 @@
       .sort((a, b) => a.ef - b.ef || a.ef2 - b.ef2 || b.n - a.n || (b.dosis ? 1 : 0) - (a.dosis ? 1 : 0) || (a.ef === 999 ? a.i - b.i : a.p.nombre.localeCompare(b.p.nombre)))
       .map((x) => x.p);
   }
-  const api = { ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, compraOptima, precioUnitario, nombrePresentacion,
+  const api = { fraccionSacos, textoSacos, ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
     CLASES, OPC_CLASE, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;

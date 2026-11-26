@@ -695,7 +695,7 @@
         <div><div class="n">${h(L.cantidad(r.porBomba, r.unidad))}</div><small>Dosis por ${equipoTxt(false)}</small></div></div>`;
     } else if (r.kgTotal !== undefined) {
       res = `<div class="grid2"><div><div class="n">${L.fmt(r.kgTotal, 1)} kg</div><small>Producto requerido total</small></div>
-        <div><div class="n">${r.textoFraccion ? h(r.textoFraccion) : r.sacos50}</div><small>${r.textoFraccion && r.fraccionSaco < 1 ? `De saco de ${L.fmt(r.kgSaco)} kg` : `Sacos de ${L.fmt(r.kgSaco || 50)} kg`}</small></div>
+        <div><div class="n">${r.textoFraccion ? h(r.textoFraccion) : r.sacos50}</div><small>${r.textoFraccion && r.fraccionSaco < 1 ? `De saco de ${L.fmt(r.kgSaco)} kg` : r.textoFraccion && r.fraccionSaco === 1 ? `Saco de ${L.fmt(r.kgSaco)} kg` : `Sacos de ${L.fmt(r.kgSaco || 50)} kg`}</small></div>
         ${r.gPorPlanta ? `<div><div class="n">${L.fmt(r.gPorPlanta, 0)} g</div><small>Por planta</small></div>` : ""}
         ${r.sitios ? `<div><div class="n">${L.fmt(r.sitios, 0)}</div><small>Sitios / plantas</small></div>` : ""}</div>`;
     }
@@ -794,7 +794,9 @@
       const p = P(x.producto_id), dz = dzDe(x);
       if (dz === null) return { p, total: null };
       if (esSuelo(x)) { // fertilizante al suelo: kg/ha × hectáreas, se compra en sacos
-        const g = dz * haSuelo * 1000, c = L.compraOptima(g, "g", p.presentaciones);
+        const g = dz * haSuelo * 1000, fs = L.fraccionSacos(g, p);
+        if (fs) return { p, total: g, unidad: "g", envases: fs.sacos, texto: fs.texto, costo: fs.costo, costoTanque: null };
+        const c = L.compraOptima(g, "g", p.presentaciones);
         if (c) return { p, total: g, unidad: "g", envases: c.envases, texto: c.texto, costo: c.costo, costoTanque: null };
         const cont = Number(p.contenido) || null, envases = cont ? Math.ceil(g / cont - 1e-9) : null;
         return { p, total: g, unidad: "g", envases, texto: envases ? envases + " × " + (p.presentacion || "saco") : null, costo: envases && p.pvp !== null && p.pvp !== undefined ? envases * Number(p.pvp) : null, costoTanque: null };
