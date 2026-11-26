@@ -321,7 +321,7 @@
     if (r.relacionados.length) html += `<div class="mini" style="margin-top:4px"><b>${r.problemas.length ? "También relacionado" : r.clase ? "Del mismo tipo (" + h(nomClase) + ") en nuestros manuales" : "Relacionado en nuestros manuales"}</b></div>` +
       r.relacionados.slice(0, 4).map((pr) => item("#/problema/" + pr.id, pr.nombre, "Manual de " + nomC(pr.cultivo_id) + " · " + recDe(pr))).join("");
     if (r.clase && !r.problemas.length) {
-      const top = L.rankearPorClase(r.clase, I.c.productos || []).filter((x) => !x.p.no_sugerir && !/tratamiento de semilla/i.test((x.p.control || "") + " " + (x.p.nota || ""))).slice(0, 4);
+      const top = L.rankearPorClase(r.clase, I.c.productos || []).filter((x) => !x.p.no_sugerir && !/tratamiento de semilla|\brosas?\b|\barroz\b/i.test((x.p.control || "") + " " + (x.p.nota || "")) && !/\bflora\b/i.test(x.p.nombre)).slice(0, 4);
       if (top.length) html += `<div class="mini" style="margin-top:4px"><b>Productos de nuestro portafolio para ${h(nomClase)}</b> (del más eficiente)</div>` +
         top.map((x, i) => item("#/calcular?p=" + x.p.id, `${i + 1}. ${x.p.nombre}`, [x.p.concentracion || x.p.ingrediente_activo, x.grupo.n].filter(Boolean).join(" · ") + " · Calcular dosis")).join("");
     }
