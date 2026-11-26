@@ -1444,6 +1444,12 @@
     }
   }
   window.addEventListener("hashchange", router);
+  // tocar "Inicio" en la barra de abajo siempre deja el inicio limpio: borra la búsqueda de problemas y vuelve arriba
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest(".nav a[href='#/']"); if (!a) return;
+    ui.consulta = ""; guardarUI();
+    if ((location.hash || "#/") === "#/") { e.preventDefault(); vInicio(); window.scrollTo(0, 0); }
+  });
   D.alCambiar((que) => {
     if (que === "catalogo" || que === "catalogo_actualizado") {
       indexar(); precargarFotos();

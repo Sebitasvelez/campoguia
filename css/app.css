@@ -79,7 +79,9 @@ h1,h2,h3{margin:0;font-family:"Space Grotesk",Inter,system-ui,sans-serif;letter-
 .paso .num{width:26px;height:26px;border-radius:50%;background:var(--verde);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--borde);display:grid;grid-template-columns:repeat(4,1fr);padding:6px 4px calc(8px + env(safe-area-inset-bottom));z-index:10;max-width:560px;margin:0 auto}
 .nav a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11.5px;color:var(--suave);text-decoration:none;min-height:50px;justify-content:center}
-.nav a.sel{color:var(--verde);font-weight:600}
+.nav a{position:relative;border-radius:12px;margin:0 2px}
+.nav a.sel{color:var(--verde);font-weight:700;background:#E3EFE7}
+.nav a.sel::before{content:"";position:absolute;top:-7px;left:22%;right:22%;height:3px;border-radius:0 0 3px 3px;background:var(--verde)}
 .estado{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.16);padding:6px 10px;border-radius:999px;font-size:12px;font-weight:600;color:#fff}
 .estado i{width:8px;height:8px;border-radius:50%;background:#7FD69B;display:inline-block}
 .estado.off i{background:#F2B84B}
