@@ -4257,42 +4257,6 @@
    "concentracion": "Etefón 480 g/L (SL) (referencial, verificar etiqueta)"
   },
   {
-   "id": 97,
-   "nombre": "Ethylbloc (1.000 sachets × 2,5 g)",
-   "ingrediente_activo": "1-METILCICLOPROPENO",
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": null,
-   "dosis_texto": null,
-   "presentacion": "UNIDAD",
-   "contenido": 1,
-   "contenido_unidad": "u",
-   "pvp": 390,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": null,
-   "fuente": "Dato referencial por nombre comercial / formulación conocida; verificar con la etiqueta | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "UNIDAD",
-     "cantidad": 1,
-     "unidad": "u",
-     "precio": 390
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": "1-MCP en sachets (poscosecha)"
-  },
-  {
    "id": 98,
    "nombre": "Exit",
    "ingrediente_activo": "ESTERES METILADOS DE ACIDOS GRASOS",
@@ -4922,78 +4886,6 @@
    "dosis_ha_max": null,
    "activo": true,
    "concentracion": "Ácido naftalenacético (ANA) (referencial, verificar etiqueta)"
-  },
-  {
-   "id": 113,
-   "nombre": "Hydraflor 100",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "polvo",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": "g",
-   "dosis_texto": null,
-   "presentacion": "5 LBRS",
-   "contenido": 2268,
-   "contenido_unidad": "g",
-   "pvp": 69,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": "Hidratante poscosecha de flores. Completar: composición",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "5 LBRS",
-     "cantidad": 2268,
-     "unidad": "g",
-     "precio": 69
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": null
-  },
-  {
-   "id": 114,
-   "nombre": "Hydraflor Clear Ultra 100",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": "cc",
-   "dosis_texto": null,
-   "presentacion": "20 LTS",
-   "contenido": 20000,
-   "contenido_unidad": "cc",
-   "pvp": 348,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": "Hidratante poscosecha de flores. Completar: composición",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "20 LTS",
-     "cantidad": 20000,
-     "unidad": "cc",
-     "precio": 348
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": null
   },
   {
    "id": 115,
@@ -6188,49 +6080,6 @@
    "concentracion": null
   },
   {
-   "id": 145,
-   "nombre": "Quick Dip",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": "cc",
-   "dosis_texto": null,
-   "presentacion": "4 LTS",
-   "contenido": 4000,
-   "contenido_unidad": "cc",
-   "pvp": 15.5,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": "Completar: ingrediente activo, concentración, dosis, categoría",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "4 LTS",
-     "cantidad": 4000,
-     "unidad": "cc",
-     "precio": 15.5
-    },
-    {
-     "codigo": null,
-     "empaque": "5 GLNS",
-     "cantidad": 18925,
-     "unidad": "cc",
-     "precio": 67.5
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": null
-  },
-  {
    "id": 146,
    "nombre": "Reflect",
    "ingrediente_activo": "ISOPYRAZAM",
@@ -7334,42 +7183,6 @@
    "dosis_ha_max": null,
    "activo": true,
    "concentracion": "Penconazol 100 g/L (EC) (referencial, verificar etiqueta)"
-  },
-  {
-   "id": 173,
-   "nombre": "Transport Care Paper (200 láminas)",
-   "ingrediente_activo": null,
-   "grupo": null,
-   "categoria": "Otros",
-   "formulacion": "liquido",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": null,
-   "dosis_texto": null,
-   "presentacion": "UNIDAD",
-   "contenido": 1,
-   "contenido_unidad": "u",
-   "pvp": 65,
-   "control": null,
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": "Papel para poscosecha / transporte.",
-   "fuente": "Sin ficha técnica encontrada | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
-   "presentaciones": [
-    {
-     "codigo": null,
-     "empaque": "UNIDAD",
-     "cantidad": 1,
-     "unidad": "u",
-     "precio": 65
-    }
-   ],
-   "dosis_ha_min": null,
-   "dosis_ha_max": null,
-   "activo": true,
-   "concentracion": null
   },
   {
    "id": 174,

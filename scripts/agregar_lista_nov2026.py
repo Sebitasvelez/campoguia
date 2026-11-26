@@ -128,7 +128,6 @@ NUEVOS = {
  "DUAL GOLD 960 EC": P("Dual Gold 960 EC", "Herbicida", "S-METOLACLORO", "S-metolacloro 960 g/L (EC)", "emulsion", fuente=F_ED, nota=C_D),
  "ECUAFIX": P("Ecuafix", "Coadyuvante", "ETER FENOL POLIGLICOLICO", "Éter fenol poliglicólico", "aceite_adherente", dmin=100, dmax=100, dtexto="100 cc / 200 L", fuente=F_ED),
  "ETHREL 480 CE": P("Ethrel 480", "Bioestimulante", "ETEFON", "Etefón 480 g/L (SL)", "soluble", fuente=F_REF, ref=True, nota=C_D),
- "ETHYLBLOC (1.000 SACHETSX 2.5 GR)": P("Ethylbloc (1.000 sachets × 2,5 g)", "Otros", "1-METILCICLOPROPENO", "1-MCP en sachets (poscosecha)", unidad="u", fuente=F_REF),
  "EXIT": P("Exit", "Coadyuvante", "ESTERES METILADOS DE ACIDOS GRASOS", "Ésteres metilados de ácidos grasos 100%", "aceite_adherente", dmin=250, dmax=500,
            dtexto="250 - 500 cc / 200 L (uso general)", fuente=F_ED),
  "EXPRESS UNIVERSAL 300": P("Express Universal 300", "Otros", unidad="g", nota=C_IA + ", categoría"),
@@ -147,8 +146,6 @@ NUEVOS = {
  "HICURE": P("Hicure", "Bioestimulante", "AMINOACIDOS", form="liquido_foliar", fuente=F_REF, nota="Completar: composición, dosis"),
  "HORMONAGRO ANA": P("Hormonagro ANA", "Bioestimulante", "ACIDO NAFTALENACETICO", "Ácido naftalenacético (ANA)", "liquido_foliar", fuente=F_REF, ref=True,
                      nota="Completar: concentración, dosis"),
- "HYDRAFLOR 100": P("Hydraflor 100", "Otros", form="polvo", unidad="g", nota="Hidratante poscosecha de flores. Completar: composición"),
- "HYDRAFLOR CLEAR ULTRA 100": P("Hydraflor Clear Ultra 100", "Otros", nota="Hidratante poscosecha de flores. Completar: composición"),
  "INMORTAL": P("Inmortal", "Otros", unidad="g", nota=C_IA + ", categoría"),
  "KAMSA": P("Kamsa 970 SG", "Insecticida", "ACEFATO", "Acefato 970 g/kg (SG)", "polvo", "g", dmin=500, dmax=500, dtexto="0,5 kg / 200 L (maíz, gusano cogollero)",
             fuente="Ficha técnica ADAMA Ecuador (reg. 35-I25/NA)"),
@@ -188,7 +185,6 @@ NUEVOS = {
                     fuente=F_ED, nota=C_D + " por tanque"),
  "QUADRIS TOP": P("Quadris Top", "Fungicida", "AZOXISTROBINA + DIFENOCONAZOL", "Azoxistrobina 200 g/L + Difenoconazol 125 g/L (SC)", "suspension", fuente=F_ED, nota=C_D),
  "QUEEN": P("Queen", "Otros", nota=C_IA + ", categoría"),
- "QUICK DIP": P("Quick Dip", "Otros", nota=C_IA + ", categoría"),
  "REFLECT": P("Reflect", "Fungicida", "ISOPYRAZAM", "Isopyrazam 125 g/L (EC)", "emulsion", fuente=F_REF, ref=True, nota=C_D),
  "REVUS": P("Revus", "Fungicida", "MANDIPROPAMID", "Mandipropamid 250 g/L (SC)", "suspension", fuente=F_ED, nota=C_D),
  "REVUS OPTI": P("Revus Opti", "Fungicida", "MANDIPROPAMID + CLOROTALONIL", "Mandipropamid + Clorotalonil (SC)", "suspension", fuente=F_REF, ref=True,
@@ -217,7 +213,6 @@ NUEVOS = {
  "TOMATE TORRY": P("Semilla tomate Torry", "Semilla", unidad="u"),
  "TOMATE VENTO X 1.000 SEMILLAS": P("Semilla tomate Vento (1.000 semillas)", "Semilla", unidad="u"),
  "TOPAS": P("Topas 100 EC", "Fungicida", "PENCONAZOL", "Penconazol 100 g/L (EC)", "emulsion", fuente=F_REF, ref=True, nota=C_D),
- "TRANSPORT CARE PAPER FDA. X 200 LAMINAS": P("Transport Care Paper (200 láminas)", "Otros", unidad="u", nota="Papel para poscosecha / transporte."),
  "TRICAR 90WDG": P("Tricar 90 WDG", "Otros", unidad="g", nota=C_IA + ", categoría"),
  "TRIGARD 75 WP": P("Trigard 75 WP", "Insecticida", "CIROMAZINA", "Ciromazina 750 g/kg (WP)", "polvo", "g", fuente=F_REF, ref=True, nota=C_D),
  "TRIZIMAN D": P("Triziman D", "Fungicida preventivo", "MANCOZEB", "Mancozeb 800 g/kg (WP)", "polvo", "g", carencia=7, fuente=F_ED, nota=C_D),
@@ -275,9 +270,11 @@ def poner_precio(p, pres):
     fuente = re.sub(r"\s*\|\s*No figura en la lista[^|]*", "", fuente)
     p["fuente"] = (fuente + " | " + PRECIOS).strip(" |")
 
+# productos de poscosecha que no se incluyen en la app (pedido del asesor)
+EXCLUIR = {"ETHYLBLOC (1.000 SACHETSX 2.5 GR)", "HYDRAFLOR 100", "HYDRAFLOR CLEAR ULTRA 100", "QUICK DIP", "TRANSPORT CARE PAPER FDA. X 200 LAMINAS"}
 vistos = set()
 for nl in lista:
-    if nl in UNIR: continue
+    if nl in UNIR or nl in EXCLUIR: continue
     if nl in EXISTENTES:
         p = por_nombre[EXISTENTES[nl]]
         for k, v in CORRIGE.get(p["nombre"], {}).items(): p[k] = v
