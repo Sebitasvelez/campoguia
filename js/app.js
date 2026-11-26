@@ -54,6 +54,7 @@
     flecha: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>',
     casa: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11l9-7 9 7v9H3z"/></svg>',
     calc: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg>',
+    portafolio: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2M3 13h18"/></svg>',
     lotes: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18v12H3zM9 6v12M15 6v12"/></svg>',
     mezcla: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg>',
     persona: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>',
@@ -90,8 +91,8 @@
   const barra = (titulo, sub, atras) =>
     `<header class="barra"><a class="icono-btn" href="${h(atras || "#/")}" aria-label="Volver">${ic.atras}</a><div class="t">${sub ? `<small>${h(sub)}</small>` : ""}<strong>${h(titulo)}</strong></div></header>`;
   function nav(sel) {
-    const it = [["#/", "Inicio", ic.casa, "inicio"], ["#/calcular", "Calcular", ic.calc, "calcular"], ["#/mezcla", "Mezcla", ic.mezcla, "mezcla"], ["#/lotes", "Mis lotes", ic.lotes, "lotes"]];
-    return `<nav class="nav" aria-label="Principal">${it.map(([href, t, i, k]) => `<a href="${href}" class="${sel === k ? "sel" : ""}" ${sel === k ? 'aria-current="page"' : ""}>${i}${t}</a>`).join("")}</nav>`;
+    const it = [["#/", "Inicio", ic.casa, "inicio"], ["#/calcular", "Calcular", ic.calc, "calcular"], ["#/mezcla", "Mezcla", ic.mezcla, "mezcla"], ...(esTecnico() ? [["#/portafolio", "Portafolio", ic.portafolio, "portafolio"]] : []), ["#/lotes", "Mis lotes", ic.lotes, "lotes"]];
+    return `<nav class="nav" aria-label="Principal" style="grid-template-columns:repeat(${it.length},1fr)">${it.map(([href, t, i, k]) => `<a href="${href}" class="${sel === k ? "sel" : ""}" ${sel === k ? 'aria-current="page"' : ""}>${i}${t}</a>`).join("")}</nav>`;
   }
   const demoBanner = () => (D.modoDemo ? `<div class="demo">Modo demostración: los datos se guardan solo en este equipo.</div>` : "");
   // ------------------------------------------------------------ INSTALAR LA APP EN EL CELULAR
@@ -500,6 +501,44 @@
       const x = fases[Number(b.dataset.rg)];
       prefill = { actividad: "Fumigación planta", lineas: x.elegidos.map((y) => ({ producto_id: y.producto_id, dosis: Number(y.dosis_tanque), unidad: (y.unidad || "cc") + "/tanque" })) };
       location.hash = "#/registrar";
+    }));
+  }
+
+  // ------------------------------------------------------------ PORTAFOLIO (técnicos): todo el catálogo por categorías, con buscador
+  function vPortafolio() {
+    const prods = (I.c.productos || []).filter((p) => p.activo !== false);
+    const grupos = {};
+    prods.forEach((p) => { const k = p.categoria || "Otros"; (grupos[k] = grupos[k] || []).push(p); });
+    const cats = Object.keys(grupos).sort((a, b) => (a === "Otros") - (b === "Otros") || a.localeCompare(b));
+    const fila = (p) => `<details class="card port-item" data-cat="${h(p.categoria || "Otros")}" data-txt="${h(sinTilde([p.nombre, p.ingrediente_activo, p.concentracion, p.categoria, p.control, p.grupo].filter(Boolean).join(" ")))}" style="padding:0">
+        <summary style="padding:12px 14px;display:flex;justify-content:space-between;gap:10px;align-items:center;cursor:pointer;list-style:none">
+          <span style="display:flex;flex-direction:column;gap:2px;min-width:0"><b>${h(p.nombre)}</b>${p.concentracion || p.ingrediente_activo ? `<span class="mini">${h(p.concentracion || p.ingrediente_activo)}</span>` : ""}</span>
+          <b style="white-space:nowrap;font-size:14px">${p.pvp !== null && p.pvp !== undefined ? dinero(p.pvp) : ""}</b></summary>
+        <div class="port-ficha" data-id="${p.id}" style="padding:0 6px 6px"></div></details>`;
+    pintar(`${barra("Portafolio", prods.length + " productos", "#/")}
+      <main class="cont">
+        <label class="campo">Buscar producto<input id="pbuscar" type="search" placeholder="Nombre, ingrediente activo, plaga…" autocomplete="off"></label>
+        <div class="chips" role="group" aria-label="Categoría"><button class="chip sel" data-pc="">Todos (${prods.length})</button>${cats.map((k) => `<button class="chip" data-pc="${h(k)}">${h(k)} (${grupos[k].length})</button>`).join("")}</div>
+        ${cats.map((k) => `<section class="port-grupo" data-cat="${h(k)}" style="display:flex;flex-direction:column;gap:8px"><h3 style="margin:8px 0 0;font-size:15px;color:var(--verde)">${h(k)}</h3>${grupos[k].sort((a, b) => a.nombre.localeCompare(b.nombre)).map(fila).join("")}</section>`).join("")}
+        <div class="vacio" id="pvacio" hidden>No se encontró ningún producto con esa búsqueda.</div>
+      </main>`, "portafolio");
+    let cat = "";
+    const filtrar = () => {
+      const t = sinTilde($("#pbuscar").value.trim()).split(/\s+/).filter(Boolean); let vis = 0;
+      $$(".port-grupo").forEach((g) => {
+        let n = 0;
+        $$(".port-item", g).forEach((it) => { const ok = (!cat || it.dataset.cat === cat) && t.every((w) => it.dataset.txt.includes(w)); it.hidden = !ok; if (ok) n++; });
+        g.hidden = !n; vis += n;
+      });
+      $("#pvacio").hidden = vis > 0;
+    };
+    $("#pbuscar").addEventListener("input", filtrar);
+    $$("[data-pc]").forEach((b) => b.addEventListener("click", () => { cat = b.dataset.pc; $$("[data-pc]").forEach((x) => x.classList.toggle("sel", x === b)); filtrar(); }));
+    // la ficha completa se arma al abrir el producto
+    $$(".port-item").forEach((d) => d.addEventListener("toggle", () => {
+      const f = $(".port-ficha", d); if (!d.open || f.innerHTML) return;
+      const p = P(f.dataset.id); f.innerHTML = p ? tarjetaProducto(p, null, p.categoria || "") : "";
+      $$("[data-mez]", f).forEach((b) => b.addEventListener("click", () => agregarAMezcla(b.dataset.mez, b.dataset.d === "" ? null : Number(b.dataset.d))));
     }));
   }
 
@@ -1279,6 +1318,7 @@
       case "fertilizacion": return vFert(seg[1]);
       case "calcular": return vCalcular(q);
       case "mezcla": return vMezcla();
+      case "portafolio": return esTecnico() ? vPortafolio() : vNoEncontrado();
       case "lotes": return vLotes(q);
       case "lote": return vLote(seg[1], q);
       case "registrar": return vRegistrar(q);
