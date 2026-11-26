@@ -7485,7 +7485,7 @@
   {
    "id": 185,
    "nombre": "Volaton AG",
-   "ingrediente_activo": "FOXIM",
+   "ingrediente_activo": "MALATION",
    "grupo": "IRAC 1B",
    "categoria": "Insecticida",
    "formulacion": "polvo",
@@ -7498,12 +7498,12 @@
    "contenido": 250,
    "contenido_unidad": "g",
    "pvp": 3.8,
-   "control": null,
+   "control": "Insecticida organofosforado (malatión) de contacto e ingestión; en polvo para hormigas y nidos.",
    "carencia_dias": null,
    "reingreso_horas": null,
    "categoria_tox": null,
    "nota": "Completar: concentración, dosis",
-   "fuente": "Dato referencial por nombre comercial / formulación conocida; verificar con la etiqueta | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
+   "fuente": "Asesor Ecuaquímica: Volaton AG es malatión | Dato referencial por nombre comercial / formulación conocida; verificar con la etiqueta | Precios y presentaciones: Lista de productos Ecuaquímica, noviembre 2026.",
    "presentaciones": [
     {
      "codigo": null,
@@ -7523,7 +7523,7 @@
    "dosis_ha_min": null,
    "dosis_ha_max": null,
    "activo": true,
-   "concentracion": "Foxim (referencial, verificar etiqueta)",
+   "concentracion": "Malatión en polvo (concentración por verificar en la etiqueta)",
    "no_sugerir": false
   },
   {
@@ -7908,33 +7908,6 @@
    "dosis_ha_max": null,
    "activo": true,
    "concentracion": "Abamectina 84 g/L (referencial, verificar etiqueta)",
-   "no_sugerir": false
-  },
-  {
-   "id": 196,
-   "nombre": "Malathion 57 EC",
-   "ingrediente_activo": "MALATION",
-   "grupo": "IRAC 1B",
-   "categoria": "Insecticida",
-   "formulacion": "emulsion",
-   "modo_aplicacion": "tanque",
-   "dosis_min": null,
-   "dosis_max": null,
-   "unidad": "cc",
-   "dosis_texto": null,
-   "presentacion": null,
-   "contenido": null,
-   "contenido_unidad": null,
-   "pvp": null,
-   "control": "Insecticida organofosforado de contacto, ingestión e inhalación; amplio espectro (hormigas, chupadores y masticadores).",
-   "carencia_dias": null,
-   "reingreso_horas": null,
-   "categoria_tox": null,
-   "nota": "Completar: nombre comercial, dosis, precio",
-   "fuente": "Pedido del asesor; ficha técnica de Malathion 57% EC (referencial)",
-   "activo": true,
-   "concentracion": "Malatión 570 g/L (EC) (referencial, verificar etiqueta)",
-   "presentaciones": [],
    "no_sugerir": false
   }
  ],
@@ -8399,7 +8372,7 @@
   },
   {
    "problema_id": 3,
-   "producto_id": 196,
+   "producto_id": 185,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,

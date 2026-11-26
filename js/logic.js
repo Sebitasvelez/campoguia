@@ -344,7 +344,7 @@
     // [patrón del ingrediente activo, ente, código]
     [/lambda|cihalotr|cyhalothr/, "IRAC", "3A"], [/cipermetr|cypermethr/, "IRAC", "3A"],
     [/tiametox|thiametox/, "IRAC", "4A"], [/clorantranil|chlorantranil/, "IRAC", "28"], [/abamect/, "IRAC", "6"],
-    [/azadirac/, "IRAC", "UN"], [/profenof|diazin|clorpirif|chlorpyrif/, "IRAC", "1B"], [/tiocicl|thiocycl/, "IRAC", "14"],
+    [/azadirac/, "IRAC", "UN"], [/profenof|diazin|clorpirif|chlorpyrif|malat/, "IRAC", "1B"], [/tiocicl|thiocycl/, "IRAC", "14"],
     [/sulflur/, "IRAC", "13"], [/emamectin/, "IRAC", "6"], [/diafentiur|diafenthiur/, "IRAC", "12A"], [/lufenur/, "IRAC", "15"],
     [/ciromaz|cyromaz/, "IRAC", "17"], [/acefat|acephat/, "IRAC", "1B"], [/foxim|phoxim/, "IRAC", "1B"], [/thuringiensis/, "IRAC", "11A"],
     [/isociclos|isocyclos/, "IRAC", "30"], [/ciantranil|cyantranil/, "IRAC", "28"],
@@ -388,23 +388,23 @@
   const CLASES = {
     "Masticador": { tipo: "plaga", resumen: "Muerde, corta y tritura el tejido con mandíbulas.",
       control: "Funcionan mejor los insecticidas de contacto y de ingestión aplicados sobre el órgano que come.",
-      grupos: [G("IRAC 1A", "Carbamatos"), G("IRAC 1B", "Organofosforados"), G("IRAC 2B", "Fenilpirazoles (fipronil)"), G("IRAC 3A", "Piretroides"),
-        G("IRAC 4A", "Neonicotinoides (contacto e ingestión)"), G("IRAC 5", "Espinosinas"), G("IRAC 6", "Avermectinas"), G("IRAC 13", "Desacopladores (sulfluramida, clorfenapir)"),
-        G("IRAC 14", "Nereistoxinas (tiociclam)"), G("IRAC 22A", "Oxadiazinas (indoxacarb)"), G("IRAC 28", "Diamidas"), G("IRAC 30", "Meta-diamidas e isoxazolinas"), G("IRAC UN", "Botánicos (azadiractina)")] },
+      grupos: [G("IRAC 1B", "Organofosforados"), G("IRAC 3A", "Piretroides"), G("IRAC 28", "Diamidas"), G("IRAC 13", "Desacopladores (sulfluramida, clorfenapir)"),
+        G("IRAC 2B", "Fenilpirazoles (fipronil)"), G("IRAC 6", "Avermectinas"), G("IRAC 5", "Espinosinas"), G("IRAC 22A", "Oxadiazinas (indoxacarb)"), G("IRAC 30", "Meta-diamidas e isoxazolinas"),
+        G("IRAC 1A", "Carbamatos"), G("IRAC 4A", "Neonicotinoides (contacto e ingestión)"), G("IRAC 14", "Nereistoxinas (tiociclam)"), G("IRAC UN", "Botánicos (azadiractina)")] },
     "Masticador-lamedor": { tipo: "plaga", resumen: "Raspa el tejido con mandíbulas y lame los jugos que brotan.",
       control: "No succiona savia, por eso los sistémicos actúan poco: funcionan mejor los de contacto e ingestión sobre botones, flores y frutos.",
-      grupos: [G("IRAC 1B", "Organofosforados"), G("IRAC 3A", "Piretroides"), G("IRAC 4A", "Neonicotinoides (contacto e ingestión)"), G("IRAC 6", "Avermectinas"),
-        G("IRAC 14", "Nereistoxinas (tiociclam)"), G("IRAC UN", "Botánicos (azadiractina, repelente)")] },
+      grupos: [G("IRAC 3A", "Piretroides"), G("IRAC 14", "Nereistoxinas (tiociclam)"), G("IRAC 1B", "Organofosforados"), G("IRAC 6", "Avermectinas"),
+        G("IRAC 4A", "Neonicotinoides (contacto e ingestión)"), G("IRAC UN", "Botánicos (azadiractina, repelente)")] },
     "Picador-chupador": { tipo: "plaga", resumen: "Clava un estilete en el tejido y succiona la savia o los jugos.",
       control: "Funcionan los sistémicos y translaminares que viajan en la savia; los de contacto ayudan a bajar la población.",
-      grupos: [G("IRAC 4A", "Neonicotinoides (sistémicos)"), G("IRAC 4C", "Sulfoximinas (sulfoxaflor)"), G("IRAC 9B", "Piridinas azometinas (pimetrozina)"),
-        G("IRAC 29", "Flonicamid"), G("IRAC 23", "Ácidos tetrónicos (spirotetramat)"), G("IRAC 12A", "Diafentiurón"), G("IRAC 28", "Diamidas (ciantraniliprol, sistémico)"),
-        G("IRAC 1B", "Organofosforados (acefato, dimetoato)"), G("IRAC 3A", "Piretroides (contacto)")] },
+      grupos: [G("IRAC 4A", "Neonicotinoides (sistémicos)"), G("IRAC 28", "Diamidas (ciantraniliprol, sistémico)"), G("IRAC 6", "Avermectinas (abamectina, translaminar)"),
+        G("IRAC 4C", "Sulfoximinas (sulfoxaflor)"), G("IRAC 29", "Flonicamid"), G("IRAC 9B", "Piridinas azometinas (pimetrozina)"), G("IRAC 23", "Ácidos tetrónicos (spirotetramat)"),
+        G("IRAC 12A", "Diafentiurón"), G("IRAC 1B", "Organofosforados (acefato, dimetoato)"), G("IRAC 3A", "Piretroides (contacto)")] },
     "Picador-chupador (quelíceros)": { tipo: "plaga", resumen: "Ácaro: perfora las células con quelíceros en forma de estilete y succiona su contenido.",
       control: "Necesita acaricidas específicos. Evita piretroides solos: pueden aumentar los ácaros.",
-      grupos: [G("IRAC 6", "Avermectinas (abamectina)"), G("IRAC 10A", "Hexitiazox / clofentezina"), G("IRAC 10B", "Etoxazol"), G("IRAC 12B", "Organoestánnicos"),
-        G("IRAC 12C", "Propargite"), G("IRAC 12D", "Tetradifón"), G("IRAC 20D", "Bifenazato"), G("IRAC 21A", "METI (piridabén, fenpiroximato)"),
-        G("IRAC 23", "Ácidos tetrónicos (spiromesifén)"), G("IRAC 25A", "Beta-cetonitrilos (cienopirafén)"), G("FRAC M02", "Azufre (acción acaricida)")] },
+      grupos: [G("IRAC 20D", "Bifenazato"), G("IRAC 25A", "Beta-cetonitrilos (cienopirafén)"), G("IRAC 12C", "Propargite"), G("IRAC 12D", "Tetradifón"),
+        G("IRAC 6", "Avermectinas (abamectina)"), G("IRAC 21A", "METI (piridabén, fenpiroximato)"), G("IRAC 23", "Ácidos tetrónicos (spiromesifén)"), G("IRAC 10A", "Hexitiazox / clofentezina"),
+        G("IRAC 10B", "Etoxazol"), G("IRAC 12B", "Organoestánnicos"), G("FRAC M02", "Azufre (acción acaricida)")] },
     "Picador-chupador (estilete)": { tipo: "plaga", resumen: "Nematodo: perfora las células de la raíz con un estilete y succiona su contenido.",
       control: "Se controla con nematicidas al suelo o productos con acción nematicida, junto con materia orgánica y biológicos.",
       grupos: [G(null, "Carbamatos nematicidas (oxamil, carbofurán)", /oxamil|oxamyl|carbofur/), G(null, "Organofosforados nematicidas (etoprofos, fenamifós, cadusafós)", /etoprof|ethoprop|fenamif|cadusaf|terbuf|fostiaz/),
@@ -416,39 +416,39 @@
 
     "Oomiceto": { tipo: "enfermedad", resumen: "Pseudohongo de agua: pared de celulosa, sin ergosterol; se dispersa con zoosporas que nadan en el agua.",
       control: "Triazoles (FRAC 3), bencimidazoles (FRAC 1) y la mayoría de carboxamidas SDHI (FRAC 7) no lo controlan, porque actúan sobre el ergosterol o la tubulina de hongos verdaderos.",
-      grupos: [G("FRAC 4", "Fenilamidas (metalaxil)"), G("FRAC 11", "Estrobilurinas (azoxistrobina, piraclostrobina)"), G("FRAC 21", "QiI (ciazofamida)"),
-        G("FRAC 27", "Cianoacetamida-oximas (cimoxanil)"), G("FRAC 28", "Carbamatos (propamocarb)"), G("FRAC 40", "Amidas CAA (dimetomorf, mandipropamid)"),
-        G("FRAC 43", "Benzamidas (fluopicolide)"), G("FRAC 45", "QoSI (ametoctradina)"), G("FRAC 49", "Oxatiapiprolina"), G("FRAC 29", "Fluazinam"),
-        G("FRAC P07", "Fosfonatos (fosetil-Al)"), G(null, "Etridiazol (FRAC 14, al suelo)", /etridiaz/), G("FRAC M01", "Cobres"), G("FRAC M03", "Ditiocarbamatos (mancozeb)"), G("FRAC M05", "Clorotalonil")] },
+      grupos: [G("FRAC 4", "Fenilamidas (metalaxil)"), G("FRAC 40", "Amidas CAA (dimetomorf, mandipropamid)"), G("FRAC 49", "Oxatiapiprolina"),
+        G("FRAC 27", "Cianoacetamida-oximas (cimoxanil)"), G("FRAC 43", "Benzamidas (fluopicolide)"), G("FRAC 28", "Carbamatos (propamocarb)"), G("FRAC 21", "QiI (ciazofamida)"),
+        G("FRAC 45", "QoSI (ametoctradina)"), G("FRAC P07", "Fosfonatos (fosetil-Al)"), G("FRAC 11", "Estrobilurinas (azoxistrobina, piraclostrobina)"), G("FRAC 29", "Fluazinam"),
+        G(null, "Etridiazol (FRAC 14, al suelo)", /etridiaz/), G("FRAC M03", "Ditiocarbamatos (mancozeb)"), G("FRAC M01", "Cobres"), G("FRAC M05", "Clorotalonil")] },
     "Ascomiceto": { tipo: "enfermedad", resumen: "Hongo verdadero con esporas sexuales en ascas; pared de quitina con ergosterol.",
       control: "Responde a los grupos que actúan sobre hongos verdaderos; rota modos de acción para evitar resistencia.",
-      grupos: [G("FRAC 1", "Bencimidazoles (tiabendazol, carbendazim)"), G("FRAC 2", "Dicarboximidas (iprodiona)"), G("FRAC 3", "Triazoles (difenoconazol, propiconazol, tebuconazol)"),
-        G("FRAC 5", "Aminas (spiroxamina, fenpropidin)"), G("FRAC 7", "Carboxamidas SDHI (boscalid, fluxapiroxad)"), G("FRAC 9", "Anilinopirimidinas (ciprodinil)"),
-        G("FRAC 11", "Estrobilurinas"), G("FRAC 12", "Fenilpirroles (fludioxonil)"), G("FRAC 17", "Hidroxianilidas (fenhexamida)"), G("FRAC 29", "Fluazinam"),
-        G("FRAC BM02", "Biológicos (Bacillus subtilis)"), G("FRAC M01", "Cobres"), G("FRAC M02", "Azufre (oídios)"), G("FRAC M03", "Ditiocarbamatos (mancozeb)"),
-        G("FRAC M04", "Ftalimidas (captan)"), G("FRAC M05", "Clorotalonil")] },
+      grupos: [G("FRAC 11", "Estrobilurinas"), G("FRAC 3", "Triazoles (difenoconazol, propiconazol, tebuconazol)"), G("FRAC 7", "Carboxamidas SDHI (boscalid, fluxapiroxad)"),
+        G("FRAC 1", "Bencimidazoles (tiabendazol, carbendazim)"), G("FRAC 9", "Anilinopirimidinas (ciprodinil)"), G("FRAC 12", "Fenilpirroles (fludioxonil)"),
+        G("FRAC 5", "Aminas (spiroxamina, fenpropidin)"), G("FRAC 2", "Dicarboximidas (iprodiona)"), G("FRAC 17", "Hidroxianilidas (fenhexamida)"), G("FRAC 29", "Fluazinam"),
+        G("FRAC M05", "Clorotalonil"), G("FRAC M03", "Ditiocarbamatos (mancozeb)"), G("FRAC M04", "Ftalimidas (captan)"), G("FRAC M01", "Cobres"), G("FRAC M02", "Azufre (oídios)"),
+        G("FRAC BM02", "Biológicos (Bacillus subtilis)")] },
     "Deuteromiceto": { tipo: "enfermedad", resumen: "Grupo que se mantiene en la clasificación antigua para Botrytis, Fusarium y Rhizoctonia: hongos especiales que se controlan solo con determinados ingredientes activos.",
       control: "Botrytis: fenhexamida, ciprodinil, fludioxonil, iprodiona, boscalid. Fusarium: tiabendazol o carbendazim, triazoles y fludioxonil. Rhizoctonia: PCNB, carboxin o flutolanil y azoxistrobina. Rota grupos: Botrytis genera resistencia rápido.",
-      grupos: [G("FRAC 1", "Bencimidazoles (tiabendazol, carbendazim)"), G("FRAC 2", "Dicarboximidas (iprodiona)"), G("FRAC 3", "Triazoles (tebuconazol, procloraz, difenoconazol)"),
-        G("FRAC 7", "Carboxamidas SDHI (boscalid, fluopyram, carboxin, flutolanil)"), G("FRAC 9", "Anilinopirimidinas (ciprodinil, pirimetanil)"), G("FRAC 11", "Estrobilurinas (azoxistrobina)"),
-        G("FRAC 12", "Fenilpirroles (fludioxonil)"), G("FRAC 14", "Hidrocarburos aromáticos (PCNB, al suelo)"), G("FRAC 17", "Hidroxianilidas (fenhexamida)"), G("FRAC 29", "Fluazinam"),
-        G("FRAC BM02", "Biológicos (Bacillus subtilis)"), G("FRAC M04", "Ftalimidas (captan)")] },
+      grupos: [G("FRAC 1", "Bencimidazoles (tiabendazol, carbendazim)"), G("FRAC 7", "Carboxamidas SDHI (boscalid, fluopyram, carboxin, flutolanil)"), G("FRAC 12", "Fenilpirroles (fludioxonil)"),
+        G("FRAC 9", "Anilinopirimidinas (ciprodinil, pirimetanil)"), G("FRAC 3", "Triazoles (tebuconazol, procloraz, difenoconazol)"), G("FRAC 17", "Hidroxianilidas (fenhexamida)"),
+        G("FRAC 2", "Dicarboximidas (iprodiona)"), G("FRAC 14", "Hidrocarburos aromáticos (PCNB, al suelo)"), G("FRAC 11", "Estrobilurinas (azoxistrobina)"), G("FRAC 29", "Fluazinam"),
+        G("FRAC M04", "Ftalimidas (captan)"), G("FRAC 24", "Kasugamicina (con cobre)"), G("FRAC M01", "Cobres"), G("FRAC BM02", "Biológicos (Bacillus subtilis)")] },
     "Basidiomiceto": { tipo: "enfermedad", resumen: "Hongo verdadero con esporas sexuales en basidios (como royas, Moniliophthora y Sclerotium).",
       control: "Las carboxamidas (FRAC 7), triazoles y estrobilurinas son las más activas; los multisitio protegen antes de la infección.",
-      grupos: [G("FRAC 3", "Triazoles (tebuconazol, propiconazol, difenoconazol)"), G("FRAC 7", "Carboxamidas SDHI (carboxin, flutolanil)"), G("FRAC 11", "Estrobilurinas (azoxistrobina)"),
-        G("FRAC 14", "Hidrocarburos aromáticos (PCNB, al suelo)"), G("FRAC 1", "Bencimidazoles"), G("FRAC M01", "Cobres"), G("FRAC M03", "Ditiocarbamatos (mancozeb)"), G("FRAC M05", "Clorotalonil")] },
+      grupos: [G("FRAC 11", "Estrobilurinas (azoxistrobina, piraclostrobina)"), G("FRAC 3", "Triazoles (tebuconazol, propiconazol, difenoconazol)"), G("FRAC 7", "Carboxamidas SDHI (carboxin, flutolanil)"),
+        G("FRAC 14", "Hidrocarburos aromáticos (PCNB, al suelo)"), G("FRAC 1", "Bencimidazoles"), G("FRAC M01", "Cobres"), G("FRAC M05", "Clorotalonil"), G("FRAC M03", "Ditiocarbamatos (mancozeb)")] },
     "Bacteria": { tipo: "enfermedad", resumen: "No es un hongo: es una bacteria que entra por heridas y aberturas y se multiplica con humedad y calor.",
       control: "Los fungicidas no la controlan. Funcionan los cobres y los antibióticos agrícolas, junto con eliminar el tejido enfermo y desinfectar herramientas.",
-      grupos: [G("FRAC M01", "Cobres"), G("FRAC 24", "Kasugamicina"), G("FRAC 25", "Estreptomicina"), G("FRAC 41", "Oxitetraciclina"), G("FRAC BM02", "Biológicos (Bacillus subtilis)")] },
+      grupos: [G("FRAC 24", "Kasugamicina"), G("FRAC 25", "Estreptomicina"), G("FRAC 41", "Oxitetraciclina"), G("FRAC M01", "Cobres"), G("FRAC BM02", "Biológicos (Bacillus subtilis)")] },
     "Amplio espectro (multisitio)": { tipo: "enfermedad", resumen: "Protección preventiva contra hongos de todas las clases.",
       control: "Los multisitio actúan en varios puntos de la célula del hongo: casi no generan resistencia y sirven de base para rotar con los sistémicos.",
-      grupos: [G("FRAC M01", "Cobres"), G("FRAC M02", "Azufre"), G("FRAC M03", "Ditiocarbamatos (mancozeb)"), G("FRAC M04", "Ftalimidas (captan)"), G("FRAC M05", "Clorotalonil")] },
+      grupos: [G("FRAC M05", "Clorotalonil"), G("FRAC M03", "Ditiocarbamatos (mancozeb)"), G("FRAC M04", "Ftalimidas (captan)"), G("FRAC M01", "Cobres"), G("FRAC M02", "Azufre")] },
     "No selectivo (control total)": { tipo: "maleza", resumen: "Herbicidas que eliminan toda la vegetación que tocan: se aplican dirigidos a las calles, sin mojar el cultivo.",
       control: "Rota entre sistémicos (glifosato) y de contacto (glufosinato, paraquat, diquat). Usa pantalla o campana y nunca toques tallos ni hojas del cultivo.",
       grupos: [G("HRAC 9", "Glicinas (glifosato, sistémico)"), G("HRAC 10", "Glufosinato (contacto)"), G("HRAC 22", "Bipiridilos (paraquat, diquat; contacto)")] },
     "Hoja ancha": { tipo: "maleza", resumen: "Malezas dicotiledóneas: hojas anchas con nervaduras en red.",
       control: "Herbicidas selectivos para hoja ancha, aplicados dirigidos. Revisa en la etiqueta que el cultivo tolere el producto.",
-      grupos: [G("HRAC 4", "Auxinas sintéticas (2,4-D)"), G(null, "Inhibidores ALS (metsulfurón)", /metsulf/), G("HRAC 14", "Inhibidores PPO (oxifluorfén)"), G(null, "Triazinas (ametrina)", /ametrin/)] },
+      grupos: [G("HRAC 4", "Auxinas sintéticas (2,4-D)"), G("HRAC 14", "Inhibidores PPO (oxifluorfén)"), G(null, "Triazinas (ametrina)", /ametrin/), G(null, "Inhibidores ALS (metsulfurón)", /metsulf/)] },
     "Gramíneas": { tipo: "maleza", resumen: "Pastos: hojas angostas con nervaduras paralelas y tallos con nudos.",
       control: "Graminicidas selectivos o preemergentes para pastos. Revisa en la etiqueta que el cultivo tolere el producto.",
       grupos: [G("HRAC 1", "Inhibidores ACCasa (fluazifop, cletodim)"), G(null, "Inhibidores ALS (nicosulfurón)", /nicosulf/), G(null, "Cloroacetamidas (S-metolacloro, preemergente)", /metolacl/)] },
@@ -478,7 +478,8 @@
 
 
   // ---------------- alternativas sugeridas para un problema: grupos químicos funcionales de su clase + portafolio
-  // Mantiene la opción recomendada y elige hasta n alternativas que sumen grupos distintos (rotación), prefiriendo
+  // Mantiene la opción recomendada y elige hasta n alternativas que sumen grupos distintos (rotación), ordenadas de la
+  // más eficiente (1) a la menos según el orden de grupos de cada clase, prefiriendo
   // productos con dosis cargada. Evita productos de uso específico en otro cultivo (arroz, rosas), de tratamiento
   // de semilla o de la línea para flores.
   const CAT_CLASE = { plaga: /insectic|acaric|cebo|nematic/i, enfermedad: /fungic|desinfecc|bactericida/i, maleza: /herbic/i };
@@ -498,16 +499,21 @@
     const cubiertos = new Set(principal ? coincideGrupos(principal, gf).map((g) => g.c || g.n) : []);
     let cand = productos.filter((p) => p.activo !== false && !p.no_sugerir && String(p.id) !== String(principalId) && cat.test(p.categoria || "") && !ajeno(p))
       .map((p) => ({ p, g: coincideGrupos(p, gf).map((g) => g.c || g.n), dosis: tieneDosis(p) })).filter((x) => x.g.length);
+    // eficiencia: los grupos de cada clase están ordenados del más eficiente al menos; vale el mejor grupo del producto
+    const pos = new Map(gf.map((g, i) => [g.c || g.n, i]));
+    cand.forEach((x) => { const idx = x.g.map((g) => pos.get(g)).sort((a, b) => a - b); x.ef = idx[0]; x.ef2 = idx.length > 1 ? idx[1] : 99; });
     // mismo grupo químico exacto que la principal no aporta rotación
     const firmaPrincipal = principal ? codigosGrupo(principal.grupo).sort().join("|") : null;
     const elegidos = [], firmas = new Set(firmaPrincipal ? [firmaPrincipal] : []);
     while (elegidos.length < n && cand.length) {
       cand.forEach((x) => { const nuevos = x.g.filter((g) => !cubiertos.has(g)).length, firma = codigosGrupo(x.p.grupo).sort().join("|");
-        x.score = (x.dosis ? 100 : 0) + nuevos * 12 + (firmas.has(firma) ? -30 : 0) + Math.min(x.g.length, 2) * 2 + (prev.has(String(x.p.id)) ? 15 : 0); });
+        x.score = (x.dosis ? 100 : 0) + nuevos * 12 + (firmas.has(firma) ? -30 : 0) + Math.min(x.g.length, 2) * 2 + (prev.has(String(x.p.id)) ? 15 : 0) + Math.max(0, 10 - x.ef); });
       cand.sort((a, b) => b.score - a.score || a.p.nombre.localeCompare(b.p.nombre));
-      const x = cand.shift(); elegidos.push(x.p); x.g.forEach((g) => cubiertos.add(g)); firmas.add(codigosGrupo(x.p.grupo).sort().join("|"));
+      const x = cand.shift(); elegidos.push(x); x.g.forEach((g) => cubiertos.add(g)); firmas.add(codigosGrupo(x.p.grupo).sort().join("|"));
     }
-    return elegidos;
+    // orden final de prioridad: 1 = la más eficiente (mejor grupo, luego segundo grupo, más grupos funcionales, con dosis)
+    elegidos.sort((a, b) => a.ef - b.ef || a.ef2 - b.ef2 || b.g.length - a.g.length || (b.dosis ? 1 : 0) - (a.dosis ? 1 : 0) || a.p.nombre.localeCompare(b.p.nombre));
+    return elegidos.map((x) => x.p);
   }
   const api = { ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,

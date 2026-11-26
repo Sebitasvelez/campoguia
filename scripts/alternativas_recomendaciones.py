@@ -1,13 +1,13 @@
 """Recomendaciones por problema: opción recomendada + 4 alternativas ordenadas de la más eficiente (1) a la menos (4).
 Elegidas por grupo químico funcional de la clase del problema y revisadas por el asesor (nov 2026).
-Añade Malathion 57 EC (pedido del asesor para hormigas arrieras) y marca Neem X como «no sugerir».
+Volaton AG (malatión, indicado por el asesor) va en hormigas arrieras; Neem X queda como «no sugerir».
 Uso: python3 alternativas_recomendaciones.py data/catalogo-inicial.json"""
 import json, sys
 
 ORDEN = {  # (cultivo, problema): [recomendada, alt1, alt2, alt3, alt4]
  ("pitahaya", "Avispas / murujas"): ["Engeo", "Ninja Zeon", "Tryclan", "Bala", "Solvigo"],
  ("pitahaya", "Hormigas"): ["Engeo", "Bala", "Curacron", "Flecha", "Solvigo"],
- ("pitahaya", "Hormigas arrieras"): ["Attakill", "Pyrigran", "Malathion 57 EC", "Bala", "Cogollero"],
+ ("pitahaya", "Hormigas arrieras"): ["Attakill", "Pyrigran", "Volaton AG", "Bala", "Cogollero"],
  ("pitahaya", "Chinches"): ["Engeo", "Voliam Flexi", "Solvigo", "Bala", "Curacron"],
  ("pitahaya", "Ácaros"): ["Solvigo", "Floramite", "Starmite", "Omite", "Theron"],
  ("pitahaya", "Babosas y caracoles"): ["Matababosa", "Tryclan"],
@@ -28,18 +28,15 @@ ORDEN = {  # (cultivo, problema): [recomendada, alt1, alt2, alt3, alt4]
  ("cacao", "Malezas en general (no selectivo)"): ["Guadaña", "Tiro Fijo", "Winquat", "Fascinate 280 SL", "Gramoxone"],
 }
 NR_CACAO = "Sugerencia de manual técnico: confirma la dosis para cacao en la etiqueta."
-MALATHION = {"id": 196, "nombre": "Malathion 57 EC", "ingrediente_activo": "MALATION", "grupo": "IRAC 1B", "categoria": "Insecticida",
-  "formulacion": "emulsion", "modo_aplicacion": "tanque", "dosis_min": None, "dosis_max": None, "unidad": "cc", "dosis_texto": None,
-  "presentacion": None, "contenido": None, "contenido_unidad": None, "pvp": None,
-  "control": "Insecticida organofosforado de contacto, ingestión e inhalación; amplio espectro (hormigas, chupadores y masticadores).",
-  "carencia_dias": None, "reingreso_horas": None, "categoria_tox": None, "nota": "Completar: nombre comercial, dosis, precio",
-  "fuente": "Pedido del asesor; ficha técnica de Malathion 57% EC (referencial)", "activo": True,
-  "concentracion": "Malatión 570 g/L (EC) (referencial, verificar etiqueta)", "presentaciones": [], "no_sugerir": False}
 
 def main(path):
     c = json.load(open(path, encoding="utf-8"))
-    if not any(p["nombre"] == MALATHION["nombre"] for p in c["productos"]):
-        c["productos"].append(dict(MALATHION))
+    c["productos"] = [p for p in c["productos"] if p["nombre"] != "Malathion 57 EC"]
+    for p in c["productos"]:
+        if p["nombre"] == "Volaton AG":
+            p.update(ingrediente_activo="MALATION", concentracion="Malatión en polvo (concentración por verificar en la etiqueta)",
+                     grupo="IRAC 1B", control="Insecticida organofosforado (malatión) de contacto e ingestión; en polvo para hormigas y nidos.",
+                     fuente="Asesor Ecuaquímica: Volaton AG es malatión | " + (p.get("fuente") or ""))
     for p in c["productos"]:
         p["no_sugerir"] = p["nombre"] == "Neem X"
     ids = {p["nombre"]: p["id"] for p in c["productos"]}

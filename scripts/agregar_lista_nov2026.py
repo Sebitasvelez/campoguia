@@ -226,7 +226,7 @@ NUEVOS = {
  "VITAFOL 10-40-10 ECUAFOL": P("Vitafol 10-40-10", "Fertilizante foliar", "N-P-K", "N 10% · P₂O₅ 40% · K₂O 10% + Mg 0,5% + S 1%", "polvo", "g", fuente=F_ED, nota=C_D),
  "VITAFOL 20-20-20 ECUAFOL": P("Vitafol 20-20-20", "Fertilizante foliar", "N-P-K", "N 20% · P₂O₅ 20% · K₂O 20% + Mg 0,5% + S 1%", "polvo", "g", fuente=F_ED, nota=C_D),
  "VITAFOL 30-10-10 ECUAFOL": P("Vitafol 30-10-10", "Fertilizante foliar", "N-P-K", "N 30% · P₂O₅ 10% · K₂O 10% + Mg 0,5% + S 1%", "polvo", "g", fuente=F_ED, nota=C_D),
- "VOLATON AG": P("Volaton AG", "Insecticida", "FOXIM", "Foxim", "polvo", "g", fuente=F_REF, ref=True, nota="Completar: concentración, dosis"),
+ "VOLATON AG": P("Volaton AG", "Insecticida", "MALATION", "Malatión en polvo (concentración por verificar en la etiqueta)", "polvo", "g", fuente="Asesor Ecuaquímica: Volaton AG es malatión", nota="Completar: concentración, dosis"),
  "VYKENDA": P("Vykenda", "Insecticida", "ISOCICLOSERAM", "Isocicloseram", "suspension", fuente="Syngenta / ANLA Colombia (isocicloseram, IRAC 30)",
               nota="Completar: concentración, dosis"),
  "WELGRO": P("Welgro", "Otros", unidad="g", nota=C_IA + ", categoría"),

@@ -181,7 +181,7 @@
     const busca = (q.q || "").toLowerCase();
     const vis = filas.filter((r) => (!fval || String(r[sec.filtro.campo]) === String(fval)) && (!busca || sec.buscar(r).toLowerCase().includes(busca)));
     const sel = q.id === "nuevo" ? "nuevo" : filas.find((r) => String(r.id) === String(q.id)) || null;
-    const extra = clave === "productos" ? `<label class="btn sec" style="cursor:pointer">Actualizar precios (lista Excel)<input type="file" id="impLista" accept=".xlsx,.xls" hidden></label><button class="btn sec" id="exp">Exportar Excel</button><label class="btn sec" style="cursor:pointer">Importar Excel<input type="file" id="imp" accept=".xlsx,.xls,.csv" hidden></label>` : clave === "etapas" ? `<button class="btn sec" id="nuevoCultivo">+ Nuevo cultivo</button>` : clave === "recomendaciones" && fval ? `<button class="btn sec" id="sugerir" title="Mantiene la opción recomendada y propone 4 alternativas por grupo químico">Sugerir alternativas</button>` : "";
+    const extra = clave === "productos" ? `<label class="btn sec" style="cursor:pointer">Actualizar precios (lista Excel)<input type="file" id="impLista" accept=".xlsx,.xls" hidden></label><button class="btn sec" id="exp">Exportar Excel</button><label class="btn sec" style="cursor:pointer">Importar Excel<input type="file" id="imp" accept=".xlsx,.xls,.csv" hidden></label>` : clave === "etapas" ? `<button class="btn sec" id="nuevoCultivo">+ Nuevo cultivo</button>` : clave === "recomendaciones" && fval ? `<button class="btn sec" id="sugerir" title="Mantiene la opción recomendada y propone 4 alternativas por grupo químico, ordenadas de la más eficiente (1) a la menos (4)">Sugerir alternativas</button>` : "";
     marco(clave, `
       <div class="adm-cab"><div><h2>${h(sec.titulo)}</h2><div class="mini" style="margin-top:4px">${h(sec.ayuda)} · ${filas.length} en total</div></div>
         <div class="botones">${extra}<a class="btn sec" href="#${clave}?id=nuevo${fval ? "&f=" + encodeURIComponent(fval) : ""}">+ Nuevo</a>${botonPublicar}</div></div>
@@ -353,12 +353,12 @@
     const principal = recs[0];
     const alts = L.sugerirAlternativas(pr, DB.productos || [], principal.producto_id, 4, nomCultivo(pr.cultivo_id), recs.slice(1).map((r) => r.producto_id));
     if (!alts.length) return toast("No hay productos del portafolio en los grupos químicos de esta clase.");
-    if (!(await UI.confirmar(`Se mantiene «${nomProducto(principal.producto_id)}» como opción recomendada y las alternativas pasan a ser: ${alts.map((p, i) => `${i + 1}. ${p.nombre}`).join(", ")}. Después revisa el orden para que la 1 sea la más eficiente. ¿Continuar?`, { ok: "Aplicar sugerencia" }))) return;
+    if (!(await UI.confirmar(`Se mantiene «${nomProducto(principal.producto_id)}» como opción recomendada y las alternativas pasan a ser, de la más eficiente a la menos: ${alts.map((p, i) => `${i + 1}. ${p.nombre}`).join(", ")}. ¿Continuar?`, { ok: "Aplicar sugerencia" }))) return;
     try {
       for (const r of recs.slice(1)) await A.borrar("recomendaciones", r.id);
       const nota = pr.cultivo_id === "pitahaya" ? null : `Sugerencia de manual técnico: confirma la dosis para ${nomCultivo(pr.cultivo_id).toLowerCase()} en la etiqueta.`;
       for (let i = 0; i < alts.length; i++) await A.guardar("recomendaciones", { problema_id: pr.id, producto_id: alts[i].id, etapa_id: null, prioridad: i + 2, dosis_min: null, dosis_max: null, nota });
-      await cargarTodo(); marcarCambio(); toast("Alternativas sugeridas. Revisa el orden y publica."); router();
+      await cargarTodo(); marcarCambio(); toast("Alternativas sugeridas en orden de eficiencia. Revisa y publica."); router();
     } catch (er) { toast(er.message); }
   }
   async function nuevoCultivo() {
