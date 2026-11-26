@@ -503,6 +503,41 @@
     const gf = CLASES[x.clase].grupos, orden = x.orden ? x.orden.map((c) => gf.find((g) => g.c === c) || G(c, NOMBRE_GRUPO[c] || c)).concat(gf.filter((g) => !x.orden.includes(g.c))) : gf;
     return { clase: x.clase, grupos: orden };
   }
+  // ---------------- "¿Qué problema tienes?" (inicio del agricultor): interpreta lo que escribe y lo lleva a los manuales
+  const PALABRAS_VACIAS = new Set("el la los las un una unos unas de del en mi mis tu y o a al con para por que se me hay tengo tiene tienen problema problemas cultivo cultivos planta plantas mata matas finca lote como hago hacer controlar control combatir eliminar quitar curar ataque atacando atacan esta estan muy mucho mucha sale salen".split(" "));
+  const raiz = (w) => w.length > 4 ? w.replace(/(es|s)$/, "") : w;
+  function distancia(a, b) { // Levenshtein, para errores al escribir (monilla → monilia)
+    if (Math.abs(a.length - b.length) > 2) return 9;
+    const d = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+    for (let j = 1; j <= b.length; j++) d[0][j] = j;
+    for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    return d[a.length][b.length];
+  }
+  const parecida = (w, v) => { if (w === v) return true; if (w.length >= 4 && v.length >= 4 && (v.startsWith(w) || w.startsWith(v))) return true;
+    return w.length >= 5 && w[0] === v[0] && distancia(w, v) <= (w.length >= 8 ? 2 : 1); };
+  const palabras = (t) => quitarTildes(t).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter((w) => w.length > 2 && !PALABRAS_VACIAS.has(w)).map(raiz);
+  function interpretarConsulta(texto, cat) {
+    const t = quitarTildes(texto), ws = palabras(texto);
+    const cultivos = (cat.cultivos || []).filter((c) => c.activo !== false && palabras(c.nombre).some((v) => ws.some((w) => parecida(w, v)))).map((c) => c.id);
+    const quedan = ws.filter((w) => !(cat.cultivos || []).some((c) => palabras(c.nombre).some((v) => parecida(w, v))));
+    const intencion = /fertiliz|abon|nutric|nutrient|fertil|engros|crecimiento|amarill|deficien/.test(t) ? "fertilizacion" : /plan sanitario|calendario|programa de fumig|que aplicar|cronograma/.test(t) ? "plan" : null;
+    const tipo = /hongo|enfermedad|pudr|mancha|podrid|marchit|seca/.test(t) ? "enfermedad" : /plaga|insecto|bicho|gusano/.test(t) ? "plaga" : /maleza|monte|hierba|yerba|pasto/.test(t) ? "maleza" : null;
+    const clase = claseDeBusqueda(texto);
+    const enCultivo = (p) => !cultivos.length || cultivos.includes(p.cultivo_id);
+    const problemas = (cat.problemas || []).filter(enCultivo).map((p) => {
+      const nom = palabras(p.nombre), resto = palabras([p.descripcion, p.como_actua].join(" "));
+      let score = 0, directo = false;
+      quedan.forEach((w) => { if (nom.some((v) => parecida(w, v))) { score += 10; directo = true; } else if (resto.some((v) => v === w)) score += 2; });
+      if (clase && clasesDe(p.clasificacion).includes(clase.clase)) score += 5;
+      if (tipo && p.tipo === tipo) score += 4;
+      return { p, score, directo };
+    }).filter((x) => x.score >= 4).sort((a, b) => b.score - a.score || (a.p.orden || 0) - (b.p.orden || 0));
+    // si algo coincide por nombre, los demás solo se muestran si están muy relacionados
+    const hayDirecto = problemas.some((x) => x.directo);
+    const lista = problemas.filter((x) => !hayDirecto || x.directo || x.score >= 6);
+    return { cultivos, intencion, tipo, clase, problemas: lista.filter((x) => x.directo).map((x) => x.p), relacionados: lista.filter((x) => !x.directo).map((x) => x.p), palabras: quedan };
+  }
+
   // ordena los productos que sirven para la clase, del más eficiente al menos: mejor grupo, segundo grupo, más grupos
   function rankearPorClase(info, productos) {
     const k = info.clase, tipo = CLASES[k].tipo, pos = new Map(info.grupos.map((g, i) => [g.c || g.n, i]));
@@ -635,6 +670,6 @@
   }
   const api = { fraccionSacos, textoSacos, ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, nombresGrupo, textoBusquedaGrupo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
-    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, claseDeBusqueda, rankearPorClase, esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
+    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, claseDeBusqueda, rankearPorClase, interpretarConsulta, esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);

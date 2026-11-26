@@ -282,6 +282,9 @@
           ? `<a href="#/lotes" class="aviso rojo" style="text-decoration:none"><span class="pill rojo">CARENCIA</span><div><b>${h(a.lote)}:</b> no cosechar hasta el <b>${fechaCorta(a.fecha)}</b> (${a.dias} días)</div></a>`
           : `<a href="#/lotes" class="aviso ambar" style="text-decoration:none"><span class="pill ambar">RECORDATORIO</span><div><b>${h(a.lote)}:</b> ${h(a.actividad)} ${a.dias === 0 ? "hoy" : a.dias > 0 ? "en " + a.dias + " días" : "atrasada " + -a.dias + " días"}</div></a>`).join("")}
         ${cardInstalar()}
+        <section class="card" style="gap:8px"><label class="campo" style="gap:6px"><b style="font-size:16px">¿Qué problema tienes en tu cultivo?</b>
+          <input id="consulta" type="search" autocomplete="off" value="${h(ui.consulta || "")}" placeholder="Ej. pulgones, ácaros, lancha, monilia, fertilización en pitahaya…"></label>
+          <div id="consultaRes" style="display:flex;flex-direction:column;gap:8px"></div></section>
         <div class="etq">Elige tu cultivo</div>
         <div class="grid2">${cultivos().map((c) => `<a class="cultivo ${c.id === ui.cultivo ? "sel" : ""}" href="#/cultivo/${h(c.id)}" data-c="${h(c.id)}"><span style="color:var(--verde);display:flex;height:44px;align-items:center">${ICONO_CULTIVO[c.id] || ic.hoja}</span><b>${h(c.nombre)}</b><span>Manual técnico · ${(I.problemas[c.id] || []).length} temas</span></a>`).join("")}</div>
         <div class="etq" style="margin-top:4px">Accesos rápidos</div>
@@ -293,6 +296,42 @@
         <a class="btn wa" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", soy " + perfil.nombres + ". Necesito asesoría para mi cultivo."))}" target="_blank" rel="noopener">${ic.wa}Hablar con mi asesor</a>
       </main>`, "inicio");
     $$("[data-c]").forEach((a) => a.addEventListener("click", () => { ui.cultivo = a.dataset.c; guardarUI(); }));
+    let tq; const inp = $("#consulta");
+    inp.addEventListener("input", () => { clearTimeout(tq); tq = setTimeout(() => { ui.consulta = inp.value; guardarUI(); pintarConsulta(inp.value); }, 250); });
+    pintarConsulta(inp.value);
+  }
+  // "¿Qué problema tienes?": lleva al manual del problema, al plan de fertilización o a los productos del portafolio;
+  // si no está en los manuales, ofrece buscar en internet o preguntar al asesor
+  function pintarConsulta(q) {
+    const box = $("#consultaRes"); if (!box) return;
+    q = String(q || "").trim(); if (q.length < 3) { box.innerHTML = ""; return; }
+    const r = L.interpretarConsulta(q, I.c), nomC = (id) => (cultivo(id) || {}).nombre || id;
+    const item = (href, titulo, sub) => `<a class="item" href="${h(href)}"><div class="tx"><b>${h(titulo)}</b>${sub ? `<span>${h(sub)}</span>` : ""}</div>${ic.flecha}</a>`;
+    const recDe = (pr) => { const rec = (I.recs[pr.id] || []).find((x) => P(x.producto_id)); return rec ? "Recomendado: " + P(rec.producto_id).nombre : ""; };
+    const conFert = cultivos().filter((c) => etapasDe(c.id).some((e) => (I.fert[e.id] || []).length)).map((c) => c.id);
+    let html = "";
+    if (r.intencion === "fertilizacion") {
+      const cs = (r.cultivos.length ? r.cultivos : conFert).filter((id) => conFert.includes(id));
+      html += cs.map((id) => item("#/fertilizacion/" + id, "Plan de fertilización · " + nomC(id), "Al suelo, foliar y enmiendas por etapa")).join("");
+    }
+    if (r.intencion === "plan") html += (r.cultivos.length ? r.cultivos : cultivos().map((c) => c.id)).map((id) => item("#/plan/" + id, "Plan sanitario · " + nomC(id), "Qué aplicar en cada etapa")).join("");
+    html += r.problemas.slice(0, 5).map((pr) => item("#/problema/" + pr.id, pr.nombre, "Manual de " + nomC(pr.cultivo_id) + " · " + recDe(pr))).join("");
+    if (!html && !r.relacionados.length && r.cultivos.length) html += r.cultivos.map((id) => item("#/cultivo/" + id, "Manual técnico de " + nomC(id), "Plagas, enfermedades, malezas y nutrición")).join("");
+    const nomClase = r.clase ? (CLS_NOM[r.clase.clase] || r.clase.clase.toLowerCase()) : "";
+    if (r.relacionados.length) html += `<div class="mini" style="margin-top:4px"><b>${r.problemas.length ? "También relacionado" : r.clase ? "Del mismo tipo (" + h(nomClase) + ") en nuestros manuales" : "Relacionado en nuestros manuales"}</b></div>` +
+      r.relacionados.slice(0, 4).map((pr) => item("#/problema/" + pr.id, pr.nombre, "Manual de " + nomC(pr.cultivo_id) + " · " + recDe(pr))).join("");
+    if (r.clase && !r.problemas.length) {
+      const top = L.rankearPorClase(r.clase, I.c.productos || []).filter((x) => !x.p.no_sugerir && !/tratamiento de semilla/i.test((x.p.control || "") + " " + (x.p.nota || ""))).slice(0, 4);
+      if (top.length) html += `<div class="mini" style="margin-top:4px"><b>Productos de nuestro portafolio para ${h(nomClase)}</b> (del más eficiente)</div>` +
+        top.map((x, i) => item("#/calcular?p=" + x.p.id, `${i + 1}. ${x.p.nombre}`, [x.p.concentracion || x.p.ingrediente_activo, x.grupo.n].filter(Boolean).join(" · ") + " · Calcular dosis")).join("");
+    }
+    const directo = r.problemas.length || r.intencion;
+    const cult = r.cultivos.length ? nomC(r.cultivos[0]) : "";
+    const web = "https://www.google.com/search?q=" + encodeURIComponent(q + " control" + (cult ? " en " + cult : "") + " Ecuador");
+    html += directo ? "" : `<div class="aviso ambar" style="padding:8px 10px">${ic.alerta}<div>${html ? "No encontramos exactamente «" + h(q) + "» en los manuales; revisa lo relacionado o consulta." : "Aún no tenemos «" + h(q) + "» documentado en los manuales."}</div></div>
+      <div class="acciones">${navigator.onLine !== false ? `<a class="btn sec chico" href="${h(web)}" target="_blank" rel="noopener">Buscar en internet</a>` : ""}
+      <a class="btn wa chico" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", tengo este problema" + (cult ? " en mi " + cult : "") + ": " + q + ". ¿Qué me recomienda?"))}" target="_blank" rel="noopener">${ic.wa}Preguntar a mi asesor</a></div>`;
+    box.innerHTML = html;
   }
 
   // ------------------------------------------------------------ CULTIVO: manual técnico
