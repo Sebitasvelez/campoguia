@@ -190,6 +190,7 @@ python3 scripts/otros_lista_agro.py data/catalogo-inicial.json   # quita semilla
 python3 scripts/clasificacion_problemas.py data/catalogo-inicial.json   # aparato bucal / clase del hongo de plagas y enfermedades
 python3 scripts/alternativas_recomendaciones.py data/catalogo-inicial.json   # opción recomendada + 4 alternativas ordenadas por eficiencia
 python3 scripts/fertilizantes_actual.py LISTA_FERTILIZANTES_ACTUAL.xlsx data/catalogo-inicial.json   # fertilizantes edáficos (nov 2026)
+python3 scripts/ajuste_precio_fertilizantes.py data/catalogo-inicial.json   # +$4 a fertilizantes edáficos
 node scripts/aplicar_grupos.js .   # grupos IRAC/FRAC/HRAC según ingrediente activo
 python3 scripts/build_seed.py data/catalogo-inicial.json supabase/seed.sql
 ```
