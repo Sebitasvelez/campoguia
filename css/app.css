@@ -157,3 +157,6 @@ details.card summary{cursor:pointer;font-weight:600;font-size:14px;min-height:28
 .formula{display:flex;flex-direction:column;gap:4px;margin-top:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.12);font-size:13.5px;line-height:1.35}
 .formula b{font-size:14.5px}
 .formula .mini{color:inherit;opacity:.85}
+
+.seg-chico button{min-height:36px;padding:7px 6px;font-size:13px}
+.info-sup>b:first-child{flex-shrink:0;width:20px;height:20px;border-radius:50%;background:#163C5C;color:#fff;display:grid;place-items:center;font-size:12px;font-style:italic;font-family:Georgia,serif}
