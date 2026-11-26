@@ -532,8 +532,10 @@
       });
       $("#pvacio").hidden = vis > 0;
     };
-    $("#pbuscar").addEventListener("input", filtrar);
-    $$("[data-pc]").forEach((b) => b.addEventListener("click", () => { cat = b.dataset.pc; $$("[data-pc]").forEach((x) => x.classList.toggle("sel", x === b)); filtrar(); }));
+    const marcarCat = (k) => { cat = k; $$("[data-pc]").forEach((x) => x.classList.toggle("sel", x.dataset.pc === k)); };
+    // al escribir, se busca en todo el portafolio sin importar la categoría marcada; al tocar una categoría se limpia la búsqueda
+    $("#pbuscar").addEventListener("input", (e) => { if (e.target.value.trim() && cat) marcarCat(""); filtrar(); });
+    $$("[data-pc]").forEach((b) => b.addEventListener("click", () => { $("#pbuscar").value = ""; marcarCat(b.dataset.pc); filtrar(); }));
     // la ficha completa se arma al abrir el producto
     $$(".port-item").forEach((d) => d.addEventListener("toggle", () => {
       const f = $(".port-ficha", d); if (!d.open || f.innerHTML) return;
