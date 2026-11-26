@@ -1,6 +1,7 @@
 """Añade a plagas y enfermedades su clasificación agronómica:
-plagas → tipo de aparato bucal; enfermedades → clase del hongo (taxonomía clásica:
-Oomiceto, Ascomiceto, Basidiomiceto, Deuteromiceto) y una explicación breve.
+plagas → tipo de aparato bucal; enfermedades → clase del hongo con la taxonomía actual (Oomiceto, Ascomiceto,
+Basidiomiceto), salvo Botrytis, Fusarium y Rhizoctonia, que se mantienen como Deuteromicetos
+porque se controlan con ingredientes activos específicos; y una explicación breve.
 Uso: python3 clasificacion_problemas.py data/catalogo-inicial.json"""
 import json, sys
 
@@ -25,22 +26,22 @@ DATOS = {
  ("cacao", "Hormigas y comejenes"): ("Masticador",
   "Ambos mastican: las hormigas cortan hojas y brotes con las mandíbulas, y los comejenes (termitas) roen raíces, corteza y madera desde sus galerías."),
 
- ("pitahaya", "Antracnosis (Colletotrichum) y Alternaria"): ("Deuteromiceto",
-  "Colletotrichum y Alternaria son hongos imperfectos (Deuteromicetos). Se multiplican por conidias que salpican con la lluvia y entran por heridas o tejido tierno; con humedad alta las manchas crecen rápido."),
- ("pitahaya", "Fusarium / sarna fúngica"): ("Deuteromiceto",
-  "Fusarium y el hongo de la sarna (Neoscytalidium) son Deuteromicetos. Viven en el suelo y en restos de cosecha, entran por heridas y producen conidias que se dispersan con el agua y las herramientas."),
+ ("pitahaya", "Antracnosis (Colletotrichum) y Alternaria"): ("Ascomiceto",
+  "Colletotrichum (estado sexual Glomerella) y Alternaria son Ascomicetos. Se multiplican por conidias que salpican con la lluvia y entran por heridas o tejido tierno; con humedad alta las manchas crecen rápido."),
+ ("pitahaya", "Fusarium / sarna fúngica"): ("Deuteromiceto + Ascomiceto",
+  "Fusarium se maneja como Deuteromiceto: es un hongo especial que solo responde a ciertos ingredientes activos. El hongo de la sarna (Neoscytalidium) es un Ascomiceto. Ambos viven en el suelo y en restos de cosecha, entran por heridas y se dispersan con el agua y las herramientas."),
  ("pitahaya", "Prevención de hongos (amplio espectro)"): ("Amplio espectro (multisitio)",
   "Antes de que aparezcan síntomas no se sabe qué hongo atacará, por eso se usan productos multisitio que protegen contra hongos de todas las clases."),
  ("pitahaya", "Bacteriosis / pudrición blanda"): ("Bacteria",
   "La causan bacterias (Erwinia / Pectobacterium), no hongos. Entran por heridas y deshacen las paredes de las células, por eso el tejido se vuelve acuoso y huele mal."),
- ("pitahaya", "Hongos del suelo (desinfección)"): ("Oomiceto + Deuteromiceto",
-  "En el suelo actúan oomicetos (Pythium, Phytophthora) y deuteromicetos (Fusarium, Rhizoctonia, Sclerotium). Como responden a grupos químicos distintos, la desinfección combina productos para ambas clases."),
+ ("pitahaya", "Hongos del suelo (desinfección)"): ("Oomiceto + Deuteromiceto + Basidiomiceto",
+  "En el suelo actúan oomicetos (Pythium, Phytophthora), Fusarium y Rhizoctonia (manejados como Deuteromicetos) y Sclerotium rolfsii (Basidiomiceto, hoy Athelia rolfsii). Como responden a grupos químicos distintos, la desinfección combina productos para las tres clases."),
  ("cacao", "Monilia (Moniliophthora roreri)"): ("Basidiomiceto",
-  "Hoy se clasifica como Basidiomiceto; antes se describía como el deuteromiceto Monilia roreri. Infecta la mazorca joven en las primeras semanas y sus esporas secas se dispersan con el viento: la clave es proteger la mazorca pequeña y retirar las enfermas."),
+  "Moniliophthora roreri es un Basidiomiceto. Infecta la mazorca joven en las primeras semanas y sus esporas secas se dispersan con el viento: la clave es proteger la mazorca pequeña y retirar las enfermas."),
  ("cacao", "Escoba de bruja (Moniliophthora perniciosa)"): ("Basidiomiceto",
-  "Basidiomiceto (antes Crinipellis perniciosa). Infecta brotes, cojines florales y mazorcas en crecimiento; en las escobas secas forma pequeños hongos (setas) que liberan esporas con la lluvia."),
+  "Moniliophthora perniciosa es un Basidiomiceto. Infecta brotes, cojines florales y mazorcas en crecimiento; en las escobas secas forma pequeños hongos (setas) que liberan esporas con la lluvia."),
  ("cacao", "Mazorca negra (Phytophthora)"): ("Oomiceto",
-  "Phytophthora es un oomiceto: produce zoosporas que nadan en el agua y salpican desde el suelo con la lluvia. Por eso avanza rápido en épocas lluviosas y con mal drenaje."),
+  "Phytophthora es un oomiceto: no es un hongo verdadero sino un pseudohongo (reino Stramenopila), con pared de celulosa y sin ergosterol. Produce zoosporas que nadan en el agua y salpican desde el suelo con la lluvia, por eso avanza rápido en épocas lluviosas y con mal drenaje."),
 }
 
 def main(path):

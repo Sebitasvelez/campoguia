@@ -426,13 +426,13 @@
         G("FRAC 11", "Estrobilurinas"), G("FRAC 12", "Fenilpirroles (fludioxonil)"), G("FRAC 17", "Hidroxianilidas (fenhexamida)"), G("FRAC 29", "Fluazinam"),
         G("FRAC BM02", "Biológicos (Bacillus subtilis)"), G("FRAC M01", "Cobres"), G("FRAC M02", "Azufre (oídios)"), G("FRAC M03", "Ditiocarbamatos (mancozeb)"),
         G("FRAC M04", "Ftalimidas (captan)"), G("FRAC M05", "Clorotalonil")] },
-    "Deuteromiceto": { tipo: "enfermedad", resumen: "Hongo imperfecto: solo se conoce su reproducción asexual por conidias, que salpican con la lluvia y el viento.",
-      control: "Responde a los grupos que actúan sobre hongos verdaderos; rota modos de acción para evitar resistencia.",
-      grupos: [G("FRAC 1", "Bencimidazoles (tiabendazol, carbendazim)"), G("FRAC 2", "Dicarboximidas (iprodiona)"), G("FRAC 3", "Triazoles (difenoconazol, propiconazol, tebuconazol)"),
-        G("FRAC 7", "Carboxamidas SDHI (boscalid, carboxin)"), G("FRAC 9", "Anilinopirimidinas (ciprodinil)"), G("FRAC 11", "Estrobilurinas"),
-        G("FRAC 12", "Fenilpirroles (fludioxonil)"), G("FRAC 14", "Hidrocarburos aromáticos (PCNB, al suelo)"), G("FRAC 29", "Fluazinam"),
-        G("FRAC BM02", "Biológicos (Bacillus subtilis)"), G("FRAC M01", "Cobres"), G("FRAC M03", "Ditiocarbamatos (mancozeb)"), G("FRAC M04", "Ftalimidas (captan)"), G("FRAC M05", "Clorotalonil")] },
-    "Basidiomiceto": { tipo: "enfermedad", resumen: "Hongo verdadero con esporas sexuales en basidios (como royas, Rhizoctonia y Moniliophthora).",
+    "Deuteromiceto": { tipo: "enfermedad", resumen: "Grupo que se mantiene en la clasificación antigua para Botrytis, Fusarium y Rhizoctonia: hongos especiales que se controlan solo con determinados ingredientes activos.",
+      control: "Botrytis: fenhexamida, ciprodinil, fludioxonil, iprodiona, boscalid. Fusarium: tiabendazol o carbendazim, triazoles y fludioxonil. Rhizoctonia: PCNB, carboxin o flutolanil y azoxistrobina. Rota grupos: Botrytis genera resistencia rápido.",
+      grupos: [G("FRAC 1", "Bencimidazoles (tiabendazol, carbendazim)"), G("FRAC 2", "Dicarboximidas (iprodiona)"), G("FRAC 3", "Triazoles (tebuconazol, procloraz, difenoconazol)"),
+        G("FRAC 7", "Carboxamidas SDHI (boscalid, fluopyram, carboxin, flutolanil)"), G("FRAC 9", "Anilinopirimidinas (ciprodinil, pirimetanil)"), G("FRAC 11", "Estrobilurinas (azoxistrobina)"),
+        G("FRAC 12", "Fenilpirroles (fludioxonil)"), G("FRAC 14", "Hidrocarburos aromáticos (PCNB, al suelo)"), G("FRAC 17", "Hidroxianilidas (fenhexamida)"), G("FRAC 29", "Fluazinam"),
+        G("FRAC BM02", "Biológicos (Bacillus subtilis)"), G("FRAC M04", "Ftalimidas (captan)")] },
+    "Basidiomiceto": { tipo: "enfermedad", resumen: "Hongo verdadero con esporas sexuales en basidios (como royas, Moniliophthora y Sclerotium).",
       control: "Las carboxamidas (FRAC 7), triazoles y estrobilurinas son las más activas; los multisitio protegen antes de la infección.",
       grupos: [G("FRAC 3", "Triazoles (tebuconazol, propiconazol, difenoconazol)"), G("FRAC 7", "Carboxamidas SDHI (carboxin, flutolanil)"), G("FRAC 11", "Estrobilurinas (azoxistrobina)"),
         G("FRAC 14", "Hidrocarburos aromáticos (PCNB, al suelo)"), G("FRAC 1", "Bencimidazoles"), G("FRAC M01", "Cobres"), G("FRAC M03", "Ditiocarbamatos (mancozeb)"), G("FRAC M05", "Clorotalonil")] },
@@ -444,7 +444,7 @@
       grupos: [G("FRAC M01", "Cobres"), G("FRAC M02", "Azufre"), G("FRAC M03", "Ditiocarbamatos (mancozeb)"), G("FRAC M04", "Ftalimidas (captan)"), G("FRAC M05", "Clorotalonil")] },
   };
   const OPC_CLASE = { plaga: Object.keys(CLASES).filter((k) => CLASES[k].tipo === "plaga"), enfermedad: Object.keys(CLASES).filter((k) => CLASES[k].tipo === "enfermedad") };
-  // "Oomiceto + Deuteromiceto" → varias clases
+  // "Oomiceto + Deuteromiceto" → varias clases. Taxonomía actual; Botrytis, Fusarium y Rhizoctonia se mantienen como Deuteromicetos
   const clasesDe = (txt) => String(txt || "").split(/\s*\+\s*/).map((s) => s.trim()).filter((s) => CLASES[s]);
   function gruposFuncionales(txt) {
     const out = [], vistos = new Set();

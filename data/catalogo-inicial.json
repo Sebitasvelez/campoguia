@@ -7824,8 +7824,8 @@
    "orden": 8,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
-   "clasificacion": "Deuteromiceto",
-   "como_actua": "Colletotrichum y Alternaria son hongos imperfectos (Deuteromicetos). Se multiplican por conidias que salpican con la lluvia y entran por heridas o tejido tierno; con humedad alta las manchas crecen rápido."
+   "clasificacion": "Ascomiceto",
+   "como_actua": "Colletotrichum (estado sexual Glomerella) y Alternaria son Ascomicetos. Se multiplican por conidias que salpican con la lluvia y entran por heridas o tejido tierno; con humedad alta las manchas crecen rápido."
   },
   {
    "id": 9,
@@ -7836,8 +7836,8 @@
    "orden": 9,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
-   "clasificacion": "Deuteromiceto",
-   "como_actua": "Fusarium y el hongo de la sarna (Neoscytalidium) son Deuteromicetos. Viven en el suelo y en restos de cosecha, entran por heridas y producen conidias que se dispersan con el agua y las herramientas."
+   "clasificacion": "Deuteromiceto + Ascomiceto",
+   "como_actua": "Fusarium se maneja como Deuteromiceto: es un hongo especial que solo responde a ciertos ingredientes activos. El hongo de la sarna (Neoscytalidium) es un Ascomiceto. Ambos viven en el suelo y en restos de cosecha, entran por heridas y se dispersan con el agua y las herramientas."
   },
   {
    "id": 10,
@@ -7872,8 +7872,8 @@
    "orden": 12,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
-   "clasificacion": "Oomiceto + Deuteromiceto",
-   "como_actua": "En el suelo actúan oomicetos (Pythium, Phytophthora) y deuteromicetos (Fusarium, Rhizoctonia, Sclerotium). Como responden a grupos químicos distintos, la desinfección combina productos para ambas clases."
+   "clasificacion": "Oomiceto + Deuteromiceto + Basidiomiceto",
+   "como_actua": "En el suelo actúan oomicetos (Pythium, Phytophthora), Fusarium y Rhizoctonia (manejados como Deuteromicetos) y Sclerotium rolfsii (Basidiomiceto, hoy Athelia rolfsii). Como responden a grupos químicos distintos, la desinfección combina productos para las tres clases."
   },
   {
    "id": 13,
@@ -7981,7 +7981,7 @@
    "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
    "fotos": [],
    "clasificacion": "Basidiomiceto",
-   "como_actua": "Hoy se clasifica como Basidiomiceto; antes se describía como el deuteromiceto Monilia roreri. Infecta la mazorca joven en las primeras semanas y sus esporas secas se dispersan con el viento: la clave es proteger la mazorca pequeña y retirar las enfermas."
+   "como_actua": "Moniliophthora roreri es un Basidiomiceto. Infecta la mazorca joven en las primeras semanas y sus esporas secas se dispersan con el viento: la clave es proteger la mazorca pequeña y retirar las enfermas."
   },
   {
    "id": 22,
@@ -7993,7 +7993,7 @@
    "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
    "fotos": [],
    "clasificacion": "Basidiomiceto",
-   "como_actua": "Basidiomiceto (antes Crinipellis perniciosa). Infecta brotes, cojines florales y mazorcas en crecimiento; en las escobas secas forma pequeños hongos (setas) que liberan esporas con la lluvia."
+   "como_actua": "Moniliophthora perniciosa es un Basidiomiceto. Infecta brotes, cojines florales y mazorcas en crecimiento; en las escobas secas forma pequeños hongos (setas) que liberan esporas con la lluvia."
   },
   {
    "id": 23,
@@ -8005,7 +8005,7 @@
    "fuente": "Manuales de cacao (ICA Colombia, CATIE, guía PNUD Ecuador) y fichas técnicas; revisar",
    "fotos": [],
    "clasificacion": "Oomiceto",
-   "como_actua": "Phytophthora es un oomiceto: produce zoosporas que nadan en el agua y salpican desde el suelo con la lluvia. Por eso avanza rápido en épocas lluviosas y con mal drenaje."
+   "como_actua": "Phytophthora es un oomiceto: no es un hongo verdadero sino un pseudohongo (reino Stramenopila), con pared de celulosa y sin ergosterol. Produce zoosporas que nadan en el agua y salpican desde el suelo con la lluvia, por eso avanza rápido en épocas lluviosas y con mal drenaje."
   },
   {
    "id": 24,
