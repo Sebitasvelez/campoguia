@@ -511,12 +511,21 @@
       cand.sort((a, b) => b.score - a.score || a.p.nombre.localeCompare(b.p.nombre));
       const x = cand.shift(); elegidos.push(x); x.g.forEach((g) => cubiertos.add(g)); firmas.add(codigosGrupo(x.p.grupo).sort().join("|"));
     }
-    // orden final de prioridad: 1 = la más eficiente (mejor grupo, luego segundo grupo, más grupos funcionales, con dosis)
-    elegidos.sort((a, b) => a.ef - b.ef || a.ef2 - b.ef2 || b.g.length - a.g.length || (b.dosis ? 1 : 0) - (a.dosis ? 1 : 0) || a.p.nombre.localeCompare(b.p.nombre));
-    return elegidos.map((x) => x.p);
+    return ordenarPorEficiencia(problema, elegidos.map((x) => x.p));
+  }
+  // ordena productos de la más eficiente (1) a la menos para la clase del problema: mejor grupo funcional, luego el
+  // segundo grupo, más grupos funcionales y con dosis cargada. Sin clasificación o sin grupo funcional, van al final
+  // en el orden recibido.
+  function ordenarPorEficiencia(problema, lista) {
+    const gf = gruposFuncionales(problema && problema.clasificacion), pos = new Map(gf.map((g, i) => [g.c || g.n, i]));
+    const tieneDosis = (p) => [p.dosis_min, p.dosis_max, p.dosis_ha_min, p.dosis_ha_max].some((v) => v !== null && v !== undefined && v !== "");
+    return lista.map((p, i) => { const g = coincideGrupos(p, gf).map((x) => x.c || x.n), idx = g.map((x) => pos.get(x)).sort((a, b) => a - b);
+      return { p, i, n: g.length, ef: idx.length ? idx[0] : 999, ef2: idx.length > 1 ? idx[1] : 999, dosis: tieneDosis(p) }; })
+      .sort((a, b) => a.ef - b.ef || a.ef2 - b.ef2 || b.n - a.n || (b.dosis ? 1 : 0) - (a.dosis ? 1 : 0) || (a.ef === 999 ? a.i - b.i : a.p.nombre.localeCompare(b.p.nombre)))
+      .map((x) => x.p);
   }
   const api = { ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
-    CLASES, OPC_CLASE, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas };
+    CLASES, OPC_CLASE, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);

@@ -180,6 +180,7 @@
     store.set("f_" + clave, fval);
     const busca = (q.q || "").toLowerCase();
     const vis = filas.filter((r) => (!fval || String(r[sec.filtro.campo]) === String(fval)) && (!busca || sec.buscar(r).toLowerCase().includes(busca)));
+    if (clave === "recomendaciones") vis.sort((a, b) => Number(a.problema_id) - Number(b.problema_id) || Number(a.prioridad) - Number(b.prioridad));
     const sel = q.id === "nuevo" ? "nuevo" : filas.find((r) => String(r.id) === String(q.id)) || null;
     const extra = clave === "productos" ? `<label class="btn sec" style="cursor:pointer">Actualizar precios (lista Excel)<input type="file" id="impLista" accept=".xlsx,.xls" hidden></label><button class="btn sec" id="exp">Exportar Excel</button><label class="btn sec" style="cursor:pointer">Importar Excel<input type="file" id="imp" accept=".xlsx,.xls,.csv" hidden></label>` : clave === "etapas" ? `<button class="btn sec" id="nuevoCultivo">+ Nuevo cultivo</button>` : clave === "recomendaciones" && fval ? `<button class="btn sec" id="sugerir" title="Mantiene la opción recomendada y propone 4 alternativas por grupo químico, ordenadas de la más eficiente (1) a la menos (4)">Sugerir alternativas</button>` : "";
     marco(clave, `
@@ -330,11 +331,14 @@
       }
       if (sec.campos.some((c) => c.tipo === "grupo")) datos.grupo = L.grupoResistencia(datos.ingrediente_activo, datos.categoria).grupo;
       const b = f.querySelector("button[type=submit]"); b.disabled = true;
+      // recomendaciones: estado previo del problema para reubicar alternativas si cambia la opción recomendada
+      const antesRecs = sec.tabla === "recomendaciones" ? (DB.recomendaciones || []).filter((r) => String(r.problema_id) === String(datos.problema_id)).map((r) => Object.assign({}, r)) : null;
       try {
         const guardada = await A.guardar(sec.tabla, datos);
         const arr = DB[sec.tabla] = DB[sec.tabla] || [];
         const i = arr.findIndex((x) => String(x.id) === String(guardada.id));
         if (i < 0) arr.push(guardada); else arr[i] = Object.assign({}, arr[i], guardada);
+        if (antesRecs) { const msg = await reubicarAlternativas(antesRecs, guardada); if (msg) { marcarCambio(); toast(msg); cerrar(); return; } }
         marcarCambio(); toast("Guardado. Recuerda publicar."); cerrar();
       } catch (er) { $("#err").textContent = er.message; b.disabled = false; }
     });
@@ -343,6 +347,33 @@
       try { await A.borrar(sec.tabla, fila.id); await cargarTodo(); marcarCambio(); toast("Eliminado"); cerrar(); } catch (er) { $("#err").textContent = er.message; }
     });
     const ce = $("#cerrar"); if (ce) ce.addEventListener("click", cerrar);
+  }
+  // Si cambia la opción recomendada (prioridad 1), el producto saliente pasa a las alternativas y todas se vuelven a
+  // ordenar por eficiencia (2 = alternativa 1, la más eficiente). Cada producto conserva su dosis propia y su nota.
+  async function reubicarAlternativas(antes, guardada) {
+    if (Number(guardada.prioridad) !== 1) return null;
+    const previa = antes.filter((r) => Number(r.prioridad) === 1 && String(r.id) !== String(guardada.id)).concat(antes.filter((r) => String(r.id) === String(guardada.id) && Number(r.prioridad) === 1))[0];
+    if (previa && String(previa.producto_id) === String(guardada.producto_id) && String(previa.id) === String(guardada.id)) return null; // misma recomendada
+    const pr = (DB.problemas || []).find((x) => String(x.id) === String(guardada.problema_id)); if (!pr) return null;
+    const P = (id) => (DB.productos || []).find((p) => String(p.id) === String(id));
+    // filas actuales tras guardar
+    let filas = (DB.recomendaciones || []).filter((r) => String(r.problema_id) === String(pr.id));
+    const ops = [];
+    // el producto saliente: si su fila fue la editada (se cambió el producto), hay que crearle una fila nueva
+    if (previa && String(previa.producto_id) !== String(guardada.producto_id) && !filas.some((r) => String(r.producto_id) === String(previa.producto_id))) {
+      const nueva = { problema_id: pr.id, producto_id: previa.producto_id, etapa_id: previa.etapa_id || null, prioridad: 99,
+        dosis_min: String(previa.id) === String(guardada.id) ? null : previa.dosis_min, dosis_max: String(previa.id) === String(guardada.id) ? null : previa.dosis_max, nota: previa.nota || null };
+      filas.push(nueva); ops.push(nueva);
+    }
+    // una fila por producto: la recomendada manda; duplicados del mismo producto se eliminan
+    const vistos = new Set([String(guardada.producto_id)]), borrar = [];
+    const alts = filas.filter((r) => String(r.id) !== String(guardada.id)).filter((r) => { const k = String(r.producto_id); if (vistos.has(k)) { if (r.id) borrar.push(r); return false; } vistos.add(k); return true; });
+    const orden = L.ordenarPorEficiencia(pr, alts.map((r) => P(r.producto_id)).filter(Boolean));
+    const porProd = new Map(alts.map((r) => [String(r.producto_id), r]));
+    for (const r of borrar) await A.borrar("recomendaciones", r.id);
+    for (let i = 0; i < orden.length; i++) { const r = porProd.get(String(orden[i].id)); r.prioridad = i + 2; await A.guardar("recomendaciones", r); }
+    await cargarTodo();
+    return `Opción recomendada: ${nomProducto(guardada.producto_id)}. Alternativas por eficiencia: ${orden.map((p, i) => `${i + 1}. ${p.nombre}`).join(", ")}. Recuerda publicar.`;
   }
   // propone 4 alternativas para un problema según los grupos químicos funcionales de su clase y el portafolio
   async function sugerirAlternativas(problemaId) {
