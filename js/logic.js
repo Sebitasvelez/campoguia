@@ -240,31 +240,21 @@
     return producto.pvp !== null && producto.pvp !== undefined && producto.contenido ? Number(producto.pvp) / Number(producto.contenido) : null;
   }
 
-  /** aplicaciones al año sugeridas para un renglón del plan: según "cada cuántos días" (365 / días), si no 1 */
-  function aplicacionesSugeridas(item) {
-    const f = num(item && item.frecuencia_dias);
-    return f && f > 0 ? Math.max(1, Math.round(365 / f)) : 1;
-  }
-  /** Fertilización al suelo: dosis_g_planta (por aplicación) o dosis_kg_ha (kg/ha AL AÑO, repartida entre las aplicaciones) -> totales.
-   *  kgTotal = total del año en la finca (lo que se compra); kgAplicacion = lo que va en cada aplicación; gPorPlanta = por planta en cada aplicación */
-  function calcularFertSuelo(item, producto, hectareas, plantasPorHa, aplicacionesAno) {
+  /** Fertilización al suelo: dosis_g_planta o dosis_kg_ha -> totales */
+  function calcularFertSuelo(item, producto, hectareas, plantasPorHa) {
     const ha = num(hectareas), pha = num(plantasPorHa);
-    const out = { gPorPlanta: null, kgTotal: null, kgAplicacion: null, aplicaciones: null, sacos50: null };
+    const out = { gPorPlanta: null, kgTotal: null, sacos50: null };
     if (num(item.dosis_g_planta) !== null) {
       out.gPorPlanta = num(item.dosis_g_planta);
-      if (ha !== null && pha) out.kgTotal = out.kgAplicacion = (out.gPorPlanta * pha * ha) / 1000;
+      if (ha !== null && pha) out.kgTotal = (out.gPorPlanta * pha * ha) / 1000;
     } else if (num(item.dosis_kg_ha) !== null) {
-      const n = num(aplicacionesAno) && num(aplicacionesAno) > 0 ? Math.round(num(aplicacionesAno)) : aplicacionesSugeridas(item);
-      out.aplicaciones = n; out.kgHaAplicacion = num(item.dosis_kg_ha) / n;
-      if (ha !== null) { out.kgTotal = num(item.dosis_kg_ha) * ha; out.kgAplicacion = out.kgTotal / n; }
-      if (pha) out.gPorPlanta = (out.kgHaAplicacion * 1000) / pha;
+      if (ha !== null) out.kgTotal = num(item.dosis_kg_ha) * ha;
+      if (pha) out.gPorPlanta = (num(item.dosis_kg_ha) * 1000) / pha;
     }
     const sacoMax = producto && (producto.presentaciones || []).filter((x) => x.unidad === "g").sort((a, b) => b.cantidad - a.cantidad)[0];
     const saco = sacoMax ? Number(sacoMax.cantidad) / 1000 : producto && num(producto.contenido) && producto.contenido_unidad === "g" ? num(producto.contenido) / 1000 : 50;
     if (out.kgTotal !== null) { out.sacos50 = Math.ceil(out.kgTotal / saco - 1e-9); out.sacoKg = saco; }
-    const fs = out.kgTotal !== null && producto ? fraccionSacos(out.kgTotal * 1000, producto) : null;
-    if (fs) { out.sacos50 = fs.sacos; out.sacosTexto = fs.fraccion; out.compraTexto = fs.texto; if (fs.costo !== null) out.costo = fs.costo; }
-    else if (out.kgTotal !== null && producto && (producto.presentaciones || []).length) {
+    if (out.kgTotal !== null && producto && (producto.presentaciones || []).length) {
       const c = compraOptima(out.kgTotal * 1000, "g", producto.presentaciones);
       if (c) { out.costo = c.costo; out.compraTexto = c.texto; }
     } else if (out.sacos50 !== null && producto && num(producto.pvp) !== null) out.costo = r2(out.sacos50 * num(producto.pvp));
@@ -572,7 +562,7 @@
       .sort((a, b) => a.ef - b.ef || a.ef2 - b.ef2 || b.n - a.n || (b.dosis ? 1 : 0) - (a.dosis ? 1 : 0) || (a.ef === 999 ? a.i - b.i : a.p.nombre.localeCompare(b.p.nombre)))
       .map((x) => x.p);
   }
-  const api = { fraccionSacos, textoSacos, ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, aplicacionesSugeridas, compraOptima, precioUnitario, nombrePresentacion,
+  const api = { fraccionSacos, textoSacos, ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
     CLASES, OPC_CLASE, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
