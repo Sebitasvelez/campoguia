@@ -244,8 +244,9 @@
       return;
     }
     pintar(`${intro}${cardInstalar() ? `<div class="cont" style="padding-bottom:0">${cardInstalar()}</div>` : ""}<form class="cont" id="f" novalidate>
-      <h2 style="font-size:20px">Ingresa con tu cédula</h2>
+      <h2 style="font-size:20px">Ingresa con tu cédula y celular</h2>
       <label class="campo">Número de cédula<input name="cedula" inputmode="numeric" maxlength="10" autocomplete="off" required></label>
+      <label class="campo">Celular con el que te registraste<input name="telefono" type="tel" inputmode="tel" maxlength="15" autocomplete="tel" placeholder="09…" required><small>Por seguridad pedimos los dos datos: así nadie más puede ver tus lotes y costos.</small></label>
       <p class="mini" id="err" role="alert" style="color:var(--rojo);margin:0"></p>
       <button class="btn" type="submit">Ingresar</button>
       <div class="linea-sep"></div>
@@ -254,8 +255,9 @@
     $("#f").addEventListener("submit", async (e) => {
       e.preventDefault(); const f = e.target, b = f.querySelector("button"); $("#err").textContent = "";
       if (!D.cedulaValida(f.cedula.value)) { $("#err").textContent = "La cédula no es válida. Revisa los 10 dígitos."; return; }
+      if (f.telefono.value.replace(/\D/g, "").length < 9) { $("#err").textContent = "Escribe tu número de celular."; return; }
       b.disabled = true;
-      try { await D.ingresar(f.cedula.value); ui.cultivo = D.sesion.perfil.cultivo_id || ui.cultivo; guardarUI(); location.hash = "#/"; router(); }
+      try { await D.ingresar(f.cedula.value, f.telefono.value); ui.cultivo = D.sesion.perfil.cultivo_id || ui.cultivo; guardarUI(); location.hash = "#/"; router(); }
       catch (er) { $("#err").textContent = er.codigo === "red" ? "Para ingresar la primera vez necesitas internet." : er.message; b.disabled = false; }
     });
   }

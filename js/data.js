@@ -32,11 +32,14 @@
   const MENSAJES = {
     cedula_ya_registrada: "Esa cédula ya tiene una cuenta. Usa «Ya tengo cuenta».",
     no_registrado: "No encontramos una cuenta con esa cédula. Revísala o crea tu cuenta.",
+    credenciales: "La cédula y el celular no coinciden con ninguna cuenta. Revísalos (usa el celular con el que te registraste) o crea tu cuenta.",
+    demasiados_intentos: "Demasiados intentos seguidos. Por seguridad espera 15 minutos y vuelve a probar.",
+    demasiados_datos: "Hay demasiados datos para enviar de una vez. Contacta a tu asesor.",
     telefono_invalido: "Revisa el número de celular.",
     cedula_invalida: "La cédula no es válida. Revisa los 10 dígitos.",
     ubicacion_requerida: "Elige la provincia y escribe el sector de tu cultivo.",
     nombre_requerido: "Escribe tus nombres.",
-    sesion_invalida: "Tu sesión terminó. Vuelve a ingresar con tu celular.",
+    sesion_invalida: "Tu sesión terminó. Vuelve a ingresar con tu cédula y tu celular.",
     solo_admin: "Solo el administrador puede hacer esto.",
   };
   function error(e) {
@@ -57,6 +60,7 @@
   async function rpc(nombre, args) {
     const { data, error: e } = await cliente().rpc(nombre, args);
     if (e) throw error(e);
+    if (data && typeof data === "object" && !Array.isArray(data) && data.error) throw error(data.error); // errores controlados ({error})
     return data;
   }
 
@@ -72,7 +76,7 @@
       return data.datos;
     },
     registrar: (p) => rpc("app_registrar", { p }),
-    ingresar: (cedula) => rpc("app_ingresar", { p_cedula: cedula }),
+    ingresar: (cedula, telefono) => rpc("app_ingresar", { p_cedula: cedula, p_telefono: telefono }),
     misDatos: (token) => rpc("app_mis_datos", { p_token: token }),
     sincronizar: (token, lotes, registros) => rpc("app_sincronizar", { p_token: token, p_lotes: lotes, p_registros: registros }),
     actualizarPerfil: (token, p) => rpc("app_actualizar_perfil", { p_token: token, p }),
@@ -110,10 +114,10 @@
       db.agricultores.push(a); const token = uuid(); db.sesiones[token] = a.id; demoSave(db);
       return { token, perfil: a };
     },
-    async ingresar(cedula) {
+    async ingresar(cedula, telefono) {
       await espera();
-      const db = demoDB(), a = db.agricultores.find((x) => x.cedula === String(cedula || "").replace(/\D/g, "") && x.activo !== false);
-      if (!a) throw error("no_registrado");
+      const tel = normTel(telefono), db = demoDB(), a = db.agricultores.find((x) => x.cedula === String(cedula || "").replace(/\D/g, "") && x.activo !== false);
+      if (!a || tel.length < 9 || normTel(a.telefono).slice(-9) !== tel.slice(-9)) throw error("credenciales");
       a.ultimo_ingreso = new Date().toISOString();
       const token = uuid(); db.sesiones[token] = a.id; demoSave(db);
       return { token, perfil: a };
@@ -177,7 +181,7 @@
     },
 
     async registrar(p) { const r = await B.registrar(p); this._entrar(r); await this.sincronizar(); return r; },
-    async ingresar(cedula) { const r = await B.ingresar(cedula); this._entrar(r); await this.sincronizar(); return r; },
+    async ingresar(cedula, telefono) { const r = await B.ingresar(cedula, telefono); this._entrar(r); await this.sincronizar(); return r; },
     _entrar(r) {
       this.sesion = { token: r.token, perfil: r.perfil }; Store.set("sesion", this.sesion);
       this.mis = { lotes: [], registros: [] }; this.pendientes = { lotes: [], registros: [] }; this.guardarLocal();

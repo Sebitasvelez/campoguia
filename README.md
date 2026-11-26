@@ -28,6 +28,7 @@ Tiempo aproximado: 20 a 30 minutos, una sola vez.
    - Anota la contraseña de la base de datos en un lugar seguro.
 2. Cuando el proyecto esté listo, abre **SQL Editor**, luego **New query**.
 3. Copia todo el contenido de `supabase/schema.sql`, pégalo y pulsa **Run**. Debe decir *Success*. Esto también crea la carpeta pública **fotos** (Storage) donde se guardan las fotografías del manual. Si actualizas una base que ya tenías, vuelve a correr `schema.sql`: agrega lo nuevo sin borrar datos.
+4. Después corre `supabase/seguridad.sql` (ingreso con cédula + celular, límite de intentos, sesiones que caducan). Siempre va **después** de `schema.sql`.
 4. Abre otra **New query**, pega todo el contenido de `supabase/seed.sql` y pulsa **Run**. Con esto se cargan los 59 productos, los problemas, el plan sanitario y el plan de fertilización inicial, y se publica la **versión 1**.
 
 ## Paso 2. Crear tu usuario de administrador
@@ -173,6 +174,7 @@ js/data.js            Conexión, modo sin internet y sincronización
 js/logic.js           Cálculos de dosis, sacos, mezcla y costos
 data/catalogo-inicial.json   Catálogo inicial (también se usa en el modo demostración)
 supabase/schema.sql   Estructura de la base de datos
+supabase/seguridad.sql  Refuerzo de seguridad (correr después de schema.sql)
 supabase/seed.sql     Datos iniciales
 sw.js, manifest.webmanifest, icons/   Instalación y uso sin internet
 ```
