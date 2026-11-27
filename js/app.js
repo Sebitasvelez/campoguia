@@ -1100,7 +1100,8 @@
     $$("[data-t]", box).forEach((el) => {
       const k = el.dataset.t, sug = $(`[data-sug="${k}"]`, box);
       const mostrar = () => {
-        const ops = opcionesAsis(k, el.value).slice(0, 6);
+        // problemas y productos: sugerencias solo cuando empieza a escribir (vacío taparía la pantalla)
+        const ops = (k === "problema" || k === "ultimo") && !el.value.trim() ? [] : opcionesAsis(k, el.value).slice(0, 6);
         sug.innerHTML = ops.map((o) => `<button type="button" data-v="${h(o.v)}"><b>${h(o.t)}</b>${o.s ? `<span>${h(o.s)}</span>` : ""}</button>`).join("") || (el.value.trim() ? `<span class="mini" style="padding:8px 10px">Sin coincidencias${k === "problema" ? " en el manual de este cultivo" : ""}</span>` : "");
         sug.hidden = !sug.innerHTML;
       };
