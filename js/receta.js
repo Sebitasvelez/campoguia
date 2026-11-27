@@ -90,7 +90,7 @@
     if ((d.fertilizantes || []).length) {
       tabla(`${++nSec}. Fertilización al suelo`, d.fertilizantes, "Total para la finca", "Dosis");
       if ((d.resumenSuelo || []).length) recuadro(d.resumenSuelo); else if (limpio(d.notaSuelo)) recuadro([d.notaSuelo]);
-      if (limpio(d.obsSuelo)) { sub("Observaciones"); texto(d.obsSuelo, 10, "normal", TEXTO, 3); }
+      if (limpio(d.obsSuelo)) { sub("Detalles de la mezcla"); texto(d.obsSuelo, 10, "normal", TEXTO, 3); }
       y += 2;
     }
 
@@ -116,7 +116,7 @@
     fuente("bold", 10); color(TEXTO); doc.text(limpio(d.tecnico || ""), M, y + 4.5); fuente("normal", 9); color(SUAVE); doc.text("Técnico responsable", M, y + 8.5); }
 
     // nota final sobre los costos
-    if ((d.compras || []).length) { y += 6; texto("Nota: los costos de esta receta son referenciales y aproximados, calculados con el PVP (precio de venta al público) de los insumos. Pueden variar de acuerdo al punto de venta.", 8.5, "italic", SUAVE); }
+    if ((d.compras || []).length) { y += 6; texto("Nota: los costos de esta receta son referenciales y aproximados, calculados con el PVP (precio de venta al público) de los insumos. Pueden variar de acuerdo al punto de venta o al almacén.", 8.5, "italic", SUAVE); }
 
     // pie en todas las páginas
     const pags = doc.getNumberOfPages();

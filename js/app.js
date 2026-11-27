@@ -1754,14 +1754,14 @@
           ${cajaBuscaProd("Buscar fertilizante", "F", "Fertilizante, fórmula o etapa…")}
           ${sueloM.map((x) => { const p = P(x.producto_id), c = compra[idx(x)]; return `<div class="rec-item"><div class="tx"><b>${h(p.nombre)}</b><span class="mini">Dosis requerida por ha por aplicación: <b>${h(fmtD(x))}</b>${c && c.texto ? " · " + h(c.texto) + " para " + L.fmt(haSuelo, 2) + " ha" : ""}</span></div><span style="display:flex;gap:6px;align-items:center">${quitar(x)}</span></div>`; }).join("") || `<span class="mini">Agrega fertilizantes al suelo o envíalos desde el plan de fertilización.</span>`}
           ${resSuelo.length ? `<div class="aviso verde" style="flex-direction:column;align-items:flex-start;gap:4px">${resSuelo.map((t, i) => i ? `<span>${h(t)}.</span>` : `<b>${h(t)}.</b>`).join("")}</div>` : ""}
-          ${obsSuelo ? `<span class="mini"><b>Observaciones:</b> ${h(obsSuelo)}</span>` : ""}`)}
+          ${obsSuelo ? `<span class="mini"><b>Detalles de la mezcla:</b> ${h(obsSuelo)}</span>` : ""}`)}
         ${m.length ? sec(4, "Costos", `
           ${compra.map((c) => `<div class="fila" style="font-size:14px;border-top:1px solid var(--borde);padding-top:8px"><span><b>${h(c.p.nombre)}</b><br><span class="mini">${c.total !== null ? h(L.cantidad(c.total, c.unidad || c.p.unidad)) + " en total" : "Ver etiqueta"}</span></span><span style="text-align:right">${c.texto ? h(c.texto) : "—"}${c.costo !== null && c.costo !== undefined ? `<br><b>${dinero(c.costo)}</b>` : ""}</span></div>`).join("")}
           ${hayTanque ? `<div class="fila" style="border-top:1px solid var(--borde);padding-top:8px"><span>Productos para fumigar aprox.</span><b>${dinero(costoProd)}</b></div>` : ""}
           ${haySuelo ? `<div class="fila"${hayTanque ? "" : ` style="border-top:1px solid var(--borde);padding-top:8px"`}><span>Fertilizantes aprox.${` · ${L.fmt(haSuelo, 2)} ha`}</span><b>${dinero(costoFert)}</b></div>` : ""}
           <div class="fila" style="border-top:1px solid var(--borde);padding-top:8px"><span><b>Costo total aprox.</b>${haySuelo ? ` · ${L.fmt(haSuelo, 2)} ha` : ""}</span><b>${dinero(costoCompra)}</b></div>
           ${hayTanque ? `<div class="fila"><span class="mini">${txtCostoEquipo}</span><b>${dinero(costoEquipoMezcla)}</b></div>` : ""}
-          <span class="mini">Costos referenciales y aproximados según el PVP; pueden variar según el punto de venta.</span>`) : ""}
+          <span class="mini">Costos referenciales y aproximados según el PVP; pueden variar según el punto de venta o el almacén.</span>`) : ""}
         ${m.length ? sec(5, tec ? "Indicaciones y receta" : "Mi receta", tec ? `
           <label class="campo">Indicaciones y recomendaciones<textarea id="recInd" rows="3" placeholder="Ej. Aplicar en la tarde, cubrir bien el envés. Repetir a los 8 días.">${h(ui.recInd || "")}</textarea></label>
           <button class="btn wa" id="recetar">${ic.wa}Recetar (PDF)</button>
@@ -1801,7 +1801,7 @@
     const equipo = ui.vol === "tanque" ? `tanques de ${TANQUE()} L` : `bombas de ${BOMBA()} L`;
     const avisos = prodsT.length >= 2 ? (rev.length ? rev.map((r) => ({ nivel: r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde", texto: (r.nivel === "incompatible" ? "NO MEZCLAR. " : r.nivel === "precaucion" ? "PRECAUCIÓN. " : "") + (r.a ? nombre(r.a) + " + " + nombre(r.b) + ": " : "") + (r.nota || "") })) : [{ nivel: "verde", texto: "Sin incompatibilidades registradas. Haga la prueba del frasco antes de llenar el tanque." }]) : [];
     const texto = () => [`*${NOMBRE} · Receta*`, hayTanque ? `${L.fmt(cargas, 1)} ${equipo}` : "", "", hayTanque ? `*Dosis por ${volTxt()}:*` : ""].concat(tanqueM.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`))
-      .concat(haySuelo ? ["", "*Al suelo (dosis requerida por ha por aplicación):*"].concat(sueloM.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`)).concat(resSuelo.map((t) => t + ".")).concat(obsSuelo ? ["_Observaciones:_ " + obsSuelo] : []) : [])
+      .concat(haySuelo ? ["", "*Al suelo (dosis requerida por ha por aplicación):*"].concat(sueloM.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`)).concat(resSuelo.map((t) => t + ".")).concat(obsSuelo ? ["_Detalles de la mezcla:_ " + obsSuelo] : []) : [])
       .concat(["", "*Para comprar:*"]).concat(compra.map((c) => `• ${c.p.nombre}: ${c.texto || "ver etiqueta"}`)).concat([`Costo total aprox.: ${dinero(costoCompra)}`]).concat(pasos.length ? ["", "*Orden de mezcla:*"].concat(pasos) : []).filter((x, i, l) => x !== "" || l[i - 1] !== "").join("\n");
     const armar = () => { const per = D.sesion.perfil, ahora = new Date(), tel = String(per.telefono || "").replace(/\D/g, "");
       const nomPer = [per.nombres, per.apellidos].filter(Boolean).join(" ");
