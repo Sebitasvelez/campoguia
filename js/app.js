@@ -279,7 +279,7 @@
   const barra = (titulo, sub, atras) =>
     `<header class="barra"><a class="icono-btn" href="${h(atras || "#/")}" aria-label="Volver">${ic.atras}</a><div class="t">${sub ? `<small>${h(sub)}</small>` : ""}<strong>${h(titulo)}</strong></div></header>`;
   function nav(sel) {
-    const it = [["#/", "Inicio", ic.casa, "inicio"], ...(esTecnico() ? [["#/portafolio", "Portafolio", ic.portafolio, "portafolio"]] : []), ["#/calcular", "Dosis", ic.calc, "calcular"], ["#/receta", "Receta", ic.mezcla, "mezcla"], ["#/lotes", "Mis lotes", ic.lotes, "lotes"]];
+    const it = [["#/", "Inicio", ic.casa, "inicio"], ...(esTecnico() ? [["#/portafolio", "Portafolio", ic.portafolio, "portafolio"]] : []), ["#/calcular", "Dosis", ic.calc, "calcular"], ["#/receta", esTecnico() ? "Recetar" : "Receta", ic.mezcla, "mezcla"], ["#/lotes", "Mis lotes", ic.lotes, "lotes"]];
     return `<nav class="nav" aria-label="Principal" style="grid-template-columns:repeat(${it.length},1fr)">${it.map(([href, t, i, k]) => `<a href="${href}" class="${sel === k ? "sel" : ""}" ${sel === k ? 'aria-current="page"' : ""}>${i}${t}</a>`).join("")}</nav>`;
   }
   const demoBanner = () => (D.modoDemo ? `<div class="demo">Modo demostración: los datos se guardan solo en este equipo.</div>` : "");
@@ -496,9 +496,9 @@
         <div class="lista">
           ${esTecnico() ? `<a class="item" href="#/calcfert/${h(ui.cultivo || "")}"><div class="tx"><b>Calcular plan de fertilización</b><span>${h((cultivo(ui.cultivo) || {}).nombre || "")} · sacos y costos</span></div>${ic.flecha}</a>
           <a class="item" href="#/calcular"><div class="tx"><b>Calcular dosis de productos</b><span>Por bomba, tanque, hectáreas o plantas</span></div>${ic.flecha}</a>
-          <a class="item" href="#/receta"><div class="tx"><b>Receta</b><span>Compatibilidad, orden de mezcla y costos</span></div>${ic.flecha}</a>`
+          <a class="item" href="#/receta"><div class="tx"><b>Recetar</b><span>Compatibilidad, orden de mezcla y costos</span></div>${ic.flecha}</a>`
           : `<a class="item" href="#/lotes"><div class="tx"><b>Registro de mis lotes</b><span>Actividades y costos de producción</span></div>${ic.flecha}</a>
-          <a class="item" href="#/receta?asis=1"><div class="tx"><b>Asesoría rápida</b><span>¿Qué le pongo esta semana?</span></div>${ic.flecha}</a>
+          <a class="item" href="#/asesoria"><div class="tx"><b>Asesoría rápida</b><span>¿Qué le pongo esta semana?</span></div>${ic.flecha}</a>
           <a class="item" href="#/receta"><div class="tx"><b>Revisar mi receta</b><span>Compatibilidad, orden de mezcla y costos</span></div>${ic.flecha}</a>`}
         </div>
         <a class="btn wa" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", soy " + perfil.nombres + ". Necesito asesoría para mi cultivo."))}" target="_blank" rel="noopener">${ic.wa}Hablar con mi asesor</a>
@@ -1086,25 +1086,58 @@
   const sinTilde = (x) => String(x || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const textoProd = (p) => sinTilde([p.nombre, p.ingrediente_activo, p.concentracion, p.categoria, p.control].filter(Boolean).join(" "));
   // cuadro de búsqueda de producto (calculadora y mezcla); filtro opcional y productos a excluir
-  const cajaBuscaProd = (etiqueta) => `<div class="campo busca-prod"><label for="buscaP">${h(etiqueta)}</label>
-          <input id="buscaP" type="search" placeholder="Buscar producto o ingrediente activo…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sugP" aria-autocomplete="list">
-          <div id="sugP" class="sugerencias" role="listbox" hidden></div></div>`;
-  function conectarBuscaProd(elegir, filtro) {
-    const inp = $("#buscaP"), sug = $("#sugP"); if (!inp) return;
-    const prods = (I.c.productos || []).filter((p) => p.activo !== false && !SIN_DOSIS.includes(p.categoria)).filter(filtro || (() => true));
+  // texto de búsqueda como en el portafolio: nombre, I.A., concentración, categoría, uso; el técnico además busca por
+  // grupo químico (IRAC/FRAC/HRAC) y por grupo de hongos
+  const multiProd = (p) => /fungic|bacteric|desinfec/i.test(p.categoria || "") && (L.esMultisitio(p) || /preventiv/i.test(p.categoria || ""));
+  const _txtB = new Map();
+  const textoBusqueda = (p) => { const k = p.id + (esTecnico() ? "t" : "a"); if (_txtB.has(k)) return _txtB.get(k);
+    const base = [p.nombre, p.ingrediente_activo, p.concentracion, p.categoria, multiProd(p) ? String(p.control || "").replace(/\b(oomicet|ascomicet|basidiomicet|deuteromicet)\w*/gi, "") : p.control];
+    const tec = esTecnico() ? [p.grupo, L.textoBusquedaGrupo(p.grupo), L.clasesFuncionales(p).map((x) => CLS_TXT[x] || "").join(" "), multiProd(p) ? "multisitio multisitios amplio espectro preventivo preventivos protectante protectantes de contacto" : ""] : [];
+    const t = sinTilde(base.concat(tec).filter(Boolean).join(" ")); _txtB.set(k, t); return t; };
+  // cuadro de búsqueda de producto (calculadora y receta); «suf» permite dos buscadores en la misma pantalla
+  const cajaBuscaProd = (etiqueta, suf, ph) => { suf = suf || "P";
+    return `<div class="campo busca-prod"><label for="busca${suf}">${h(etiqueta)}</label>
+          <input id="busca${suf}" type="search" placeholder="${h(ph || (esTecnico() ? "Producto, I.A., grupo químico, plaga, enfermedad, etapa…" : "Producto, plaga, enfermedad o etapa…"))}" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sug${suf}" aria-autocomplete="list">
+          <div id="sug${suf}" class="sugerencias" role="listbox" hidden></div></div>`; };
+  // resultados del buscador, como en «¿Qué problema tienes?» y el portafolio:
+  // 1) problema de los manuales → productos recomendados en su orden; 2) clase de plaga u hongo → por eficiencia del grupo;
+  // 3) etapa fenológica → productos del plan sanitario y de fertilización de esa etapa; 4) coincidencia por texto
+  function buscarProductos(qTxt, prods) {
+    const q = sinTilde(qTxt).trim(); if (!q) return [];
+    const ok = new Map(prods.map((p) => [String(p.id), p])), vistos = new Set(), grupos = [];
+    const agregar = (tit, lista, numerar) => { const ps = lista.map((p) => p && ok.get(String(p.id))).filter((p) => p && !vistos.has(String(p.id)));
+      if (!ps.length) return; ps.forEach((p) => vistos.add(String(p.id))); grupos.push({ tit, ps, numerar }); };
+    const nomC = (id) => (cultivo(id) || {}).nombre || "";
+    if (q.length >= 3) {
+      const r = L.interpretarConsulta(qTxt, I.c);
+      r.problemas.slice(0, 3).forEach((pr) => agregar(pr.nombre + " · manual de " + nomC(pr.cultivo_id), (I.recs[pr.id] || []).map((x) => P(x.producto_id)), true));
+      const info = L.claseDeBusqueda(qTxt);
+      if (info && (esTecnico() || L.CLASES[info.clase].tipo === "plaga" || r.problemas.length || /hongo|enfermedad|plaga/i.test(qTxt)))
+        agregar((CLS_NOM[info.clase] || info.clase) + " · del más eficiente al menos", L.rankearPorClase(info, prods).map((x) => x.p).slice(0, 8), true);
+      (I.c.etapas || []).filter((e) => e.uso !== "lote" && L.coincideTexto(qTxt, e.nombre) && cultivo(e.cultivo_id)).slice(0, 3).forEach((e) => {
+        const ids = planDe(e.id).map((x) => P(x.producto_id)).concat((I.fert[e.id] || []).map((x) => P(x.producto_id)));
+        agregar("Etapa " + e.nombre + " · " + nomC(e.cultivo_id), ids, false); });
+    }
+    const t = q.split(/\s+/);
+    const txt = prods.filter((p) => !vistos.has(String(p.id)) && t.every((x) => textoBusqueda(p).includes(x)))
+      .sort((a, b) => (sinTilde(a.nombre).startsWith(q) ? 0 : 1) - (sinTilde(b.nombre).startsWith(q) ? 0 : 1) || a.nombre.localeCompare(b.nombre)).slice(0, 12);
+    agregar(grupos.length ? "Coinciden con «" + qTxt.trim() + "»" : "", txt, false);
+    return grupos;
+  }
+  function conectarBuscaProd(elegir, filtro, suf) {
+    suf = suf || "P"; const inp = $("#busca" + suf), sug = $("#sug" + suf); if (!inp) return;
+    const prods = () => (I.c.productos || []).filter((p) => p.activo !== false && !SIN_DOSIS.includes(p.categoria)).filter(filtro || (() => true));
     let sel = -1, hall = [];
     const cerrar = () => { sug.hidden = true; inp.setAttribute("aria-expanded", "false"); sel = -1; };
-    const marcar = () => [...sug.children].forEach((b, i) => b.classList.toggle("act", i === sel));
+    const marcar = () => $$("[data-id]", sug).forEach((b, i) => b.classList.toggle("act", i === sel));
     const pintarSug = () => {
-      const q = sinTilde(inp.value).trim(); if (!q) return cerrar();
-      const t = q.split(/\s+/);
-      hall = prods.filter((p) => t.every((x) => textoProd(p).includes(x)))
-        .sort((a, b) => (sinTilde(a.nombre).startsWith(q) ? 0 : 1) - (sinTilde(b.nombre).startsWith(q) ? 0 : 1) || a.nombre.localeCompare(b.nombre)).slice(0, 12);
-      sug.innerHTML = hall.length ? hall.map((p) => { const d = L.dosisDe(p), sin = d.min === null && d.max === null;
-        return `<button type="button" role="option" data-id="${p.id}"><b>${h(p.nombre)}</b>${p.concentracion || p.ingrediente_activo ? `<span>${h(p.concentracion || p.ingrediente_activo)}</span>` : ""}<small>${h(p.categoria || "")}${sin ? " · Dosis no cargada" : ""}</small></button>`; }).join("")
+      if (!inp.value.trim()) return cerrar();
+      const grupos = buscarProductos(inp.value, prods()); hall = grupos.flatMap((g) => g.ps);
+      sug.innerHTML = hall.length ? grupos.map((g) => (g.tit ? `<div class="sug-tit">${h(g.tit)}</div>` : "") + g.ps.map((p, i) => { const d = L.dosisDe(p), sin = d.min === null && d.max === null;
+        return `<button type="button" role="option" data-id="${p.id}"><b>${g.numerar ? i + 1 + ". " : ""}${h(p.nombre)}</b>${p.concentracion || p.ingrediente_activo ? `<span>${h(p.concentracion || p.ingrediente_activo)}</span>` : ""}<small>${h(p.categoria || "")}${esTecnico() && L.nombresGrupo(p.grupo).length ? " · " + h(p.grupo) : ""}${sin ? " · Dosis no cargada" : ""}</small></button>`; }).join("")).join("")
         : `<div class="sin">No hay productos con «${h(inp.value)}».</div>`;
       sug.hidden = false; inp.setAttribute("aria-expanded", "true"); sel = -1;
-      $$("#sugP [data-id]").forEach((b) => b.addEventListener("click", () => elegir(b.dataset.id)));
+      $$("[data-id]", sug).forEach((b) => b.addEventListener("click", () => elegir(b.dataset.id)));
     };
     inp.addEventListener("input", pintarSug);
     inp.addEventListener("keydown", (e) => {
@@ -1414,7 +1447,7 @@
     const box = $("#asis"); if (!box) return;
     box.addEventListener("toggle", () => { ui.asisAbierto = box.open; guardarUI(); });
     const a = asis();
-    const re = (foco) => { const y = window.scrollY; guardarUI(); vMezcla(); window.scrollTo(0, y); if (foco) { const el = $(`#asis [data-t="${foco}"]`); if (el) el.focus(); } };
+    const re = (foco) => { const y = window.scrollY; guardarUI(); (vistaAsis || vMezcla)(); window.scrollTo(0, y); if (foco) { const el = $(`#asis [data-t="${foco}"]`); if (el) el.focus(); } };
     $$("[data-a]", box).forEach((el) => el.addEventListener("change", () => { a[el.dataset.a] = el.value; guardarUI(); }));
     // sugerencias debajo del cuadro mientras escribe; al tocar una se elige
     $$("[data-t]", box).forEach((el) => {
@@ -1484,24 +1517,48 @@
         if (sinPha.length) setTimeout(() => toast(sinPha.join(", ") + " va por planta: agrégalo desde el plan de fertilización con tus plantas por ha"), 1800);
         if (cargas) ui.mezclaCargas = String(Math.round(cargas * 10) / 10).replace(".", ",");
         if (ha > 0) ui.mezclaHa = String(ha).replace(".", ",");
-        ui.asisAbierto = false; guardarUI(); vMezcla(); window.scrollTo(0, 0); toast("Receta lista: revisa compatibilidad y orden");
+        ui.asisAbierto = false; ui.recModo = "propia"; guardarUI(); vistaAsis = null;
+        if (location.hash.startsWith("#/receta")) vMezcla(); else location.hash = "#/receta";
+        window.scrollTo(0, 0); toast("Receta lista: revisa compatibilidad y orden");
       });
     });
   }
+  // ------------------------------------------------------------ RECETA (agricultor) / RECETAR (técnico)
+  // asesoría rápida («¿Qué le pongo esta semana?»): pantalla propia para el agricultor; en el técnico, opción de Recetar
+  let vistaAsis = null;
+  function vAsesoria() {
+    vistaAsis = vAsesoria;
+    pintar(`${barra("Asesoría rápida", "¿Qué le pongo esta semana?", "#/")}
+      <main class="cont">${asistenteSemana(true)}</main>`, "inicio");
+    conectarAsistente();
+  }
   function vMezcla() {
+    const tec = esTecnico(), modo = tec && ui.recModo === "rapida" ? "rapida" : "propia";
+    const segRec = tec ? `<div class="seg" role="group" aria-label="Recetar"><button data-rm="rapida" class="${modo === "rapida" ? "sel" : ""}">Sugerencia rápida</button><button data-rm="propia" class="${modo === "propia" ? "sel" : ""}">Asesoría propia</button></div>` : "";
+    const conectarSeg = () => $$("[data-rm]").forEach((b) => b.addEventListener("click", () => { ui.recModo = b.dataset.rm; guardarUI(); vMezcla(); window.scrollTo(0, 0); }));
+    if (modo === "rapida") {
+      vistaAsis = vMezcla;
+      pintar(`${barra("Recetar", "Sugerencia rápida", "#/")}<main class="cont">${segRec}${asistenteSemana(true)}</main>`, "mezcla");
+      conectarSeg(); conectarAsistente(); return;
+    }
     const m = S.get("mezcla", []).filter((x) => P(x.producto_id));
     const prods = m.map((x) => P(x.producto_id));
     const f = volL() / TANQUE();
-    const rev = L.revisarMezcla(prods, I.c.compatibilidad || []);
-    const orden = L.ordenMezcla(prods);
-    const nombre = (id) => (P(id) || {}).nombre || "";
     const esSuelo = (x) => !!x.suelo || (P(x.producto_id) || {}).modo_aplicacion === "suelo_ha";
+    const tanqueM = m.filter((x) => !esSuelo(x)), sueloM = m.filter(esSuelo), prodsT = tanqueM.map((x) => P(x.producto_id));
+    const rev = L.revisarMezcla(prodsT, I.c.compatibilidad || []);
+    const orden = L.ordenMezcla(prodsT);
+    const nombre = (id) => (P(id) || {}).nombre || "";
     const dzDe = (x) => { const v = esSuelo(x) ? x.dosis_ha : x.dosis_tanque; return v !== null && v !== undefined ? v : L.dosisDe(P(x.producto_id)).min; };
     const fmtD = (x) => { const p = P(x.producto_id), dz = dzDe(x); return dz === null ? "Ver etiqueta" : esSuelo(x) ? L.fmt(dz) + " kg/ha" : L.cantidad(dz * f, p.unidad); };
-    const cargas = Number(String(ui.mezclaCargas || "1").replace(",", ".")) || 0;
-    const haSuelo = Number(String(ui.mezclaHa || D.sesion.perfil.hectareas || "1").replace(",", ".")) || 0;
-    const haySuelo = m.some(esSuelo), hayTanque = m.some((x) => !esSuelo(x));
-    // vía de aplicación para la receta (técnicos): follaje, drench al suelo o al suelo
+    const num = (v) => Number(String(v === undefined || v === null ? "" : v).replace(",", ".")) || 0;
+    // datos: el agricultor puede partir de uno de sus lotes (cultivo, hectáreas y plantas por ha)
+    const lotes = tec ? [] : D.lotes(), lote = lotes.find((l) => String(l.id) === String(ui.recLote)) || null;
+    const cargas = num(ui.mezclaCargas || "1");
+    const haSuelo = num(ui.mezclaHa || D.sesion.perfil.hectareas || "1");
+    const pha = num(ui.recPha);
+    const haySuelo = sueloM.length > 0, hayTanque = tanqueM.length > 0;
+    // vía de aplicación de cada producto (técnico): follaje, drench al suelo o al suelo
     const VIAS = ["Foliar", "Drench al suelo", "Al suelo (voleo / corona)"];
     ui.recVia = ui.recVia || {};
     const viaDe = (x) => ui.recVia[x.producto_id] || (esSuelo(x) ? VIAS[2] : VIAS[0]);
@@ -1524,97 +1581,115 @@
       return { p, total, envases, texto: envases ? envases + " × " + (p.presentacion || "envase") : null, costo: envases && p.pvp !== null && p.pvp !== undefined ? envases * Number(p.pvp) : null, costoTanque };
     });
     const costoCompra = compra.reduce((a, c) => a + (c.costo || 0), 0), costoTanqueMezcla = compra.reduce((a, c) => a + (c.costoTanque || 0), 0);
-    // costo por equipo que usa el agricultor: tanque de 200 L o bomba de 20 L
     const costoEquipoMezcla = ui.vol === "tanque" ? costoTanqueMezcla : costoTanqueMezcla * BOMBA() / TANQUE();
     const txtCostoEquipo = ui.vol === "tanque" ? `Costo por tanque de ${TANQUE()} L de aplicación` : `Costo por bomba de ${BOMBA()} L de aplicación`;
+    const kgHaSuelo = sueloM.reduce((a, x) => a + (dzDe(x) || 0), 0), gPlanta = pha > 0 ? kgHaSuelo * 1000 / pha : 0;
+    const idx = (x) => m.indexOf(x);
+    const sec = (n, t, cuerpo) => `<section class="card rec-sec"><div class="rec-tit"><i>${n}</i>${t}</div>${cuerpo}</section>`;
+    const quitar = (x) => `<button class="icono-btn" data-q="${idx(x)}" aria-label="Quitar ${h(nombre(x.producto_id))}">✕</button>`;
+    const selVia = (x) => (tec ? `<select data-via="${P(x.producto_id).id}" aria-label="Vía de aplicación">${VIAS.map((o) => `<option ${o === viaDe(x) ? "selected" : ""}>${o}</option>`).join("")}</select>` : "");
+    const cultSel = tec ? "" : (ui.recCultivo && cultivo(ui.recCultivo) ? ui.recCultivo : (lote && lote.cultivo_id) || ui.cultivo || "");
     let n = 0;
-    pintar(`${barra("Mi receta", "Revisión de compatibilidad y orden", "#/")}
+    pintar(`${barra(tec ? "Recetar" : "Mi receta", tec ? "Asesoría propia" : "Compatibilidad, orden y costos", "#/")}
       <main class="cont">
-        ${asistenteSemana(m.length === 0)}
-        ${cajaBuscaProd("Agregar producto")}
-        ${segVol()}
-        <label class="campo">${ui.vol === "tanque" ? "¿Cuántos tanques de " + TANQUE() : "¿Cuántas bombas de " + BOMBA()} L vas a aplicar?<span class="unido"><input id="cargas" inputmode="decimal" value="${h(ui.mezclaCargas || "1")}"><span>${ui.vol === "tanque" ? "tanques" : "bombas"}</span></span></label>
-        <div class="lista">${m.map((x, i) => { const p = P(x.producto_id); return `<div class="item" style="cursor:default"><div class="tx"><b>${h(p.nombre)}</b><span>${esSuelo(x) ? `${h(fmtD(x))} · al suelo, no va al tanque` : `${h(fmtD(x))} en ${h(volTxt())} · ${h(L.ORDEN_FORMULACION[p.formulacion] ? L.ORDEN_FORMULACION[p.formulacion].texto.split(" (")[0] : "Líquido")}`}</span></div><button class="icono-btn" data-q="${i}" aria-label="Quitar ${h(p.nombre)}">✕</button></div>`; }).join("") || `<div class="vacio">Tu receta está vacía. Agrega productos desde una recomendación, el plan sanitario o aquí abajo.</div>`}</div>
-        ${prods.length >= 2 ? (rev.length ? rev.map((r) => `<div class="aviso ${r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde"}"><span class="pill ${r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde"}">${r.nivel === "incompatible" ? "NO MEZCLAR" : r.nivel === "precaucion" ? "PRECAUCIÓN" : "COMPATIBLE"}</span><div>${r.a ? `<b>${h(nombre(r.a))} + ${h(nombre(r.b))}:</b> ` : ""}${h(r.nota || "")}</div></div>`).join("")
-          : `<div class="aviso verde"><span class="pill verde">SIN ALERTAS</span><div>No hay incompatibilidades registradas para esta combinación. Igual haz la <b>prueba del frasco</b> antes de llenar el tanque.</div></div>`) : ""}
-        ${prods.length ? `<section class="card"><div class="etq">Orden de mezcla</div>
-          ${orden.pasos.filter((p) => p.productos.length || p === orden.pasos[0] || p === orden.pasos[orden.pasos.length - 1]).map((p) => `<div class="paso"><span class="num">${++n}</span><div>${p.productos.length ? `<b>${p.productos.map((x) => h(x.nombre)).join(", ")}</b> · ${h(p.texto)}` : h(p.texto)}</div></div>`).join("")}
-          ${orden.fuera.length ? `<span class="mini">No van al tanque: ${orden.fuera.map((x) => h(x.nombre)).join(", ")}.</span>` : ""}
-          <span class="mini">Agrega un producto a la vez y espera que se disuelva antes del siguiente. Usa agua con pH entre 5 y 6 (con cobres, no acidifiques demasiado).</span></section>` : ""}
-        ${prods.length ? `<section class="card"><div class="etq">Para comprar</div>
-          ${haySuelo ? `<label class="campo">¿Cuántas hectáreas vas a fertilizar al suelo?<span class="unido"><input id="haSuelo" inputmode="decimal" value="${h(ui.mezclaHa || D.sesion.perfil.hectareas || "1")}"><span>ha</span></span></label>` : ""}
-          ${compra.map((c) => `<div class="fila" style="font-size:14px;border-top:1px solid var(--borde);padding-top:8px"><span><b>${h(c.p.nombre)}</b><br><span class="mini">${c.total !== null ? h(L.cantidad(c.total, c.unidad || c.p.unidad)) + " en total" : "Ver etiqueta"}</span></span><span style="text-align:right">${c.texto ? h(c.texto) : "—"}${c.costo !== null ? `<br><span class="mini">${dinero(c.costo)}</span>` : ""}</span></div>`).join("")}
-          <div class="fila" style="border-top:1px solid var(--borde);padding-top:8px"><span class="mini">Total de referencia</span><b>${dinero(costoCompra)}</b></div>
+        ${segRec}
+        ${sec(1, tec ? "Datos del agricultor" : "Mis datos", `
+          ${tec ? `<div class="grid2"><label class="campo">Agricultor<input id="recAgr" value="${h(ui.recAgr || "")}" placeholder="Nombre"></label>
+            <label class="campo">Cultivo / lote<input id="recCult" value="${h(ui.recCult || "")}" placeholder="Ej. Pitahaya, lote 2"></label></div>`
+          : `<div class="grid2"><label class="campo">Lote<select id="recLote"><option value="">—</option>${lotes.map((l) => `<option value="${h(l.id)}" ${lote && String(l.id) === String(lote.id) ? "selected" : ""}>${h(l.nombre)}</option>`).join("")}</select></label>
+            <label class="campo">Cultivo<select id="recCultivo"><option value="">—</option>${cultivos().map((c) => `<option value="${h(c.id)}" ${c.id === cultSel ? "selected" : ""}>${h(c.nombre)}</option>`).join("")}</select></label></div>`}
+          <div class="grid2"><label class="campo">Hectáreas<input id="haSuelo" inputmode="decimal" value="${h(ui.mezclaHa || D.sesion.perfil.hectareas || "1")}"></label>
+          <label class="campo">Plantas por ha<input id="recPha" inputmode="numeric" value="${h(ui.recPha || "")}" placeholder="Ej. 1600"></label></div>
+          ${segVol()}
+          <label class="campo">${ui.vol === "tanque" ? "Tanques de " + TANQUE() : "Bombas de " + BOMBA()} L a aplicar<span class="unido"><input id="cargas" inputmode="decimal" value="${h(ui.mezclaCargas || "1")}"><span>${ui.vol === "tanque" ? "tanques" : "bombas"}</span></span></label>`)}
+        ${sec(2, "Productos para fumigar", `
+          ${cajaBuscaProd("Buscar producto", "P")}
+          ${tanqueM.map((x) => { const p = P(x.producto_id); return `<div class="rec-item"><div class="tx"><b>${h(p.nombre)}</b><span class="mini">${h(fmtD(x))} por ${h(volTxt())}${p.formulacion && L.ORDEN_FORMULACION[p.formulacion] ? " · " + h(p.formulacion) : ""}</span></div><span style="display:flex;gap:6px;align-items:center">${selVia(x)}${quitar(x)}</span></div>`; }).join("") || `<span class="mini">Busca por producto${tec ? ", ingrediente activo, grupo químico" : ""}, plaga, enfermedad o etapa.</span>`}
+          ${prodsT.length >= 2 ? (rev.length ? rev.map((r) => `<div class="aviso ${r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde"}"><span class="pill ${r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde"}">${r.nivel === "incompatible" ? "NO MEZCLAR" : r.nivel === "precaucion" ? "PRECAUCIÓN" : "OK"}</span><div>${r.a ? `<b>${h(nombre(r.a))} + ${h(nombre(r.b))}:</b> ` : ""}${h(r.nota || "")}</div></div>`).join("")
+            : `<div class="aviso verde"><span class="pill verde">SIN ALERTAS</span><div>No hay incompatibilidades registradas. Igual haz la <b>prueba del frasco</b> antes de llenar el tanque.</div></div>`) : ""}
+          ${prodsT.length ? `<div class="etq">Orden de mezcla</div>
+            ${orden.pasos.filter((p) => p.productos.length || p === orden.pasos[0] || p === orden.pasos[orden.pasos.length - 1]).map((p) => `<div class="paso"><span class="num">${++n}</span><div>${p.productos.length ? `<b>${p.productos.map((x) => h(x.nombre)).join(", ")}</b> · ${h(p.texto)}` : h(p.texto)}</div></div>`).join("")}
+            <span class="mini">Agrega un producto a la vez y espera que se disuelva antes del siguiente. Usa agua con pH entre 5 y 6.</span>` : ""}`)}
+        ${sec(3, "Fertilización al suelo", `
+          ${cajaBuscaProd("Buscar fertilizante", "F", "Fertilizante, fórmula o etapa…")}
+          ${sueloM.map((x) => { const p = P(x.producto_id), c = compra[idx(x)]; return `<div class="rec-item"><div class="tx"><b>${h(p.nombre)}</b><span class="mini">${h(fmtD(x))}${c && c.texto ? " · " + h(c.texto) + " para " + L.fmt(haSuelo, 2) + " ha" : ""}</span></div><span style="display:flex;gap:6px;align-items:center">${quitar(x)}</span></div>`; }).join("") || `<span class="mini">Agrega fertilizantes al suelo o envíalos desde el plan de fertilización.</span>`}
+          ${haySuelo ? `<span class="mini">${sueloM.length > 1 ? "Mezclar en fórmula y aplicar " : "Aplicar "}${gPlanta ? `<b>${L.fmt(gPlanta, 0)} g por planta</b>.` : "los gramos por planta: escribe las plantas por ha arriba."}</span>` : ""}`)}
+        ${m.length ? sec(4, "Costos", `
+          ${compra.map((c) => `<div class="fila" style="font-size:14px;border-top:1px solid var(--borde);padding-top:8px"><span><b>${h(c.p.nombre)}</b><br><span class="mini">${c.total !== null ? h(L.cantidad(c.total, c.unidad || c.p.unidad)) + " en total" : "Ver etiqueta"}</span></span><span style="text-align:right">${c.texto ? h(c.texto) : "—"}${c.costo !== null && c.costo !== undefined ? `<br><b>${dinero(c.costo)}</b>` : ""}</span></div>`).join("")}
+          <div class="fila" style="border-top:1px solid var(--borde);padding-top:8px"><span><b>Total de referencia</b>${haySuelo ? ` · ${L.fmt(haSuelo, 2)} ha` : ""}</span><b>${dinero(costoCompra)}</b></div>
           ${hayTanque ? `<div class="fila"><span class="mini">${txtCostoEquipo}</span><b>${dinero(costoEquipoMezcla)}</b></div>` : ""}
-        </section>
-        ${esTecnico() ? `<section class="card"><div class="etq">Receta para el agricultor (PDF)</div>
-          <div class="grid2"><label class="campo">Agricultor<input id="recAgr" value="${h(ui.recAgr || "")}" placeholder="Nombre"></label>
-          <label class="campo">Cultivo / lote<input id="recCult" value="${h(ui.recCult || "")}" placeholder="Ej. Pitahaya, lote 2"></label></div>
-          <div class="campo"><span>Vía de aplicación de cada producto</span>${m.map((x) => { const p = P(x.producto_id), v = viaDe(x);
-            return `<div class="fila" style="gap:8px;padding:4px 0"><span style="font-size:14px;min-width:0">${h(p.nombre)}</span><select data-via="${p.id}" style="max-width:170px">${VIAS.map((o) => `<option ${o === v ? "selected" : ""}>${o}</option>`).join("")}</select></div>`; }).join("")}</div>
+          <span class="mini">Precios referenciales según el PVP; pueden variar según el almacén.</span>`) : ""}
+        ${m.length ? sec(5, tec ? "Indicaciones y receta" : "Mi receta", tec ? `
           <label class="campo">Indicaciones y recomendaciones<textarea id="recInd" rows="3" placeholder="Ej. Aplicar en la tarde, cubrir bien el envés. Repetir a los 8 días.">${h(ui.recInd || "")}</textarea></label>
-          <button class="btn wa" id="recetar">${ic.wa}Recetar</button>
-          <span class="mini">Se crea un PDF con la receta, el orden, las dosis y tus indicaciones para enviarlo por WhatsApp.</span></section>` : botonesReporte()}
-        <div class="acciones"><button class="btn" id="reg">Registrar esta receta</button><button class="btn peligro" id="vaciar">Vaciar</button></div>
-        <a class="btn wa" target="_blank" rel="noopener" href="${h(waLink("Hola, quiero validar esta receta para " + volTxt() + ": " + m.map((x) => P(x.producto_id).nombre + " " + fmtD(x)).join(", ") + ". ¿Está bien?"))}">${ic.wa}Validar receta con mi asesor</a>` : ""}
+          <button class="btn wa" id="recetar">${ic.wa}Recetar (PDF)</button>
+          <span class="mini">Se crea un PDF con la receta, el orden, las dosis y tus indicaciones para enviarlo por WhatsApp.</span>
+          <div class="acciones"><button class="btn sec" id="reg">Registrar</button><button class="btn peligro" id="vaciar">Vaciar</button></div>` : `
+          <button class="btn" id="recBajar">${ic.descarga}Descargar receta (PDF)</button>
+          <a class="btn wa" target="_blank" rel="noopener" href="${h(waLink("Hola, quiero validar esta receta: " + m.map((x) => P(x.producto_id).nombre + " " + fmtD(x) + (esSuelo(x) ? "" : " por " + volTxt())).join(", ") + ". ¿Está bien?"))}">${ic.wa}Validar receta con mi asesor</a>
+          <div class="acciones"><button class="btn sec" id="reg">Registrar en mi lote</button><button class="btn peligro" id="vaciar">Vaciar</button></div>`) : ""}
       </main>`, "mezcla");
+    conectarSeg();
     conectarVol(vMezcla);
-    $$("[data-q]").forEach((b) => b.addEventListener("click", () => { m.splice(Number(b.dataset.q), 1); S.set("mezcla", m); vMezcla(); }));
-    conectarBuscaProd((id) => { const p = P(id); m.push(itemMezcla(p, L.dosisDe(p).min)); S.set("mezcla", m); vMezcla(); },
-      (p) => ["tanque", "suelo_ha"].includes(p.modo_aplicacion || "tanque") && !m.some((x) => String(x.producto_id) === String(p.id)));
+    const re = () => { const y = window.scrollY; vMezcla(); window.scrollTo(0, y); };
+    $$("[data-q]").forEach((b) => b.addEventListener("click", () => { m.splice(Number(b.dataset.q), 1); S.set("mezcla", m); re(); }));
+    const agregar = (id) => { const p = P(id); if (!p || m.some((x) => String(x.producto_id) === String(p.id))) return toast("Ese producto ya está en tu receta"); m.push(itemMezcla(p, L.dosisDe(p).min)); S.set("mezcla", m); re(); };
+    const esFert = (p) => p.modo_aplicacion === "suelo_ha" || /ed[aá]fico|enmienda/i.test(p.categoria || "");
+    conectarBuscaProd(agregar, (p) => (p.modo_aplicacion || "tanque") === "tanque" && !esFert(p), "P");
+    conectarBuscaProd(agregar, (p) => p.modo_aplicacion === "suelo_ha" || (esFert(p) && (p.modo_aplicacion || "") !== "tanque"), "F");
+    const cambio = (id, k, cb) => { const el = $("#" + id); if (el) el.addEventListener("change", () => { ui[k] = el.value; if (cb) cb(el.value); guardarUI(); re(); }); };
+    cambio("cargas", "mezclaCargas"); cambio("haSuelo", "mezclaHa"); cambio("recPha", "recPha"); cambio("recCultivo", "recCultivo");
+    cambio("recLote", "recLote", (v) => { const l = lotes.find((x) => String(x.id) === String(v)); if (!l) return;
+      if (l.cultivo_id) ui.recCultivo = l.cultivo_id; if (l.hectareas) ui.mezclaHa = String(l.hectareas);
+      if (l.plantas && Number(l.hectareas)) ui.recPha = String(Math.round(Number(l.plantas) / Number(l.hectareas))); });
+    [["recAgr", "recAgr"], ["recCult", "recCult"], ["recInd", "recInd"]].forEach(([id, k]) => { const el = $("#" + id); if (el) el.addEventListener("input", () => { ui[k] = el.value; guardarUI(); }); });
+    $$("[data-via]").forEach((sl) => sl.addEventListener("change", () => { ui.recVia[sl.dataset.via] = sl.value; guardarUI(); }));
+    const va = $("#vaciar"); if (va) va.addEventListener("click", () => { S.set("mezcla", []); re(); });
     const reg = $("#reg"); if (reg) reg.addEventListener("click", () => {
       prefill = { actividad: hayTanque ? "Fumigación planta" : "Fertilización al suelo", lineas: m.map((x) => { const dz = dzDe(x);
         return esSuelo(x) ? { producto_id: x.producto_id, dosis: dz, unidad: "kg/ha" } : { producto_id: x.producto_id, dosis: dz !== null ? Math.round(dz * f * 10) / 10 : null, unidad: P(x.producto_id).unidad + "/" + volL() + " L" }; }) };
-      location.hash = "#/registrar";
+      location.hash = "#/registrar" + (lote ? "?lote=" + encodeURIComponent(lote.id) : "");
     });
-    const va = $("#vaciar"); if (va) va.addEventListener("click", () => { S.set("mezcla", []); vMezcla(); });
-    const ca = $("#cargas"); if (ca) ca.addEventListener("change", () => { ui.mezclaCargas = ca.value; guardarUI(); vMezcla(); });
-    conectarAsistente();
-    const hs = $("#haSuelo"); if (hs) hs.addEventListener("change", () => { ui.mezclaHa = hs.value; guardarUI(); vMezcla(); });
-    if (prods.length) {
-      const pasos = orden.pasos.filter((p) => p.productos.length || p === orden.pasos[0] || p === orden.pasos[orden.pasos.length - 1])
-        .map((p, i) => `${i + 1}. ${p.productos.length ? p.productos.map((x) => x.nombre).join(", ") + " · " + p.texto : p.texto}`);
-      const equipo = ui.vol === "tanque" ? `tanques de ${TANQUE()} L` : `bombas de ${BOMBA()} L`;
-      const datos = () => ({ marca: NOMBRE, titulo: "Mezcla para fumigar", subtitulo: `${L.fmt(cargas, 1)} ${equipo} · ${D.sesion.perfil.nombres}`,
-        destacados: [[String(m.length), "Productos en la mezcla"], [L.fmt(cargas, 1), ui.vol === "tanque" ? `Tanques de ${TANQUE()} L a aplicar` : `Bombas de ${BOMBA()} L a aplicar`]],
-        secciones: [
-          { titulo: `Dosis por ${volTxt()}`, filas: m.map((x) => [P(x.producto_id).nombre, fmtD(x)]) },
-          { titulo: "Para comprar", filas: compra.map((c) => [c.p.nombre + (c.total !== null ? ` (${L.cantidad(c.total, c.unidad || c.p.unidad)})` : ""), c.texto ? `${c.texto}${c.costo !== null ? " · " + dinero(c.costo) : ""}` : "Ver etiqueta"]).concat([["Total de referencia", dinero(costoCompra)], [txtCostoEquipo, dinero(costoEquipoMezcla)]]) },
-          { titulo: "Compatibilidad", avisos: prods.length >= 2 ? (rev.length ? rev.map((r) => ({ nivel: r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde", texto: (r.nivel === "incompatible" ? "NO MEZCLAR. " : r.nivel === "precaucion" ? "PRECAUCIÓN. " : "") + (r.a ? nombre(r.a) + " + " + nombre(r.b) + ": " : "") + (r.nota || "") })) : [{ nivel: "verde", texto: "Sin incompatibilidades registradas. Haz la prueba del frasco antes de llenar el tanque." }]) : [] },
-          { titulo: "Orden de mezcla", textos: pasos },
-        ], pie: pieReporte() });
-      const texto = () => [`*${NOMBRE} · Mezcla para fumigar*`, `${L.fmt(cargas, 1)} ${equipo}`, "", `*Dosis por ${volTxt()}:*`].concat(m.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`))
-        .concat(["", "*Para comprar:*"]).concat(compra.map((c) => `• ${c.p.nombre}: ${c.texto || "ver etiqueta"}`))
-        .concat([`Total de referencia: ${dinero(costoCompra)}`, "", "*Orden de mezcla:*"]).concat(pasos).join("\n");
-      conectarReporte(datos, () => `Mezcla_${new Date().toISOString().slice(0, 10)}.png`, texto);
-      // receta en PDF (técnicos)
-      [["recAgr", "recAgr"], ["recCult", "recCult"], ["recInd", "recInd"]].forEach(([id, k]) => { const el = $("#" + id); if (el) el.addEventListener("input", () => { ui[k] = el.value; guardarUI(); }); });
-      $$("[data-via]").forEach((sel) => sel.addEventListener("change", () => { ui.recVia[sel.dataset.via] = sel.value; guardarUI(); }));
-      const bRec = $("#recetar");
-      if (bRec) bRec.addEventListener("click", async () => {
-        const per = D.sesion.perfil, ahora = new Date();
-        const tel = String(per.telefono || "").replace(/\D/g, "");
-        const receta = { marca: NOMBRE, titulo: "Receta técnica", fecha: ahora.toLocaleDateString("es-EC", { day: "numeric", month: "long", year: "numeric" }),
-          tecnico: [per.nombres, per.apellidos].filter(Boolean).join(" "), telefonoTecnico: tel ? "Cel. " + tel : "", agricultor: (ui.recAgr || "").trim(), cultivo: (ui.recCult || "").trim(),
-          equipo: [hayTanque ? `${L.fmt(cargas, 1)} ${cargas === 1 ? equipo.replace(/^tanques/, "tanque").replace(/^bombas/, "bomba") : equipo}` : "", haySuelo ? `${L.fmt(haSuelo, 2)} ha al suelo` : ""].filter(Boolean).join(" · "),
-          productos: m.map((x, i) => [x, compra[i]]).filter(([x]) => !esSuelo(x)).map(([x, c]) => { const p = P(x.producto_id);
-            return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: `${fmtD(x)} por ${volTxt()}`, via: viaDe(x), total: c.total !== null ? L.cantidad(c.total, p.unidad) + " en total" : "Ver etiqueta" }; }),
-          fertilizantes: m.map((x, i) => [x, compra[i]]).filter(([x]) => esSuelo(x)).map(([x, c]) => { const p = P(x.producto_id);
-            return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: fmtD(x), via: viaDe(x), total: c.texto ? c.texto + ` (${L.fmt(haSuelo, 2)} ha)` : c.total !== null ? L.cantidad(c.total, "g") : "Ver etiqueta" }; }),
-          pasos, avisos: datos().secciones[2].avisos || [],
-          precauciones: prods.filter((p) => (p.carencia_dias !== null && p.carencia_dias !== undefined) || (p.reingreso_horas !== null && p.reingreso_horas !== undefined))
-            .map((p) => `${p.nombre}: ${p.carencia_dias !== null && p.carencia_dias !== undefined ? "carencia " + p.carencia_dias + " días" : ""}${p.carencia_dias !== null && p.carencia_dias !== undefined && p.reingreso_horas !== null && p.reingreso_horas !== undefined ? " · " : ""}${p.reingreso_horas !== null && p.reingreso_horas !== undefined ? "reingreso " + p.reingreso_horas + " h" : ""}`)
-            .concat(["Lea siempre la etiqueta. Use equipo de protección personal (guantes, mascarilla, gafas y ropa larga).", "No fumigue con viento fuerte ni antes de lluvia. Lave el equipo y no contamine fuentes de agua."]),
-          compras: compra.map((c) => [c.p.nombre, c.texto ? `${c.texto}${c.costo !== null && c.costo !== undefined ? " · " + dinero(c.costo) : ""}` : "Ver etiqueta"]),
-          totales: [["Total de referencia", dinero(costoCompra)]].concat(hayTanque ? [[txtCostoEquipo, dinero(costoEquipoMezcla)]] : []),
-          indicaciones: (ui.recInd || "").trim(), pie: pieReporte().replace(/^Reporte generado/, "Receta generada") };
-        const nom = `Receta_${nombreSeguro(receta.agricultor || "mezcla")}_${ahora.toISOString().slice(0, 10)}.pdf`;
-        bRec.disabled = true;
-        try { const r = await Receta.compartir(receta, nom, texto()); if (r === "descargado") toast("PDF descargado. Adjúntalo en el chat de WhatsApp del agricultor."); }
-        catch (e) { toast("No se pudo crear el PDF en este teléfono."); }
-        bRec.disabled = false;
-      });
-    }
+    if (!m.length) return;
+    // receta en PDF: el técnico la comparte por WhatsApp; el agricultor la descarga
+    const pasos = orden.pasos.filter((p) => p.productos.length || p === orden.pasos[0] || p === orden.pasos[orden.pasos.length - 1])
+      .map((p, i) => `${i + 1}. ${p.productos.length ? p.productos.map((x) => x.nombre).join(", ") + " · " + p.texto : p.texto}`);
+    const equipo = ui.vol === "tanque" ? `tanques de ${TANQUE()} L` : `bombas de ${BOMBA()} L`;
+    const avisos = prodsT.length >= 2 ? (rev.length ? rev.map((r) => ({ nivel: r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde", texto: (r.nivel === "incompatible" ? "NO MEZCLAR. " : r.nivel === "precaucion" ? "PRECAUCIÓN. " : "") + (r.a ? nombre(r.a) + " + " + nombre(r.b) + ": " : "") + (r.nota || "") })) : [{ nivel: "verde", texto: "Sin incompatibilidades registradas. Haga la prueba del frasco antes de llenar el tanque." }]) : [];
+    const texto = () => [`*${NOMBRE} · Receta*`, hayTanque ? `${L.fmt(cargas, 1)} ${equipo}` : "", "", hayTanque ? `*Dosis por ${volTxt()}:*` : ""].concat(tanqueM.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`))
+      .concat(haySuelo ? ["", "*Al suelo:*"].concat(sueloM.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`)) : [])
+      .concat(["", "*Para comprar:*"]).concat(compra.map((c) => `• ${c.p.nombre}: ${c.texto || "ver etiqueta"}`)).concat([`Total de referencia: ${dinero(costoCompra)}`]).concat(pasos.length ? ["", "*Orden de mezcla:*"].concat(pasos) : []).filter((x, i, l) => x !== "" || l[i - 1] !== "").join("\n");
+    const armar = () => { const per = D.sesion.perfil, ahora = new Date(), tel = String(per.telefono || "").replace(/\D/g, "");
+      const nomPer = [per.nombres, per.apellidos].filter(Boolean).join(" ");
+      return { marca: NOMBRE, titulo: tec ? "Receta técnica" : "Mi receta", deAgricultor: !tec, fecha: ahora.toLocaleDateString("es-EC", { day: "numeric", month: "long", year: "numeric" }),
+        tecnico: tec ? nomPer : "", telefonoTecnico: tec && tel ? "Cel. " + tel : "", agricultor: tec ? (ui.recAgr || "").trim() : nomPer,
+        cultivo: tec ? (ui.recCult || "").trim() : [lote ? lote.nombre : "", (cultivo(cultSel) || {}).nombre || ""].filter(Boolean).join(" · "),
+        equipo: [hayTanque ? `${L.fmt(cargas, 1)} ${cargas === 1 ? equipo.replace(/^tanques/, "tanque").replace(/^bombas/, "bomba") : equipo}` : "", haySuelo ? `${L.fmt(haSuelo, 2)} ha al suelo` + (pha ? ` · ${L.fmt(pha, 0)} plantas/ha` : "") : ""].filter(Boolean).join(" · "),
+        productos: tanqueM.map((x) => { const p = P(x.producto_id), c = compra[idx(x)];
+          return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: `${fmtD(x)} por ${volTxt()}`, via: viaDe(x), total: c.total !== null ? L.cantidad(c.total, p.unidad) + " en total" : "Ver etiqueta" }; }),
+        fertilizantes: sueloM.map((x) => { const p = P(x.producto_id), c = compra[idx(x)], dz = dzDe(x);
+          return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: fmtD(x) + (pha && dz ? ` · ${L.fmt(dz * 1000 / pha, 0)} g/planta` : ""), via: viaDe(x), total: c.texto ? c.texto + ` (${L.fmt(haSuelo, 2)} ha)` : c.total !== null ? L.cantidad(c.total, "g") : "Ver etiqueta" }; }),
+        notaSuelo: haySuelo && gPlanta ? `${sueloM.length > 1 ? "Mezclar los fertilizantes en fórmula y aplicar" : "Aplicar"} ${L.fmt(gPlanta, 0)} g por planta.` : "",
+        pasos, avisos,
+        precauciones: prods.filter((p) => (p.carencia_dias !== null && p.carencia_dias !== undefined) || (p.reingreso_horas !== null && p.reingreso_horas !== undefined))
+          .map((p) => `${p.nombre}: ${p.carencia_dias !== null && p.carencia_dias !== undefined ? "carencia " + p.carencia_dias + " días" : ""}${p.carencia_dias !== null && p.carencia_dias !== undefined && p.reingreso_horas !== null && p.reingreso_horas !== undefined ? " · " : ""}${p.reingreso_horas !== null && p.reingreso_horas !== undefined ? "reingreso " + p.reingreso_horas + " h" : ""}`)
+          .concat(["Lea siempre la etiqueta. Use equipo de protección personal (guantes, mascarilla, gafas y ropa larga).", "No fumigue con viento fuerte ni antes de lluvia. Lave el equipo y no contamine fuentes de agua."]),
+        compras: compra.map((c) => [c.p.nombre, c.texto ? `${c.texto}${c.costo !== null && c.costo !== undefined ? " · " + dinero(c.costo) : ""}` : "Ver etiqueta"]),
+        totales: [["Total de referencia", dinero(costoCompra)]].concat(hayTanque ? [[txtCostoEquipo, dinero(costoEquipoMezcla)]] : []),
+        indicaciones: tec ? (ui.recInd || "").trim() : "", pie: pieReporte().replace(/^Reporte generado/, "Receta generada") }; };
+    const nomArch = (d) => `Receta_${nombreSeguro(d.agricultor || "receta")}_${new Date().toISOString().slice(0, 10)}.pdf`;
+    const bRec = $("#recetar");
+    if (bRec) bRec.addEventListener("click", async () => {
+      const d = armar(); bRec.disabled = true;
+      try { const r = await Receta.compartir(d, nomArch(d), texto()); if (r === "descargado") toast("PDF descargado. Adjúntalo en el chat de WhatsApp del agricultor."); }
+      catch (e) { toast("No se pudo crear el PDF en este teléfono."); }
+      bRec.disabled = false;
+    });
+    const bBaj = $("#recBajar");
+    if (bBaj) bBaj.addEventListener("click", () => {
+      const d = armar();
+      try { Receta.descargar(d, nomArch(d)); toast("Receta descargada en tu teléfono (carpeta Descargas)"); }
+      catch (e) { toast("No se pudo crear el PDF en este teléfono."); }
+    });
   }
 
   // ------------------------------------------------------------ LOTES
@@ -2044,8 +2119,9 @@
       case "calcular": return vCalcular(q);
       case "mezcla": case "receta":
         // acceso rápido «Asesoría rápida»: abre la receta con el asistente desplegado
-        if (q.asis) { ui.asisAbierto = true; guardarUI(); vMezcla(); history.replaceState(null, "", "#/receta"); const b = $("#asis"); if (b) setTimeout(() => b.scrollIntoView({ block: "start" }), 50); return; }
-        return vMezcla();
+        if (q.asis) { if (esTecnico()) { ui.recModo = "rapida"; guardarUI(); } else { location.hash = "#/asesoria"; return; } }
+        vistaAsis = null; return vMezcla();
+      case "asesoria": return esTecnico() ? (ui.recModo = "rapida", guardarUI(), (location.hash = "#/receta")) : vAsesoria();
       case "portafolio": return esTecnico() ? vPortafolio() : vNoEncontrado();
       case "lotes": return vLotes(q);
       case "lote": return vLote(seg[1], q);

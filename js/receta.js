@@ -31,8 +31,8 @@
     y = 38;
 
     // datos de la receta
-    const datos = [["Técnico", d.tecnico + (d.telefonoTecnico ? " · " + d.telefonoTecnico : "")], ["Agricultor", d.agricultor || "________________________________"],
-      ["Cultivo / lote", d.cultivo || "________________________________"], ["Aplicación", d.equipo || ""]];
+    const datos = (d.deAgricultor ? [] : [["Técnico", d.tecnico + (d.telefonoTecnico ? " · " + d.telefonoTecnico : "")]]).concat([["Agricultor", d.agricultor || "________________________________"],
+      ["Cultivo / lote", d.cultivo || "________________________________"], ["Aplicación", d.equipo || ""]]);
     fill([245, 246, 241]); doc.roundedRect(M, y, AN, datos.length * 6.5 + 4, 2, 2, "F");
     let yy = y + 6.5;
     datos.forEach(([k, v]) => { fuente("bold", 10); color(SUAVE); doc.text(k + ":", M + 4, yy); fuente("normal", 10); color(TEXTO); doc.text(lineas(v, AN - 40)[0] || "", M + 36, yy); yy += 6.5; });
@@ -63,6 +63,7 @@
     };
     if ((d.productos || []).length) tabla("Rx · Mezcla recetada", d.productos, "Total a usar");
     if ((d.fertilizantes || []).length) tabla("Rx · Fertilización recetada", d.fertilizantes, "Total para la finca");
+    if (limpio(d.notaSuelo)) { fuente("bold", 10); color(VERDE); const l = lineas(d.notaSuelo, AN); espacio(alto(l.length, 10) + 2); doc.text(l, M, y); y += alto(l.length, 10) + 4; }
 
     const texto = (t, tam, peso, c, sangria) => { fuente(peso || "normal", tam || 10); const l = lineas(t, AN - (sangria || 0)); espacio(alto(l.length, tam || 10) + 1); color(c || TEXTO); doc.text(l, M + (sangria || 0), y); y += alto(l.length, tam || 10) + 1.5; };
 
@@ -93,9 +94,9 @@
       y += 2;
     }
 
-    // firma
-    espacio(17); y += 8; doc.setDrawColor(TEXTO[0], TEXTO[1], TEXTO[2]); doc.setLineWidth(0.3); doc.line(M, y, M + 70, y);
-    fuente("bold", 10); color(TEXTO); doc.text(limpio(d.tecnico || ""), M, y + 4.5); fuente("normal", 9); color(SUAVE); doc.text("Técnico responsable", M, y + 8.5);
+    // firma (solo la receta del técnico)
+    if (!d.deAgricultor) { espacio(17); y += 8; doc.setDrawColor(TEXTO[0], TEXTO[1], TEXTO[2]); doc.setLineWidth(0.3); doc.line(M, y, M + 70, y);
+    fuente("bold", 10); color(TEXTO); doc.text(limpio(d.tecnico || ""), M, y + 4.5); fuente("normal", 9); color(SUAVE); doc.text("Técnico responsable", M, y + 8.5); }
 
     // pie en todas las páginas
     const pags = doc.getNumberOfPages();
@@ -119,5 +120,11 @@
     return "descargado";
   }
 
-  window.Receta = { crear, compartir };
+  // descarga el PDF directo al teléfono (receta del agricultor)
+  function descargar(d, nombre) {
+    const blob = crear(d).output("blob"), url = URL.createObjectURL(blob), a = document.createElement("a");
+    a.href = url; a.download = nombre; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000);
+    return "descargado";
+  }
+  window.Receta = { crear, compartir, descargar };
 })();

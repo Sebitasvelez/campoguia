@@ -227,3 +227,10 @@ button.enlace{border:0;background:none;color:var(--verde);text-decoration:underl
 .tabla-rep tr.cambio td{background:#fff4dc}
 .tabla-rep tr.actual td:first-child{font-weight:600}
 .tabla-rep tr.total td{border-top:1.5px solid var(--suave)}
+.sugerencias .sug-tit{padding:8px 14px 4px;font-size:12px;font-weight:700;color:var(--verde);background:#f5f6f1;border-bottom:1px solid var(--borde);position:sticky;top:0}
+.rec-sec{gap:10px}
+.rec-sec>.rec-tit{display:flex;align-items:center;gap:8px;font-weight:700;font-size:16px}
+.rec-sec>.rec-tit i{display:inline-flex;width:24px;height:24px;border-radius:50%;background:var(--verde-claro,#e6f2e9);color:var(--verde);font-style:normal;font-size:13px;align-items:center;justify-content:center}
+.rec-item{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--borde);padding-top:8px}
+.rec-item .tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.rec-item select{max-width:150px}
