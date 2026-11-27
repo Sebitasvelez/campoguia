@@ -107,12 +107,18 @@
   const fracTxt = (n) => { const e = Math.floor(n + 1e-9), f = n - e, fr = f > 0.83 ? "" : f > 0.6 ? "¾" : f > 0.4 ? "½" : f > 0.1 ? "¼" : ""; return (f > 0.83 ? String(e + 1) : (e ? String(e) : "") + fr) || "0"; };
   const sacosN = (n, kgS) => fracTxt(n) + " " + (n > 1 ? "sacos" : "saco") + (kgS && kgS !== 50 ? " de " + L.fmt(kgS) + " kg" : "");
   const sacosTxt = (kg) => sacosN(kg / 50) + " de 50 kg";
+  const g10 = (g) => Math.max(10, Math.round(g / 10) * 10); // gramos por planta redondeados de 10 en 10
   const NOMBRE_EL = { n: "Nitrógeno (N)", p: "Fósforo (P₂O₅)", k: "Potasio (K₂O)" };
   // cuadro de la etapa: el agricultor ve la mezcla en sacos, gramos por planta, elemento más presente y N:K;
   // el técnico además compara lo que requiere la etapa con lo que aporta la mezcla
   const cajaReq = (eid, ha) => { const e = etapa(eid); if (!e || !I.req[eid]) return ""; const cul = cultivo(e.cultivo_id);
     return cajaEtapa(resumenSuelo(e, cul), Number(String(ha || "").replace(",", ".")) || 0, Number(String((ui.calc && ui.calc.pha) || "").replace(",", ".")) || 0); };
   // requerimiento del cultivo y cuánto cubre el plan con sus fertilizaciones al año o al ciclo
+  // frecuencia de las fertilizaciones al suelo según el plan (para la receta)
+  const frecPlan = (cid) => { const cul = cultivo(cid); if (!cul || !tieneReq(cul)) return null;
+    const per = cul.req_periodo === "ciclo" ? "ciclo" : "año", apps = etapasFert(cid).filter((e) => I.req[e.id] && appsDe(e)).reduce((a, e) => a + appsDe(e), 0);
+    const meses = per === "ciclo" ? Number(cul.ciclo_meses) || 0 : 12;
+    return apps && meses ? { apps, per, txt: cadaCuanto(meses, apps) } : null; };
   const cajaCultivo = (cid) => { const cul = cultivo(cid); if (!cul || !tieneReq(cul)) return "";
     const per = cul.req_periodo === "ciclo" ? "ciclo" : "año", ets = etapasFert(cid).filter((e) => I.req[e.id] && appsDe(e));
     const tot = ets.reduce((a, e) => { const q = resumenSuelo(e, cul), n = appsDe(e); a.n += q.aporte.n * n; a.p += q.aporte.p * n; a.k += q.aporte.k * n; a.apps += n; return a; }, { n: 0, p: 0, k: 0, apps: 0 });
@@ -175,7 +181,7 @@
     if (!q || (!q.lista.length && !simOn())) return "";
     const vacia = !q.lista.length;
     const a = q.aporte, tec = esTecnico(), haN = ha > 0 ? ha : 1, rg = q.regla;
-    const gPl = vacia ? `<span class="mini">Toca «+ Agregar fertilizante» o «Sugerir mezcla».</span>` : pha > 0 ? `Aplicar <b>${L.fmt((q.masa + q.mg) * 1000 / pha, 0)} g por planta</b>.` : `<span class="mini">Escribe las plantas por ha para saber los gramos por planta.</span>`;
+    const gPl = vacia ? `<span class="mini">Toca «+ Agregar fertilizante» o «Sugerir mezcla».</span>` : pha > 0 ? `${q.lista.length + (q.mg ? 1 : 0) > 1 ? "Mezclar todo y aplicar" : "Aplicar"} <b>${g10((q.masa + q.mg) * 1000 / pha)} g por planta</b>.` : `<span class="mini">Escribe las plantas por ha para saber los gramos por planta.</span>`;
     const okMayor = !vacia && (!rg || !rg.mayor || a[q.mayor] > 0 && q.mayor === rg.mayor || (rg && a[rg.mayor] >= a[q.mayor] - 1e-6)), okRatio = !rg || (isFinite(q.ratio) && q.ratio >= rg.min - 1e-6 && q.ratio <= rg.max + 1e-6);
     const pk = a.k > 0 ? a.p / a.k : a.p > 0 ? Infinity : 0, okPK = !rg || !rg.pkMin || (pk >= rg.pkMin - 1e-6 && pk <= rg.pkMax + 1e-6);
     const chk = (ok, si, no) => vacia && tec && rg ? `<span class="mini" style="color:#b26a00">⚠ ${no}</span>` : (tec && rg ? `<span class="mini" style="color:${ok ? "var(--verde)" : "#b26a00"}">${ok ? "✓ " + si : "⚠ " + no}</span>` : "");
@@ -191,6 +197,7 @@
     return `<div class="card caja-etapa">
       <span class="mini">${h(q.etapa)} · ${ha > 0 ? "para " + L.fmt(ha) + " ha" : "por hectárea"} en cada aplicación</span>
       <b style="font-size:15px">${partes || "Sin fertilizantes"}</b>
+      ${q.masa && q.mg ? `<span>Total: <b>${sacosTxt((q.masa + q.mg) * haN)}</b> de mezcla de fertilizantes</span>` : ""}
       <span>${gPl}</span>
       ${tabla}
       <div class="grid2">${tile("Elemento más presente", vacia ? "—" : NOMBRE_EL[q.mayor], chk(okMayor, "Es el que pide la etapa", (rg && rg.mayor ? "La etapa pide " + NOMBRE_EL[rg.mayor].charAt(0).toLowerCase() + NOMBRE_EL[rg.mayor].slice(1) : "Revisa la regla de la etapa")))}${rg && rg.pkMin ? tile("Relación N:P:K", vacia ? "—" : txtNPK(a), chk(okRatio && okPK, "Dentro de la regla", "Fuera de la regla")) : tile("Relación N:K", vacia ? "—" : txtRatio(q.ratio), chk(okRatio, "Dentro de la regla", "Fuera de la regla"))}</div>
@@ -972,7 +979,7 @@
     const res = et && tipoSel === "suelo" ? resumenSuelo(et, c) : null;
     const visibles = tipoSel === "suelo" && res ? res.lista.map((x) => Object.assign({}, x.item || {}, { producto_id: x.ref, tipo: "suelo", dosis_kg_ha: x.kgHa, dosis_g_planta: null, _p: x.p,
       nota: x.item ? x.item.nota : x.p.otra_marca ? "Otra marca (agregado por un técnico)." : "Agregado por el técnico." })) : items.filter((x) => x.tipo === tipoSel);
-    let totalCosto = 0, costoFoliar = 0; const nSuelo = visibles.filter((x) => x.tipo === "suelo").length, gMezcla = res && phaN > 0 ? (res.masa + res.mg) * 1000 / phaN : 0; let kgEnm = 0;
+    let totalCosto = 0, costoFoliar = 0; const nSuelo = visibles.filter((x) => x.tipo === "suelo").length, gMezcla = res && phaN > 0 ? g10((res.masa + res.mg) * 1000 / phaN) : 0; let kgEnm = 0;
     const filas = visibles.map((x) => {
       const p = x._p || P(x.producto_id);
       if (x.tipo === "foliar") {
@@ -1087,6 +1094,7 @@
         if (kgHa === null) { sinPha.push(p.nombre); return; }
         m.push({ producto_id: Number(p.id), suelo: true, dosis_ha: Math.round(kgHa * 10) / 10 }); n++; });
       S.set("mezcla", m);
+      if (tipoSel === "suelo" && n) { const fp = frecPlan(c.id); S.set("recFert", { cultivo: c.nombre, etapa: et ? et.nombre : "", frec: fp ? fp.txt : "", apps: fp ? fp.apps : 0, per: fp ? fp.per : "" }); }
       if (otrasF.length) setTimeout(() => toast(otrasF.join(", ") + " es de otra marca: no se pasa a la receta"), 1600);
       if (sinPha.length) toast("Escribe las plantas por ha para añadir " + sinPha.join(", "));
       else if (n) { ui.asisAbierto = false; guardarUI(); toast(n + (n === 1 ? " producto agregado" : " productos agregados") + " a tu receta"); location.hash = "#/receta"; window.scrollTo(0, 0); }
@@ -1639,7 +1647,7 @@
     const orden = L.ordenMezcla(prodsT);
     const nombre = (id) => (P(id) || {}).nombre || "";
     const dzDe = (x) => { const v = esSuelo(x) ? x.dosis_ha : x.dosis_tanque; return v !== null && v !== undefined ? v : L.dosisDe(P(x.producto_id)).min; };
-    const fmtD = (x) => { const p = P(x.producto_id), dz = dzDe(x); return dz === null ? "Ver etiqueta" : esSuelo(x) ? L.fmt(dz) + " kg/ha" : L.cantidad(dz * f, p.unidad); };
+    const fmtD = (x) => { const p = P(x.producto_id), dz = dzDe(x); return dz === null ? "Ver etiqueta" : esSuelo(x) ? L.fmt(dz) + " kg" : L.cantidad(dz * f, p.unidad); };
     const num = (v) => Number(String(v === undefined || v === null ? "" : v).replace(",", ".")) || 0;
     // datos: el agricultor puede partir de uno de sus lotes (cultivo, hectáreas y plantas por ha)
     const lotes = tec ? [] : D.lotes(), lote = lotes.find((l) => String(l.id) === String(ui.recLote)) || null;
@@ -1672,7 +1680,12 @@
     const costoCompra = compra.reduce((a, c) => a + (c.costo || 0), 0), costoTanqueMezcla = compra.reduce((a, c) => a + (c.costoTanque || 0), 0);
     const costoEquipoMezcla = ui.vol === "tanque" ? costoTanqueMezcla : costoTanqueMezcla * BOMBA() / TANQUE();
     const txtCostoEquipo = ui.vol === "tanque" ? `Costo aprox. por tanque de ${TANQUE()} L de aplicación` : `Costo aprox. por bomba de ${BOMBA()} L de aplicación`;
-    const kgHaSuelo = sueloM.reduce((a, x) => a + (dzDe(x) || 0), 0), gPlanta = pha > 0 ? kgHaSuelo * 1000 / pha : 0;
+    const kgHaSuelo = sueloM.reduce((a, x) => a + (dzDe(x) || 0), 0), gPlanta = pha > 0 && kgHaSuelo > 0 ? g10(kgHaSuelo * 1000 / pha) : 0;
+    const rf = S.get("recFert", null) || {};
+    const resSuelo = !haySuelo || !kgHaSuelo ? [] : [
+      `Total a aplicar: ${sacosTxt(kgHaSuelo * haSuelo)} ${sueloM.length > 1 ? "de mezcla de fertilizantes" : "de fertilizante"} (${L.fmt(haSuelo, 2)} ha)`,
+      gPlanta ? `${sueloM.length > 1 ? "Mezclar todos los fertilizantes y aplicar" : "Aplicar"} ${gPlanta} g por planta` : `${sueloM.length > 1 ? "Mezclar todos los fertilizantes y aplicar" : "Aplicar"} ${L.fmt(kgHaSuelo)} kg por ha (escribe las plantas por ha para saber los gramos por planta)`,
+      rf.frec && rf.frec !== "según la etapa" ? `Próxima fertilización: ${rf.frec.replace(/^cada /, "repetir dentro de ")}, según el plan de fertilización${rf.cultivo ? " de " + rf.cultivo.toLowerCase() : ""} (${rf.apps} fertilizaciones al suelo por ${rf.per})` : "Próxima fertilización: según el plan de fertilización del cultivo"];
     const idx = (x) => m.indexOf(x);
     const sec = (n, t, cuerpo) => `<section class="card rec-sec"><div class="rec-tit"><i>${n}</i>${t}</div>${cuerpo}</section>`;
     const quitar = (x) => `<button class="icono-btn" data-q="${idx(x)}" aria-label="Quitar ${h(nombre(x.producto_id))}">✕</button>`;
@@ -1703,8 +1716,8 @@
             <span class="mini">Agrega un producto a la vez y espera que se disuelva antes del siguiente. Usa agua con pH entre 5 y 6.</span>${op1() ? "</details>" : ""}` : ""}`)}
         ${sec(3, "Fertilización al suelo", `
           ${cajaBuscaProd("Buscar fertilizante", "F", "Fertilizante, fórmula o etapa…")}
-          ${sueloM.map((x) => { const p = P(x.producto_id), c = compra[idx(x)]; return `<div class="rec-item"><div class="tx"><b>${h(p.nombre)}</b><span class="mini">${h(fmtD(x))}${c && c.texto ? " · " + h(c.texto) + " para " + L.fmt(haSuelo, 2) + " ha" : ""}</span></div><span style="display:flex;gap:6px;align-items:center">${quitar(x)}</span></div>`; }).join("") || `<span class="mini">Agrega fertilizantes al suelo o envíalos desde el plan de fertilización.</span>`}
-          ${haySuelo ? `<span class="mini">${sueloM.length > 1 ? "Mezclar en fórmula y aplicar " : "Aplicar "}${gPlanta ? `<b>${L.fmt(gPlanta, 0)} g por planta</b>.` : "los gramos por planta: escribe las plantas por ha arriba."}</span>` : ""}`)}
+          ${sueloM.map((x) => { const p = P(x.producto_id), c = compra[idx(x)]; return `<div class="rec-item"><div class="tx"><b>${h(p.nombre)}</b><span class="mini">Dosis requerida por ha por aplicación: <b>${h(fmtD(x))}</b>${c && c.texto ? " · " + h(c.texto) + " para " + L.fmt(haSuelo, 2) + " ha" : ""}</span></div><span style="display:flex;gap:6px;align-items:center">${quitar(x)}</span></div>`; }).join("") || `<span class="mini">Agrega fertilizantes al suelo o envíalos desde el plan de fertilización.</span>`}
+          ${resSuelo.length ? `<div class="aviso verde" style="flex-direction:column;align-items:flex-start;gap:4px">${resSuelo.map((t, i) => i ? `<span>${h(t)}.</span>` : `<b>${h(t)}.</b>`).join("")}</div>` : ""}`)}
         ${m.length ? sec(4, "Costos", `
           ${compra.map((c) => `<div class="fila" style="font-size:14px;border-top:1px solid var(--borde);padding-top:8px"><span><b>${h(c.p.nombre)}</b><br><span class="mini">${c.total !== null ? h(L.cantidad(c.total, c.unidad || c.p.unidad)) + " en total" : "Ver etiqueta"}</span></span><span style="text-align:right">${c.texto ? h(c.texto) : "—"}${c.costo !== null && c.costo !== undefined ? `<br><b>${dinero(c.costo)}</b>` : ""}</span></div>`).join("")}
           <div class="fila" style="border-top:1px solid var(--borde);padding-top:8px"><span><b>Costo total aprox.</b>${haySuelo ? ` · ${L.fmt(haSuelo, 2)} ha` : ""}</span><b>${dinero(costoCompra)}</b></div>
@@ -1736,7 +1749,7 @@
       if (l.plantas && Number(l.hectareas)) ui.recPha = String(Math.round(Number(l.plantas) / Number(l.hectareas))); });
     [["recAgr", "recAgr"], ["recCult", "recCult"], ["recInd", "recInd"]].forEach(([id, k]) => { const el = $("#" + id); if (el) el.addEventListener("input", () => { ui[k] = el.value; guardarUI(); }); });
     $$("[data-via]").forEach((sl) => sl.addEventListener("change", () => { ui.recVia[sl.dataset.via] = sl.value; guardarUI(); }));
-    const va = $("#vaciar"); if (va) va.addEventListener("click", () => { S.set("mezcla", []); re(); });
+    const va = $("#vaciar"); if (va) va.addEventListener("click", () => { S.set("mezcla", []); S.set("recFert", null); re(); });
     const reg = $("#reg"); if (reg) reg.addEventListener("click", () => {
       prefill = { actividad: hayTanque ? "Fumigación planta" : "Fertilización al suelo", lineas: m.map((x) => { const dz = dzDe(x);
         return esSuelo(x) ? { producto_id: x.producto_id, dosis: dz, unidad: "kg/ha" } : { producto_id: x.producto_id, dosis: dz !== null ? Math.round(dz * f * 10) / 10 : null, unidad: P(x.producto_id).unidad + "/" + volL() + " L" }; }) };
@@ -1749,7 +1762,7 @@
     const equipo = ui.vol === "tanque" ? `tanques de ${TANQUE()} L` : `bombas de ${BOMBA()} L`;
     const avisos = prodsT.length >= 2 ? (rev.length ? rev.map((r) => ({ nivel: r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde", texto: (r.nivel === "incompatible" ? "NO MEZCLAR. " : r.nivel === "precaucion" ? "PRECAUCIÓN. " : "") + (r.a ? nombre(r.a) + " + " + nombre(r.b) + ": " : "") + (r.nota || "") })) : [{ nivel: "verde", texto: "Sin incompatibilidades registradas. Haga la prueba del frasco antes de llenar el tanque." }]) : [];
     const texto = () => [`*${NOMBRE} · Receta*`, hayTanque ? `${L.fmt(cargas, 1)} ${equipo}` : "", "", hayTanque ? `*Dosis por ${volTxt()}:*` : ""].concat(tanqueM.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`))
-      .concat(haySuelo ? ["", "*Al suelo:*"].concat(sueloM.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`)) : [])
+      .concat(haySuelo ? ["", "*Al suelo (dosis requerida por ha por aplicación):*"].concat(sueloM.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`)).concat(resSuelo.map((t) => t + ".")) : [])
       .concat(["", "*Para comprar:*"]).concat(compra.map((c) => `• ${c.p.nombre}: ${c.texto || "ver etiqueta"}`)).concat([`Costo total aprox.: ${dinero(costoCompra)}`]).concat(pasos.length ? ["", "*Orden de mezcla:*"].concat(pasos) : []).filter((x, i, l) => x !== "" || l[i - 1] !== "").join("\n");
     const armar = () => { const per = D.sesion.perfil, ahora = new Date(), tel = String(per.telefono || "").replace(/\D/g, "");
       const nomPer = [per.nombres, per.apellidos].filter(Boolean).join(" ");
@@ -1760,7 +1773,8 @@
         productos: tanqueM.map((x) => { const p = P(x.producto_id), c = compra[idx(x)];
           return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: `${fmtD(x)} por ${volTxt()}`, via: viaDe(x), total: c.total !== null ? L.cantidad(c.total, p.unidad) + " en total" : "Ver etiqueta" }; }),
         fertilizantes: sueloM.map((x) => { const p = P(x.producto_id), c = compra[idx(x)], dz = dzDe(x);
-          return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: fmtD(x) + (pha && dz ? ` · ${L.fmt(dz * 1000 / pha, 0)} g/planta` : ""), via: viaDe(x), total: c.texto ? c.texto + ` (${L.fmt(haSuelo, 2)} ha)` : c.total !== null ? L.cantidad(c.total, "g") : "Ver etiqueta" }; }),
+          return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: fmtD(x), via: viaDe(x), total: c.texto ? c.texto + ` (${L.fmt(haSuelo, 2)} ha)` : c.total !== null ? L.cantidad(c.total, "g") : "Ver etiqueta" }; }),
+        resumenSuelo: resSuelo,
         notaSuelo: haySuelo && gPlanta ? `${sueloM.length > 1 ? "Mezclar los fertilizantes en fórmula y aplicar" : "Aplicar"} ${L.fmt(gPlanta, 0)} g por planta.` : "",
         pasos, avisos,
         precauciones: prods.filter((p) => (p.carencia_dias !== null && p.carencia_dias !== undefined) || (p.reingreso_horas !== null && p.reingreso_horas !== undefined))

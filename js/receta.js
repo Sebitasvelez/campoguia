@@ -41,11 +41,12 @@
     const titulo = (t) => { espacio(14); fuente("bold", 12); color(VERDE); doc.text(limpio(t), M, y); y += 2; doc.setDrawColor(VERDE[0], VERDE[1], VERDE[2]); doc.setLineWidth(0.4); doc.line(M, y, W - M, y); y += 5; };
 
     // cuerpo de la receta: tabla de productos (mezcla al tanque y/o fertilización al suelo)
-    const tabla = (tit, lista, colTotal) => {
+    const tabla = (tit, lista, colTotal, colDosis) => {
       titulo(tit);
-      const cols = [{ t: "#", w: 7 }, { t: "Producto e ingrediente activo", w: 60 }, { t: "Dosis", w: 44 }, { t: "Vía de aplicación", w: 32 }, { t: colTotal, w: AN - 143 }];
-      espacio(14); fill(CLARO); doc.rect(M, y - 4, AN, 7, "F"); fuente("bold", 8.5); color(TEXTO);
-      let x = M; cols.forEach((c) => { doc.text(c.t, x + 2, y + 0.5); x += c.w; }); y += 6;
+      const cols = [{ t: "#", w: 7 }, { t: "Producto e ingrediente activo", w: 60 }, { t: colDosis || "Dosis", w: 44 }, { t: "Vía de aplicación", w: 32 }, { t: colTotal, w: AN - 143 }];
+      fuente("bold", 8.5); const lh = cols.map((c) => lineas(c.t, c.w - 3)), hh = Math.max(...lh.map((l) => l.length)) * 3.6 + 3.4;
+      espacio(10 + hh); fill(CLARO); doc.rect(M, y - 4, AN, hh, "F"); color(TEXTO);
+      let x = M; cols.forEach((c, i) => { doc.text(lh[i], x + 2, y + 0.5); x += c.w; }); y += hh - 1;
       lista.forEach((p, i) => {
         fuente("bold", 10); const ln = lineas(p.nombre, cols[1].w - 4); fuente("normal", 8.5); const li = p.ia ? lineas(p.ia, cols[1].w - 4) : [];
         fuente("bold", 10); const ld = lineas(p.dosis, cols[2].w - 4); fuente("normal", 10); const lt = lineas(p.total, cols[4].w - 4); fuente("bold", 9.5); const lv = lineas(p.via || "", cols[3].w - 4);
@@ -61,30 +62,43 @@
       });
       y += 4;
     };
-    if ((d.productos || []).length) tabla("Rx · Mezcla recetada", d.productos, "Total a usar");
-    if ((d.fertilizantes || []).length) tabla("Rx · Fertilización recetada", d.fertilizantes, "Total para la finca");
-    if (limpio(d.notaSuelo)) { fuente("bold", 10); color(VERDE); const l = lineas(d.notaSuelo, AN); espacio(alto(l.length, 10) + 2); doc.text(l, M, y); y += alto(l.length, 10) + 4; }
-
     const texto = (t, tam, peso, c, sangria) => { fuente(peso || "normal", tam || 10); const l = lineas(t, AN - (sangria || 0)); espacio(alto(l.length, tam || 10) + 1); color(c || TEXTO); doc.text(l, M + (sangria || 0), y); y += alto(l.length, tam || 10) + 1.5; };
+    const sub = (t) => { espacio(10); y += 1; fuente("bold", 10.5); color(TEXTO); doc.text(limpio(t), M, y); y += 5; };
+    // recuadro destacado (resumen de la fertilización)
+    const recuadro = (lineasTxt) => { fuente("normal", 10); const ls = lineasTxt.map((t) => lineas(t, AN - 10)); const h = ls.reduce((a, l) => a + alto(l.length, 10) + 1.5, 0) + 3;
+      espacio(h + 3); fill([235, 245, 238]); doc.roundedRect(M, y - 3, AN, h, 2, 2, "F"); let yy = y + 2;
+      ls.forEach((l, i) => { fuente(i === 0 ? "bold" : "normal", 10); color(i === 0 ? VERDE : TEXTO); doc.text(l, M + 5, yy); yy += alto(l.length, 10) + 1.5; }); y += h + 3; };
+    let nSec = 0;
 
-    if ((d.pasos || []).length) { titulo("Orden de mezcla"); d.pasos.forEach((p) => texto(p, 10)); texto("Agregue un producto a la vez y espere que se disuelva antes del siguiente. Agua con pH entre 5 y 6.", 9, "italic", SUAVE); y += 2; }
+    // 1) insumos para fumigar y, debajo, cómo prepararlos y aplicarlos
+    if ((d.productos || []).length) {
+      tabla(`${++nSec}. Insumos para fumigar`, d.productos, "Total a usar", "Dosis por equipo");
+      if ((d.pasos || []).length) { sub("Orden de mezcla en el tanque"); d.pasos.forEach((p) => texto(p, 10, "normal", TEXTO, 3)); texto("Agregue un producto a la vez y espere que se disuelva antes del siguiente. Agua con pH entre 5 y 6.", 9, "italic", SUAVE, 3); y += 1; }
+      if ((d.avisos || []).length) {
+        sub("Compatibilidad");
+        d.avisos.forEach((a) => {
+          const [fondo, tinta] = AVISO[a.nivel] || AVISO.verde; fuente("normal", 9.5); const l = lineas(a.texto, AN - 8), h = alto(l.length, 9.5) + 4;
+          espacio(h + 2); fill(fondo); doc.roundedRect(M, y - 4, AN, h, 1.5, 1.5, "F"); color(tinta); doc.text(l, M + 4, y + 0.5); y += h + 2;
+        });
+        y += 2;
+      }
+      if ((d.precauciones || []).length) { sub("Equipo de protección y precauciones"); d.precauciones.forEach((p) => texto("- " + p, 9.5, "normal", TEXTO, 3)); }
+      y += 3;
+    }
 
-    if ((d.avisos || []).length) {
-      titulo("Compatibilidad");
-      d.avisos.forEach((a) => {
-        const [fondo, tinta] = AVISO[a.nivel] || AVISO.verde; fuente("normal", 9.5); const l = lineas(a.texto, AN - 8), h = alto(l.length, 9.5) + 4;
-        espacio(h + 2); fill(fondo); doc.roundedRect(M, y - 4, AN, h, 1.5, 1.5, "F"); color(tinta); doc.text(l, M + 4, y + 0.5); y += h + 2;
-      });
+    // 2) fertilización al suelo y, debajo, el resumen: total de sacos, gramos por planta y próxima aplicación
+    if ((d.fertilizantes || []).length) {
+      tabla(`${++nSec}. Fertilización al suelo`, d.fertilizantes, "Total para la finca", "Dosis requerida por ha por aplicación");
+      if ((d.resumenSuelo || []).length) recuadro(d.resumenSuelo); else if (limpio(d.notaSuelo)) recuadro([d.notaSuelo]);
       y += 2;
     }
 
-    if (limpio(d.indicaciones)) { titulo("Indicaciones del técnico"); texto(d.indicaciones, 10.5); y += 2; }
+    if (limpio(d.indicaciones)) { titulo(`${++nSec}. Indicaciones del técnico`); texto(d.indicaciones, 10.5); y += 2; }
 
-    if ((d.precauciones || []).length) { titulo("Precauciones"); d.precauciones.forEach((p) => texto("- " + p, 9.5, "normal", TEXTO, 0)); y += 2; }
 
     if ((d.compras || []).length) {
       espacio(14 + (d.compras.length + (d.totales || []).length) * 5.5 + 12); // el bloque de costos no se parte entre páginas
-      titulo("Para comprar");
+      titulo(`${++nSec}. Para comprar (costos aprox.)`);
       d.compras.concat(d.totales || []).forEach(([a, b], i) => {
         const esTot = i >= d.compras.length; fuente(esTot ? "bold" : "normal", 10); const la = lineas(a, AN * 0.55), lb = lineas(b, AN * 0.42);
         const h = Math.max(alto(la.length, 10), alto(lb.length, 10)) + 1.5; espacio(h);
