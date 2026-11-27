@@ -1416,24 +1416,46 @@
       if (!usable(p) || items.length >= 4) return false; items.push({ p, dosis: dosis !== null && dosis !== undefined ? Number(dosis) : L.dosisDe(p).min, motivo }); return true; };
     const multisitio = (p) => L.esMultisitio(p) || /preventiv/i.test(p.categoria || "");
     const evitados = new Set();
+    // multisitio preventivo más eficiente según el tipo de hongo: oomicetos y bacterias → cobre > mancozeb > clorotalonil;
+    // ascomicetos, basidiomicetos y deuteromicetos → clorotalonil > mancozeb > cobre; cenicilla / oídio → azufre primero
+    const multiDe = (pr) => { const cls = L.clasesDe(pr.clasificacion), oo = cls.some((k) => k === "Oomiceto" || k === "Bacteria"), oidio = /cenicill|o[ií]dio/i.test(pr.nombre);
+      const ord = (oidio ? ["M02"] : []).concat(oo ? ["M01", "M03", "M05"] : ["M05", "M03", "M01"]);
+      const lista = (I.c.productos || []).filter((p) => usable(p) && /fungic|bacteric/i.test(p.categoria || "") && L.esMultisitio(p));
+      const pos = (p) => { const c = L.codigosGrupo(p.grupo).map((x) => x.replace(/^FRAC /, "")); const k = ord.findIndex((m) => c.includes(m)); return k < 0 ? 99 : k + (c.length > 1 ? 0.5 : 0); };
+      return lista.filter((p) => pos(p) < 99).sort((a, b) => pos(a) - pos(b) || a.nombre.localeCompare(b.nombre))[0] || null; };
+    // productos para el problema, del más eficiente al menos: primero los del manual (orden del asesor), luego el portafolio por grupo
+    const opcionesDe = (pr) => { const recs = (I.recs[pr.id] || []).map((r) => ({ p: P(r.producto_id), dosis: r.dosis_min, manual: true })).filter((x) => usable(x.p));
+      const cls = L.clasesDe(pr.clasificacion)[0], gr = L.gruposDelProblema(pr);
+      // del portafolio, como en el buscador del inicio: sin tratamientos de semilla, líneas de otros cultivos (Flora, rosas, arroz)
+      // ni desinfectantes de suelo, salvo que el problema sea de raíz o suelo
+      const deSuelo = /ra[ií]z|suelo|cuello|damping|semiller/i.test(pr.nombre + " " + (pr.descripcion || ""));
+      const apto = (p) => usable(p) && !/tratamiento de semilla|\brosas?\b|\barroz\b/i.test((p.control || "") + " " + (p.nota || "")) && !/\bflora\b/i.test(p.nombre) && (deSuelo || !/desinfecci[oó]n de suelo/i.test(p.categoria || "") && !/hongos del suelo|semilla/i.test(p.control || ""));
+      const port = cls && L.CLASES[cls] && gr.length ? L.rankearPorClase({ clase: cls, grupos: gr }, (I.c.productos || []).filter(apto)).map((x) => ({ p: x.p, dosis: null, manual: false }))
+        .sort((x, y) => (L.dosisDe(x.p).min === null ? 1 : 0) - (L.dosisDe(y.p).min === null ? 1 : 0)) : []; // del portafolio, primero los que tienen dosis cargada
+      return recs.concat(port.filter((x) => !recs.some((y) => y.p.id === x.p.id))); };
+    const especifico = (x) => !L.esMultisitio(x.p);
     prs.forEach((pr) => {
-      const recs = (I.recs[pr.id] || []).map((r) => ({ r, p: P(r.producto_id) })).filter((x) => usable(x.p));
-      // si un producto ya elegido también sirve para este problema, se aprovecha
-      const comun = recs.find((x) => ya(x.p));
-      // daño medio o alto: el más eficiente aunque repita grupo; daño bajo: se rota el grupo de la última aplicación
-      const nv = nivelDe(a, pr.id), fuerte = nv !== "bajo";
-      const main = comun || (fuerte ? recs[0] : recs.find((x) => !repite(x.p)) || recs[0]);
-      if (!main) return;
-      if (!comun && repite(main.p)) avisos.push(fuerte ? `Daño ${nv} en ${h(pr.nombre)}: se recomienda <b>${h(main.p.nombre)}</b>, el más eficiente, aunque repite el grupo ${h(codigos(main.p).filter((c) => ultCod.includes(c)).join(", "))} de la última aplicación. En la próxima cambia de grupo.` : `Para ${h(pr.nombre)} todas las opciones del manual repiten el grupo de la última aplicación; en la próxima cambia de grupo.`);
-      else if (!comun && recs[0] && recs[0] !== main && repite(recs[0].p)) codigos(recs[0].p).filter((c) => ultCod.includes(c)).forEach((c) => evitados.add(c));
-      poner(main.p, main.r.dosis_min, `Control de ${pr.nombre}`);
-      if (nv === "alto") { const seg = recs.find((x) => x !== main && !ya(x.p) && !codigos(x.p).some((c) => codigos(main.p).includes(c)) && !repite(x.p) && !multisitio(x.p));
-        if (seg) poner(seg.p, seg.r.dosis_min, `Daño alto en ${pr.nombre}: segundo modo de acción`); }
+      const nv = nivelDe(a, pr.id), enf = pr.tipo === "enfermedad", ops = opcionesDe(pr).filter(especifico);
+      if (!ops.length) { if (enf && nv !== "bajo") { const m0 = multiDe(pr); if (m0) poner(m0, null, `Preventivo multisitio para ${pr.nombre}`); } return; }
+      let main;
+      if (nv === "alto") {
+        // daño alto: el más eficiente aunque repita el grupo de la última fumigación (por la urgencia)
+        main = ops[0];
+        if (repite(main.p)) avisos.push(`Daño <b>alto</b> en ${h(pr.nombre)}: por la urgencia se recomienda <b>${h(main.p.nombre)}</b>, el más eficiente, aunque repite el grupo ${h(codigos(main.p).filter((c) => ultCod.includes(c)).join(", "))} de la última fumigación. <b>En la siguiente aplicación rota</b> a otro grupo químico.`);
+      } else {
+        // daño medio o bajo: se prioriza la rotación: el más eficiente que no repite el grupo de la última fumigación
+        main = ops.find((x) => !repite(x.p) && !ya(x.p)) || ops.find((x) => !repite(x.p));
+        if (main && ops[0] !== main && repite(ops[0].p)) codigos(ops[0].p).filter((c) => ultCod.includes(c)).forEach((c) => evitados.add(c));
+        if (main && !main.manual) avisos.push(`Para ${h(pr.nombre)} las opciones del manual repiten el grupo de la última fumigación; se eligió <b>${h(main.p.nombre)}</b> (${h(codigos(main.p).join(" + "))}) del portafolio para rotar.`);
+        if (!main) { main = ops[0]; avisos.push(`Para ${h(pr.nombre)} no hay otro grupo disponible: <b>${h(main.p.nombre)}</b> repite el grupo de la última fumigación. Consulta con tu asesor para rotar.`); }
+      }
+      poner(main.p, main.dosis, `${enf ? "Fungicida específico" : "Control"} para ${pr.nombre} (daño ${nv})`);
+      // enfermedad con daño alto o medio: además un preventivo multisitio (el más eficiente para ese tipo de hongo)
+      if (enf && nv !== "bajo") { const m0 = multiDe(pr); if (m0) poner(m0, null, `Preventivo multisitio para ${pr.nombre} (daño ${nv})`); }
     });
-    if (evitados.size) avisos.push(`Se evitó repetir el grupo ${h([...evitados].join(", "))} de la última aplicación para prevenir resistencia.`);
+    if (evitados.size) avisos.push(`Se evitó repetir el grupo ${h([...evitados].join(", "))} de la última fumigación para prevenir resistencia.`);
     const prev = (I.problemas[a.cultivo] || []).find((p) => /amplio espectro|multisitio/i.test(p.clasificacion || ""));
     const protect = (prev ? (I.recs[prev.id] || []).map((r) => P(r.producto_id)) : []).concat([(I.c.productos || []).find((p) => /daconil/i.test(p.nombre))]).filter((p) => p && multisitio(p));
-    if (prs.some((pr) => pr.tipo === "enfermedad") && !items.some((x) => multisitio(x.p)) && protect[0]) poner(protect[0], null, "Protectante multisitio para que no avance la enfermedad");
     if (!prs.length) {
       const plan = planDe(a.etapa).map((x) => ({ x, p: P(x.producto_id) })).filter((y) => y.p && !/coadyuv|fertiliz|bioestim/i.test(y.p.categoria || ""));
       const elegidos = plan.filter((y) => !repite(y.p)).slice(0, 2);
