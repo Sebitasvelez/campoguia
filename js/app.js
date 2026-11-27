@@ -1004,9 +1004,11 @@
       const recs = (I.recs[pr.id] || []).map((r) => ({ r, p: P(r.producto_id) })).filter((x) => usable(x.p));
       // si un producto ya elegido también sirve para este problema, se aprovecha
       const comun = recs.find((x) => ya(x.p));
-      const main = comun || (a.nivel === "alto" ? recs[0] : recs.find((x) => !repite(x.p)) || recs[0]);
+      // daño medio o alto: el más eficiente aunque repita grupo; daño bajo: se rota el grupo de la última aplicación
+      const fuerte = a.nivel !== "bajo";
+      const main = comun || (fuerte ? recs[0] : recs.find((x) => !repite(x.p)) || recs[0]);
       if (!main) return;
-      if (!comun && repite(main.p)) avisos.push(a.nivel === "alto" ? `Daño alto en ${h(pr.nombre)}: se recomienda <b>${h(main.p.nombre)}</b>, el más eficiente, aunque repite el grupo ${h(codigos(main.p).filter((c) => ultCod.includes(c)).join(", "))} de la última aplicación. En la próxima cambia de grupo.` : `Para ${h(pr.nombre)} todas las opciones del manual repiten el grupo de la última aplicación; en la próxima cambia de grupo.`);
+      if (!comun && repite(main.p)) avisos.push(fuerte ? `Daño ${a.nivel} en ${h(pr.nombre)}: se recomienda <b>${h(main.p.nombre)}</b>, el más eficiente, aunque repite el grupo ${h(codigos(main.p).filter((c) => ultCod.includes(c)).join(", "))} de la última aplicación. En la próxima cambia de grupo.` : `Para ${h(pr.nombre)} todas las opciones del manual repiten el grupo de la última aplicación; en la próxima cambia de grupo.`);
       else if (!comun && recs[0] && recs[0] !== main && repite(recs[0].p)) codigos(recs[0].p).filter((c) => ultCod.includes(c)).forEach((c) => evitados.add(c));
       poner(main.p, main.r.dosis_min, `Control de ${pr.nombre}`);
       if (a.nivel === "alto") { const seg = recs.find((x) => x !== main && !ya(x.p) && !codigos(x.p).some((c) => codigos(main.p).includes(c)) && !repite(x.p) && !multisitio(x.p));
