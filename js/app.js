@@ -960,7 +960,7 @@
       <div class="grid2"><label class="campo">Último producto aplicado<input data-t="ultimo" list="dlUlt" value="${h(nomUlt)}" placeholder="Ej. Score (vacío si no recuerdas)" autocomplete="off"></label>
         <label class="campo">Fecha de esa aplicación<input data-a="fecha" type="date" value="${h(a.fecha || "")}"></label></div>
       ${dl("dlCult", cultivos().map((c) => c.nombre))}${dl("dlEt", etapasDe(a.cultivo).map((e) => e.nombre))}${dl("dlProb", probs.map((p) => p.nombre))}${dl("dlUlt", ultimos.map((p) => p.nombre))}
-      <button class="btn" type="button" id="asisBtn">Recomendar mezcla</button>
+      <div class="acciones"><button class="btn" type="button" id="asisBtn">Recomendar mezcla</button><button class="btn sec chico" type="button" id="asisVaciar">Vaciar</button></div>
       <div id="asisRes" style="display:flex;flex-direction:column;gap:8px"></div>
     </details>`;
   }
@@ -1029,6 +1029,8 @@
     }));
     $$("[data-nivel]", box).forEach((b) => b.addEventListener("click", () => { a.nivel = b.dataset.nivel; re(); }));
     $$("[data-avol]", box).forEach((b) => b.addEventListener("click", () => { ui.vol = b.dataset.avol; re(); }));
+    // vaciar: borra todo lo escrito en la asesoría rápida (queda el cultivo elegido en el inicio)
+    $("#asisVaciar").addEventListener("click", () => { ui.asis = {}; ui.asisAbierto = true; re(); toast("Datos borrados"); });
     $("#asisBtn").addEventListener("click", () => {
       const r = recomendarSemana(), res = $("#asisRes"), ha = Number(String(a.ha || "").replace(",", ".")), por = Number(String(a.porHa || "").replace(",", "."));
       const cargas = ha > 0 && por > 0 ? ha * por : null, eq = ui.vol === "tanque" ? "tanque" : "bomba", f = (ui.vol === "tanque" ? TANQUE() : BOMBA()) / TANQUE();
