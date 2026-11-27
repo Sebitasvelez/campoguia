@@ -575,7 +575,17 @@
     floracion:  { re: /flor|brotaci|producci|tuberizaci|cormo/, mayor: "p", min: 0.5, max: 1, ideal: 1 / 1.5, texto: "mayor demanda de fósforo, relación N:K de 1:1 a 1:2 (mejor 1:1,5)" },
   };
   const ORDEN_REGLAS = ["arranque", "engrose", "desarrollo", "floracion"];
-  const reglaDeEtapa = (nombre) => { const t = quitarTildes(nombre); const k = ORDEN_REGLAS.find((x) => REGLAS_FERT[x].re.test(t)); return k ? Object.assign({ clave: k }, REGLAS_FERT[k]) : null; };
+  // reglas propias de un cultivo (manda sobre la general): en maíz la prefloración pide nitrógeno y el llenado N y K parejos
+  const REGLAS_CULTIVO = {
+    maiz: [
+      { clave: "prefloracion_maiz", re: /prefloraci/, mayor: "n", min: 2, max: 3, ideal: 2.5, texto: "mayor demanda de nitrógeno, relación N:K de 2:1 a 3:1" },
+      { clave: "llenado_maiz", re: /llenado/, mayor: null, min: 0.8, max: 1.25, ideal: 1, texto: "nitrógeno y potasio parejos, relación N:K cercana a 1:1" },
+    ],
+  };
+  const reglaDeEtapa = (nombre, cultivoId) => { const t = quitarTildes(nombre);
+    const propia = (REGLAS_CULTIVO[cultivoId] || []).find((x) => x.re.test(t)); if (propia) return Object.assign({}, propia);
+    const k = ORDEN_REGLAS.find((x) => REGLAS_FERT[x].re.test(t)); return k ? Object.assign({ clave: k }, REGLAS_FERT[k]) : null; };
+  const etapaCritica = (regla) => !!regla && ["desarrollo", "engrose", "llenado_maiz"].includes(regla.clave);
   // mezcla de hasta 3 fertilizantes que suma «masa» kg/ha (en partes de 25 kg), con al menos 1 saco (50 kg) de un Soli;
   // busca que el elemento de la regla sea el mayor y que N:K quede en el rango (lo más cerca del ideal), con la menor
   // cantidad posible de productos que no son Soli
@@ -587,8 +597,8 @@
       if (!grupo.some((x, i) => x.soli && q[i] >= 2)) return;
       const a = { n: 0, p: 0, k: 0 }; let kgNo = 0;
       grupo.forEach((x, i) => { const kg = q[i] * 25; if (!x.soli) kgNo += kg; a.n += kg * x.npk.n / 100; a.p += kg * x.npk.p / 100; a.k += kg * x.npk.k / 100; });
-      const m = a[regla.mayor], otros = ["n", "p", "k"].filter((e) => e !== regla.mayor);
-      let pen = otros.reduce((s, e) => s + Math.max(0, a[e] - m) / (m + 1) * 6, 0);
+      let pen = 0;
+      if (regla.mayor) { const m = a[regla.mayor]; pen = ["n", "p", "k"].filter((e) => e !== regla.mayor).reduce((s, e) => s + Math.max(0, a[e] - m) / (m + 1) * 6, 0); }
       const r = a.k > 0 ? a.n / a.k : a.n > 0 ? 99 : 0;
       if (r <= 0) pen += 20; else { if (r < regla.min) pen += ln(regla.min / r) * 4; else if (r > regla.max) pen += ln(r / regla.max) * 4; pen += Math.abs(ln(r / regla.ideal)) * 0.4; }
       pen += (kgNo / masa) * 1.2 + (grupo.length - 1) * 0.05;
@@ -763,6 +773,6 @@
   }
   const api = { fraccionSacos, textoSacos, ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, nombresGrupo, textoBusquedaGrupo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
-    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, claseDeBusqueda, rankearPorClase, interpretarConsulta, coincideTexto, npkDe, kgSacoDe, repartirNPK, REGLAS_FERT, reglaDeEtapa, mezclaPorRegla, palabrasDe: (t) => palabras(t), fonetica: (t) => fonetica(t).replace(/[^a-z0-9ñ ]/g, " ").replace(/\s+/g, " ").trim(), esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
+    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, claseDeBusqueda, rankearPorClase, interpretarConsulta, coincideTexto, npkDe, kgSacoDe, repartirNPK, REGLAS_FERT, reglaDeEtapa, mezclaPorRegla, etapaCritica, palabrasDe: (t) => palabras(t), fonetica: (t) => fonetica(t).replace(/[^a-z0-9ñ ]/g, " ").replace(/\s+/g, " ").trim(), esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);

@@ -7,11 +7,11 @@
    "nombre": "Pitahaya amarilla",
    "activo": true,
    "orden": 1,
-   "req_n": 137,
-   "req_p2o5": 73,
-   "req_k2o": 392,
+   "req_n": 175,
+   "req_p2o5": 69,
+   "req_k2o": 156,
    "req_periodo": "año",
-   "req_fuente": "Garbanzo-León et al. 2024, Agronomía Mesoamericana (pitahaya, 3000 plantas/ha)",
+   "req_fuente": "INIAP 2020, Manual del cultivo de pitahaya para la Amazonía (Tabla 7, suelo medio: 140 g N, 40–70 g P₂O₅, 100–150 g K₂O por planta al año, con 1 250 plantas/ha)",
    "kg_aplicacion": 125,
    "ciclo_meses": 12
   },
@@ -72,7 +72,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 2,
@@ -90,7 +95,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 3,
@@ -108,7 +118,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 4,
@@ -126,7 +141,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 5,
@@ -144,7 +164,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 6,
@@ -161,7 +186,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 7,
@@ -178,7 +208,12 @@
    "aplicaciones": 2,
    "pct_n": 45,
    "pct_p2o5": 20,
-   "pct_k2o": 5
+   "pct_k2o": 5,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 10,
@@ -195,7 +230,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 11,
@@ -212,7 +252,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 12,
@@ -229,7 +274,12 @@
    "aplicaciones": 2,
    "pct_n": 50,
    "pct_p2o5": 60,
-   "pct_k2o": 40
+   "pct_k2o": 40,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 13,
@@ -246,7 +296,12 @@
    "aplicaciones": 2,
    "pct_n": 50,
    "pct_p2o5": 40,
-   "pct_k2o": 60
+   "pct_k2o": 60,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 14,
@@ -264,7 +319,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 15,
@@ -282,7 +342,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 16,
@@ -300,7 +365,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 17,
@@ -318,7 +388,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 18,
@@ -336,7 +411,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 19,
@@ -354,7 +434,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 101,
@@ -372,7 +457,12 @@
    "aplicaciones": 1,
    "pct_n": 15,
    "pct_p2o5": 80,
-   "pct_k2o": 35
+   "pct_k2o": 35,
+   "pct_lit_n": 8,
+   "pct_lit_p2o5": 5,
+   "pct_lit_k2o": 10,
+   "apps_lit": 1,
+   "fuente_lit": "Johnston y Dowbenko 2004; INIAP Los Ríos (K)"
   },
   {
    "id": 102,
@@ -390,7 +480,12 @@
    "aplicaciones": 1,
    "pct_n": 45,
    "pct_p2o5": 20,
-   "pct_k2o": 25
+   "pct_k2o": 25,
+   "pct_lit_n": 35,
+   "pct_lit_p2o5": 27,
+   "pct_lit_k2o": 40,
+   "apps_lit": 1,
+   "fuente_lit": "Johnston y Dowbenko 2004; INIAP Los Ríos (K)"
   },
   {
    "id": 103,
@@ -408,7 +503,12 @@
    "aplicaciones": 1,
    "pct_n": 40,
    "pct_p2o5": 0,
-   "pct_k2o": 40
+   "pct_k2o": 40,
+   "pct_lit_n": 31,
+   "pct_lit_p2o5": 36,
+   "pct_lit_k2o": 30,
+   "apps_lit": 1,
+   "fuente_lit": "Johnston y Dowbenko 2004; INIAP Los Ríos (K)"
   },
   {
    "id": 104,
@@ -426,7 +526,12 @@
    "aplicaciones": 0,
    "pct_n": 0,
    "pct_p2o5": 0,
-   "pct_k2o": 0
+   "pct_k2o": 0,
+   "pct_lit_n": 26,
+   "pct_lit_p2o5": 32,
+   "pct_lit_k2o": 20,
+   "apps_lit": 1,
+   "fuente_lit": "Johnston y Dowbenko 2004; INIAP Los Ríos (K)"
   },
   {
    "id": 111,
@@ -444,7 +549,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 112,
@@ -462,7 +572,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 113,
@@ -480,7 +595,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 105,
@@ -498,7 +618,12 @@
    "aplicaciones": 1,
    "pct_n": 20,
    "pct_p2o5": 60,
-   "pct_k2o": 20
+   "pct_k2o": 20,
+   "pct_lit_n": 25,
+   "pct_lit_p2o5": 100,
+   "pct_lit_k2o": 0,
+   "apps_lit": 1,
+   "fuente_lit": "Guía de Xanthosoma (P a la siembra; N y K en tercios a los 2, 4 y 6 meses)"
   },
   {
    "id": 106,
@@ -516,7 +641,12 @@
    "aplicaciones": 2,
    "pct_n": 50,
    "pct_p2o5": 20,
-   "pct_k2o": 10
+   "pct_k2o": 10,
+   "pct_lit_n": 25,
+   "pct_lit_p2o5": 0,
+   "pct_lit_k2o": 33,
+   "apps_lit": 1,
+   "fuente_lit": "Guía de Xanthosoma"
   },
   {
    "id": 107,
@@ -534,7 +664,12 @@
    "aplicaciones": 1,
    "pct_n": 20,
    "pct_p2o5": 20,
-   "pct_k2o": 40
+   "pct_k2o": 40,
+   "pct_lit_n": 50,
+   "pct_lit_p2o5": 0,
+   "pct_lit_k2o": 67,
+   "apps_lit": 2,
+   "fuente_lit": "Guía de Xanthosoma"
   },
   {
    "id": 108,
@@ -552,7 +687,12 @@
    "aplicaciones": 1,
    "pct_n": 10,
    "pct_p2o5": 0,
-   "pct_k2o": 30
+   "pct_k2o": 30,
+   "pct_lit_n": 0,
+   "pct_lit_p2o5": 0,
+   "pct_lit_k2o": 0,
+   "apps_lit": 0,
+   "fuente_lit": "Guía de Xanthosoma"
   },
   {
    "id": 114,
@@ -570,7 +710,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 115,
@@ -588,7 +733,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 116,
@@ -606,7 +756,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 117,
@@ -623,7 +778,12 @@
    "aplicaciones": null,
    "pct_n": null,
    "pct_p2o5": null,
-   "pct_k2o": null
+   "pct_k2o": null,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 118,
@@ -645,7 +805,12 @@
    "aplicaciones": 2,
    "pct_n": 30,
    "pct_p2o5": 50,
-   "pct_k2o": 25
+   "pct_k2o": 25,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   },
   {
    "id": 119,
@@ -666,7 +831,12 @@
    "aplicaciones": 2,
    "pct_n": 25,
    "pct_p2o5": 30,
-   "pct_k2o": 70
+   "pct_k2o": 70,
+   "pct_lit_n": null,
+   "pct_lit_p2o5": null,
+   "pct_lit_k2o": null,
+   "apps_lit": null,
+   "fuente_lit": null
   }
  ],
  "productos": [

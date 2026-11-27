@@ -176,6 +176,8 @@
         { k: "nombre", t: "Nombre de la etapa", req: true },
         { k: "uso", t: "Se usa en", tipo: "select", opciones: () => [["ambos", "Plan sanitario y fertilización"], ["sanitario", "Solo plan sanitario"], ["fertilizacion", "Solo fertilización y asesoría rápida"], ["lote", "Etapa del lote (al crear un lote)"]], def: "ambos" },
         { k: "aplicaciones", t: "Fertilizaciones al suelo en esta etapa (por año o ciclo)", tipo: "num", ayuda: "La mezcla de cada aplicación la arma la app con la regla de la etapa (según su nombre: siembra, desarrollo, floración, engrose) y los kg por aplicación del cultivo. Con este número la app suma cuánto cubre el plan del requerimiento del cultivo." },
+        { k: "pct_n", t: "Asesor: % del N del cultivo para esta etapa", tipo: "num" }, { k: "pct_p2o5", t: "Asesor: % del P₂O₅", tipo: "num" }, { k: "pct_k2o", t: "Asesor: % del K₂O", tipo: "num" },
+        { k: "apps_lit", t: "Literatura: fertilizaciones en esta etapa", tipo: "num" }, { k: "pct_lit_n", t: "Literatura: % del N", tipo: "num" }, { k: "pct_lit_p2o5", t: "Literatura: % del P₂O₅", tipo: "num" }, { k: "pct_lit_k2o", t: "Literatura: % del K₂O", tipo: "num" }, { k: "fuente_lit", t: "Literatura: fuente" },
         { k: "semanas", t: "Semanas (texto)" },
         { k: "riesgo_hongos", t: "Riesgo de sarna/hongos", tipo: "select", opciones: () => [["bajo", "Bajo"], ["ligero", "Ligero"], ["alto", "Alto"]], vacio: true },
         { k: "notas", t: "Recomendaciones de manejo", tipo: "area" }, { k: "costo_ref_texto", t: "Costo de referencia (texto)" }, { k: "orden", t: "Orden", tipo: "num", def: 1 },

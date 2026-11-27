@@ -218,3 +218,12 @@ button.enlace{border:0;background:none;color:var(--verde);text-decoration:underl
 .apps-fila.cambio{background:#fff4dc}
 .apps-fila.actual span{font-weight:600}
 .apps-fila.total{grid-template-columns:auto 1fr;justify-items:end;border-top:1.5px solid var(--suave)}
+.tabla-rep{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+.tabla-rep th{font-weight:400;color:var(--suave);text-align:right;padding:4px 2px}
+.tabla-rep th:first-child,.tabla-rep td:first-child{text-align:left;width:38%}
+.tabla-rep th:nth-child(2),.tabla-rep td:nth-child(2){text-align:center;width:62px}
+.tabla-rep td{text-align:right;padding:5px 2px;border-top:1px solid var(--borde,#e2e6e0)}
+.tabla-rep select{width:54px;min-height:34px;padding:0 4px}
+.tabla-rep tr.cambio td{background:#fff4dc}
+.tabla-rep tr.actual td:first-child{font-weight:600}
+.tabla-rep tr.total td{border-top:1.5px solid var(--suave)}
