@@ -699,14 +699,20 @@
         return `<div class="card"><div class="fila"><div class="tx" style="display:flex;flex-direction:column;gap:2px"><b>${h(p.nombre)}</b><span class="mini">${h(p.concentracion || p.ingrediente_activo || "")}</span></div><b style="font-size:17px;white-space:nowrap">${h(L.cantidad(dosis * volL() / TANQUE(), p.unidad))}</b></div><span class="mini">por ${h(volTxt())}${x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : ""}${x.nota ? " · " + h(x.nota) : ""}</span></div>`;
       }
       const r = L.calcularFertSuelo(x, p, String(ui.calc.ha).replace(",", "."), String(ui.calc.pha).replace(",", "."));
-      if (r.costo) totalCosto += r.costo;
+      // sacos en fracción (¼, ½…) cuando es menos de uno; precio del saco y costo de lo que hay que comprar
+      const fs = r.kgTotal !== null ? L.fraccionSacos(r.kgTotal * 1000, p) : null, costo = fs && fs.costo !== null ? fs.costo : r.costo;
+      const pres = (p.presentaciones || []).filter((y) => (y.unidad || "g") === "g" && Number(y.cantidad) >= 10000).sort((a, b) => b.cantidad - a.cantidad)[0];
+      const precioSaco = pres && pres.precio !== null && pres.precio !== undefined ? Number(pres.precio) : p.pvp !== null && p.pvp !== undefined ? Number(p.pvp) : null;
+      const kgSaco = fs ? fs.kgSaco : r.sacoKg || (pres ? pres.cantidad / 1000 : 50);
+      if (costo) totalCosto += costo;
       const omitir = x.tipo === "enmienda" && !isNaN(ph) && ph >= phAcido;
       return `<div class="card" style="${omitir ? "opacity:.6" : ""}">
         <div class="fila" style="align-items:flex-start"><div style="display:flex;flex-direction:column;gap:2px"><b>${h(p.nombre)}</b><span class="mini">${h(p.concentracion || p.ingrediente_activo || "")}</span></div>
         <span class="pill ${x.tipo === "enmienda" ? "gris" : "verde"}">${x.tipo === "enmienda" ? "Enmienda" : "Al suelo"}</span></div>
-        <div class="grid3"><div class="dato"><span>Por planta / aplicación</span><b>${r.gPorPlanta !== null ? L.fmt(r.gPorPlanta, 0) + " g" : "—"}</b></div>
-        <div class="dato"><span>Finca / aplicación</span><b>${r.kgTotal !== null ? L.fmt(r.kgTotal, 0) + " kg" : "—"}</b></div>
-        <div class="dato"><span>Sacos ${r.sacoKg ? L.fmt(r.sacoKg) + " kg" : ""}</span><b>${r.sacos50 !== null ? r.sacos50 : "—"}</b></div></div>
+        <div class="grid3"><div class="dato"><b>${r.kgTotal !== null ? L.fmt(r.kgTotal, r.kgTotal < 10 ? 1 : 0) + " kg" : "—"}</b><span>Requerimiento total / aplicación</span></div>
+        <div class="dato"><b>${fs ? h(fs.fraccion) : r.sacos50 !== null ? r.sacos50 : "—"}</b><span>${fs ? (fs.sacos <= 1 ? "Saco" : "Sacos") : "Sacos"} de ${L.fmt(kgSaco)} kg</span></div>
+        <div class="dato"><b>${r.gPorPlanta !== null ? L.fmt(r.gPorPlanta, 0) + " g" : "—"}</b><span>Por planta / aplicación</span></div></div>
+        ${precioSaco ? `<div class="fila"><span class="mini">Precio: <b>${dinero(precioSaco)}</b> el saco de ${L.fmt(kgSaco)} kg</span>${costo ? `<span class="mini">Costo: <b>${dinero(costo)}</b></span>` : ""}</div>` : ""}
         <span class="mini">${x.dosis_kg_ha ? L.fmt(Number(x.dosis_kg_ha)) + " kg NPK/ha por aplicación" : ""}${x.condicion ? " · " + h(x.condicion) : ""}${x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : ""}${x.nota ? " · " + h(x.nota) : ""}${r.compraTexto ? " · Comprar " + h(r.compraTexto) : ""}${r.costo ? " · " + dinero(r.costo) : ""}</span>
         ${omitir ? `<span class="mini"><b>Tu pH (${h(ui.ph)}) no es ácido:</b> no necesitas esta enmienda.</span>` : ""}
       </div>`;
@@ -725,13 +731,26 @@
         ${filas || `<div class="vacio">No hay productos de este tipo para la etapa ${et ? h(et.nombre) : ""}.</div>`}
         ${totalCosto > 0 ? `<div class="resultado"><div class="etq">Inversión estimada en sacos</div><div class="n">${dinero(totalCosto)}</div></div>` : ""}
         <div class="acciones"><button class="btn" id="reg">Registrar fertilización</button>
-        <a class="btn wa" target="_blank" rel="noopener" href="${h(waLink("Hola, quiero cotizar para " + ui.calc.ha + " ha de " + c.nombre + ": " + visibles.map((x) => { const p = P(x.producto_id); const r = L.calcularFertSuelo(x, p, ui.calc.ha, ui.calc.pha); return p.nombre + (r.sacos50 ? " (" + r.sacos50 + " sacos)" : ""); }).join(", ")))}">${ic.wa}Cotizar</a></div>
+        ${visibles.length ? `<button class="btn sec" id="aMez">Añadir a mezcla</button>` : ""}</div>
       </main>`, "inicio");
     $$("[data-e]").forEach((b) => b.addEventListener("click", () => { ui.etapa[c.id] = b.dataset.e; guardarUI(); vFert(c.id); }));
     $$("[data-ft]").forEach((b) => b.addEventListener("click", () => { const y = window.scrollY; ui.fertTipo = b.dataset.ft; guardarUI(); vFert(c.id); window.scrollTo(0, y); }));
     conectarVol(() => vFert(c.id));
     const re = (id, k) => { const el = $("#" + id); if (el) el.addEventListener("change", () => { const y = window.scrollY; if (k === "ph") ui.ph = el.value; else ui.calc[k] = el.value; guardarUI(); vFert(c.id); window.scrollTo(0, y); }); };
     re("ha", "ha"); re("pha", "pha"); re("ph", "ph");
+    // añadir a mezcla: foliares por tanque; al suelo y enmiendas por hectárea (los de g por planta se pasan a kg/ha si hay plantas por ha)
+    const am = $("#aMez"); if (am) am.addEventListener("click", () => {
+      const m = S.get("mezcla", []), pha = Number(String(ui.calc.pha || "").replace(",", ".")); let n = 0, sinPha = [];
+      visibles.forEach((x) => { const p = P(x.producto_id); if (!p || m.some((y) => String(y.producto_id) === String(p.id))) return;
+        if (x.tipo === "foliar") { m.push({ producto_id: Number(p.id), dosis_tanque: x.dosis_tanque !== null && x.dosis_tanque !== undefined ? Number(x.dosis_tanque) : L.dosisDe(p).min }); n++; return; }
+        const kgHa = x.dosis_kg_ha ? Number(x.dosis_kg_ha) : x.dosis_g_planta && pha > 0 ? Number(x.dosis_g_planta) * pha / 1000 : null;
+        if (kgHa === null) { sinPha.push(p.nombre); return; }
+        m.push({ producto_id: Number(p.id), suelo: true, dosis_ha: Math.round(kgHa * 10) / 10 }); n++; });
+      S.set("mezcla", m);
+      if (sinPha.length) toast("Escribe las plantas por ha para añadir " + sinPha.join(", "));
+      else if (n) { toast("Agregado a tu mezcla"); location.hash = "#/mezcla"; }
+      else toast("Ya están en tu mezcla");
+    });
     $("#reg").addEventListener("click", () => {
       const act = tipoSel === "foliar" ? "Fertilización foliar" : tipoSel === "enmienda" ? "Enmienda" : "Fertilización al suelo";
       prefill = { actividad: act, lineas: visibles.map((x) => {
