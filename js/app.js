@@ -1402,7 +1402,7 @@
       if (!t) return [];
       const lista = (I.c.productos || []).filter((p) => p.activo !== false && CAT_PROTEGER.test(p.categoria || "") && !/herbic/i.test(p.categoria || "") && !a.ultimos.map(String).includes(String(p.id)));
       const propios = filtrar(lista, (p) => p.nombre, (p) => p.ingrediente_activo || "").map((p) => ({ v: p.id, t: p.nombre, s: [p.categoria, p.grupo].filter(Boolean).join(" · ") }));
-      const otras = filtrar(otrasMarcas().filter((x) => !a.ultimos.includes(x.id)), (x) => x.nombre, (x) => x.ingrediente_activo || "").map((x) => ({ v: x.id, t: x.nombre, s: "Otra marca · " + [x.ingrediente_activo, x.grupo].filter(Boolean).join(" · ") }));
+      const otras = filtrar(otrasMarcas().filter((x) => !a.ultimos.includes(x.id)), (x) => x.nombre, (x) => x.ingrediente_activo || "").map((x) => ({ v: x.id, t: x.nombre, s: "Otra marca · " + ([x.ingrediente_activo, x.grupo].filter(Boolean).join(" · ") || "ingrediente activo por confirmar") }));
       const exacto = propios.concat(otras).some((o) => norm(o.t) === t);
       return propios.slice(0, 4).concat(otras.slice(0, 4)).slice(0, 5).concat(!exacto && txt.trim().length >= 3 ? [{ v: "nuevo:" + txt.trim(), t: `Agregar «${txt.trim()}»`, s: "Producto de otra marca que no está en la lista" }] : []);
     }
@@ -1530,7 +1530,7 @@
         a.otros[id] = { id, nombre, ingrediente_activo: ia ? ia.toUpperCase() : "", grupo, categoria: OM.catDeGrupo(grupo), otra_marca: true };
         if (!a.ultimos.includes(id)) a.ultimos.push(id);
         if (D.reportarProducto) D.reportarProducto({ nombre, ingrediente_activo: ia || null, grupo: grupo || null });
-        toast(!ia ? "Guardado. Vamos a buscar su ingrediente activo." : grupo ? "Guardado: " + grupo : "Guardado. Revisaremos el grupo de ese ingrediente.");
+        toast(!ia ? "Guardado en Otras marcas. Tu asesor completará su ingrediente activo." : grupo ? "Guardado: " + grupo : "Guardado. Revisaremos el grupo de ese ingrediente.");
         re("ultimo");
       };
       const elegir = (v) => {

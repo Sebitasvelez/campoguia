@@ -82,3 +82,7 @@ grant execute on function public.app_reportar_producto(uuid, jsonb) to anon, aut
 -- req_{bajo,medio,alto}_{n,p2o5,k2o,s} y fuente_suelo.
 -- Pitahaya: g por planta (INIAP 2020 Tabla 7), suelo bajo por defecto, 1600 pl/ha de referencia.
 -- Cacao, maíz, malanga: medio = requerimiento actual; bajo N ×1,43 P₂O₅ ×1,55 K₂O ×1,40; alto ×0,57 ×0,55 ×0,60 (proporciones INIAP pitahaya).
+
+-- 2026-11-27 · otros_productos_visibles_sin_ia
+-- app_otros_productos devuelve también los agroquímicos de otra marca sin ingrediente activo (por confirmar) y su estado,
+-- para que cualquier usuario los encuentre por nombre. Oxitane corregido: MANCOZEB + OXICLORURO DE COBRE (FRAC M03 + M01).

@@ -47,11 +47,17 @@
   const CLAVES = Object.keys(IA).map((k) => ({ k: norm(k), g: IA[k] })).sort((a, b) => b.k.length - a.k.length);
 
   // «Mancozeb + Cimoxanil» → «FRAC M03 + 27»; «Imidacloprid + Ciflutrina» → «IRAC 4A + 3A»; vacío si no se conoce
+  // distancia de edición (Levenshtein) entre dos palabras
+  function dist(a, b) { const d = Array.from({ length: a.length + 1 }, (_, i) => [i]); for (let j = 1; j <= b.length; j++) d[0][j] = j;
+    for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    return d[a.length][b.length]; }
   function grupoDeIA(ia) {
     const partes = String(ia || "").split(/\+|\/|;|,(?!\s*\d)|\by\b/i).map(norm).filter(Boolean), por = {};
     partes.forEach((p) => {
       // primero el ingrediente escrito completo; si no, el escrito a medias (≥ 6 letras) que empieza igual
-      const c = CLAVES.find((x) => p.includes(x.k)) || CLAVES.find((x) => p.length >= 6 && x.k.startsWith(p)); if (!c) return;
+      // y por último con un error de escritura (manzoceb = mancozeb, imidacloprit = imidacloprid)
+      const c = CLAVES.find((x) => p.includes(x.k)) || CLAVES.find((x) => p.length >= 6 && x.k.startsWith(p))
+        || CLAVES.filter((x) => x.k.length >= 6).find((x) => p.split(" ").some((w) => w.length >= 6 && Math.abs(w.length - x.k.length) <= 2 && dist(w, x.k) <= (x.k.length >= 8 ? 2 : 1))); if (!c) return;
       const [pre, cod] = c.g.split(" "); por[pre] = por[pre] || []; if (!por[pre].includes(cod)) por[pre].push(cod);
     });
     return ["FRAC", "IRAC", "HRAC"].filter((p) => por[p]).map((p) => p + " " + por[p].join(" + ")).join(" · ");
