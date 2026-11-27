@@ -1172,7 +1172,15 @@
         <div class="acciones"><button class="btn" type="button" id="asisUsar">Usar esta mezcla</button>
         <a class="btn wa chico" target="_blank" rel="noopener" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", la app me sugiere para " + ((cultivo(a.cultivo) || {}).nombre || "") + (r.prs.length ? " (" + r.prs.map((p) => p.nombre + " daño " + nivelDe(a, p.id)).join(", ") + ")" : "") + ": " + r.items.map((x) => x.p.nombre).join(", ") + ". ¿Está bien?"))}">${ic.wa}Confirmar con mi asesor</a></div>`;
       $("#asisUsar").addEventListener("click", () => {
-        S.set("mezcla", r.items.map((x) => itemMezcla(x.p, isNaN(x.dosis) ? null : x.dosis)));
+        // agroquímicos de la recomendación + fertilización de la etapa (al suelo y enmiendas por ha; foliares que no cupieron, por tanque)
+        const mz = r.items.map((x) => itemMezcla(x.p, isNaN(x.dosis) ? null : x.dosis)), pha = Number(String(ui.calc.pha || "").replace(",", ".")), sinPha = [];
+        (r.fert || []).forEach((x) => { const p = P(x.producto_id); if (!p || mz.some((y) => String(y.producto_id) === String(p.id))) return;
+          if (x.tipo === "foliar") { mz.push({ producto_id: Number(p.id), dosis_tanque: x.dosis_tanque !== null && x.dosis_tanque !== undefined ? Number(x.dosis_tanque) : L.dosisDe(p).min }); return; }
+          const kgHa = x.dosis_kg_ha ? Number(x.dosis_kg_ha) : x.dosis_g_planta && pha > 0 ? Number(x.dosis_g_planta) * pha / 1000 : null;
+          if (kgHa === null) { sinPha.push(p.nombre); return; }
+          mz.push({ producto_id: Number(p.id), suelo: true, dosis_ha: Math.round(kgHa * 10) / 10 }); });
+        S.set("mezcla", mz);
+        if (sinPha.length) setTimeout(() => toast(sinPha.join(", ") + " va por planta: agrégalo desde el plan de fertilización con tus plantas por ha"), 1800);
         if (cargas) ui.mezclaCargas = String(Math.round(cargas * 10) / 10).replace(".", ",");
         if (ha > 0) ui.mezclaHa = String(ha).replace(".", ",");
         ui.asisAbierto = false; guardarUI(); vMezcla(); window.scrollTo(0, 0); toast("Mezcla lista: revisa compatibilidad y orden");
