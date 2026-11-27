@@ -13133,7 +13133,7 @@
    "dosis_tanque": null,
    "frecuencia_dias": null,
    "condicion": "Si el pH del suelo es ácido",
-   "nota": "Aplicar en el hoyo o sitio de siembra, 30 días antes de fertilizar.",
+   "nota": "Aplicar en el hoyo o sitio de siembra, de 21 a 30 días antes o después de fertilizar.",
    "orden": 1
   },
   {
@@ -13692,7 +13692,7 @@
    "dosis_tanque": null,
    "frecuencia_dias": null,
    "condicion": null,
-   "nota": "Primero: corrige la acidez del suelo. Aplicar 30 días antes de fertilizar.",
+   "nota": "Primero: corrige la acidez del suelo. Aplicar de 21 a 30 días antes o después de fertilizar.",
    "orden": 1,
    "cultivo_id": "pitahaya"
   },

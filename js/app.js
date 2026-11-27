@@ -1145,7 +1145,7 @@
       const cargas = ha > 0 && por > 0 ? ha * por : null, eq = ui.vol === "tanque" ? "tanque" : "bomba", f = (ui.vol === "tanque" ? TANQUE() : BOMBA()) / TANQUE();
       if (!r.items.length) { res.innerHTML = `<div class="aviso ambar">${ic.alerta}<div>No encontramos una recomendación con estos datos. Consulta a tu asesor.</div></div>`; return; }
       res.innerHTML = `<div class="etq">Recomendación para esta semana</div>
-        ${r.items.map((x, i) => `<div class="item" style="cursor:default"><div class="tx"><b>${i + 1}. ${h(x.p.nombre)}</b><span>${x.dosis !== null && !isNaN(x.dosis) ? h(L.cantidad(x.dosis * f, x.p.unidad)) + " por " + eq : "Dosis: ver etiqueta"} · ${h(x.motivo)}</span></div></div>`).join("")}
+        ${r.items.map((x, i) => `<div class="item" style="cursor:default"><div class="tx"><b>${h(x.p.nombre)}</b><span>${x.dosis !== null && !isNaN(x.dosis) ? h(L.cantidad(x.dosis * f, x.p.unidad)) + " por " + eq : "Dosis: ver etiqueta"} · ${h(x.motivo)}</span></div></div>`).join("")}
         ${cargas ? `<span class="mini">Para ${L.fmt(ha, 2)} ha a ${L.fmt(por)} ${eq}s por ha: <b>${L.fmt(cargas, 1)} ${eq}s</b> en total.</span>` : `<span class="mini">Escribe las hectáreas y ${eq}s por hectárea para calcular cuánto comprar.</span>`}
         ${r.avisos.map((t) => `<div class="aviso azul" style="padding:8px 10px">${ic.alerta}<div>${t}</div></div>`).join("")}
         ${fertAsis(r, a)}
