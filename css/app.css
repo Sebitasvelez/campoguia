@@ -183,3 +183,11 @@ input,select,textarea{font-size:16px}
 .asis-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:-4px}
 .asis-chip{display:inline-flex;align-items:center;gap:4px;background:var(--verde-claro);color:var(--texto);border-radius:999px;padding:4px 4px 4px 12px;font-size:14px}
 .asis-chip button{border:0;background:transparent;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;color:var(--suave)}
+.asis-probs{display:flex;flex-direction:column;gap:8px;margin-top:-4px}
+.asis-prob{border-radius:12px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;background:var(--verde-claro)}
+.asis-prob-cab{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:14px}
+.asis-prob-cab button{border:0;background:transparent;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;color:var(--suave)}
+.asis-prob .seg button.sel.niv-bajo{background:#2e7d32;color:#fff}
+.asis-prob .seg button.sel.niv-medio{background:#d39200;color:#fff}
+.asis-prob .seg button.sel.niv-alto{background:#c62828;color:#fff}
+.pill.azul{background:#e3eefb;color:#1e5aa8}

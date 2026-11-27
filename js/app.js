@@ -960,7 +960,10 @@
     delete a.problema; delete a.ultimo; delete a.problemaTxt; delete a.ultimoTxt;
     a.problemas = a.problemas.filter((id) => (I.problemas[a.cultivo] || []).some((p) => String(p.id) === String(id)));
     a.ultimos = a.ultimos.filter((id) => P(id));
-    if (!a.nivel) a.nivel = "medio"; return a; };
+    // nivel de daño por cada plaga o enfermedad (antes era uno solo para todos)
+    if (!a.niveles || typeof a.niveles !== "object") { a.niveles = {}; if (a.nivel) a.problemas.forEach((id) => { a.niveles[id] = a.nivel; }); }
+    delete a.nivel; return a; };
+  const nivelDe = (a, id) => (a.niveles && a.niveles[id]) || "medio";
   const CAT_PROTEGER = /fungic|insectic|acaric|bacteric|cebo|nematic|herbic|desinfec/i;
   const probDe = (id) => (I.c.problemas || []).find((p) => String(p.id) === String(id)) || null;
   function asistenteSemana(abierto) {
@@ -972,8 +975,9 @@
       <span class="mini">Escribe los datos y te sugerimos qué mezclar, como lo haría tu asesor.</span>
       <div class="grid2">${campo("cultivo", "Cultivo", (cultivo(a.cultivo) || {}).nombre || "", "Ej. Cacao")}${campo("etapa", "Etapa", (etapa(a.etapa) || {}).nombre || "", "Ej. Floración")}</div>
       ${campo("problema", "¿Qué problemas ves?", "", a.problemas.length ? "Agregar otro problema…" : "Ej. monilia, ácaros… (vacío: solo prevención)")}
-      ${chips(a.problemas, (id) => (probDe(id) || {}).nombre || "", "problema")}
-      ${a.problemas.length ? `<div class="campo"><span>Nivel de daño</span><div class="seg" role="group" aria-label="Nivel de daño">${["bajo", "medio", "alto"].map((n) => `<button type="button" data-nivel="${n}" class="${a.nivel === n ? "sel" : ""}">${n[0].toUpperCase() + n.slice(1)}</button>`).join("")}</div></div>` : ""}
+      ${a.problemas.length ? `<div class="asis-probs"><span class="mini">Nivel de daño de cada uno:</span>${a.problemas.map((id) => { const nom = (probDe(id) || {}).nombre || "", nv = nivelDe(a, id);
+        return `<div class="asis-prob"><div class="asis-prob-cab"><b>${h(nom)}</b><button type="button" data-quitar="problema" data-id="${h(id)}" aria-label="Quitar ${h(nom)}">✕</button></div>
+        <div class="seg" role="group" aria-label="Nivel de daño de ${h(nom)}">${["bajo", "medio", "alto"].map((n) => `<button type="button" data-nivel="${n}" data-pid="${h(id)}" class="${nv === n ? "sel niv-" + n : ""}">${n[0].toUpperCase() + n.slice(1)}</button>`).join("")}</div></div>`; }).join("")}</div>` : ""}
       <div class="grid2"><label class="campo">Hectáreas a fumigar<input data-a="ha" inputmode="decimal" value="${h(a.ha || "")}" placeholder="Ej. 1"></label>
         <label class="campo">${ui.vol === "tanque" ? "Tanques" : "Bombas"} por hectárea<input data-a="porHa" inputmode="decimal" value="${h(a.porHa || "")}" placeholder="${ui.vol === "tanque" ? "Ej. 2" : "Ej. 20"}"></label></div>
       <div class="campo"><span>Equipo</span>${segVolAsis()}</div>
@@ -1022,13 +1026,13 @@
       // si un producto ya elegido también sirve para este problema, se aprovecha
       const comun = recs.find((x) => ya(x.p));
       // daño medio o alto: el más eficiente aunque repita grupo; daño bajo: se rota el grupo de la última aplicación
-      const fuerte = a.nivel !== "bajo";
+      const nv = nivelDe(a, pr.id), fuerte = nv !== "bajo";
       const main = comun || (fuerte ? recs[0] : recs.find((x) => !repite(x.p)) || recs[0]);
       if (!main) return;
-      if (!comun && repite(main.p)) avisos.push(fuerte ? `Daño ${a.nivel} en ${h(pr.nombre)}: se recomienda <b>${h(main.p.nombre)}</b>, el más eficiente, aunque repite el grupo ${h(codigos(main.p).filter((c) => ultCod.includes(c)).join(", "))} de la última aplicación. En la próxima cambia de grupo.` : `Para ${h(pr.nombre)} todas las opciones del manual repiten el grupo de la última aplicación; en la próxima cambia de grupo.`);
+      if (!comun && repite(main.p)) avisos.push(fuerte ? `Daño ${nv} en ${h(pr.nombre)}: se recomienda <b>${h(main.p.nombre)}</b>, el más eficiente, aunque repite el grupo ${h(codigos(main.p).filter((c) => ultCod.includes(c)).join(", "))} de la última aplicación. En la próxima cambia de grupo.` : `Para ${h(pr.nombre)} todas las opciones del manual repiten el grupo de la última aplicación; en la próxima cambia de grupo.`);
       else if (!comun && recs[0] && recs[0] !== main && repite(recs[0].p)) codigos(recs[0].p).filter((c) => ultCod.includes(c)).forEach((c) => evitados.add(c));
       poner(main.p, main.r.dosis_min, `Control de ${pr.nombre}`);
-      if (a.nivel === "alto") { const seg = recs.find((x) => x !== main && !ya(x.p) && !codigos(x.p).some((c) => codigos(main.p).includes(c)) && !repite(x.p) && !multisitio(x.p));
+      if (nv === "alto") { const seg = recs.find((x) => x !== main && !ya(x.p) && !codigos(x.p).some((c) => codigos(main.p).includes(c)) && !repite(x.p) && !multisitio(x.p));
         if (seg) poner(seg.p, seg.r.dosis_min, `Daño alto en ${pr.nombre}: segundo modo de acción`); }
     });
     if (evitados.size) avisos.push(`Se evitó repetir el grupo ${h([...evitados].join(", "))} de la última aplicación para prevenir resistencia.`);
@@ -1048,8 +1052,23 @@
     if (coadP) poner(coadP, coad ? coad.x.dosis_tanque : null, "Coadyuvante: mejora la cobertura");
     if (prs.length > 2 && items.length >= 4) avisos.push("La mezcla llegó al máximo de 4 productos; si falta controlar algún problema, consúltalo con tu asesor.");
     if (a.fecha) { const hoy = new Date(), dias = Math.round((new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) - new Date(a.fecha + "T00:00:00")) / 864e5); // días calendario
-      if (dias >= 0 && dias < 7) avisos.push(a.nivel === "alto" && prs.length ? `Aplicaste hace ${dias} día(s); con daño alto puedes aplicar, pero respeta el máximo de aplicaciones de la etiqueta.` : `Aplicaste hace ${dias} día(s): espera al menos 7 días entre aplicaciones, salvo que el daño sea alto.`); }
-    return { items, avisos, prs };
+      if (dias >= 0 && dias < 7) avisos.push(prs.some((pr) => nivelDe(a, pr.id) === "alto") ? `Aplicaste hace ${dias} día(s); con daño alto puedes aplicar, pero respeta el máximo de aplicaciones de la etiqueta.` : `Aplicaste hace ${dias} día(s): espera al menos 7 días entre aplicaciones, salvo que el daño sea alto.`); }
+    // plan de fertilización de la etapa fenológica: lo que va al suelo (y enmiendas) se recomienda aparte de la mezcla
+    const fert = (I.fert[a.etapa] || []).filter((f) => P(f.producto_id) && (f.tipo === "suelo" || f.tipo === "enmienda" || (f.tipo === "foliar" && !ya(P(f.producto_id))))).sort((x, y) => (x.orden || 0) - (y.orden || 0));
+    return { items, avisos, prs, fert };
+  }
+  function fertAsis(r, a) {
+    const et = etapa(a.etapa), ha = Number(String(a.ha || "").replace(",", "."));
+    if (!et) return `<div class="aviso azul" style="padding:8px 10px">${ic.alerta}<div>Escribe la <b>etapa</b> del cultivo para recomendarte también la fertilización.</div></div>`;
+    if (!r.fert.length) return "";
+    const eq = ui.vol === "tanque" ? "tanque" : "bomba", fv = (ui.vol === "tanque" ? TANQUE() : BOMBA()) / TANQUE();
+    return `<div class="etq">Fertilización para la etapa ${h(et.nombre)}</div>
+      ${r.fert.map((x) => { const p = P(x.producto_id), dz = x.dosis_kg_ha ? Number(x.dosis_kg_ha) : null;
+        const fs = dz && ha > 0 ? L.fraccionSacos(dz * ha * 1000, p) : null;
+        const fol = x.tipo === "foliar", dt = x.dosis_tanque !== null && x.dosis_tanque !== undefined ? Number(x.dosis_tanque) : L.dosisDe(p).min;
+        const dosis = fol ? (dt !== null && !isNaN(dt) ? L.cantidad(dt * fv, p.unidad) + " por " + eq : "Dosis: ver etiqueta") + (r.items.length >= 4 ? " · no cupo en la mezcla de 4: aplícalo en la próxima" : "") : dz ? L.fmt(dz) + " kg/ha por aplicación" : x.dosis_g_planta ? L.fmt(Number(x.dosis_g_planta)) + " g por planta" : "Dosis: ver plan";
+        return `<div class="item" style="cursor:default"><div class="tx"><b>${h(p.nombre)} <span class="pill ${x.tipo === "enmienda" ? "gris" : fol ? "azul" : "verde"}" style="font-size:11px">${x.tipo === "enmienda" ? "Enmienda" : fol ? "Foliar" : "Al suelo"}</span></b><span>${h(dosis)}${fs ? " · Para " + L.fmt(ha, 2) + " ha: <b>" + h(fs.texto) + "</b>" : ""}${x.condicion ? " · " + h(x.condicion) : ""}${x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : ""}${x.nota ? " · " + h(x.nota) : ""}</span></div></div>`; }).join("")}
+      <a class="btn sec chico" href="#/fertilizacion/${h(a.cultivo || "")}">Ver plan de fertilización completo</a>`;
   }
   function conectarAsistente() {
     const box = $("#asis"); if (!box) return;
@@ -1083,11 +1102,12 @@
       const lista = b.dataset.quitar === "problema" ? a.problemas : a.ultimos, i = lista.map(String).indexOf(b.dataset.id);
       if (i >= 0) lista.splice(i, 1); re();
     }));
-    $$("[data-nivel]", box).forEach((b) => b.addEventListener("click", () => { a.nivel = b.dataset.nivel; re(); }));
+    $$("[data-nivel]", box).forEach((b) => b.addEventListener("click", () => { a.niveles[b.dataset.pid] = b.dataset.nivel; re(); }));
     $$("[data-avol]", box).forEach((b) => b.addEventListener("click", () => { ui.vol = b.dataset.avol; re(); }));
     // vaciar: borra todo lo escrito en la asesoría rápida (queda el cultivo elegido en el inicio)
     $("#asisVaciar").addEventListener("click", () => { ui.asis = {}; ui.asisAbierto = true; re(); toast("Datos borrados"); });
     $("#asisBtn").addEventListener("click", () => {
+      if (a.cultivo && a.etapa) { ui.etapa[a.cultivo] = a.etapa; guardarUI(); } // el plan completo abre en la misma etapa
       const r = recomendarSemana(), res = $("#asisRes"), ha = Number(String(a.ha || "").replace(",", ".")), por = Number(String(a.porHa || "").replace(",", "."));
       const cargas = ha > 0 && por > 0 ? ha * por : null, eq = ui.vol === "tanque" ? "tanque" : "bomba", f = (ui.vol === "tanque" ? TANQUE() : BOMBA()) / TANQUE();
       if (!r.items.length) { res.innerHTML = `<div class="aviso ambar">${ic.alerta}<div>No encontramos una recomendación con estos datos. Consulta a tu asesor.</div></div>`; return; }
@@ -1095,8 +1115,9 @@
         ${r.items.map((x, i) => `<div class="item" style="cursor:default"><div class="tx"><b>${i + 1}. ${h(x.p.nombre)}</b><span>${x.dosis !== null && !isNaN(x.dosis) ? h(L.cantidad(x.dosis * f, x.p.unidad)) + " por " + eq : "Dosis: ver etiqueta"} · ${h(x.motivo)}</span></div></div>`).join("")}
         ${cargas ? `<span class="mini">Para ${L.fmt(ha, 2)} ha a ${L.fmt(por)} ${eq}s por ha: <b>${L.fmt(cargas, 1)} ${eq}s</b> en total.</span>` : `<span class="mini">Escribe las hectáreas y ${eq}s por hectárea para calcular cuánto comprar.</span>`}
         ${r.avisos.map((t) => `<div class="aviso azul" style="padding:8px 10px">${ic.alerta}<div>${t}</div></div>`).join("")}
+        ${fertAsis(r, a)}
         <div class="acciones"><button class="btn" type="button" id="asisUsar">Usar esta mezcla</button>
-        <a class="btn wa chico" target="_blank" rel="noopener" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", la app me sugiere para " + ((cultivo(a.cultivo) || {}).nombre || "") + (r.prs.length ? " (" + r.prs.map((p) => p.nombre).join(", ") + ", daño " + a.nivel + ")" : "") + ": " + r.items.map((x) => x.p.nombre).join(", ") + ". ¿Está bien?"))}">${ic.wa}Confirmar con mi asesor</a></div>`;
+        <a class="btn wa chico" target="_blank" rel="noopener" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", la app me sugiere para " + ((cultivo(a.cultivo) || {}).nombre || "") + (r.prs.length ? " (" + r.prs.map((p) => p.nombre + " daño " + nivelDe(a, p.id)).join(", ") + ")" : "") + ": " + r.items.map((x) => x.p.nombre).join(", ") + ". ¿Está bien?"))}">${ic.wa}Confirmar con mi asesor</a></div>`;
       $("#asisUsar").addEventListener("click", () => {
         S.set("mezcla", r.items.map((x) => itemMezcla(x.p, isNaN(x.dosis) ? null : x.dosis)));
         if (cargas) ui.mezclaCargas = String(Math.round(cargas * 10) / 10).replace(".", ",");
