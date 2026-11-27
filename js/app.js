@@ -32,26 +32,39 @@
     };
     // etapas con requerimiento de N, P₂O₅ y K₂O: los sacos de los fertilizantes NPK al suelo se calculan para cumplirlo
     (c.etapas || []).forEach((e) => {
-      if (!(Number(e.req_n) || Number(e.req_p2o5) || Number(e.req_k2o))) return;
+      // requerimiento por aplicación: del requerimiento del cultivo (año o ciclo) × % de la etapa ÷ sus fertilizaciones;
+      // si no, el que se escribió directo en la etapa (p. ej. la siembra, que no es parte del año en producción)
+      const cul = (c.cultivos || []).find((x) => x.id === e.cultivo_id), apps = Number(e.aplicaciones) || 0;
+      const desdeCultivo = cul && (Number(cul.req_n) || Number(cul.req_p2o5) || Number(cul.req_k2o)) && apps > 0 && (Number(e.pct_n) || Number(e.pct_p2o5) || Number(e.pct_k2o));
+      const q = desdeCultivo ? { n: (Number(cul.req_n) || 0) * (Number(e.pct_n) || 0) / 100 / apps, p: (Number(cul.req_p2o5) || 0) * (Number(e.pct_p2o5) || 0) / 100 / apps, k: (Number(cul.req_k2o) || 0) * (Number(e.pct_k2o) || 0) / 100 / apps }
+        : { n: Number(e.req_n) || 0, p: Number(e.req_p2o5) || 0, k: Number(e.req_k2o) || 0 };
+      if (!(q.n || q.p || q.k)) return;
       const lista = I.fert[e.id] || [], prod = (id) => I.prod[String(id)];
       const esNPK = (x) => x.tipo === "suelo" && prod(x.producto_id) && L.npkDe(prod(x.producto_id));
       // candidatos: los fertilizantes NPK al suelo de la etapa + la línea Solei (se prefiere cuando cumple igual de bien)
       const cand = new Map();
       lista.filter(esNPK).forEach((x) => cand.set(String(x.producto_id), prod(x.producto_id)));
       (c.productos || []).filter((p) => p.activo !== false && /^solei/i.test(p.nombre) && /ed[aá]fico/i.test(p.categoria || "") && L.npkDe(p)).forEach((p) => cand.set(String(p.id), p));
-      const r = L.repartirNPK({ n: e.req_n, p: e.req_p2o5, k: e.req_k2o }, [...cand.values()].map((p) => ({ id: p.id, npk: L.npkDe(p), kgSaco: L.kgSacoDe(p), preferido: /^solei/i.test(p.nombre) })));
+      const r = L.repartirNPK(q, [...cand.values()].map((p) => ({ id: p.id, npk: L.npkDe(p), kgSaco: L.kgSacoDe(p), preferido: /^solei/i.test(p.nombre) })));
       if (!r) return;
       const elegidos = r.items.map((it) => { const x = lista.find((y) => esNPK(y) && String(y.producto_id) === String(it.id));
         return Object.assign({}, x || { id: "auto-" + e.id + "-" + it.id, cultivo_id: e.cultivo_id, etapa_id: e.id, tipo: "suelo", producto_id: it.id, nota: "Línea Solei: elegido para cumplir el requerimiento de la etapa.", orden: -1 },
           { dosis_kg_ha: it.kgHa, dosis_g_planta: null, calculada: true }); });
       I.fert[e.id] = elegidos.concat(lista.filter((x) => !esNPK(x))).sort((x, y) => (x.tipo === "suelo" ? 0 : 1) - (y.tipo === "suelo" ? 0 : 1) || (x.orden || 0) - (y.orden || 0));
-      I.req[e.id] = { n: Number(e.req_n) || 0, p: Number(e.req_p2o5) || 0, k: Number(e.req_k2o) || 0, aporte: r.aporte, kg: r.kgTotal };
+      I.req[e.id] = Object.assign({}, q, { aporte: r.aporte, kg: r.kgTotal, desdeCultivo: !!desdeCultivo, apps, pct: { n: Number(e.pct_n) || 0, p: Number(e.pct_p2o5) || 0, k: Number(e.pct_k2o) || 0 }, cul });
     });
   }
   // «Requerimiento: N 20 · P₂O₅ 2,5 · K₂O 5 kg/ha por aplicación» y lo que aporta la mezcla calculada
   const cajaReq = (eid) => { const q = I.req[eid]; if (!q) return "";
     const f = (o) => `N ${L.fmt(o.n, 1)} · P₂O₅ ${L.fmt(o.p, 1)} · K₂O ${L.fmt(o.k, 1)}`;
-    return `<div class="aviso verde">${ic.alerta}<div><b>Requerimiento de la etapa:</b> ${f(q)} kg/ha por aplicación.<br><span class="mini">Los fertilizantes al suelo aportan ${f(q.aporte)} kg/ha con ${L.fmt(q.kg)} kg de producto por ha (en medios sacos).</span></div></div>`; };
+    const per = q.cul && q.cul.req_periodo === "ciclo" ? "ciclo" : "año";
+    const origen = q.desdeCultivo ? `<span class="mini">${q.apps} ${q.apps === 1 ? "fertilización" : "fertilizaciones"} al ${per} en esta etapa, con el ${L.fmt(q.pct.n)} % del N, ${L.fmt(q.pct.p)} % del P₂O₅ y ${L.fmt(q.pct.k)} % del K₂O del requerimiento del cultivo.</span><br>` : "";
+    return `<div class="aviso verde">${ic.alerta}<div><b>Por aplicación:</b> ${f(q)} kg/ha.<br>${origen}<span class="mini">Los fertilizantes al suelo aportan ${f(q.aporte)} kg/ha con ${L.fmt(q.kg)} kg de producto por ha (en medios sacos).</span></div></div>`; };
+  // requerimiento total del cultivo y cuántas fertilizaciones al suelo suma el plan en el año o ciclo
+  const cajaCultivo = (cid) => { const cul = cultivo(cid); if (!cul || !(Number(cul.req_n) || Number(cul.req_p2o5) || Number(cul.req_k2o))) return "";
+    const per = cul.req_periodo === "ciclo" ? "ciclo" : "año", total = etapasFert(cid).reduce((s, e) => s + (Number(e.aplicaciones) || 0), 0);
+    return `<div class="card" style="gap:4px"><span class="etq">Requerimiento del cultivo</span><b>N ${L.fmt(Number(cul.req_n) || 0)} · P₂O₅ ${L.fmt(Number(cul.req_p2o5) || 0)} · K₂O ${L.fmt(Number(cul.req_k2o) || 0)} kg/ha/${per}</b>
+      ${total ? `<span class="mini">El plan reparte este requerimiento en <b>${total} fertilizaciones al suelo por ${per}</b>.</span>` : ""}${cul.req_fuente ? `<span class="mini">Fuente: ${h(cul.req_fuente)}</span>` : ""}</div>`; };
   const aj = (k, def) => { const v = ((D.catalogo || {}).ajustes || {})[k]; return v === undefined || v === null || v === "" ? def : v; };
   const P = (id) => (I.prod[String(id)] || null);
   const cultivos = () => (I.c.cultivos || []).filter((c) => c.activo !== false).sort((a, b) => a.orden - b.orden);
@@ -760,7 +773,7 @@
       <main class="cont">
         <div class="chips" role="group" aria-label="Etapa">${etapas.map((e) => `<button class="chip ${et && e.id === et.id ? "sel" : ""}" data-e="${e.id}">${h(e.nombre)}</button>`).join("")}</div>
         <div class="seg" role="group" aria-label="Tipo de fertilización">${[["suelo", "Al suelo"], ["foliar", "Foliar"], ["enmienda", "Enmiendas"]].map(([k, t]) => `<button data-ft="${k}" class="${tipoSel === k ? "sel" : ""}">${t} (${items.filter((x) => x.tipo === k).length})</button>`).join("")}</div>
-        ${tipoSel === "suelo" && et ? cajaReq(et.id) : ""}
+        ${tipoSel === "suelo" ? cajaCultivo(c.id) : ""}${tipoSel === "suelo" && et ? cajaReq(et.id) : ""}
         <details class="card" ${ui.ph ? "open" : ""}><summary>¿Tienes análisis de suelo?</summary>
           <label class="campo">pH del suelo<input id="ph" inputmode="decimal" value="${h(ui.ph)}" placeholder="Ej. 5,2"></label>
           ${!isNaN(ph) ? `<div class="aviso ${ph < phAcido ? "ambar" : "verde"}">${ic.alerta}<div>${ph < phAcido ? `Suelo <b>ácido</b> (pH ${h(ui.ph)}): aplica primero la enmienda (${h(items.filter((x) => x.tipo === "enmienda").map((x) => P(x.producto_id).nombre).join(", ") || "cal o dolomita")}) unos 30 días antes de fertilizar.` : `pH ${h(ui.ph)}: no necesitas encalar.`}</div></div>` : ""}

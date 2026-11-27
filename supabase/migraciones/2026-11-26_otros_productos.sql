@@ -62,3 +62,6 @@ grant execute on function public.app_reportar_producto(uuid, jsonb) to anon, aut
 
 -- etapas_requerimiento_npk (aplicada): etapas.req_n, req_p2o5, req_k2o (kg/ha por aplicación). Si la etapa los tiene,
 -- la app reparte en medios sacos los fertilizantes NPK al suelo de la etapa para cumplirlos (Logic.repartirNPK).
+
+-- requerimiento_cultivo_y_reparto_etapas (aplicada): cultivos.req_n/req_p2o5/req_k2o/req_periodo('año'|'ciclo')/req_fuente;
+-- etapas.aplicaciones/pct_n/pct_p2o5/pct_k2o. Requerimiento por aplicación = requerimiento del cultivo × % ÷ aplicaciones.

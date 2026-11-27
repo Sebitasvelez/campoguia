@@ -150,6 +150,18 @@
         { k: "estado", t: "Estado", tipo: "select", opciones: () => [["pendiente", "Pendiente"], ["completo", "Completo"]], req: true },
       ],
     },
+    cultivos: {
+      tabla: "cultivos", titulo: "Requerimiento de los cultivos", sinNuevo: true, ayuda: "Requerimiento total de N, P₂O₅ y K₂O por hectárea, por año (perennes) o por ciclo. En «Cultivos y etapas» indicas cuántas fertilizaciones tiene cada etapa y qué % del requerimiento le toca; la app calcula los sacos por aplicación.",
+      buscar: (r) => r.nombre,
+      filtro: { campo: "req_periodo", etiqueta: "Período", opciones: () => [["año", "Por año"], ["ciclo", "Por ciclo"]] },
+      columnas: [["Cultivo", (r) => `<b>${h(r.nombre)}</b>`], ["N", (r) => h(r.req_n ?? "—")], ["P₂O₅", (r) => h(r.req_p2o5 ?? "—")], ["K₂O", (r) => h(r.req_k2o ?? "—")], ["Por", (r) => h(r.req_periodo || "—")], ["Fuente", (r) => `<span class="mini">${h(r.req_fuente || "")}</span>`]],
+      campos: [
+        { k: "nombre", t: "Cultivo", req: true },
+        { k: "req_n", t: "N (kg/ha)", tipo: "num" }, { k: "req_p2o5", t: "P₂O₅ (kg/ha)", tipo: "num" }, { k: "req_k2o", t: "K₂O (kg/ha)", tipo: "num" },
+        { k: "req_periodo", t: "El requerimiento es", tipo: "select", opciones: () => [["año", "Por hectárea por año (perenne)"], ["ciclo", "Por hectárea por ciclo"]], vacio: true },
+        { k: "req_fuente", t: "Fuente" },
+      ],
+    },
     etapas: {
       tabla: "etapas", titulo: "Cultivos y etapas", ayuda: "Etapas fenológicas de cada cultivo. Para agregar un cultivo nuevo usa el botón «Nuevo cultivo».",
       buscar: (r) => r.nombre + " " + nomCultivo(r.cultivo_id),
@@ -159,7 +171,9 @@
         { k: "cultivo_id", t: "Cultivo", tipo: "select", opciones: optCultivos, req: true },
         { k: "nombre", t: "Nombre de la etapa", req: true },
         { k: "uso", t: "Se usa en", tipo: "select", opciones: () => [["ambos", "Plan sanitario y fertilización"], ["sanitario", "Solo plan sanitario"], ["fertilizacion", "Solo fertilización y asesoría rápida"], ["lote", "Etapa del lote (al crear un lote)"]], def: "ambos" },
-        { k: "req_n", t: "Requerimiento N (kg/ha por aplicación)", tipo: "num", ayuda: "Si llenas N, P₂O₅ y K₂O, la app calcula los sacos de los fertilizantes NPK al suelo de esta etapa para cumplirlo (en medios sacos). Vacío: usa las dosis fijas del plan." },
+        { k: "aplicaciones", t: "Fertilizaciones al suelo en esta etapa (por año o ciclo)", tipo: "num", ayuda: "Con el % de N, P₂O₅ y K₂O la app calcula el requerimiento por aplicación desde el requerimiento del cultivo y reparte los sacos (prioriza Solei)." },
+        { k: "pct_n", t: "% del N del cultivo para esta etapa", tipo: "num" }, { k: "pct_p2o5", t: "% del P₂O₅", tipo: "num" }, { k: "pct_k2o", t: "% del K₂O", tipo: "num" },
+        { k: "req_n", t: "O requerimiento directo N (kg/ha por aplicación)", tipo: "num", ayuda: "Solo para etapas fuera del año en producción (siembra, establecimiento). Si la etapa tiene fertilizaciones y %, estos campos no se usan." },
         { k: "req_p2o5", t: "Requerimiento P₂O₅ (kg/ha por aplicación)", tipo: "num" },
         { k: "req_k2o", t: "Requerimiento K₂O (kg/ha por aplicación)", tipo: "num" },
         { k: "semanas", t: "Semanas (texto)" },
@@ -170,7 +184,7 @@
   };
 
   // ------------------------------------------------------------ layout
-  const MENU = [["resumen", "Resumen"], ["productos", "Productos"], ["problemas", "Problemas por cultivo"], ["recomendaciones", "Recomendaciones"], ["plan_sanitario", "Plan sanitario"], ["plan_fertilizacion", "Plan de fertilización"], ["compatibilidad", "Compatibilidad de mezclas"], ["otros_productos", "Otras marcas"], ["etapas", "Cultivos y etapas"], ["agricultores", "Agricultores y registros"], ["ajustes", "Ajustes de la app"]];
+  const MENU = [["resumen", "Resumen"], ["productos", "Productos"], ["problemas", "Problemas por cultivo"], ["recomendaciones", "Recomendaciones"], ["plan_sanitario", "Plan sanitario"], ["plan_fertilizacion", "Plan de fertilización"], ["compatibilidad", "Compatibilidad de mezclas"], ["otros_productos", "Otras marcas"], ["cultivos", "Requerimiento de los cultivos"], ["etapas", "Cultivos y etapas"], ["agricultores", "Agricultores y registros"], ["ajustes", "Ajustes de la app"]];
   const hayCambios = () => store.get("cambios", false);
   const marcarCambio = () => { store.set("cambios", true); const b = $("#estadoPub"); if (b) b.outerHTML = estadoPub(); };
   const estadoPub = () => hayCambios()
@@ -205,7 +219,7 @@
     const extra = clave === "productos" ? `<label class="btn sec" style="cursor:pointer">Actualizar precios (lista Excel)<input type="file" id="impLista" accept=".xlsx,.xls" hidden></label><button class="btn sec" id="exp">Exportar Excel</button><label class="btn sec" style="cursor:pointer">Importar Excel<input type="file" id="imp" accept=".xlsx,.xls,.csv" hidden></label>` : clave === "etapas" ? `<button class="btn sec" id="nuevoCultivo">+ Nuevo cultivo</button>` : clave === "recomendaciones" && fval ? `<button class="btn sec" id="sugerir" title="Mantiene la opción recomendada y propone 4 alternativas por grupo químico, ordenadas de la más eficiente (1) a la menos (4)">Sugerir alternativas</button>` : "";
     marco(clave, `
       <div class="adm-cab"><div><h2>${h(sec.titulo)}</h2><div class="mini" style="margin-top:4px">${h(sec.ayuda)} · ${filas.length} en total</div></div>
-        <div class="botones">${extra}<a class="btn sec" href="#${clave}?id=nuevo${fval ? "&f=" + encodeURIComponent(fval) : ""}">+ Nuevo</a>${botonPublicar}</div></div>
+        <div class="botones">${extra}${sec.sinNuevo ? "" : `<a class="btn sec" href="#${clave}?id=nuevo${fval ? "&f=" + encodeURIComponent(fval) : ""}">+ Nuevo</a>`}${botonPublicar}</div></div>
       ${estadoPub()}
       <div class="adm-filtros">
         <label class="campo">${h(sec.filtro.etiqueta)}<select id="filtro"><option value="">Todos</option>${sec.filtro.opciones().map(([v, t]) => `<option value="${h(v)}" ${String(v) === String(fval) ? "selected" : ""}>${h(t)}</option>`).join("")}</select></label>
