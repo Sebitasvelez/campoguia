@@ -90,6 +90,7 @@
     if ((d.fertilizantes || []).length) {
       tabla(`${++nSec}. Fertilización al suelo`, d.fertilizantes, "Total para la finca", "Dosis requerida por ha por aplicación");
       if ((d.resumenSuelo || []).length) recuadro(d.resumenSuelo); else if (limpio(d.notaSuelo)) recuadro([d.notaSuelo]);
+      if (limpio(d.obsSuelo)) { sub("Observaciones"); texto(d.obsSuelo, 10, "normal", TEXTO, 3); }
       y += 2;
     }
 

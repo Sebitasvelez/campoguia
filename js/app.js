@@ -112,8 +112,33 @@
   // cuadro de la etapa: el agricultor ve la mezcla en sacos, gramos por planta, elemento más presente y N:K;
   // el técnico además compara lo que requiere la etapa con lo que aporta la mezcla
   const cajaReq = (eid, ha) => { const e = etapa(eid); if (!e || !I.req[eid]) return ""; const cul = cultivo(e.cultivo_id);
-    return cajaEtapa(resumenSuelo(e, cul), Number(String(ha || "").replace(",", ".")) || 0, Number(String((ui.calc && ui.calc.pha) || "").replace(",", ".")) || 0); };
+    return cajaEtapa(resumenSuelo(e, cul), Number(String(ha || "").replace(",", ".")) || 0, Number(String((ui.calc && ui.calc.pha) || "").replace(",", ".")) || 0, cul.id); };
   // requerimiento del cultivo y cuánto cubre el plan con sus fertilizaciones al año o al ciclo
+  // propósito de la mezcla al suelo según el cultivo y la etapa con la que se calculó (observaciones de la receta)
+  const PROPOSITO = [
+    ["pitahaya", /recuperaci/, "Mezcla para recuperar plantas amarillas o débiles. El nitrógeno devuelve el color verde y reactiva el crecimiento de pencas; el fósforo, igual o mayor que el potasio, regenera raíces para que la planta vuelva a absorber nutrientes. Revise también el drenaje, el estado de las raíces y las plagas del suelo, que suelen ser la causa del amarillamiento."],
+    ["pitahaya", /siembra|inicio/, "Mezcla de arranque, rica en fósforo. Estimula la formación de raíces nuevas para que la planta prenda rápido y se ancle al tutor; el nitrógeno y el potasio en partes iguales sostienen el primer crecimiento sin forzar la planta."],
+    ["pitahaya", /desarrollo|pencas/, "Mezcla rica en nitrógeno. Impulsa la emisión y el engrosamiento de pencas nuevas, que son la estructura que sostendrá la producción: pencas gruesas y sanas acumulan las reservas que la planta usará en la floración."],
+    ["pitahaya", /flor|cuaj|brotaci/, "Mezcla rica en fósforo, acompañada de potasio. Apoya la formación de botones florales, da energía a la floración y favorece el cuajado del fruto, ayudando a reducir el aborto de flores."],
+    ["pitahaya", /engros|fruta|fruto/, "Mezcla rica en potasio. Favorece el llenado y el tamaño del fruto, el paso de azúcares a la pulpa (grados Brix), el color y la firmeza de la cáscara para una mejor poscosecha. El magnesio mantiene las pencas verdes y activas mientras cargan la fruta."],
+    ["cacao", /vivero|establec|siembra|inicio/, "Mezcla de arranque, rica en fósforo. Desarrolla un sistema de raíces fuerte para que la planta se establezca bien en el campo y resista el trasplante."],
+    ["cacao", /desarrollo|crecimiento/, "Mezcla rica en nitrógeno. Impulsa el crecimiento del tronco, las ramas y el follaje para formar una copa (estructura productiva) amplia y bien formada antes de entrar en producción."],
+    ["cacao", /flor/, "Mezcla rica en fósforo. Favorece una floración abundante en los cojines florales y el cuajado de los frutos pequeños (pepinillos)."],
+    ["cacao", /llenado|mazorca|engros/, "Mezcla rica en potasio. Favorece el llenado de la mazorca y de las almendras, el peso y la calidad del grano, y ayuda a reducir la marchitez de los pepinillos."],
+    ["maiz", /siembra|emergencia/, "Mezcla de arranque, rica en fósforo. Desarrolla raíces y da vigor a la plántula para una emergencia pareja del lote."],
+    ["maiz", /vegetativ|crecimiento|desarrollo/, "Mezcla rica en nitrógeno. Impulsa el crecimiento de hojas y tallo; en esta etapa la planta empieza a definir el tamaño potencial de la mazorca (número de hileras)."],
+    ["maiz", /prefloraci/, "Mezcla rica en nitrógeno, con potasio. Es la etapa de mayor absorción: define el tamaño de la mazorca y el número de granos por hilera, y prepara la planta para una buena polinización."],
+    ["maiz", /llenado|flor/, "Mezcla con nitrógeno y potasio parejos. Sostiene la polinización y el llenado del grano, mejora el peso de la mazorca y fortalece el tallo para evitar el acame."],
+    ["malanga", /siembra|brotaci/, "Mezcla de arranque, rica en fósforo. Estimula las raíces y una brotación pareja de la semilla."],
+    ["malanga", /foliar|desarrollo/, "Mezcla rica en nitrógeno. Desarrolla el área de hojas, que es la que produce el alimento que luego se guardará en los cormos."],
+    ["malanga", /cormo|formaci/, "Mezcla rica en fósforo. Apoya el inicio y la formación de los cormos y cormelos, que definen el número de unidades a cosechar."],
+    ["malanga", /engros|cosecha/, "Mezcla rica en potasio. Favorece el engrose de los cormos, la acumulación de almidón, el peso y la conservación después de la cosecha."],
+  ];
+  const PROP_GEN = { arranque: "Mezcla de arranque, rica en fósforo: estimula raíces y un buen establecimiento.", desarrollo: "Mezcla rica en nitrógeno: impulsa el crecimiento de hojas, tallos y ramas.",
+    floracion: "Mezcla rica en fósforo: apoya la floración y el cuajado.", engrose: "Mezcla rica en potasio: favorece el llenado, el tamaño y la calidad de la cosecha." };
+  const propositoDe = (cid, nombreEt) => { const t = L.quitarTildes ? L.quitarTildes(String(nombreEt || "").toLowerCase()) : String(nombreEt || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const r = PROPOSITO.find(([c, re]) => c === cid && re.test(t)); if (r) return r[2];
+    const rg = L.reglaDeEtapa ? L.reglaDeEtapa(nombreEt, cid) : null; return rg && PROP_GEN[rg.clave] ? PROP_GEN[rg.clave] : ""; };
   // frecuencia de las fertilizaciones al suelo según el plan (para la receta)
   const frecPlan = (cid) => { const cul = cultivo(cid); if (!cul || !tieneReq(cul)) return null;
     const per = cul.req_periodo === "ciclo" ? "ciclo" : "año", apps = etapasFert(cid).filter((e) => I.req[e.id] && appsDe(e)).reduce((a, e) => a + appsDe(e), 0);
@@ -177,7 +202,7 @@
       requiere: requiereEtapa(et, cul), etapa: et.nombre, modificado: !!(simOn() && SIM.mezcla[et.id]) };
   }
   // cuadro resumen de la etapa: sacos para las hectáreas, g por planta, elemento y N:K; el técnico además compara con el requerimiento
-  function cajaEtapa(q, ha, pha) {
+  function cajaEtapa(q, ha, pha, cid) {
     if (!q || (!q.lista.length && !simOn())) return "";
     const vacia = !q.lista.length;
     const a = q.aporte, tec = esTecnico(), haN = ha > 0 ? ha : 1, rg = q.regla;
@@ -200,6 +225,7 @@
       ${q.masa && q.mg ? `<span>Total: <b>${sacosTxt((q.masa + q.mg) * haN)}</b> de mezcla de fertilizantes</span>` : ""}
       <span>${gPl}</span>
       ${tabla}
+      ${!vacia && cid && propositoDe(cid, q.etapa) ? `<div class="aviso verde prop-mezcla"><span class="pill verde">PARA QUÉ SIRVE ESTA MEZCLA</span><div>${h(propositoDe(cid, q.etapa))}</div></div>` : ""}
       <div class="grid2">${tile("Elemento más presente", vacia ? "—" : NOMBRE_EL[q.mayor], chk(okMayor, "Es el que pide la etapa", (rg && rg.mayor ? "La etapa pide " + NOMBRE_EL[rg.mayor].charAt(0).toLowerCase() + NOMBRE_EL[rg.mayor].slice(1) : "Revisa la regla de la etapa")))}${rg && rg.pkMin ? tile("Relación N:P:K", vacia ? "—" : txtNPK(a), chk(okRatio && okPK, "Dentro de la regla", "Fuera de la regla")) : tile("Relación N:K", vacia ? "—" : txtRatio(q.ratio), chk(okRatio, "Dentro de la regla", "Fuera de la regla"))}</div>
       ${tec && rg ? `<span class="mini">Regla de la etapa: ${h(rg.texto)}.</span>` : ""}
     </div>`;
@@ -1043,7 +1069,7 @@
         </div>` : tipoSel === "foliar" ? segVol() : ""}
         ${tipoSel === "suelo" && calc ? cajaCultivo(c.id) : ""}
         ${calc && tipoSel === "suelo" && et ? editorSim(et, c) : ""}
-        ${tipoSel === "suelo" && res ? cajaEtapa(res, haN, phaN) : ""}
+        ${tipoSel === "suelo" && res ? cajaEtapa(res, haN, phaN, c.id) : ""}
         ${tipoSel === "enmienda" ? `<div class="card">
           <label class="campo">pH del suelo<input id="ph" inputmode="decimal" value="${h(ui.ph)}" placeholder="Ej. 5,2"></label>
           ${!isNaN(ph) ? `<div class="aviso ${ph < phAcido ? "ambar" : "verde"}">${ic.alerta}<div>${ph < phAcido ? `Suelo <b>ácido</b> (pH ${h(ui.ph)}): aplica primero la enmienda (${h(items.filter((x) => x.tipo === "enmienda").map((x) => P(x.producto_id).nombre).join(", ") || "cal o dolomita")}) de 21 a 30 días antes o después de fertilizar.` : `pH ${h(ui.ph)}: no necesitas encalar.`}</div></div>` : ""}
@@ -1094,7 +1120,9 @@
         if (kgHa === null) { sinPha.push(p.nombre); return; }
         m.push({ producto_id: Number(p.id), suelo: true, dosis_ha: Math.round(kgHa * 10) / 10 }); n++; });
       S.set("mezcla", m);
-      if (tipoSel === "suelo" && n) { const fp = frecPlan(c.id); S.set("recFert", { cultivo: c.nombre, etapa: et ? et.nombre : "", frec: fp ? fp.txt : "", apps: fp ? fp.apps : 0, per: fp ? fp.per : "" }); }
+      if (tipoSel === "suelo" && n) { const fp = frecPlan(c.id), lst = etapasFert(c.id).filter((e) => I.req[e.id] && !/recuperaci/i.test(e.nombre)), i = et ? lst.findIndex((e) => e.id === et.id) : -1;
+        const sig = i >= 0 ? lst.slice(i + 1).find((e) => appsDe(e)) : null;
+        S.set("recFert", { cultivo: c.nombre, cid: c.id, etapa: et ? et.nombre : "", appsEt: et ? appsDe(et) : 0, siguiente: sig ? sig.nombre : "", proposito: et ? propositoDe(c.id, et.nombre) : "", frec: fp ? fp.txt : "", apps: fp ? fp.apps : 0, per: fp ? fp.per : "" }); }
       if (otrasF.length) setTimeout(() => toast(otrasF.join(", ") + " es de otra marca: no se pasa a la receta"), 1600);
       if (sinPha.length) toast("Escribe las plantas por ha para añadir " + sinPha.join(", "));
       else if (n) { ui.asisAbierto = false; guardarUI(); toast(n + (n === 1 ? " producto agregado" : " productos agregados") + " a tu receta"); location.hash = "#/receta"; window.scrollTo(0, 0); }
@@ -1680,12 +1708,19 @@
     const costoCompra = compra.reduce((a, c) => a + (c.costo || 0), 0), costoTanqueMezcla = compra.reduce((a, c) => a + (c.costoTanque || 0), 0);
     const costoEquipoMezcla = ui.vol === "tanque" ? costoTanqueMezcla : costoTanqueMezcla * BOMBA() / TANQUE();
     const txtCostoEquipo = ui.vol === "tanque" ? `Costo aprox. por tanque de ${TANQUE()} L de aplicación` : `Costo aprox. por bomba de ${BOMBA()} L de aplicación`;
+    // próxima fertilización: si la etapa lleva más de una, se repite esta misma mezcla; si no, la siguiente es con la mezcla de la otra etapa
+    const proxFert = (rf) => { const cuando = rf.frec && rf.frec !== "según la etapa" ? rf.frec.replace(/^cada /, "dentro de ") : "";
+      if (!rf.etapa) return "Próxima fertilización: según el plan de fertilización del cultivo";
+      const luego = rf.siguiente ? `la mezcla de la etapa «${rf.siguiente}»` : "la mezcla de la etapa en que esté el cultivo";
+      if (rf.appsEt > 1) return `Próxima fertilización${cuando ? " " + cuando : ""}: repetir esta misma mezcla (la etapa «${rf.etapa}» lleva ${rf.appsEt} fertilizaciones). Al terminar esta etapa, usar ${luego}, según el plan de fertilización`;
+      return `Próxima fertilización${cuando ? " " + cuando : ""}: no repetir esta mezcla (la etapa «${rf.etapa}» lleva una sola fertilización). Usar ${luego}, según el plan de fertilización`; };
     const kgHaSuelo = sueloM.reduce((a, x) => a + (dzDe(x) || 0), 0), gPlanta = pha > 0 && kgHaSuelo > 0 ? g10(kgHaSuelo * 1000 / pha) : 0;
     const rf = S.get("recFert", null) || {};
     const resSuelo = !haySuelo || !kgHaSuelo ? [] : [
       `Total a aplicar: ${sacosTxt(kgHaSuelo * haSuelo)} ${sueloM.length > 1 ? "de mezcla de fertilizantes" : "de fertilizante"} (${L.fmt(haSuelo, 2)} ha)`,
       gPlanta ? `${sueloM.length > 1 ? "Mezclar todos los fertilizantes y aplicar" : "Aplicar"} ${gPlanta} g por planta` : `${sueloM.length > 1 ? "Mezclar todos los fertilizantes y aplicar" : "Aplicar"} ${L.fmt(kgHaSuelo)} kg por ha (escribe las plantas por ha para saber los gramos por planta)`,
-      rf.frec && rf.frec !== "según la etapa" ? `Próxima fertilización: ${rf.frec.replace(/^cada /, "repetir dentro de ")}, según el plan de fertilización${rf.cultivo ? " de " + rf.cultivo.toLowerCase() : ""} (${rf.apps} fertilizaciones al suelo por ${rf.per})` : "Próxima fertilización: según el plan de fertilización del cultivo"];
+      proxFert(rf)];
+    const obsSuelo = haySuelo && rf.proposito ? `Etapa: ${rf.etapa}${rf.cultivo ? " (" + rf.cultivo.toLowerCase() + ")" : ""}. ${rf.proposito}` : "";
     const idx = (x) => m.indexOf(x);
     const sec = (n, t, cuerpo) => `<section class="card rec-sec"><div class="rec-tit"><i>${n}</i>${t}</div>${cuerpo}</section>`;
     const quitar = (x) => `<button class="icono-btn" data-q="${idx(x)}" aria-label="Quitar ${h(nombre(x.producto_id))}">✕</button>`;
@@ -1717,7 +1752,8 @@
         ${sec(3, "Fertilización al suelo", `
           ${cajaBuscaProd("Buscar fertilizante", "F", "Fertilizante, fórmula o etapa…")}
           ${sueloM.map((x) => { const p = P(x.producto_id), c = compra[idx(x)]; return `<div class="rec-item"><div class="tx"><b>${h(p.nombre)}</b><span class="mini">Dosis requerida por ha por aplicación: <b>${h(fmtD(x))}</b>${c && c.texto ? " · " + h(c.texto) + " para " + L.fmt(haSuelo, 2) + " ha" : ""}</span></div><span style="display:flex;gap:6px;align-items:center">${quitar(x)}</span></div>`; }).join("") || `<span class="mini">Agrega fertilizantes al suelo o envíalos desde el plan de fertilización.</span>`}
-          ${resSuelo.length ? `<div class="aviso verde" style="flex-direction:column;align-items:flex-start;gap:4px">${resSuelo.map((t, i) => i ? `<span>${h(t)}.</span>` : `<b>${h(t)}.</b>`).join("")}</div>` : ""}`)}
+          ${resSuelo.length ? `<div class="aviso verde" style="flex-direction:column;align-items:flex-start;gap:4px">${resSuelo.map((t, i) => i ? `<span>${h(t)}.</span>` : `<b>${h(t)}.</b>`).join("")}</div>` : ""}
+          ${obsSuelo ? `<span class="mini"><b>Observaciones:</b> ${h(obsSuelo)}</span>` : ""}`)}
         ${m.length ? sec(4, "Costos", `
           ${compra.map((c) => `<div class="fila" style="font-size:14px;border-top:1px solid var(--borde);padding-top:8px"><span><b>${h(c.p.nombre)}</b><br><span class="mini">${c.total !== null ? h(L.cantidad(c.total, c.unidad || c.p.unidad)) + " en total" : "Ver etiqueta"}</span></span><span style="text-align:right">${c.texto ? h(c.texto) : "—"}${c.costo !== null && c.costo !== undefined ? `<br><b>${dinero(c.costo)}</b>` : ""}</span></div>`).join("")}
           <div class="fila" style="border-top:1px solid var(--borde);padding-top:8px"><span><b>Costo total aprox.</b>${haySuelo ? ` · ${L.fmt(haSuelo, 2)} ha` : ""}</span><b>${dinero(costoCompra)}</b></div>
@@ -1762,7 +1798,7 @@
     const equipo = ui.vol === "tanque" ? `tanques de ${TANQUE()} L` : `bombas de ${BOMBA()} L`;
     const avisos = prodsT.length >= 2 ? (rev.length ? rev.map((r) => ({ nivel: r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde", texto: (r.nivel === "incompatible" ? "NO MEZCLAR. " : r.nivel === "precaucion" ? "PRECAUCIÓN. " : "") + (r.a ? nombre(r.a) + " + " + nombre(r.b) + ": " : "") + (r.nota || "") })) : [{ nivel: "verde", texto: "Sin incompatibilidades registradas. Haga la prueba del frasco antes de llenar el tanque." }]) : [];
     const texto = () => [`*${NOMBRE} · Receta*`, hayTanque ? `${L.fmt(cargas, 1)} ${equipo}` : "", "", hayTanque ? `*Dosis por ${volTxt()}:*` : ""].concat(tanqueM.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`))
-      .concat(haySuelo ? ["", "*Al suelo (dosis requerida por ha por aplicación):*"].concat(sueloM.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`)).concat(resSuelo.map((t) => t + ".")) : [])
+      .concat(haySuelo ? ["", "*Al suelo (dosis requerida por ha por aplicación):*"].concat(sueloM.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`)).concat(resSuelo.map((t) => t + ".")).concat(obsSuelo ? ["_Observaciones:_ " + obsSuelo] : []) : [])
       .concat(["", "*Para comprar:*"]).concat(compra.map((c) => `• ${c.p.nombre}: ${c.texto || "ver etiqueta"}`)).concat([`Costo total aprox.: ${dinero(costoCompra)}`]).concat(pasos.length ? ["", "*Orden de mezcla:*"].concat(pasos) : []).filter((x, i, l) => x !== "" || l[i - 1] !== "").join("\n");
     const armar = () => { const per = D.sesion.perfil, ahora = new Date(), tel = String(per.telefono || "").replace(/\D/g, "");
       const nomPer = [per.nombres, per.apellidos].filter(Boolean).join(" ");
@@ -1774,7 +1810,7 @@
           return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: `${fmtD(x)} por ${volTxt()}`, via: viaDe(x), total: c.total !== null ? L.cantidad(c.total, p.unidad) + " en total" : "Ver etiqueta" }; }),
         fertilizantes: sueloM.map((x) => { const p = P(x.producto_id), c = compra[idx(x)], dz = dzDe(x);
           return { nombre: p.nombre, ia: p.concentracion || p.ingrediente_activo || "", dosis: fmtD(x), via: viaDe(x), total: c.texto ? c.texto + ` (${L.fmt(haSuelo, 2)} ha)` : c.total !== null ? L.cantidad(c.total, "g") : "Ver etiqueta" }; }),
-        resumenSuelo: resSuelo,
+        resumenSuelo: resSuelo, obsSuelo,
         notaSuelo: haySuelo && gPlanta ? `${sueloM.length > 1 ? "Mezclar los fertilizantes en fórmula y aplicar" : "Aplicar"} ${L.fmt(gPlanta, 0)} g por planta.` : "",
         pasos, avisos,
         precauciones: prods.filter((p) => (p.carencia_dias !== null && p.carencia_dias !== undefined) || (p.reingreso_horas !== null && p.reingreso_horas !== undefined))
