@@ -287,7 +287,7 @@
         <section class="card" style="gap:8px"><label class="campo" style="gap:6px"><b style="font-size:16px">¿Qué problema tienes en tu cultivo?</b>
           <input id="consulta" type="search" autocomplete="off" value="${h(ui.consulta || "")}" placeholder="Ej. pulgones, ácaros, lancha, monilia, fertilización en pitahaya…"></label>
           <div id="consultaRes" style="display:flex;flex-direction:column;gap:8px"></div></section>
-        <div class="etq">Revisa el manual de tu cultivo</div>
+        <div class="etq">Elige el manual de tu cultivo</div>
         <div class="grid2">${cultivos().map((c) => `<a class="cultivo ${c.id === ui.cultivo ? "sel" : ""}" href="#/cultivo/${h(c.id)}" data-c="${h(c.id)}"><span style="color:var(--verde);display:flex;height:44px;align-items:center">${ICONO_CULTIVO[c.id] || ic.hoja}</span><b>${h(c.nombre)}</b><span>Manual técnico · ${(I.problemas[c.id] || []).length} temas</span></a>`).join("")}</div>
         <div class="etq" style="margin-top:4px">Accesos rápidos</div>
         <div class="lista">
