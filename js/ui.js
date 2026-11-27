@@ -14,7 +14,7 @@
       const fila = document.createElement("div"); fila.className = "acciones";
       const no = document.createElement("button"); no.type = "button"; no.className = "btn sec"; no.textContent = o.cancelar;
       const si = document.createElement("button"); si.type = "button"; si.className = o.peligro ? "btn peligro" : "btn"; si.textContent = o.ok;
-      fila.append(no, si); caja.appendChild(fila); fondo.appendChild(caja); document.body.appendChild(fondo);
+      if (o.cancelar) fila.append(no); fila.append(si); caja.appendChild(fila); fondo.appendChild(caja); document.body.appendChild(fondo);
       const cerrar = (v) => { fondo.remove(); document.removeEventListener("keydown", tecla); resolver(v); };
       const tecla = (e) => { if (e.key === "Escape") cerrar(o.campo ? null : false); if (e.key === "Enter" && o.campo) cerrar(input.value.trim() || null); };
       document.addEventListener("keydown", tecla);
@@ -26,6 +26,7 @@
   }
   window.UI = {
     confirmar: (m, o) => dialogo(m, o),
-    pedir: (m, placeholder) => dialogo(m, { campo: true, placeholder, ok: "Crear" }),
+    pedir: (m, placeholder, ok) => dialogo(m, { campo: true, placeholder, ok: ok || "Crear" }),
+    avisar: (m, ok) => dialogo(m, { ok: ok || "Entendido", cancelar: null }),
   };
 })();

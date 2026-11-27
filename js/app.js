@@ -222,6 +222,7 @@
         <div class="grid2"><label class="campo">Cultivo principal<select name="cultivo_id">${cultOpts}</select></label>
         <label class="campo">Hectáreas<input name="hectareas" inputmode="decimal" placeholder="Ej. 2"></label></div>
         <label class="campo">Soy<select name="rol"><option value="agricultor">Agricultor</option><option value="tecnico">Técnico agrícola (requiere aprobación)</option></select></label>
+        <label class="campo" id="campoInst" hidden>¿A qué institución perteneces?<input name="institucion" maxlength="150" placeholder="Ej. MAG, GAD provincial, almacén, universidad…"><small>El administrador la revisa para aprobar tu acceso de técnico.</small></label>
         ${bloqueUbicacion(null)}
         <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--suave)"><input type="checkbox" name="acepta" checked style="width:22px;height:22px;margin:0;accent-color:var(--verde)"> Acepto que mi asesor vea mis registros y la ubicación de mi finca para darme seguimiento técnico.</label>
         <p class="mini" id="err" role="alert" style="color:var(--rojo);margin:0"></p>
@@ -230,6 +231,8 @@
       </form>`, null);
       conectarUbicacion(ub);
       const f = $("#f");
+      const selRol = f.elements.namedItem("rol"), inpInst = f.elements.namedItem("institucion");
+      selRol.addEventListener("change", () => { $("#campoInst").hidden = selRol.value !== "tecnico"; if (selRol.value === "tecnico") inpInst.focus(); });
       f.cedula.addEventListener("input", () => {
         const v = f.cedula.value.replace(/\D/g, ""), est = $("#cedEstado");
         est.style.color = v.length < 10 ? "" : D.cedulaValida(v) ? "var(--verde)" : "var(--rojo)";
@@ -239,13 +242,15 @@
         e.preventDefault(); const b = f.querySelector("button[type=submit]"); $("#err").textContent = "";
         if (!D.cedulaValida(f.cedula.value)) { $("#err").textContent = "La cédula no es válida. Revisa los 10 dígitos."; return; }
         if (!f.provincia.value || !f.sector.value.trim()) { $("#err").textContent = "Elige la provincia y escribe el sector de tu cultivo."; return; }
+        if (f.rol.value === "tecnico" && !f.institucion.value.trim()) { $("#err").textContent = "Escribe la institución a la que perteneces."; f.institucion.focus(); return; }
         b.disabled = true;
         try {
           await D.registrar({ cedula: f.cedula.value, nombres: f.nombres.value, telefono: f.telefono.value, cultivo_id: f.cultivo_id.value,
             hectareas: f.hectareas.value.replace(",", "."), provincia: f.provincia.value, sector: f.sector.value, rol: f.rol.value,
+            institucion: f.rol.value === "tecnico" ? f.institucion.value.trim() : null,
             acepta_seguimiento: f.acepta.checked, latitud: ub.latitud, longitud: ub.longitud, precision_m: ub.precision_m });
           ui.cultivo = f.cultivo_id.value; guardarUI(); location.hash = "#/"; router();
-          if (f.rol.value === "tecnico") toast("Tu cuenta está lista. El acceso de técnico agrícola queda pendiente de aprobación de tu asesor.");
+          if (f.rol.value === "tecnico") UI.avisar("Tu cuenta está lista. Tu acceso al panel de técnico agrícola necesita la aprobación del administrador. Se aprueba en un plazo de 24 horas. Mientras tanto tienes acceso como agricultor.");
         } catch (er) { $("#err").textContent = er.codigo === "red" ? "Para crear tu cuenta necesitas internet. Inténtalo cuando tengas señal." : er.message; b.disabled = false; }
       });
       return;
@@ -284,6 +289,7 @@
           ? `<a href="#/lotes" class="aviso rojo" style="text-decoration:none"><span class="pill rojo">CARENCIA</span><div><b>${h(a.lote)}:</b> no cosechar hasta el <b>${fechaCorta(a.fecha)}</b> (${a.dias} días)</div></a>`
           : `<a href="#/lotes" class="aviso ambar" style="text-decoration:none"><span class="pill ambar">RECORDATORIO</span><div><b>${h(a.lote)}:</b> ${h(a.actividad)} ${a.dias === 0 ? "hoy" : a.dias > 0 ? "en " + a.dias + " días" : "atrasada " + -a.dias + " días"}</div></a>`).join("")}
         ${cardInstalar()}
+        ${D.sesion.perfil.rol_solicitado === "tecnico" && D.sesion.perfil.rol !== "tecnico" ? `<div class="aviso azul" style="padding:10px 12px">${ic.alerta}<div><b>Acceso de técnico en revisión.</b> El panel de técnico agrícola necesita la aprobación del administrador; se aprueba en un plazo de 24 horas. Mientras tanto tienes acceso como agricultor.</div></div>` : ""}
         <section class="card" style="gap:8px"><label class="campo" style="gap:6px"><b style="font-size:16px">¿Qué problema tienes en tu cultivo?</b>
           <input id="consulta" type="search" autocomplete="off" value="${h(ui.consulta || "")}" placeholder="Ej. pulgones, ácaros, lancha, monilia, fertilización en pitahaya…"></label>
           <div id="consultaRes" style="display:flex;flex-direction:column;gap:8px"></div></section>
@@ -1551,9 +1557,9 @@
     let cuerpo;
     if (p.rol === "tecnico") cuerpo = `<p class="mini" style="margin:0">Ves la información técnica: grupos químicos funcionales y otras opciones de productos.</p>
       <button class="btn sec chico" data-rol="agricultor">Cambiar a agricultor</button>`;
-    else if (p.rol_solicitado === "tecnico") cuerpo = `<div class="aviso azul" style="padding:8px 10px">${ic.alerta}<div>Pediste cambiar a <b>Técnico agrícola</b>${fecha ? " el " + h(fecha) : ""}. Tu asesor debe aprobarlo; el cambio se verá al sincronizar.</div></div>
+    else if (p.rol_solicitado === "tecnico") cuerpo = `<div class="aviso azul" style="padding:8px 10px">${ic.alerta}<div>Pediste cambiar a <b>Técnico agrícola</b>${fecha ? " el " + h(fecha) : ""}${p.institucion ? " (" + h(p.institucion) + ")" : ""}. El administrador lo aprueba en un plazo de 24 horas; mientras tanto tienes acceso como agricultor.</div></div>
       <button class="btn sec chico" data-rol="cancelar">Cancelar solicitud</button>`;
-    else cuerpo = `<p class="mini" style="margin:0">Si eres técnico agrícola puedes pedir el cambio. Tu asesor lo revisa y lo aprueba.</p>
+    else cuerpo = `<p class="mini" style="margin:0">Si eres técnico agrícola puedes pedir el cambio. El administrador lo revisa y lo aprueba en un plazo de 24 horas.</p>
       <button class="btn sec chico" data-rol="tecnico">Solicitar cambio a técnico agrícola</button>`;
     return `<section class="card"><div class="fila"><span class="mini">Tipo de cuenta</span><b>${p.rol === "tecnico" ? "Técnico agrícola" : "Agricultor"}</b></div>${cuerpo}</section>`;
   }
@@ -1593,9 +1599,15 @@
     $$("[data-rol]").forEach((b) => b.addEventListener("click", async () => {
       const rol = b.dataset.rol;
       if (rol === "agricultor" && !(await UI.confirmar("Dejarás de ver la información técnica de grupos químicos. Para volver a ser técnico agrícola necesitarás otra aprobación. ¿Cambiar a agricultor?", { ok: "Cambiar a agricultor" }))) return;
+      if (rol === "tecnico") { // la institución es obligatoria para pedir el acceso de técnico
+        const inst = await UI.pedir("¿A qué institución perteneces?", "Ej. MAG, GAD provincial, almacén, universidad…", "Enviar solicitud");
+        if (!inst) return;
+        try { await D.actualizarPerfil({ institucion: inst }); } catch (er) { toast(er.codigo === "red" ? "Necesitas internet para enviar la solicitud." : er.message); return; }
+      }
       try {
         await D.solicitarRol(rol);
-        toast(rol === "tecnico" ? (D.sesion.perfil.rol === "tecnico" ? "Ahora tu cuenta es de técnico agrícola" : "Solicitud enviada. Tu asesor la revisará.") : rol === "cancelar" ? "Solicitud cancelada" : "Ahora tu cuenta es de agricultor");
+        if (rol === "tecnico" && D.sesion.perfil.rol !== "tecnico") UI.avisar("Solicitud enviada. Tu acceso al panel de técnico agrícola necesita la aprobación del administrador. Se aprueba en un plazo de 24 horas. Mientras tanto tienes acceso como agricultor.");
+        else toast(rol === "tecnico" ? "Ahora tu cuenta es de técnico agrícola" : rol === "cancelar" ? "Solicitud cancelada" : "Ahora tu cuenta es de agricultor");
         vPerfil();
       } catch (er) { toast(er.codigo === "red" ? "Necesitas internet para cambiar el tipo de cuenta." : er.message); }
     }));
