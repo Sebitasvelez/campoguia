@@ -12,7 +12,8 @@
    "req_k2o": 392,
    "req_periodo": "año",
    "req_fuente": "Garbanzo-León et al. 2024, Agronomía Mesoamericana (pitahaya, 3000 plantas/ha)",
-   "kg_aplicacion": 125
+   "kg_aplicacion": 125,
+   "ciclo_meses": 12
   },
   {
    "id": "cacao",
@@ -24,7 +25,8 @@
    "req_k2o": 204,
    "req_periodo": "año",
    "req_fuente": "Barriga, Menjivar y Mite (INIAP), cacao CCN-51 con 2222 plantas/ha",
-   "kg_aplicacion": 125
+   "kg_aplicacion": 125,
+   "ciclo_meses": 12
   },
   {
    "id": "maiz",
@@ -36,7 +38,8 @@
    "req_k2o": 72.6,
    "req_periodo": "ciclo",
    "req_fuente": "Bertsch 2003, citado por INIAP (maíz tropical, 5 t/ha de grano)",
-   "kg_aplicacion": 125
+   "kg_aplicacion": 125,
+   "ciclo_meses": 4
   },
   {
    "id": "malanga",
@@ -48,7 +51,8 @@
    "req_k2o": 109,
    "req_periodo": "ciclo",
    "req_fuente": "Programa según curva de absorción en Colocasia (Costa Rica, TEC)",
-   "kg_aplicacion": 125
+   "kg_aplicacion": 125,
+   "ciclo_meses": 10
   }
  ],
  "etapas": [

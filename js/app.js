@@ -51,20 +51,52 @@
       if (critica && kieserite) { const x = lista.find(esMg);
         elegidos.push(x ? Object.assign({}, x, { dosis_kg_ha: 25, dosis_g_planta: null, calculada: true }) : nuevo(kieserite.id, 25, "Magnesio y azufre: etapa crítica.")); }
       I.fert[e.id] = elegidos.concat(lista.filter((x) => !esNPK(x) && !esMg(x))).sort((x, y) => (x.tipo === "suelo" ? 0 : 1) - (y.tipo === "suelo" ? 0 : 1) || (x.orden || 0) - (y.orden || 0));
-      I.req[e.id] = { regla, masa, mg: critica && !!kieserite, aporte: r.aporte, ratio: r.ratio, apps: Number(e.aplicaciones) || 0, cul };
+      // lo que requiere la etapa por aplicación: requerimiento del cultivo × % de la etapa ÷ sus fertilizaciones (o el escrito directo)
+      const apps = Number(e.aplicaciones) || 0, conPct = cul && apps > 0 && (Number(e.pct_n) || Number(e.pct_p2o5) || Number(e.pct_k2o));
+      const requiere = conPct ? { n: (Number(cul.req_n) || 0) * (Number(e.pct_n) || 0) / 100 / apps, p: (Number(cul.req_p2o5) || 0) * (Number(e.pct_p2o5) || 0) / 100 / apps, k: (Number(cul.req_k2o) || 0) * (Number(e.pct_k2o) || 0) / 100 / apps }
+        : (Number(e.req_n) || Number(e.req_p2o5) || Number(e.req_k2o)) ? { n: Number(e.req_n) || 0, p: Number(e.req_p2o5) || 0, k: Number(e.req_k2o) || 0 } : null;
+      I.req[e.id] = { regla, masa, mg: critica && !!kieserite, aporte: r.aporte, ratio: r.ratio, apps, cul, requiere, etapa: e.nombre };
     });
   }
-  const txtRatio = (r) => (r >= 1 ? L.fmt(r, 1) + ":1" : "1:" + L.fmt(1 / r, 1));
+  const txtRatio = (r) => (r >= 1 ? L.fmt(r, 1) + " : 1" : "1 : " + L.fmt(1 / r, 1));
+  const sacosTxt = (kg) => { const n = kg / 50, e = Math.floor(n + 1e-9), f = n - e, fr = f > 0.7 ? "¾" : f > 0.4 ? "½" : f > 0.1 ? "¼" : "";
+    return (e ? e : "") + fr + " " + (n > 1 ? "sacos" : "saco") + " de 50 kg"; };
+  const NOMBRE_EL = { n: "Nitrógeno (N)", p: "Fósforo (P₂O₅)", k: "Potasio (K₂O)" };
+  // cuadro de la etapa: el agricultor ve la mezcla en sacos, gramos por planta, elemento más presente y N:K;
+  // el técnico además compara lo que requiere la etapa con lo que aporta la mezcla
   const cajaReq = (eid) => { const q = I.req[eid]; if (!q) return "";
-    const f = (o) => `N ${L.fmt(o.n, 1)} · P₂O₅ ${L.fmt(o.p, 1)} · K₂O ${L.fmt(o.k, 1)}`;
-    return `<div class="aviso verde">${ic.alerta}<div><b>Regla de la etapa:</b> ${h(q.regla.texto)}.<br><span class="mini">Mezcla de <b>${L.fmt(q.masa)} kg de fertilizante por ha</b> por aplicación${q.mg ? " + <b>25 kg de Sulfato de Magnesio</b> (etapa crítica)" : ""}. Aporta ${f(q.aporte)} kg/ha · N:K = ${txtRatio(q.ratio)}.</span></div></div>`; };
+    const a = q.aporte, mayor = ["n", "p", "k"].reduce((m, e) => (a[e] > a[m] ? e : m), "n"), tec = esTecnico();
+    const pha = Number(String((ui.calc && ui.calc.pha) || "").replace(",", ".")), totalKg = q.masa + (q.mg ? 25 : 0);
+    const gPl = pha > 0 ? `Aplicar <b>${L.fmt(totalKg * 1000 / pha, 0)} g por planta</b>.` : `<span class="mini">Escribe las plantas por ha para saber los gramos por planta.</span>`;
+    const okMayor = mayor === q.regla.mayor, okRatio = q.ratio >= q.regla.min - 1e-6 && q.ratio <= q.regla.max + 1e-6;
+    const chk = (ok, si, no) => tec ? `<span class="mini" style="color:${ok ? "var(--verde)" : "#b26a00"}">${ok ? "✓ " + si : "⚠ " + no}</span>` : "";
+    const tile = (t, v, extra) => `<div class="dato" style="text-align:left;padding:8px 10px"><span>${t}</span><b>${v}</b>${extra || ""}</div>`;
+    let tabla = "";
+    if (tec) { const R = q.requiere, f1 = (v) => L.fmt(v, 1);
+      const dif = (ap, rq) => { if (!R) return "—"; const d = ap - rq, ok = rq ? Math.abs(d) <= rq * 0.1 + 0.05 : Math.abs(d) < 0.5; return `<span style="color:${ok ? "var(--verde)" : "#b26a00"}">${d > 0 ? "+" : d < 0 ? "−" : ""}${f1(Math.abs(d))}</span>`; };
+      const fila = (t, e) => `<tr><td><b>${t}</b></td><td>${R ? f1(R[e]) : "—"}</td><td><b>${f1(a[e])}</b></td><td>${dif(a[e], R ? R[e] : 0)}</td></tr>`;
+      const sR = R ? R.n + R.p + R.k : 0, sA = a.n + a.p + a.k;
+      tabla = `<table class="tabla-req"><tr><th>kg/ha</th><th>Requiere</th><th>Aporta</th><th>Diferencia</th></tr>${fila("N", "n")}${fila("P₂O₅", "p")}${fila("K₂O", "k")}
+        <tr class="suma"><td><b>Suma NPK</b></td><td>${R ? f1(sR) : "—"}</td><td><b>${f1(sA)}</b></td><td>${R && sR ? `<span style="color:${Math.abs(sA / sR - 1) <= 0.1 ? "var(--verde)" : "#b26a00"}">${L.fmt(sA / sR * 100, 0)} %</span>` : "—"}</td></tr></table>`; }
+    return `<div class="card caja-etapa">
+      <span class="mini">${h(q.etapa)} · por hectárea en cada aplicación</span>
+      <b style="font-size:15px">${sacosTxt(q.masa)} de mezcla${q.mg ? " + ½ saco de 50 kg de sulfato de magnesio" : ""}</b>
+      <span>${gPl}</span>
+      ${tabla}
+      <div class="grid2">${tile("Elemento más presente", NOMBRE_EL[mayor], chk(okMayor, "Es el que pide la etapa", "La etapa pide " + NOMBRE_EL[q.regla.mayor].toLowerCase()))}${tile("Relación N:K", txtRatio(q.ratio), chk(okRatio, "Dentro de la regla", "Fuera de la regla"))}</div>
+      ${tec ? `<span class="mini">Regla de la etapa: ${h(q.regla.texto)}.</span>` : ""}
+    </div>`; };
   // requerimiento del cultivo y cuánto cubre el plan con sus fertilizaciones al año o al ciclo
   const cajaCultivo = (cid) => { const cul = cultivo(cid); if (!cul || !(Number(cul.req_n) || Number(cul.req_p2o5) || Number(cul.req_k2o))) return "";
     const per = cul.req_periodo === "ciclo" ? "ciclo" : "año", ets = etapasFert(cid).filter((e) => I.req[e.id] && I.req[e.id].apps);
     const tot = ets.reduce((a, e) => { const q = I.req[e.id]; a.n += q.aporte.n * q.apps; a.p += q.aporte.p * q.apps; a.k += q.aporte.k * q.apps; a.apps += q.apps; return a; }, { n: 0, p: 0, k: 0, apps: 0 });
     const pc = (v, req) => (Number(req) ? " (" + L.fmt(v / Number(req) * 100, 0) + " %)" : "");
     return `<div class="card" style="gap:4px"><span class="etq">Requerimiento del cultivo</span><b>N ${L.fmt(Number(cul.req_n) || 0)} · P₂O₅ ${L.fmt(Number(cul.req_p2o5) || 0)} · K₂O ${L.fmt(Number(cul.req_k2o) || 0)} kg/ha/${per}</b>
-      ${tot.apps ? `<span class="mini">Con <b>${tot.apps} fertilizaciones al suelo por ${per}</b> (${ets.map((e) => h(e.nombre) + " " + I.req[e.id].apps).join(", ")}) el plan aporta N ${L.fmt(tot.n, 0)}${pc(tot.n, cul.req_n)} · P₂O₅ ${L.fmt(tot.p, 0)}${pc(tot.p, cul.req_p2o5)} · K₂O ${L.fmt(tot.k, 0)}${pc(tot.k, cul.req_k2o)}.</span>` : ""}${cul.req_fuente ? `<span class="mini">Fuente: ${h(cul.req_fuente)}</span>` : ""}</div>`; };
+      ${tot.apps ? `<span class="mini">${tot.apps} fertilizaciones al suelo por ${per} (${cadaCuanto(per === "ciclo" ? Number(cul.ciclo_meses) || 0 : 12, tot.apps)})</span>` : ""}
+      ${tot.apps && esTecnico() ? `<span class="mini">${ets.map((e) => h(e.nombre) + ": " + I.req[e.id].apps).join(" · ")}. El plan aporta N ${L.fmt(tot.n, 0)}${pc(tot.n, cul.req_n)} · P₂O₅ ${L.fmt(tot.p, 0)}${pc(tot.p, cul.req_p2o5)} · K₂O ${L.fmt(tot.k, 0)}${pc(tot.k, cul.req_k2o)} del requerimiento.</span>` : ""}${cul.req_fuente && esTecnico() ? `<span class="mini">Fuente: ${h(cul.req_fuente)}</span>` : ""}</div>`; };
+  // «cada 2 meses», «cada 5 semanas aprox.»
+  const cadaCuanto = (meses, apps) => { if (!meses || !apps) return "según la etapa"; const m = meses / apps;
+    return m < 1.5 ? "cada " + Math.round(m * 4.33) + " semanas aprox." : "cada " + L.fmt(Math.round(m * 2) / 2) + (m === 1 ? " mes" : " meses"); };
   const aj = (k, def) => { const v = ((D.catalogo || {}).ajustes || {})[k]; return v === undefined || v === null || v === "" ? def : v; };
   const P = (id) => (I.prod[String(id)] || null);
   const cultivos = () => (I.c.cultivos || []).filter((c) => c.activo !== false).sort((a, b) => a.orden - b.orden);

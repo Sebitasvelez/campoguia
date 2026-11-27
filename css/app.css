@@ -191,3 +191,10 @@ input,select,textarea{font-size:16px}
 .asis-prob .seg button.sel.niv-medio{background:#d39200;color:#fff}
 .asis-prob .seg button.sel.niv-alto{background:#c62828;color:#fff}
 .pill.azul{background:#e3eefb;color:#1e5aa8}
+.caja-etapa{gap:6px;border:1px solid var(--verde)}
+.caja-etapa .grid2 .dato b{font-size:15px}
+.tabla-req{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+.tabla-req th{font-weight:400;color:var(--suave);text-align:right;padding:4px 0}
+.tabla-req th:first-child,.tabla-req td:first-child{text-align:left;width:30%}
+.tabla-req td{text-align:right;padding:5px 0;border-top:1px solid var(--borde,#e2e6e0)}
+.tabla-req tr.suma td{border-top:1.5px solid var(--suave)}
