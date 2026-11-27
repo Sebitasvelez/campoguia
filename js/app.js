@@ -729,7 +729,7 @@
         <div class="grid3"><div class="dato"><b>${r.kgTotal !== null ? L.fmt(r.kgTotal, r.kgTotal < 10 ? 1 : 0) + " kg" : "—"}</b><span>Requerimiento total / aplicación</span></div>
         <div class="dato"><b>${fs ? h(fs.fraccion) : r.sacos50 !== null ? r.sacos50 : "—"}</b><span>${fs ? (fs.sacos <= 1 ? "Saco" : "Sacos") : "Sacos"} de ${L.fmt(kgSaco)} kg</span></div>
         <div class="dato"><b>${r.gPorPlanta !== null ? L.fmt(r.gPorPlanta, 0) + " g" : "—"}</b><span>Por planta / aplicación</span></div></div>
-        ${precioSaco ? `<div class="fila"><span class="mini">Precio: <b>${dinero(precioSaco)}</b> el saco de ${L.fmt(kgSaco)} kg</span>${costo ? `<span class="mini">Costo: <b>${dinero(costo)}</b></span>` : ""}</div>` : ""}
+        ${precioSaco ? `<div class="fila"><span class="mini">Precio: <b>${dinero(precioSaco)}</b> el saco de ${L.fmt(kgSaco)} kg</span></div>` : ""}
         <span class="mini">${x.dosis_kg_ha ? L.fmt(Number(x.dosis_kg_ha)) + " kg NPK/ha por aplicación" : ""}${x.condicion ? " · " + h(x.condicion) : ""}${x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : ""}${x.nota ? " · " + h(x.nota) : ""}${r.compraTexto ? " · Comprar " + h(r.compraTexto) : ""}${r.costo ? " · " + dinero(r.costo) : ""}</span>
         ${omitir ? `<span class="mini"><b>Tu pH (${h(ui.ph)}) no es ácido:</b> no necesitas esta enmienda.</span>` : ""}
       </div>`;
@@ -746,7 +746,6 @@
         </details>
         ${tipoSel !== "foliar" ? `<div class="grid2"><label class="campo">Hectáreas<input id="ha" inputmode="decimal" value="${h(ui.calc.ha)}"></label><label class="campo">Plantas por ha<input id="pha" inputmode="numeric" value="${h(ui.calc.pha)}" placeholder="Ej. 1600"></label></div>` : segVol()}
         ${filas || `<div class="vacio">No hay productos de este tipo para la etapa ${et ? h(et.nombre) : ""}.</div>`}
-        ${totalCosto > 0 ? `<div class="resultado"><div class="etq">Inversión estimada en sacos</div><div class="n">${dinero(totalCosto)}</div></div>` : ""}
         <div class="acciones"><button class="btn" id="reg">Registrar fertilización</button>
         ${visibles.length ? `<button class="btn sec" id="aMez">Añadir a mezcla</button>` : ""}</div>
       </main>`, "inicio");
