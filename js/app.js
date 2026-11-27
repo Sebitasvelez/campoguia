@@ -395,9 +395,23 @@
       </main>`, "inicio");
     $$("[data-t]").forEach((b) => b.addEventListener("click", () => { const y = window.scrollY; ui.tipo = b.dataset.t; guardarUI(); vCultivo(cid); window.scrollTo(0, y); }));
     $("#buscar").addEventListener("input", (e) => {
-      const q = e.target.value.toLowerCase().trim();
-      if (q) { // buscar en todos los temas del cultivo
-        $("#probs").innerHTML = todos.filter((p) => (p.nombre + " " + (p.descripcion || "")).toLowerCase().includes(q)).map((p) => `<a class="item" href="#/problema/${p.id}">${fotosDe(p).length ? `<img class="miniatura" src="${h(fotosDe(p)[0].url)}" alt="" loading="lazy">` : ""}<div class="tx" style="flex:1"><b>${h(p.nombre)}</b><span>${h((TIPOS.find((t) => t[0] === p.tipo) || [])[1] || "")} · ${h(p.descripcion || "")}</span></div>${ic.flecha}</a>`).join("") || `<div class="vacio">Sin resultados.</div>`;
+      const q = e.target.value.trim();
+      if (q) { // buscar en todos los temas del cultivo, sin importar tildes ni errores de escritura
+        const fila = (p) => `<a class="item" href="#/problema/${p.id}">${fotosDe(p).length ? `<img class="miniatura" src="${h(fotosDe(p)[0].url)}" alt="" loading="lazy">` : ""}<div class="tx" style="flex:1"><b>${h(p.nombre)}</b><span>${h((TIPOS.find((t) => t[0] === p.tipo) || [])[1] || "")} · ${h(p.descripcion || "")}</span></div>${ic.flecha}</a>`;
+        const hallados = todos.filter((p) => L.coincideTexto(q, p.nombre + " " + (p.descripcion || "") + " " + (p.clasificacion || "")));
+        if (hallados.length) { $("#probs").innerHTML = hallados.map(fila).join(""); return; }
+        if (q.length < 3) { $("#probs").innerHTML = `<div class="vacio">Sin resultados.</div>`; return; }
+        // no está en este manual: lo parecido en este y en los otros manuales, y la opción de consultar
+        // primero lo del mismo tipo (clase de hongo o plaga) en este manual, luego lo parecido en los otros manuales
+        const r = L.interpretarConsulta(q, I.c), vistos = new Set();
+        const mismaClase = r.clase ? todos.filter((p) => p.clasificacion === r.clase.clase) : [];
+        const sim = mismaClase.concat(r.problemas, r.relacionados).filter((p) => !vistos.has(p.id) && vistos.add(p.id)).slice(0, 4);
+        const recDe = (pr) => { const rec = (I.recs[pr.id] || []).find((x) => P(x.producto_id)); return rec ? " · Recomendado: " + P(rec.producto_id).nombre : ""; };
+        const ter = q.charAt(0).toUpperCase() + q.slice(1);
+        $("#probs").innerHTML = `<div class="aviso ambar">${ic.alerta}<div>No tenemos información específica de «${h(ter)}» en los manuales${sim.length ? ", pero tenemos estos similares:" : "."}</div></div>
+          ${sim.map((p) => `<a class="item" href="#/problema/${p.id}"><div class="tx"><b>${h(p.nombre)}</b><span>Manual de ${h((cultivo(p.cultivo_id) || {}).nombre || "")}${h(recDe(p))}</span></div>${ic.flecha}</a>`).join("")}
+          <div class="acciones">${navigator.onLine !== false ? `<a class="btn sec chico" href="${h("https://www.google.com/search?q=" + encodeURIComponent(q + " control en " + c.nombre + " Ecuador"))}" target="_blank" rel="noopener">Buscar en internet</a>` : ""}
+          <a class="btn wa chico" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", tengo este problema en mi " + c.nombre + ": " + q + ". ¿Qué me recomienda?"))}" target="_blank" rel="noopener">${ic.wa}Preguntar a mi asesor</a></div>`;
       } else vCultivo(cid);
     });
   }

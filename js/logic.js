@@ -537,6 +537,11 @@
   const parecida = (w, v) => { if (w === v) return true; if (w.length >= 4 && v.length >= 4 && (v.startsWith(w) || w.startsWith(v))) return true;
     return w.length >= 5 && w[0] === v[0] && distancia(w, v) <= (w.length >= 8 ? 2 : 1); };
   const palabras = (t) => fonetica(t).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter((w) => w.length > 2 && !PALABRAS_VACIAS.has(w)).map(raiz);
+  // ¿lo escrito aparece en el texto? sin tildes, con errores de escritura (acaros = ácaros, monilla = monilia) y palabras a medias
+  function coincideTexto(q, texto) {
+    const ws = palabras(q); if (!ws.length) return fonetica(texto).includes(fonetica(q).trim());
+    const vs = palabras(texto); return ws.every((w) => vs.some((v) => parecida(w, v) || v.startsWith(w)));
+  }
   function interpretarConsulta(texto, cat) {
     const t = quitarTildes(texto), ws = palabras(texto);
     const cultivos = (cat.cultivos || []).filter((c) => c.activo !== false && palabras(c.nombre).some((v) => ws.some((w) => parecida(w, v)))).map((c) => c.id);
@@ -695,6 +700,6 @@
   }
   const api = { fraccionSacos, textoSacos, ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, nombresGrupo, textoBusquedaGrupo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
-    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, claseDeBusqueda, rankearPorClase, interpretarConsulta, palabrasDe: (t) => palabras(t), fonetica: (t) => fonetica(t).replace(/[^a-z0-9ñ ]/g, " ").replace(/\s+/g, " ").trim(), esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
+    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, claseDeBusqueda, rankearPorClase, interpretarConsulta, coincideTexto, palabrasDe: (t) => palabras(t), fonetica: (t) => fonetica(t).replace(/[^a-z0-9ñ ]/g, " ").replace(/\s+/g, " ").trim(), esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);
