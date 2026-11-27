@@ -537,6 +537,30 @@
   const parecida = (w, v) => { if (w === v) return true; if (w.length >= 4 && v.length >= 4 && (v.startsWith(w) || w.startsWith(v))) return true;
     return w.length >= 5 && w[0] === v[0] && distancia(w, v) <= (w.length >= 8 ? 2 : 1); };
   const palabras = (t) => fonetica(t).replace(/[^a-z0-9ñ ]/g, " ").split(/\s+/).filter((w) => w.length > 2 && !PALABRAS_VACIAS.has(w)).map(raiz);
+  // ---------------- requerimiento de N, P₂O₅ y K₂O por etapa → cuántos sacos de cada fertilizante al suelo
+  // fórmula del producto al inicio de la concentración: «12-24-12-7S», «15,5-0-0+26(CaO)», «46-0-0»
+  function npkDe(p) {
+    const m = String((p && (p.concentracion || p.ingrediente_activo)) || "").match(/^\s*(\d+(?:[.,]\d+)?)\s*-\s*(\d+(?:[.,]\d+)?)\s*-\s*(\d+(?:[.,]\d+)?)/);
+    if (!m) return null; const v = m.slice(1).map((x) => Number(x.replace(",", ".")));
+    return v.some((x) => x > 0) ? { n: v[0], p: v[1], k: v[2] } : null;
+  }
+  const kgSacoDe = (p) => { const pres = (p.presentaciones || []).filter((x) => (x.unidad || "g") === "g" && num(x.cantidad) >= 10000).sort((a, b) => b.cantidad - a.cantidad)[0];
+    return pres ? num(pres.cantidad) / 1000 : num(p.contenido) >= 10000 && (p.contenido_unidad || "g") === "g" ? num(p.contenido) / 1000 : 50; };
+  // busca la combinación en medios sacos por hectárea que más se acerca al requerimiento (cada elemento pesa igual,
+  // en proporción a lo que se pide); a igual cercanía, la que usa menos producto
+  function repartirNPK(req, productos, maxSacos) {
+    const R = { n: num(req.n) || 0, p: num(req.p) || 0, k: num(req.k) || 0 }, lista = productos.filter((x) => x.npk);
+    if (!lista.length || !(R.n + R.p + R.k)) return null;
+    const pasos = Math.round((maxSacos || 6) * 2), escala = Math.max(R.n, R.p, R.k, 1);
+    let mejor = null; const sacos = lista.map(() => 0);
+    const evaluar = () => { const a = { n: 0, p: 0, k: 0 }; let kg = 0;
+      lista.forEach((x, i) => { const q = sacos[i] * x.kgSaco; kg += q; a.n += q * x.npk.n / 100; a.p += q * x.npk.p / 100; a.k += q * x.npk.k / 100; });
+      const err = ["n", "p", "k"].reduce((s, e) => s + Math.pow((a[e] - R[e]) / escala, 2) + (R[e] === 0 ? 0 : Math.pow((a[e] - R[e]) / Math.max(R[e], 1), 2) * 0.25), 0);
+      if (!mejor || err < mejor.err - 1e-9 || (Math.abs(err - mejor.err) < 1e-9 && kg < mejor.kg)) mejor = { err, kg, aporte: a, sacos: sacos.slice() }; };
+    const rec = (i) => { if (i === lista.length) return evaluar(); for (let s = 0; s <= pasos; s++) { sacos[i] = s / 2; rec(i + 1); } };
+    if (Math.pow(pasos + 1, lista.length) > 300000) return null; rec(0);
+    return { aporte: mejor.aporte, kgTotal: mejor.kg, items: lista.map((x, i) => ({ id: x.id, sacos: mejor.sacos[i], kgHa: mejor.sacos[i] * x.kgSaco })) };
+  }
   // ¿lo escrito aparece en el texto? sin tildes, con errores de escritura (acaros = ácaros, monilla = monilia) y palabras a medias
   function coincideTexto(q, texto) {
     const ws = palabras(q); if (!ws.length) return fonetica(texto).includes(fonetica(q).trim());
@@ -700,6 +724,6 @@
   }
   const api = { fraccionSacos, textoSacos, ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, nombresGrupo, textoBusquedaGrupo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
-    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, claseDeBusqueda, rankearPorClase, interpretarConsulta, coincideTexto, palabrasDe: (t) => palabras(t), fonetica: (t) => fonetica(t).replace(/[^a-z0-9ñ ]/g, " ").replace(/\s+/g, " ").trim(), esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
+    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, claseDeBusqueda, rankearPorClase, interpretarConsulta, coincideTexto, npkDe, kgSacoDe, repartirNPK, palabrasDe: (t) => palabras(t), fonetica: (t) => fonetica(t).replace(/[^a-z0-9ñ ]/g, " ").replace(/\s+/g, " ").trim(), esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);

@@ -59,3 +59,6 @@ grant execute on function public.app_reportar_producto(uuid, jsonb) to anon, aut
 
 -- etapas_plan_sanitario (aplicada): etapas.plan_etapas int[] → para etapas solo de fertilización, qué etapas del
 -- plan sanitario le corresponden (la asesoría rápida usa ese plan). Pitahaya: Floración y cuajado = {1,2,3}; Engrose de fruta = {4,5}.
+
+-- etapas_requerimiento_npk (aplicada): etapas.req_n, req_p2o5, req_k2o (kg/ha por aplicación). Si la etapa los tiene,
+-- la app reparte en medios sacos los fertilizantes NPK al suelo de la etapa para cumplirlos (Logic.repartirNPK).

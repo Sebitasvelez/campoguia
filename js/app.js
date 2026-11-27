@@ -28,8 +28,24 @@
       recs: by((c.recomendaciones || []).slice().sort((a, b) => a.prioridad - b.prioridad), "problema_id"),
       plan: by((c.plan_sanitario || []).slice().sort((a, b) => a.orden - b.orden), "etapa_id"),
       fert: by((c.plan_fertilizacion || []).slice().sort((a, b) => a.orden - b.orden), "etapa_id"),
+      req: {},
     };
+    // etapas con requerimiento de N, P₂O₅ y K₂O: los sacos de los fertilizantes NPK al suelo se calculan para cumplirlo
+    (c.etapas || []).forEach((e) => {
+      if (!(Number(e.req_n) || Number(e.req_p2o5) || Number(e.req_k2o))) return;
+      const lista = I.fert[e.id] || [], prod = (id) => I.prod[String(id)];
+      const npk = lista.filter((x) => x.tipo === "suelo" && prod(x.producto_id) && L.npkDe(prod(x.producto_id)));
+      const r = L.repartirNPK({ n: e.req_n, p: e.req_p2o5, k: e.req_k2o }, npk.map((x) => ({ id: x.id, npk: L.npkDe(prod(x.producto_id)), kgSaco: L.kgSacoDe(prod(x.producto_id)) })));
+      if (!r) return;
+      I.fert[e.id] = lista.map((x) => { const it = r.items.find((y) => y.id === x.id); return it ? Object.assign({}, x, { dosis_kg_ha: it.kgHa, dosis_g_planta: null, calculada: true }) : x; })
+        .filter((x) => !(x.calculada && !x.dosis_kg_ha));
+      I.req[e.id] = { n: Number(e.req_n) || 0, p: Number(e.req_p2o5) || 0, k: Number(e.req_k2o) || 0, aporte: r.aporte, kg: r.kgTotal };
+    });
   }
+  // «Requerimiento: N 20 · P₂O₅ 2,5 · K₂O 5 kg/ha por aplicación» y lo que aporta la mezcla calculada
+  const cajaReq = (eid) => { const q = I.req[eid]; if (!q) return "";
+    const f = (o) => `N ${L.fmt(o.n, 1)} · P₂O₅ ${L.fmt(o.p, 1)} · K₂O ${L.fmt(o.k, 1)}`;
+    return `<div class="aviso verde">${ic.alerta}<div><b>Requerimiento de la etapa:</b> ${f(q)} kg/ha por aplicación.<br><span class="mini">Los fertilizantes al suelo aportan ${f(q.aporte)} kg/ha con ${L.fmt(q.kg)} kg de producto por ha (en medios sacos).</span></div></div>`; };
   const aj = (k, def) => { const v = ((D.catalogo || {}).ajustes || {})[k]; return v === undefined || v === null || v === "" ? def : v; };
   const P = (id) => (I.prod[String(id)] || null);
   const cultivos = () => (I.c.cultivos || []).filter((c) => c.activo !== false).sort((a, b) => a.orden - b.orden);
@@ -738,6 +754,7 @@
       <main class="cont">
         <div class="chips" role="group" aria-label="Etapa">${etapas.map((e) => `<button class="chip ${et && e.id === et.id ? "sel" : ""}" data-e="${e.id}">${h(e.nombre)}</button>`).join("")}</div>
         <div class="seg" role="group" aria-label="Tipo de fertilización">${[["suelo", "Al suelo"], ["foliar", "Foliar"], ["enmienda", "Enmiendas"]].map(([k, t]) => `<button data-ft="${k}" class="${tipoSel === k ? "sel" : ""}">${t} (${items.filter((x) => x.tipo === k).length})</button>`).join("")}</div>
+        ${tipoSel === "suelo" && et ? cajaReq(et.id) : ""}
         <details class="card" ${ui.ph ? "open" : ""}><summary>¿Tienes análisis de suelo?</summary>
           <label class="campo">pH del suelo<input id="ph" inputmode="decimal" value="${h(ui.ph)}" placeholder="Ej. 5,2"></label>
           ${!isNaN(ph) ? `<div class="aviso ${ph < phAcido ? "ambar" : "verde"}">${ic.alerta}<div>${ph < phAcido ? `Suelo <b>ácido</b> (pH ${h(ui.ph)}): aplica primero la enmienda (${h(items.filter((x) => x.tipo === "enmienda").map((x) => P(x.producto_id).nombre).join(", ") || "cal o dolomita")}) unos 30 días antes de fertilizar.` : `pH ${h(ui.ph)}: no necesitas encalar.`}</div></div>` : ""}
@@ -1117,7 +1134,7 @@
     if (!et) return `<div class="aviso azul" style="padding:8px 10px">${ic.alerta}<div>Escribe la <b>etapa</b> del cultivo para recomendarte también la fertilización.</div></div>`;
     if (!r.fert.length) return "";
     const eq = ui.vol === "tanque" ? "tanque" : "bomba", fv = (ui.vol === "tanque" ? TANQUE() : BOMBA()) / TANQUE();
-    return `<div class="etq">Fertilización para la etapa ${h(et.nombre)}</div>
+    return `<div class="etq">Fertilización para la etapa ${h(et.nombre)}</div>${cajaReq(et.id)}
       ${r.fert.map((x) => { const p = P(x.producto_id), dz = x.dosis_kg_ha ? Number(x.dosis_kg_ha) : null;
         const fs = dz && ha > 0 ? L.fraccionSacos(dz * ha * 1000, p) : null;
         const fol = x.tipo === "foliar", dt = x.dosis_tanque !== null && x.dosis_tanque !== undefined ? Number(x.dosis_tanque) : L.dosisDe(p).min;

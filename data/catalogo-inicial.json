@@ -37,7 +37,10 @@
    "riesgo_hongos": "bajo",
    "notas": "Asegurar un buen mojado de los botones florales. Alternar cada semana sea 1 insecticida ó 1 acaricida, sea Omite o Bala (marcados «Alternar»).",
    "costo_ref_texto": "(Costo aprox. tanque $ 25)",
-   "orden": 1
+   "orden": 1,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 2,
@@ -48,7 +51,10 @@
    "riesgo_hongos": "ligero",
    "notas": "Asegurar un buen mojado de flores. Alternar cada semana 1 insecticida, sea Ninja o Engeo (marcados «Alternar»).",
    "costo_ref_texto": "(Costo aprox. tanque $ 25)",
-   "orden": 2
+   "orden": 2,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 3,
@@ -59,7 +65,10 @@
    "riesgo_hongos": "alto",
    "notas": "Cortar pétalos de flores luego de 5 días del cuajado floral, y acortar frecuencias de fumigación a cada 6 días. Asegurar un buen mojado de flores y utilizar aceites (marcados «Alternar»).",
    "costo_ref_texto": "(Costo aprox. tanque $ 30)",
-   "orden": 3
+   "orden": 3,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 4,
@@ -70,7 +79,10 @@
    "riesgo_hongos": "ligero",
    "notas": "Asegurar un buen mojado de frutos. Alternar cada semana sea 1 insecticida ó 1 acaricida, sea Solvigo ú Omite (marcados «Alternar»).",
    "costo_ref_texto": "(Costo aprox. Tanque $ 26)",
-   "orden": 4
+   "orden": 4,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 5,
@@ -81,7 +93,10 @@
    "riesgo_hongos": "bajo",
    "notas": "Asegurar un buen mojado de frutos. Cuidado con productos que marquen residualidad en fruta.",
    "costo_ref_texto": "(Costo aprox. Tanque $ 25)",
-   "orden": 5
+   "orden": 5,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 6,
@@ -91,7 +106,10 @@
    "semanas": null,
    "riesgo_hongos": null,
    "notas": null,
-   "orden": 1
+   "orden": 1,
+   "req_n": 15,
+   "req_p2o5": 30,
+   "req_k2o": 15
   },
   {
    "id": 7,
@@ -101,7 +119,10 @@
    "semanas": null,
    "riesgo_hongos": null,
    "notas": null,
-   "orden": 2
+   "orden": 2,
+   "req_n": 20,
+   "req_p2o5": 2.5,
+   "req_k2o": 5
   },
   {
    "id": 10,
@@ -111,7 +132,10 @@
    "semanas": null,
    "riesgo_hongos": null,
    "notas": null,
-   "orden": 1
+   "orden": 1,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 11,
@@ -121,7 +145,10 @@
    "semanas": null,
    "riesgo_hongos": null,
    "notas": null,
-   "orden": 2
+   "orden": 2,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 12,
@@ -131,7 +158,10 @@
    "semanas": null,
    "riesgo_hongos": null,
    "notas": null,
-   "orden": 3
+   "orden": 3,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 13,
@@ -141,7 +171,10 @@
    "semanas": null,
    "riesgo_hongos": null,
    "notas": null,
-   "orden": 4
+   "orden": 4,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 14,
@@ -152,7 +185,10 @@
    "riesgo_hongos": null,
    "notas": null,
    "costo_ref_texto": null,
-   "orden": 20
+   "orden": 20,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 15,
@@ -163,7 +199,10 @@
    "riesgo_hongos": null,
    "notas": null,
    "costo_ref_texto": null,
-   "orden": 21
+   "orden": 21,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 16,
@@ -174,7 +213,10 @@
    "riesgo_hongos": null,
    "notas": null,
    "costo_ref_texto": null,
-   "orden": 22
+   "orden": 22,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 17,
@@ -185,7 +227,10 @@
    "riesgo_hongos": null,
    "notas": null,
    "costo_ref_texto": null,
-   "orden": 20
+   "orden": 20,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 18,
@@ -196,7 +241,10 @@
    "riesgo_hongos": null,
    "notas": null,
    "costo_ref_texto": null,
-   "orden": 21
+   "orden": 21,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 19,
@@ -207,7 +255,10 @@
    "riesgo_hongos": null,
    "notas": null,
    "costo_ref_texto": null,
-   "orden": 22
+   "orden": 22,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 101,
@@ -218,7 +269,10 @@
    "riesgo_hongos": null,
    "notas": "Tratar la semilla y vigilar trozadores y gallina ciega.",
    "costo_ref_texto": null,
-   "orden": 1
+   "orden": 1,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 102,
@@ -229,7 +283,10 @@
    "riesgo_hongos": null,
    "notas": "Época crítica de cogollero; primera fertilización nitrogenada.",
    "costo_ref_texto": null,
-   "orden": 2
+   "orden": 2,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 103,
@@ -240,7 +297,10 @@
    "riesgo_hongos": null,
    "notas": "Segunda fertilización; vigilar mancha de asfalto, tizón y roya.",
    "costo_ref_texto": null,
-   "orden": 3
+   "orden": 3,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 104,
@@ -251,7 +311,10 @@
    "riesgo_hongos": null,
    "notas": "Proteger la hoja de la mazorca; gusano de la mazorca.",
    "costo_ref_texto": null,
-   "orden": 4
+   "orden": 4,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 111,
@@ -262,7 +325,10 @@
    "riesgo_hongos": null,
    "notas": null,
    "costo_ref_texto": null,
-   "orden": 20
+   "orden": 20,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 112,
@@ -273,7 +339,10 @@
    "riesgo_hongos": null,
    "notas": null,
    "costo_ref_texto": null,
-   "orden": 21
+   "orden": 21,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 113,
@@ -284,7 +353,10 @@
    "riesgo_hongos": null,
    "notas": null,
    "costo_ref_texto": null,
-   "orden": 22
+   "orden": 22,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 105,
@@ -295,7 +367,10 @@
    "riesgo_hongos": null,
    "notas": "Semilla (colinos) sana; corregir acidez del suelo.",
    "costo_ref_texto": null,
-   "orden": 1
+   "orden": 1,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 106,
@@ -306,7 +381,10 @@
    "riesgo_hongos": null,
    "notas": "Máximo crecimiento de hojas; vigilar tizón de la hoja y pulgones.",
    "costo_ref_texto": null,
-   "orden": 2
+   "orden": 2,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 107,
@@ -317,7 +395,10 @@
    "riesgo_hongos": null,
    "notas": "Alta demanda de potasio.",
    "costo_ref_texto": null,
-   "orden": 3
+   "orden": 3,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 108,
@@ -328,7 +409,10 @@
    "riesgo_hongos": null,
    "notas": "Las hojas amarillean al madurar; evitar heridas en la cosecha.",
    "costo_ref_texto": null,
-   "orden": 4
+   "orden": 4,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 114,
@@ -339,7 +423,10 @@
    "riesgo_hongos": null,
    "notas": null,
    "costo_ref_texto": null,
-   "orden": 20
+   "orden": 20,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 115,
@@ -350,7 +437,10 @@
    "riesgo_hongos": null,
    "notas": null,
    "costo_ref_texto": null,
-   "orden": 21
+   "orden": 21,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 116,
@@ -361,7 +451,10 @@
    "riesgo_hongos": null,
    "notas": null,
    "costo_ref_texto": null,
-   "orden": 22
+   "orden": 22,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 117,
@@ -371,7 +464,10 @@
    "semanas": null,
    "riesgo_hongos": null,
    "notas": "Antes de fertilizar revisa raíces y drenaje: el amarillamiento también viene por exceso de agua, nematodos o pudrición de raíz. Corrige la causa y aplica este plan para devolver el verde a las pencas.",
-   "orden": 5
+   "orden": 5,
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 118,
@@ -386,7 +482,10 @@
     1,
     2,
     3
-   ]
+   ],
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   },
   {
    "id": 119,
@@ -400,7 +499,10 @@
    "plan_etapas": [
     4,
     5
-   ]
+   ],
+   "req_n": null,
+   "req_p2o5": null,
+   "req_k2o": null
   }
  ],
  "productos": [
@@ -13237,7 +13339,7 @@
    "dosis_tanque": null,
    "frecuencia_dias": null,
    "condicion": null,
-   "nota": "Vigor y verdor.",
+   "nota": "Nitrógeno principal de la etapa.",
    "orden": 6
   },
   {
@@ -13784,6 +13886,34 @@
    "condicion": null,
    "nota": "Junto con Soli Nitro y Sulfato de Magnesio.",
    "orden": 3,
+   "cultivo_id": "pitahaya"
+  },
+  {
+   "id": 48,
+   "etapa_id": 7,
+   "tipo": "suelo",
+   "producto_id": 57,
+   "dosis_kg_ha": 50,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Aporta fósforo y potasio a la mezcla.",
+   "orden": 0,
+   "cultivo_id": "pitahaya"
+  },
+  {
+   "id": 49,
+   "etapa_id": 7,
+   "tipo": "suelo",
+   "producto_id": 205,
+   "dosis_kg_ha": 25,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Nitrógeno con calcio y boro.",
+   "orden": 1,
    "cultivo_id": "pitahaya"
   }
  ],
