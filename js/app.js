@@ -1299,8 +1299,12 @@
   }
   function conectarFormLote(l, despues) {
     const f = $("#fl"); if (!f) return;
-    const filtrar = () => { $$("option[data-c]", f.etapa_id).forEach((o) => { o.hidden = o.dataset.c !== f.cultivo_id.value; }); if (f.etapa_id.selectedOptions[0] && f.etapa_id.selectedOptions[0].hidden) f.etapa_id.value = ""; };
-    filtrar(); f.cultivo_id.addEventListener("change", filtrar);
+    // solo las etapas del cultivo elegido (en iPhone las opciones ocultas igual se ven, por eso se rehace la lista)
+    const selEt = f.elements.namedItem("etapa_id"), selCu = f.elements.namedItem("cultivo_id");
+    const filtrar = () => { const actual = selEt.value, lista = I.etapasLote[selCu.value] || [];
+      selEt.innerHTML = `<option value="">—</option>` + lista.map((e) => `<option value="${e.id}">${h(e.nombre)}</option>`).join("");
+      selEt.value = lista.some((e) => String(e.id) === String(actual)) ? actual : ""; };
+    filtrar(); selCu.addEventListener("change", filtrar);
     const ub = {}; conectarUbicacion(ub);
     f.addEventListener("submit", (e) => {
       e.preventDefault();

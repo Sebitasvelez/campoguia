@@ -32,96 +32,76 @@
    "id": 1,
    "cultivo_id": "pitahaya",
    "nombre": "Brotación de botón",
-   "uso": "sanitario",
+   "uso": "ambos",
    "semanas": "semanas 0, 1 y 2",
    "riesgo_hongos": "bajo",
    "notas": "Asegurar un buen mojado de los botones florales. Alternar cada semana sea 1 insecticida ó 1 acaricida, sea Omite o Bala (marcados «Alternar»).",
    "costo_ref_texto": "(Costo aprox. tanque $ 25)",
-   "orden": 1
+   "orden": 3
   },
   {
    "id": 2,
    "cultivo_id": "pitahaya",
    "nombre": "Desarrollo de flor",
-   "uso": "sanitario",
+   "uso": "ambos",
    "semanas": "semanas 3, 4 y 5",
    "riesgo_hongos": "ligero",
    "notas": "Asegurar un buen mojado de flores. Alternar cada semana 1 insecticida, sea Ninja o Engeo (marcados «Alternar»).",
    "costo_ref_texto": "(Costo aprox. tanque $ 25)",
-   "orden": 2
+   "orden": 4
   },
   {
    "id": 3,
    "cultivo_id": "pitahaya",
    "nombre": "Apertura y cuajado",
-   "uso": "sanitario",
+   "uso": "ambos",
    "semanas": "semanas 6, 7 y 8",
    "riesgo_hongos": "alto",
    "notas": "Cortar pétalos de flores luego de 5 días del cuajado floral, y acortar frecuencias de fumigación a cada 6 días. Asegurar un buen mojado de flores y utilizar aceites (marcados «Alternar»).",
    "costo_ref_texto": "(Costo aprox. tanque $ 30)",
-   "orden": 3
+   "orden": 5
   },
   {
    "id": 4,
    "cultivo_id": "pitahaya",
    "nombre": "Fructificación",
-   "uso": "sanitario",
+   "uso": "ambos",
    "semanas": "semanas 9, 10 y 11",
    "riesgo_hongos": "ligero",
    "notas": "Asegurar un buen mojado de frutos. Alternar cada semana sea 1 insecticida ó 1 acaricida, sea Solvigo ú Omite (marcados «Alternar»).",
    "costo_ref_texto": "(Costo aprox. Tanque $ 26)",
-   "orden": 4
+   "orden": 6
   },
   {
    "id": 5,
    "cultivo_id": "pitahaya",
    "nombre": "Engrose",
-   "uso": "sanitario",
+   "uso": "ambos",
    "semanas": "semanas 12, 13 y 14",
    "riesgo_hongos": "bajo",
    "notas": "Asegurar un buen mojado de frutos. Cuidado con productos que marquen residualidad en fruta.",
    "costo_ref_texto": "(Costo aprox. Tanque $ 25)",
-   "orden": 5
+   "orden": 7
   },
   {
    "id": 6,
    "cultivo_id": "pitahaya",
    "nombre": "Establecimiento / siembra",
-   "uso": "fertilizacion",
+   "uso": "ambos",
    "semanas": null,
    "riesgo_hongos": null,
    "notas": null,
-   "orden": 10
+   "orden": 1
   },
   {
    "id": 7,
    "cultivo_id": "pitahaya",
    "nombre": "Desarrollo de pencas",
-   "uso": "fertilizacion",
+   "uso": "ambos",
    "semanas": null,
    "riesgo_hongos": null,
    "notas": null,
-   "orden": 11
-  },
-  {
-   "id": 8,
-   "cultivo_id": "pitahaya",
-   "nombre": "Floración",
-   "uso": "fertilizacion",
-   "semanas": null,
-   "riesgo_hongos": null,
-   "notas": null,
-   "orden": 12
-  },
-  {
-   "id": 9,
-   "cultivo_id": "pitahaya",
-   "nombre": "Engrose",
-   "uso": "fertilizacion",
-   "semanas": null,
-   "riesgo_hongos": null,
-   "notas": null,
-   "orden": 13
+   "orden": 2
   },
   {
    "id": 10,
@@ -13204,7 +13184,7 @@
   {
    "id": 8,
    "cultivo_id": "pitahaya",
-   "etapa_id": 8,
+   "etapa_id": 1,
    "tipo": "suelo",
    "producto_id": 57,
    "dosis_kg_ha": 150,
@@ -13218,7 +13198,7 @@
   {
    "id": 9,
    "cultivo_id": "pitahaya",
-   "etapa_id": 8,
+   "etapa_id": 1,
    "tipo": "foliar",
    "producto_id": 41,
    "dosis_kg_ha": null,
@@ -13232,7 +13212,7 @@
   {
    "id": 10,
    "cultivo_id": "pitahaya",
-   "etapa_id": 8,
+   "etapa_id": 1,
    "tipo": "foliar",
    "producto_id": 43,
    "dosis_kg_ha": null,
@@ -13246,7 +13226,7 @@
   {
    "id": 11,
    "cultivo_id": "pitahaya",
-   "etapa_id": 8,
+   "etapa_id": 1,
    "tipo": "foliar",
    "producto_id": 42,
    "dosis_kg_ha": null,
@@ -13260,7 +13240,7 @@
   {
    "id": 12,
    "cultivo_id": "pitahaya",
-   "etapa_id": 8,
+   "etapa_id": 1,
    "tipo": "foliar",
    "producto_id": 45,
    "dosis_kg_ha": null,
@@ -13274,7 +13254,7 @@
   {
    "id": 13,
    "cultivo_id": "pitahaya",
-   "etapa_id": 9,
+   "etapa_id": 5,
    "tipo": "suelo",
    "producto_id": 59,
    "dosis_kg_ha": 150,
@@ -13288,7 +13268,7 @@
   {
    "id": 14,
    "cultivo_id": "pitahaya",
-   "etapa_id": 9,
+   "etapa_id": 5,
    "tipo": "foliar",
    "producto_id": 53,
    "dosis_kg_ha": null,
@@ -13302,7 +13282,7 @@
   {
    "id": 15,
    "cultivo_id": "pitahaya",
-   "etapa_id": 9,
+   "etapa_id": 5,
    "tipo": "foliar",
    "producto_id": 46,
    "dosis_kg_ha": null,
