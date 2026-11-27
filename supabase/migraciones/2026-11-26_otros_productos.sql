@@ -76,3 +76,9 @@ grant execute on function public.app_reportar_producto(uuid, jsonb) to anon, aut
 -- etapas_reparto_literatura (aplicada): etapas.pct_lit_n/p2o5/k2o, apps_lit, fuente_lit (curvas de absorción: maíz y malanga).
 -- Pitahaya: requerimiento INIAP 2020 (Tabla 7, suelo medio, 1 250 plantas/ha) = 175 N · 69 P₂O₅ · 156 K₂O kg/ha/año.
 -- Kg por aplicación: los calcula la app por etapa para cumplir lo que pide la etapa (suma NPK); reglas propias del maíz.
+
+-- 2026-11-27 · cultivos_requerimiento_por_nivel_suelo
+-- Columnas en cultivos: req_unidad ('ha' | 'planta'), nivel_suelo (bajo/medio/alto, el que ve el agricultor), pha_ref,
+-- req_{bajo,medio,alto}_{n,p2o5,k2o,s} y fuente_suelo.
+-- Pitahaya: g por planta (INIAP 2020 Tabla 7), suelo bajo por defecto, 1600 pl/ha de referencia.
+-- Cacao, maíz, malanga: medio = requerimiento actual; bajo N ×1,43 P₂O₅ ×1,55 K₂O ×1,40; alto ×0,57 ×0,55 ×0,60 (proporciones INIAP pitahaya).

@@ -37,19 +37,37 @@
       if (e.uso === "sanitario" || e.uso === "lote") return;
       const cul = (c.cultivos || []).find((x) => x.id === e.cultivo_id); if (!cul) return;
       I.fertBase[e.id] = I.fert[e.id] || [];
-      const calc = calcularEtapa(e, cul, requiereEtapaBase(e, cul, "asesor", null, null), c); if (!calc) return;
+      const calc = calcularEtapa(e, cul, requiereEtapaBase(e, cul, "asesor", reqNivel(cul, nivelDefecto(cul), null), null), c); if (!calc) return;
       I.fert[e.id] = armarItemsEtapa(e, I.fertBase[e.id], calc, c);
       I.req[e.id] = Object.assign({}, calc, { apps: appsEtapa(e, "asesor"), cul, etapa: e.nombre });
     });
+    I.baseKey = {}; (c.cultivos || []).forEach((cul) => { I.baseKey[cul.id] = JSON.stringify([reqNivel(cul, nivelDefecto(cul), null), null, "asesor"]); });
   }
+  // requerimiento del cultivo según el análisis de suelo (bajo, medio, alto). Por planta (pitahaya, g/planta) × plantas por ha,
+  // o por ha. Sin datos del nivel se usa el requerimiento general del cultivo.
+  const NIVELES = [["bajo", "Bajo"], ["medio", "Medio"], ["alto", "Alto"]];
+  const nivelDefecto = (cul) => (cul && NIVELES.some(([k]) => k === cul.nivel_suelo) ? cul.nivel_suelo : "medio");
+  const numN = (v) => (v === null || v === undefined || v === "" ? null : Number(v));
+  const porPlanta = (cul) => cul && cul.req_unidad === "planta";
+  const phaDe = (cul, pha) => (pha > 0 ? pha : Number(cul.pha_ref) || 1000);
+  function reqNivel(cul, nivel, pha) {
+    const v = (e) => numN(cul["req_" + nivel + "_" + e]), hay = ["n", "p2o5", "k2o"].some((e) => v(e) !== null);
+    if (!hay) return { n: Number(cul.req_n) || 0, p: Number(cul.req_p2o5) || 0, k: Number(cul.req_k2o) || 0, s: numN(cul.req_s) || 0 };
+    const f = porPlanta(cul) ? phaDe(cul, pha) / 1000 : 1, r = (x) => Math.round(x * 10) / 10;
+    return { n: r((v("n") || 0) * f), p: r((v("p2o5") || 0) * f), k: r((v("k2o") || 0) * f), s: r((v("s") || 0) * f) };
+  }
+  const tieneReq = (cul) => { const r = reqNivel(cul, nivelDefecto(cul), null); return !!(r.n || r.p || r.k); };
   // fertilizaciones y reparto de una etapa: «asesor» (criterio agronómico) o «lit» (curvas de absorción)
   function appsEtapa(e, modo, sm) { if (sm && sm[e.id] !== undefined) return sm[e.id];
     return modo === "lit" && e.apps_lit !== null && e.apps_lit !== undefined ? Number(e.apps_lit) || 0 : Number(e.aplicaciones) || 0; }
   const tieneLit = (e) => [e.pct_lit_n, e.pct_lit_p2o5, e.pct_lit_k2o].some((v) => v !== null && v !== undefined);
   function pctEtapa(e, modo) { return modo === "lit" && tieneLit(e) ? { n: Number(e.pct_lit_n) || 0, p: Number(e.pct_lit_p2o5) || 0, k: Number(e.pct_lit_k2o) || 0 } : { n: Number(e.pct_n) || 0, p: Number(e.pct_p2o5) || 0, k: Number(e.pct_k2o) || 0 }; }
   function requiereEtapaBase(e, cul, modo, R, sm) {
-    const apps = appsEtapa(e, modo, sm), pc = pctEtapa(e, modo); R = R || { n: Number(cul.req_n) || 0, p: Number(cul.req_p2o5) || 0, k: Number(cul.req_k2o) || 0 };
-    if (apps > 0 && (pc.n || pc.p || pc.k)) return { n: R.n * pc.n / 100 / apps, p: R.p * pc.p / 100 / apps, k: R.k * pc.k / 100 / apps };
+    const apps = appsEtapa(e, modo, sm), pc = pctEtapa(e, modo); R = R || reqNivel(cul, nivelDefecto(cul), null);
+    // azufre: no tiene reparto por etapa, se divide por igual entre las fertilizaciones al suelo del año o ciclo
+    const totApps = R.s ? (((I && I.c) || D.catalogo || {}).etapas || []).filter((x) => x.cultivo_id === e.cultivo_id && x.uso !== "sanitario" && x.uso !== "lote").reduce((t, x) => t + appsEtapa(x, modo, sm), 0) : 0;
+    const s = R.s && totApps && apps > 0 ? R.s / totApps : 0;
+    if (apps > 0 && (pc.n || pc.p || pc.k)) return { n: R.n * pc.n / 100 / apps, p: R.p * pc.p / 100 / apps, k: R.k * pc.k / 100 / apps, s };
     if (Number(e.req_n) || Number(e.req_p2o5) || Number(e.req_k2o)) return { n: Number(e.req_n) || 0, p: Number(e.req_p2o5) || 0, k: Number(e.req_k2o) || 0 };
     return null;
   }
@@ -66,7 +84,7 @@
     if (R && R.n + R.p + R.k > 0) { const ref = L.mezclaPorRegla(regla, 100, cand); if (!ref) return null; const sA = ref.aporte.n + ref.aporte.p + ref.aporte.k;
       masa = Math.min(500, Math.max(50, Math.round(100 * (R.n + R.p + R.k) / Math.max(sA, 1e-6) / 25) * 25)); }
     else { const m0 = Number(cul.kg_aplicacion) || 0; if (!m0) return null; masa = crit ? m0 - 25 : m0; }
-    const r = L.mezclaPorRegla(regla, masa, cand); if (!r) return null;
+    const r = L.mezclaPorRegla(regla, masa, cand, R && R.n + R.p + R.k > 0 ? R : null); if (!r) return null;
     return { regla, masa, mg: crit ? 25 : 0, aporte: r.aporte, ratio: r.ratio, items: r.items, requiere: R || null };
   }
   function armarItemsEtapa(e, lista, calc, c) {
@@ -90,16 +108,19 @@
   const cajaReq = (eid, ha) => { const e = etapa(eid); if (!e || !I.req[eid]) return ""; const cul = cultivo(e.cultivo_id);
     return cajaEtapa(resumenSuelo(e, cul), Number(String(ha || "").replace(",", ".")) || 0, Number(String((ui.calc && ui.calc.pha) || "").replace(",", ".")) || 0); };
   // requerimiento del cultivo y cuánto cubre el plan con sus fertilizaciones al año o al ciclo
-  const cajaCultivo = (cid) => { const cul = cultivo(cid); if (!cul || !(Number(cul.req_n) || Number(cul.req_p2o5) || Number(cul.req_k2o))) return "";
+  const cajaCultivo = (cid) => { const cul = cultivo(cid); if (!cul || !tieneReq(cul)) return "";
     const per = cul.req_periodo === "ciclo" ? "ciclo" : "año", ets = etapasFert(cid).filter((e) => I.req[e.id] && appsDe(e));
     const tot = ets.reduce((a, e) => { const q = resumenSuelo(e, cul), n = appsDe(e); a.n += q.aporte.n * n; a.p += q.aporte.p * n; a.k += q.aporte.k * n; a.apps += n; return a; }, { n: 0, p: 0, k: 0, apps: 0 });
     const pc = (v, req) => (Number(req) ? " (" + L.fmt(v / Number(req) * 100, 0) + " %)" : "");
     const RQ = reqCultivo(cul);
-    return `<div class="card" style="gap:4px"><span class="etq">Requerimiento del cultivo${SIM.req[cul.id] ? " (simulación)" : ""}</span><b>N ${L.fmt(RQ.n)} · P₂O₅ ${L.fmt(RQ.p)} · K₂O ${L.fmt(RQ.k)} kg/ha/${per}</b>
+    return `<div class="card" style="gap:4px"><span class="etq">Requerimiento del cultivo${esTecnico() ? " · suelo " + sueloNivel(cul.id) : ""}${esTecnico() && SIM.req[cul.id] ? " (simulación)" : ""}</span><b>N ${L.fmt(RQ.n)} · P₂O₅ ${L.fmt(RQ.p)} · K₂O ${L.fmt(RQ.k)}${RQ.s ? " · S " + L.fmt(RQ.s) : ""} kg/ha/${per}</b>
+      ${porPlanta(cul) && !(esTecnico() && SIM.req[cul.id]) ? `<span class="mini">Calculado con ${L.fmt(phaDe(cul, phaUI()))} plantas por ha${phaUI() ? "" : " (escribe tus plantas por ha para ajustarlo)"}.</span>` : ""}
       ${tot.apps ? `<span class="mini">${tot.apps} fertilizaciones al suelo por ${per} (${cadaCuanto(per === "ciclo" ? Number(cul.ciclo_meses) || 0 : 12, tot.apps)})</span>` : ""}
-      ${tot.apps && esTecnico() ? `<span class="mini">${ets.map((e) => h(e.nombre) + ": " + appsDe(e)).join(" · ")}. El plan aporta N ${L.fmt(tot.n, 0)}${pc(tot.n, RQ.n)} · P₂O₅ ${L.fmt(tot.p, 0)}${pc(tot.p, RQ.p)} · K₂O ${L.fmt(tot.k, 0)}${pc(tot.k, RQ.k)} del requerimiento.</span>` : ""}${cul.req_fuente && esTecnico() ? `<span class="mini">Fuente: ${h(cul.req_fuente)}</span>` : ""}</div>`; };
+      ${tot.apps && esTecnico() ? `<span class="mini">${ets.map((e) => h(e.nombre) + ": " + appsDe(e)).join(" · ")}. El plan aporta N ${L.fmt(tot.n, 0)}${pc(tot.n, RQ.n)} · P₂O₅ ${L.fmt(tot.p, 0)}${pc(tot.p, RQ.p)} · K₂O ${L.fmt(tot.k, 0)}${pc(tot.k, RQ.k)} del requerimiento.</span>` : ""}${cul.req_fuente && esTecnico() ? `<span class="mini">Fuente: ${h(cul.req_fuente)}</span>` : ""}${cul.fuente_suelo && esTecnico() ? `<span class="mini">Nivel de suelo: ${h(cul.fuente_suelo)}</span>` : ""}</div>`; };
   // ---------------- fertilización al suelo: sugerencia de la app y simulación del técnico (solo en memoria: al recargar vuelve la sugerida)
-  const SIM = { mezcla: {}, req: {}, apps: {}, reparto: {}, nuevo: null };
+  const SIM = { mezcla: {}, req: {}, apps: {}, reparto: {}, nivel: {}, nuevo: null };
+  const sueloNivel = (cid) => (esTecnico() && SIM.nivel[cid]) || nivelDefecto(cultivo(cid));
+  const phaUI = () => Number(String((ui.calc && ui.calc.pha) || "").replace(",", ".")) || 0;
   const modoDe = (cid) => (esTecnico() && SIM.reparto[cid]) || "asesor";
   // fertilizaciones de una etapa por año o ciclo (la simulación del técnico manda sobre la del plan)
   const appsDe = (e) => appsEtapa(e, modoDe(e.cultivo_id), esTecnico() ? SIM.apps[e.cultivo_id] : null);
@@ -108,8 +129,11 @@
   // mezcla sugerida de la etapa: la del plan o, si el técnico simula requerimiento/fertilizaciones/reparto, recalculada
   function sugerenciaEtapa(e) {
     const cul = cultivo(e.cultivo_id), base = { items: I.fert[e.id] || [], calc: I.req[e.id] || null };
-    if (!cul || !simCultivo(cul.id)) return base;
-    const key = e.id + "|" + JSON.stringify([SIM.req[cul.id], SIM.apps[cul.id], SIM.reparto[cul.id]]);
+    if (!cul) return base;
+    // se recalcula si cambia el requerimiento (nivel de suelo, plantas por ha en cultivos por planta) o la simulación del técnico
+    const k0 = JSON.stringify([reqCultivo(cul), (esTecnico() && SIM.apps[cul.id]) || null, modoDe(cul.id)]);
+    if (k0 === I.baseKey[cul.id]) return base;
+    const key = e.id + "|" + k0;
     if (!_cacheSim[key]) { const calc = calcularEtapa(e, cul, requiereEtapa(e, cul), I.c); _cacheSim[key] = calc ? { items: armarItemsEtapa(e, I.fertBase[e.id] || [], calc), calc } : base; }
     return _cacheSim[key];
   }
@@ -122,7 +146,7 @@
   const esMgP = (p) => !!p && /sulfato de magnesio/i.test(p.nombre);
   const precioSacoDe = (p) => { const pres = (p.presentaciones || []).filter((y) => (y.unidad || "g") === "g" && Number(y.cantidad) >= 10000).sort((a, b) => b.cantidad - a.cantidad)[0];
     return pres && pres.precio !== null && pres.precio !== undefined ? Number(pres.precio) : p.pvp !== null && p.pvp !== undefined ? Number(p.pvp) : null; };
-  const reqCultivo = (cul) => SIM.req[cul.id] || { n: Number(cul.req_n) || 0, p: Number(cul.req_p2o5) || 0, k: Number(cul.req_k2o) || 0 };
+  const reqCultivo = (cul) => (esTecnico() && SIM.req[cul.id]) || reqNivel(cul, sueloNivel(cul.id), phaUI());
   function requiereEtapa(e, cul) { if (!cul) return null; return requiereEtapaBase(e, cul, modoDe(cul.id), reqCultivo(cul), esTecnico() ? SIM.apps[cul.id] : null); }
   const mezclaSugerida = (eid) => (etapa(eid) ? sugerenciaEtapa(etapa(eid)).items : []).filter((x) => x.tipo === "suelo" && Number(x.dosis_kg_ha) && P(x.producto_id)).map((x) => ({ ref: x.producto_id, kgHa: Number(x.dosis_kg_ha), item: x }))
     .sort((a, b) => (esMgP(P(a.ref)) ? 1 : 0) - (esMgP(P(b.ref)) ? 1 : 0)); // el sulfato de magnesio al final
@@ -131,8 +155,8 @@
   const mezclaActiva = (eid) => (esTecnico() && SIM.mezcla[eid] ? SIM.mezcla[eid].filter((x) => x.ref && prodFert(x.ref)).map((x) => ({ ref: x.ref, kgHa: x.sacos * L.kgSacoDe(prodFert(x.ref)) })) : mezclaSugerida(eid));
   function resumenSuelo(et, cul) {
     const lista = mezclaActiva(et.id).map((x) => { const p = prodFert(x.ref); return p ? Object.assign({ p, npk: L.npkDe(p) }, x) : null; }).filter(Boolean);
-    const a = { n: 0, p: 0, k: 0 }; let masa = 0, mg = 0;
-    lista.forEach((x) => { if (esMgP(x.p)) mg += x.kgHa; else masa += x.kgHa; if (x.npk) { a.n += x.kgHa * x.npk.n / 100; a.p += x.kgHa * x.npk.p / 100; a.k += x.kgHa * x.npk.k / 100; } });
+    const a = { n: 0, p: 0, k: 0, s: 0 }; let masa = 0, mg = 0;
+    lista.forEach((x) => { if (esMgP(x.p)) mg += x.kgHa; else masa += x.kgHa; a.s += x.kgHa * L.azufreDe(x.p) / 100; if (x.npk) { a.n += x.kgHa * x.npk.n / 100; a.p += x.kgHa * x.npk.p / 100; a.k += x.kgHa * x.npk.k / 100; } });
     const sg = sugerenciaEtapa(et), regla = (sg.calc && sg.calc.regla) || L.reglaDeEtapa(et.nombre, et.cultivo_id);
     return { lista, aporte: a, masa, mg, regla, ratio: a.k > 0 ? a.n / a.k : a.n > 0 ? Infinity : 0, mayor: ["n", "p", "k"].reduce((m, e) => (a[e] > a[m] ? e : m), "n"),
       requiere: requiereEtapa(et, cul), etapa: et.nombre, modificado: !!(esTecnico() && SIM.mezcla[et.id]) };
@@ -150,7 +174,7 @@
       const dif = (ap, rq) => { if (!R) return "—"; const d = ap - rq, ok = rq ? Math.abs(d) <= rq * 0.1 + 0.05 : Math.abs(d) < 0.5; return `<span style="color:${ok ? "var(--verde)" : "#b26a00"}">${d > 0.05 ? "+" : d < -0.05 ? "−" : ""}${f1(Math.abs(d))}</span>`; };
       const fila = (t, e) => `<tr><td><b>${t}</b></td><td>${R ? f1(R[e]) : "—"}</td><td><b>${f1(a[e])}</b></td><td>${dif(a[e], R ? R[e] : 0)}</td></tr>`;
       const sR = R ? R.n + R.p + R.k : 0, sA = a.n + a.p + a.k;
-      tabla = `<table class="tabla-req"><tr><th>Por ha (kg)</th><th>Requiere</th><th>Aporta</th><th>Diferencia</th></tr>${fila("N", "n")}${fila("P₂O₅", "p")}${fila("K₂O", "k")}
+      tabla = `<table class="tabla-req"><tr><th>Por ha (kg)</th><th>Requiere</th><th>Aporta</th><th>Diferencia</th></tr>${fila("N", "n")}${fila("P₂O₅", "p")}${fila("K₂O", "k")}${(R && R.s) || a.s > 0.05 ? fila("S", "s") : ""}
         <tr class="suma"><td><b>Suma NPK</b></td><td>${R ? f1(sR) : "—"}</td><td><b>${f1(sA)}</b></td><td>${R && sR ? `<span style="color:${Math.abs(sA / sR - 1) <= 0.1 ? "var(--verde)" : "#b26a00"}">${L.fmt(sA / sR * 100, 0)} %</span>` : "—"}</td></tr></table>`; }
     const partes = [q.masa ? sacosTxt(q.masa * haN) + " de mezcla" : "", q.mg ? sacosTxt(q.mg * haN) + " de sulfato de magnesio" : ""].filter(Boolean).join(" + ");
     return `<div class="card caja-etapa">
@@ -943,9 +967,12 @@
         ${tipoSel === "suelo" ? cajaCultivo(c.id) : ""}
         ${tipoSel !== "foliar" ? `<div class="card"><b class="tit-calc">${ic.calc || ""}Calcular cantidad de fertilizante a aplicar</b>
           <div class="grid2"><label class="campo">Hectáreas<input id="ha" inputmode="decimal" value="${h(ui.calc.ha)}"></label><label class="campo">Plantas por ha<input id="pha" inputmode="numeric" value="${h(ui.calc.pha)}" placeholder="Ej. 1600"></label></div>
-          ${tec && tipoSel === "suelo" && (Number(c.req_n) || Number(c.req_p2o5) || Number(c.req_k2o)) ? (() => { const RQ = reqCultivo(c), per = c.req_periodo === "ciclo" ? "ciclo" : "año";
-            return `<span class="mini">Requerimiento kg/ha/${per}</span><div class="grid3">${[["n", "N"], ["p", "P₂O₅"], ["k", "K₂O"]].map(([k, t]) => `<label class="campo">${t}<input data-rq="${k}" inputmode="decimal" value="${h(L.fmt(RQ[k]))}"></label>`).join("")}</div>
-              <span class="mini">Sugerido: N ${L.fmt(Number(c.req_n) || 0)} · P₂O₅ ${L.fmt(Number(c.req_p2o5) || 0)} · K₂O ${L.fmt(Number(c.req_k2o) || 0)}${c.req_fuente ? " (" + h(c.req_fuente) + ")" : ""}${SIM.req[c.id] ? ` · <button class="enlace" id="rqReset">Usar el sugerido</button>` : ""}</span>
+          ${tec && tipoSel === "suelo" && tieneReq(c) ? (() => { const RQ = reqCultivo(c), per = c.req_periodo === "ciclo" ? "ciclo" : "año", nv = sueloNivel(c.id), SG = reqNivel(c, nv, phaUI());
+            const conS = !!(SG.s || RQ.s || ["bajo", "medio", "alto"].some((x) => numN(c["req_" + x + "_s"])));
+            return `<span class="mini">Análisis de suelo</span>
+              <div class="seg" role="group" aria-label="Nivel del suelo">${NIVELES.map(([k, t]) => `<button data-ns="${k}" class="${nv === k ? "sel" : ""}">${t}</button>`).join("")}</div>
+              <span class="mini">Requerimiento kg/ha/${per}</span><div class="grid3" style="grid-template-columns:repeat(${conS ? 4 : 3},1fr)">${[["n", "N"], ["p", "P₂O₅"], ["k", "K₂O"]].concat(conS ? [["s", "S"]] : []).map(([k, t]) => `<label class="campo">${t}<input data-rq="${k}" inputmode="decimal" value="${h(L.fmt(RQ[k] || 0))}"></label>`).join("")}</div>
+              <span class="mini">Sugerido suelo ${nv}: N ${L.fmt(SG.n)} · P₂O₅ ${L.fmt(SG.p)} · K₂O ${L.fmt(SG.k)}${conS ? " · S " + L.fmt(SG.s) : ""}${porPlanta(c) ? " (" + ["n", "p2o5", "k2o", "s"].map((e) => L.fmt(numN(c["req_" + nv + "_" + e]) || 0)).join(" / ") + " g por planta × " + L.fmt(phaDe(c, phaUI())) + " pl/ha)" : ""}${SIM.req[c.id] ? ` · <button class="enlace" id="rqReset">Usar el sugerido</button>` : ""}</span>
               ${(() => { const modo = modoDe(c.id), hayLit = etapasFert(c.id).some(tieneLit), mes = per === "ciclo" ? Number(c.ciclo_meses) || 0 : 12;
                 const ets = etapasFert(c.id).filter((e) => appsEtapa(e, "asesor") > 0 || appsEtapa(e, "lit") > 0 || (SIM.apps[c.id] || {})[e.id] !== undefined); if (!ets.length) return "";
                 const tot = ets.reduce((s0, e) => s0 + appsDe(e), 0), sug = ets.reduce((s0, e) => s0 + appsEtapa(e, modo), 0);
@@ -982,6 +1009,7 @@
     re("ha", "ha"); re("pha", "pha"); re("ph", "ph");
     const rv = () => { const y = window.scrollY; vFert(c.id); window.scrollTo(0, y); };
     $$("[data-rq]").forEach((el) => el.addEventListener("change", () => { const RQ = Object.assign({}, reqCultivo(c)); RQ[el.dataset.rq] = Number(String(el.value).replace(",", ".")) || 0; SIM.req[c.id] = RQ; rv(); }));
+    $$("[data-ns]").forEach((b) => b.addEventListener("click", () => { if (b.dataset.ns === nivelDefecto(c)) delete SIM.nivel[c.id]; else SIM.nivel[c.id] = b.dataset.ns; delete SIM.req[c.id]; rv(); }));
     const rqr = $("#rqReset"); if (rqr) rqr.addEventListener("click", () => { delete SIM.req[c.id]; rv(); });
     $$("[data-ap]").forEach((el) => el.addEventListener("change", () => { SIM.apps[c.id] = Object.assign({}, SIM.apps[c.id] || {}, { [el.dataset.ap]: Number(el.value) }); rv(); }));
     const apr = $("#apReset"); if (apr) apr.addEventListener("click", () => { delete SIM.apps[c.id]; rv(); });

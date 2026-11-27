@@ -544,6 +544,13 @@
     if (!m) return null; const v = m.slice(1).map((x) => Number(x.replace(",", ".")));
     return v.some((x) => x > 0) ? { n: v[0], p: v[1], k: v[2] } : null;
   }
+  // azufre (S %) en la concentración: «-22S», «+24(S)», «6S»; el sulfato «46(SO4)» se pasa a S (× 0,334)
+  function azufreDe(p) {
+    const t = String((p && p.concentracion) || ""); let s = 0;
+    const m = t.match(/(\d+(?:[.,]\d+)?)\s*\(?\s*S\s*\)?(?![A-Za-z0-9])/); if (m) s = Number(m[1].replace(",", "."));
+    else { const o = t.match(/(\d+(?:[.,]\d+)?)\s*\(?\s*SO4/); if (o) s = Number(o[1].replace(",", ".")) * 32.06 / 96.06; }
+    return s || 0;
+  }
   const kgSacoDe = (p) => { const pres = (p.presentaciones || []).filter((x) => (x.unidad || "g") === "g" && num(x.cantidad) >= 10000).sort((a, b) => b.cantidad - a.cantidad)[0];
     return pres ? num(pres.cantidad) / 1000 : num(p.contenido) >= 10000 && (p.contenido_unidad || "g") === "g" ? num(p.contenido) / 1000 : 50; };
   // busca la combinación (hasta 3 productos, en medios sacos por hectárea) que más se acerca al requerimiento;
@@ -589,7 +596,8 @@
   // mezcla de hasta 3 fertilizantes que suma «masa» kg/ha (en partes de 25 kg), con al menos 1 saco (50 kg) de un Soli;
   // busca que el elemento de la regla sea el mayor y que N:K quede en el rango (lo más cerca del ideal), con la menor
   // cantidad posible de productos que no son Soli
-  function mezclaPorRegla(regla, masa, productos) {
+  function mezclaPorRegla(regla, masa, productos, req) {
+    const sReq = req ? (num(req.n) || 0) + (num(req.p) || 0) + (num(req.k) || 0) : 0;
     const lista = productos.filter((x) => x.npk), partes = Math.round(masa / 25);
     if (!regla || !lista.length || partes < 2) return null;
     const ln = Math.log; let mejor = null;
@@ -602,6 +610,8 @@
       const r = a.k > 0 ? a.n / a.k : a.n > 0 ? 99 : 0;
       if (r <= 0) pen += 20; else { if (r < regla.min) pen += ln(regla.min / r) * 4; else if (r > regla.max) pen += ln(r / regla.max) * 4; pen += Math.abs(ln(r / regla.ideal)) * 0.4; }
       pen += (kgNo / masa) * 1.2 + (grupo.length - 1) * 0.05;
+      // con requerimiento de la etapa: que cada elemento se acerque a lo que se pide (evita sobrar fósforo, por ejemplo)
+      if (sReq > 0) pen += ["n", "p", "k"].reduce((s, e) => s + Math.abs(a[e] - (num(req[e]) || 0)), 0) / sReq * 1.5;
       if (!mejor || pen < mejor.pen - 1e-9) mejor = { pen, aporte: a, ratio: r, items: grupo.map((x, i) => ({ id: x.id, kgHa: q[i] * 25 })).filter((x) => x.kgHa > 0) };
     };
     const reparto = (n, k, pref, cb) => { if (k === 1) return cb(pref.concat([n])); for (let i = 1; i <= n - (k - 1); i++) reparto(n - i, k - 1, pref.concat([i]), cb); };
@@ -773,6 +783,6 @@
   }
   const api = { fraccionSacos, textoSacos, ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, nombresGrupo, textoBusquedaGrupo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
-    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, claseDeBusqueda, rankearPorClase, interpretarConsulta, coincideTexto, npkDe, kgSacoDe, repartirNPK, REGLAS_FERT, reglaDeEtapa, mezclaPorRegla, etapaCritica, palabrasDe: (t) => palabras(t), fonetica: (t) => fonetica(t).replace(/[^a-z0-9ñ ]/g, " ").replace(/\s+/g, " ").trim(), esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
+    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, claseDeBusqueda, rankearPorClase, interpretarConsulta, coincideTexto, npkDe, azufreDe, kgSacoDe, repartirNPK, REGLAS_FERT, reglaDeEtapa, mezclaPorRegla, etapaCritica, palabrasDe: (t) => palabras(t), fonetica: (t) => fonetica(t).replace(/[^a-z0-9ñ ]/g, " ").replace(/\s+/g, " ").trim(), esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);
