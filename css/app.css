@@ -255,3 +255,5 @@ button.enlace{border:0;background:none;color:var(--verde);text-decoration:underl
 .asis-nivel-bts .niv-bajo{color:#2e7d32}.asis-nivel-bts .niv-medio{color:#b26a00}.asis-nivel-bts .niv-alto{color:#c62828}
 .asis-renivel{border:0;background:none;font:inherit;color:inherit;padding:0;cursor:pointer;text-align:left}
 .niv-txt{font-style:normal;font-weight:600}.niv-txt.niv-bajo{color:#2e7d32}.niv-txt.niv-medio{color:#b26a00}.niv-txt.niv-alto{color:#c62828}
+.asis-nivel-bts .niv-preventivo{color:#1565c0}.niv-txt.niv-preventivo{color:#1565c0}
+.asis-nivel-bts button:not(.enlace){min-width:0;padding:0 4px;font-size:14px}

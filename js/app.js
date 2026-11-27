@@ -1366,7 +1366,7 @@
       <div class="grid2">${campo("cultivo", "Cultivo", (cultivo(a.cultivo) || {}).nombre || "", "Ej. Cacao")}${campo("etapa", "Etapa", (etapa(a.etapa) || {}).nombre || "", "Ej. Floración")}</div>
       ${campo("problema", "¿Qué problemas ves?", "", a.problemas.length ? "Agregar otro problema…" : "Ej. monilia, ácaros… (vacío: solo prevención)")}
       ${a.pendiente && probDe(a.pendiente) ? `<div class="asis-nivel" role="group" aria-label="Nivel de daño"><span>¿Qué nivel de daño tiene <b>${h(probDe(a.pendiente).nombre)}</b>?</span>
-        <div class="asis-nivel-bts">${["bajo", "medio", "alto"].map((n) => `<button type="button" class="niv-${n}" data-nv="${n}">${n[0].toUpperCase() + n.slice(1)}</button>`).join("")}<button type="button" class="enlace" data-nv="">Cancelar</button></div></div>` : ""}
+        <div class="asis-nivel-bts">${["preventivo", "bajo", "medio", "alto"].map((n) => `<button type="button" class="niv-${n}" data-nv="${n}">${n[0].toUpperCase() + n.slice(1)}</button>`).join("")}<button type="button" class="enlace" data-nv="">Cancelar</button></div></div>` : ""}
       ${a.problemas.length ? `<div class="asis-chips">${a.problemas.map((id) => { const nom = (probDe(id) || {}).nombre || "", nv = nivelDe(a, id);
         return `<span class="asis-chip"><button type="button" class="asis-renivel" data-renivel="${h(id)}" aria-label="Cambiar el nivel de daño de ${h(nom)}">${h(nom)} <i class="niv-txt niv-${nv}">(${nv})</i></button><button type="button" data-quitar="problema" data-id="${h(id)}" aria-label="Quitar ${h(nom)}">✕</button></span>`; }).join("")}</div>` : ""}
       <div class="grid2"><label class="campo">Hectáreas a fumigar<input data-a="ha" inputmode="decimal" value="${h(a.ha || "")}" placeholder="Ej. 1"></label>
@@ -1434,8 +1434,23 @@
         .sort((x, y) => (L.dosisDe(x.p).min === null ? 1 : 0) - (L.dosisDe(y.p).min === null ? 1 : 0)) : []; // del portafolio, primero los que tienen dosis cargada
       return recs.concat(port.filter((x) => !recs.some((y) => y.p.id === x.p.id))); };
     const especifico = (x) => !L.esMultisitio(x.p);
+    // riesgo de hongos de la etapa (o de las etapas sanitarias que le corresponden); sin dato: floración y cuajado se toman como de riesgo alto
+    const RANGO = { bajo: 1, ligero: 2, alto: 3 };
+    const riesgoEtapa = (eid) => { const e = etapa(eid); if (!e) return null; if (e.riesgo_hongos) return e.riesgo_hongos;
+      const rs = (e.plan_etapas || []).map((x) => (etapa(x) || {}).riesgo_hongos).filter(Boolean).sort((x, y) => RANGO[y] - RANGO[x]);
+      return rs[0] || (/flor|cuaj/i.test(e.nombre) ? "alto" : null); };
+    const prevs = prs.filter((pr) => nivelDe(a, pr.id) === "preventivo");
+    if (prevs.length) avisos.push(`Sin daño visible en ${h(prevs.map((p) => p.nombre).join(", "))}: recomendación <b>preventiva</b>. Si aparece el problema, vuelve a consultar con el nivel de daño.`);
     prs.forEach((pr) => {
       const nv = nivelDe(a, pr.id), enf = pr.tipo === "enfermedad", ops = opcionesDe(pr).filter(especifico);
+      // preventivo: plagas solo monitoreo; enfermedades un multisitio y, si la etapa es de riesgo alto de hongos, un sistémico que rote el grupo
+      if (nv === "preventivo") {
+        if (!enf) { avisos.push(`<b>${h(pr.nombre)}</b> (preventivo): no se recomienda insecticida sin la plaga presente. <b>Monitorea</b> cada semana (envés de hojas, brotes, flores y frutos; trampas si las tienes) y aplica solo cuando aparezca.`); return; }
+        const m0 = multiDe(pr); if (m0) poner(m0, null, `Preventivo multisitio para ${pr.nombre}`);
+        if (riesgoEtapa(a.etapa) === "alto") { const sis = ops.find((x) => !repite(x.p) && !ya(x.p));
+          if (sis) { poner(sis.p, sis.dosis, `Sistémico preventivo para ${pr.nombre}: etapa de riesgo alto de hongos`); avisos.push(`La etapa <b>${h((etapa(a.etapa) || {}).nombre || "")}</b> es de riesgo alto de hongos: al multisitio se suma un sistémico preventivo para ${h(pr.nombre)}.`); } }
+        return;
+      }
       if (!ops.length) { if (enf && nv !== "bajo") { const m0 = multiDe(pr); if (m0) poner(m0, null, `Preventivo multisitio para ${pr.nombre}`); } return; }
       let main;
       if (nv === "alto") {
