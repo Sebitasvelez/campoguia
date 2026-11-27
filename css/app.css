@@ -257,3 +257,6 @@ button.enlace{border:0;background:none;color:var(--verde);text-decoration:underl
 .niv-txt{font-style:normal;font-weight:600}.niv-txt.niv-bajo{color:#2e7d32}.niv-txt.niv-medio{color:#b26a00}.niv-txt.niv-alto{color:#c62828}
 .asis-nivel-bts .niv-preventivo{color:#1565c0}.niv-txt.niv-preventivo{color:#1565c0}
 .asis-nivel-bts button:not(.enlace){min-width:0;padding:0 4px;font-size:14px}
+.asis-chip{border-radius:16px;max-width:100%;padding:4px 2px 4px 12px}
+.asis-chip button.asis-renivel{width:auto;height:auto;min-height:30px;border-radius:0;font-size:14px;line-height:1.3;color:var(--texto);text-align:left;padding:2px 0;white-space:normal}
+.asis-chip button[data-quitar]{flex-shrink:0}
