@@ -32,6 +32,7 @@
   const MENSAJES = {
     cedula_ya_registrada: "Esa cédula ya tiene una cuenta. Usa «Ya tengo cuenta».",
     institucion_requerida: "Escribe la institución a la que perteneces.",
+    edad_invalida: "Escribe tu edad en años.",
     no_registrado: "No encontramos una cuenta con esa cédula. Revísala o crea tu cuenta.",
     credenciales: "La cédula y el celular no coinciden con ninguna cuenta. Revísalos (usa el celular con el que te registraste) o crea tu cuenta.",
     demasiados_intentos: "Demasiados intentos seguidos. Por seguridad espera 15 minutos y vuelve a probar.",
@@ -110,7 +111,7 @@
       if (db.agricultores.some((a) => a.cedula === ced)) throw error("cedula_ya_registrada");
       const num = (v) => (v === "" || v === undefined || v === null ? null : Number(v));
       const a = { id: uuid(), cedula: ced, nombres: p.nombres.trim(), telefono: tel, cultivo_id: p.cultivo_id, hectareas: num(p.hectareas),
-        provincia: p.provincia, sector: p.sector.trim(), comunidad: p.comunidad || null, institucion: p.rol === "tecnico" ? String(p.institucion || "").trim() || null : null, rol: "agricultor", rol_solicitado: p.rol === "tecnico" ? "tecnico" : null, rol_solicitado_fecha: p.rol === "tecnico" ? new Date().toISOString() : null, acepta_seguimiento: p.acepta_seguimiento !== false,
+        provincia: p.provincia, sector: p.sector.trim(), comunidad: p.comunidad || null, institucion: p.rol === "tecnico" ? String(p.institucion || "").trim() || null : null, edad: Number(p.edad) || null, rol: "agricultor", rol_solicitado: p.rol === "tecnico" ? "tecnico" : null, rol_solicitado_fecha: p.rol === "tecnico" ? new Date().toISOString() : null, acepta_seguimiento: p.acepta_seguimiento !== false,
         latitud: num(p.latitud), longitud: num(p.longitud), precision_m: num(p.precision_m), ubicacion_fecha: p.latitud ? new Date().toISOString() : null,
         creado: new Date().toISOString(), ultimo_ingreso: new Date().toISOString(), activo: true };
       db.agricultores.push(a); const token = uuid(); db.sesiones[token] = a.id; demoSave(db);
@@ -146,6 +147,7 @@
       if (p.hectareas !== undefined && p.hectareas !== "") a.hectareas = Number(p.hectareas);
       if (p.acepta_seguimiento !== undefined) a.acepta_seguimiento = !!p.acepta_seguimiento;
       if (p.institucion !== undefined) a.institucion = String(p.institucion || "").trim() || null;
+      if (Number(p.edad) >= 10 && Number(p.edad) <= 110) a.edad = Number(p.edad);
       demoSave(db); return a;
     },
     async solicitarRol(token, rol) {

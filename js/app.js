@@ -216,12 +216,13 @@
         <h2 style="font-size:20px">Crea tu cuenta</h2>
         <label class="campo">Número de cédula<input name="cedula" inputmode="numeric" maxlength="10" autocomplete="off" required><small id="cedEstado">Con tu cédula ingresarás a la app.</small></label>
         <label class="campo">Nombres y apellidos<input name="nombres" autocomplete="name" required></label>
-        <label class="campo">Número de celular<input name="telefono" type="tel" inputmode="tel" placeholder="09X XXX XXXX" required></label>
+        <div class="grid2"><label class="campo">Edad<input name="edad" inputmode="numeric" maxlength="3" placeholder="Ej. 35" required></label>
+        <label class="campo">Número de celular<input name="telefono" type="tel" inputmode="tel" placeholder="09X XXX XXXX" required></label></div>
         <div class="grid2"><label class="campo">Provincia<select name="provincia" required><option value="">Elige…</option>${PROVINCIAS.map((p) => `<option>${h(p)}</option>`).join("")}</select></label>
         <label class="campo">Sector del cultivo<input name="sector" placeholder="Comunidad o parroquia" required></label></div>
         <div class="grid2"><label class="campo">Cultivo principal<select name="cultivo_id">${cultOpts}</select></label>
         <label class="campo">Hectáreas<input name="hectareas" inputmode="decimal" placeholder="Ej. 2"></label></div>
-        <label class="campo">Soy<select name="rol"><option value="agricultor">Agricultor</option><option value="tecnico">Técnico agrícola (requiere aprobación)</option></select></label>
+        <label class="campo">Soy<select name="rol"><option value="agricultor">Agricultor</option><option value="tecnico">Técnico agrícola</option></select></label>
         <label class="campo" id="campoInst" hidden>¿A qué institución perteneces?<input name="institucion" maxlength="150" placeholder="Ej. MAG, GAD provincial, almacén, universidad…"><small>El administrador la revisa para aprobar tu acceso de técnico.</small></label>
         ${bloqueUbicacion(null)}
         <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--suave)"><input type="checkbox" name="acepta" checked style="width:22px;height:22px;margin:0;accent-color:var(--verde)"> Acepto que mi asesor vea mis registros y la ubicación de mi finca para darme seguimiento técnico.</label>
@@ -242,12 +243,14 @@
         e.preventDefault(); const b = f.querySelector("button[type=submit]"); $("#err").textContent = "";
         if (!D.cedulaValida(f.cedula.value)) { $("#err").textContent = "La cédula no es válida. Revisa los 10 dígitos."; return; }
         if (!f.provincia.value || !f.sector.value.trim()) { $("#err").textContent = "Elige la provincia y escribe el sector de tu cultivo."; return; }
+        const edad = Number(String(f.elements.namedItem("edad").value).replace(/\D/g, ""));
+        if (!(edad >= 10 && edad <= 110)) { $("#err").textContent = "Escribe tu edad en años."; f.elements.namedItem("edad").focus(); return; }
         if (f.rol.value === "tecnico" && !f.institucion.value.trim()) { $("#err").textContent = "Escribe la institución a la que perteneces."; f.institucion.focus(); return; }
         b.disabled = true;
         try {
           await D.registrar({ cedula: f.cedula.value, nombres: f.nombres.value, telefono: f.telefono.value, cultivo_id: f.cultivo_id.value,
             hectareas: f.hectareas.value.replace(",", "."), provincia: f.provincia.value, sector: f.sector.value, rol: f.rol.value,
-            institucion: f.rol.value === "tecnico" ? f.institucion.value.trim() : null,
+            institucion: f.rol.value === "tecnico" ? f.institucion.value.trim() : null, edad,
             acepta_seguimiento: f.acepta.checked, latitud: ub.latitud, longitud: ub.longitud, precision_m: ub.precision_m });
           ui.cultivo = f.cultivo_id.value; guardarUI(); location.hash = "#/"; router();
           if (f.rol.value === "tecnico") UI.avisar("Tu cuenta está lista. Tu acceso al panel de técnico agrícola necesita la aprobación del administrador. Se aprueba en un plazo de 24 horas. Mientras tanto tienes acceso como agricultor.");
@@ -1570,7 +1573,8 @@
         <form class="card" id="fp">
           <div class="dato"><span>Cédula (para ingresar)</span><b>${h(p.cedula)}</b></div>
           <label class="campo">Nombres<input name="nombres" value="${h(p.nombres)}"></label>
-          <label class="campo">Celular<input name="telefono" type="tel" value="${h(p.telefono || "")}"></label>
+          <div class="grid2"><label class="campo">Edad<input name="edad" inputmode="numeric" maxlength="3" value="${h(p.edad || "")}" placeholder="Años"></label>
+          <label class="campo">Celular<input name="telefono" type="tel" value="${h(p.telefono || "")}"></label></div>
           <div class="grid2"><label class="campo">Provincia<select name="provincia"><option value="">—</option>${PROVINCIAS.map((x) => `<option ${x === p.provincia ? "selected" : ""}>${h(x)}</option>`).join("")}</select></label>
           <label class="campo">Sector del cultivo<input name="sector" value="${h(p.sector || "")}"></label></div>
           <div class="grid2"><label class="campo">Cultivo principal<select name="cultivo_id">${cultivos().map((c) => `<option value="${h(c.id)}" ${c.id === p.cultivo_id ? "selected" : ""}>${h(c.nombre)}</option>`).join("")}</select></label>
@@ -1613,7 +1617,7 @@
     }));
     $("#fp").addEventListener("submit", async (e) => {
       e.preventDefault(); const f = e.target;
-      try { await D.actualizarPerfil({ nombres: f.nombres.value, telefono: f.telefono.value, provincia: f.provincia.value, sector: f.sector.value, cultivo_id: f.cultivo_id.value, hectareas: f.hectareas.value.replace(",", "."), acepta_seguimiento: f.acepta.checked }); toast("Datos guardados"); }
+      try { await D.actualizarPerfil({ nombres: f.nombres.value, edad: f.elements.namedItem("edad").value, telefono: f.telefono.value, provincia: f.provincia.value, sector: f.sector.value, cultivo_id: f.cultivo_id.value, hectareas: f.hectareas.value.replace(",", "."), acepta_seguimiento: f.acepta.checked }); toast("Datos guardados"); }
       catch (er) { toast(er.codigo === "red" ? "Necesitas internet para cambiar tus datos." : er.message); }
     });
     $("#sync").addEventListener("click", async () => { if (navigator.onLine === false) return toast("Sin conexión"); await D.actualizarCatalogo(); await D.sincronizar(); toast("Todo sincronizado"); vPerfil(); });
