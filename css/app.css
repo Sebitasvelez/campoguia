@@ -212,3 +212,9 @@ button.enlace{border:0;background:none;color:var(--verde);text-decoration:underl
 .tit-calc{display:flex;align-items:center;gap:6px}
 .tit-calc svg{color:var(--verde);width:20px;height:20px}
 .sim-nuevo .error{color:#b3261e;font-size:13px}
+.apps-tabla{border:1px solid var(--borde,#e2e6e0);border-radius:12px;overflow:hidden;font-size:14px}
+.apps-fila{display:grid;grid-template-columns:minmax(0,1fr) 84px;gap:6px;align-items:center;padding:6px 10px;border-top:1px solid var(--borde,#e2e6e0)}
+.apps-fila:first-child{border-top:0}
+.apps-fila.cambio{background:#fff4dc}
+.apps-fila.actual span{font-weight:600}
+.apps-fila.total{grid-template-columns:auto 1fr;justify-items:end;border-top:1.5px solid var(--suave)}
