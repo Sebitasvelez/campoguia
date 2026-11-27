@@ -16,10 +16,10 @@
       const si = document.createElement("button"); si.type = "button"; si.className = o.peligro ? "btn peligro" : "btn"; si.textContent = o.ok;
       if (o.cancelar) fila.append(no); fila.append(si); caja.appendChild(fila); fondo.appendChild(caja); document.body.appendChild(fondo);
       const cerrar = (v) => { fondo.remove(); document.removeEventListener("keydown", tecla); resolver(v); };
-      const tecla = (e) => { if (e.key === "Escape") cerrar(o.campo ? null : false); if (e.key === "Enter" && o.campo) cerrar(input.value.trim() || null); };
+      const tecla = (e) => { if (e.key === "Escape") cerrar(o.campo ? null : false); if (e.key === "Enter" && o.campo) cerrar(o.vacio ? input.value.trim() : input.value.trim() || null); };
       document.addEventListener("keydown", tecla);
       no.addEventListener("click", () => cerrar(o.campo ? null : false));
-      si.addEventListener("click", () => cerrar(o.campo ? input.value.trim() || null : true));
+      si.addEventListener("click", () => cerrar(o.campo ? (o.vacio ? input.value.trim() : input.value.trim() || null) : true));
       fondo.addEventListener("click", (e) => { if (e.target === fondo) cerrar(o.campo ? null : false); });
       (input || si).focus();
     });
@@ -27,6 +27,8 @@
   window.UI = {
     confirmar: (m, o) => dialogo(m, o),
     pedir: (m, placeholder, ok) => dialogo(m, { campo: true, placeholder, ok: ok || "Crear" }),
+    // como pedir, pero aceptar con el cuadro vacío devuelve "" (cancelar devuelve null)
+    pedirOpcional: (m, placeholder, ok) => dialogo(m, { campo: true, vacio: true, placeholder, ok: ok || "Aceptar" }),
     avisar: (m, ok) => dialogo(m, { ok: ok || "Entendido", cancelar: null }),
   };
 })();

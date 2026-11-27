@@ -85,6 +85,8 @@
     actualizarPerfil: (token, p) => rpc("app_actualizar_perfil", { p_token: token, p }),
     solicitarRol: (token, rol) => rpc("app_solicitar_rol", { p_token: token, p_rol: rol }),
     cerrarSesion: (token) => rpc("app_cerrar_sesion", { p_token: token }).catch(() => {}),
+    otrosProductos: () => rpc("app_otros_productos", {}),
+    reportarProducto: (token, p) => rpc("app_reportar_producto", { p_token: token || null, p }),
   };
 
   // ------------------------------------------------------------------ Demo
@@ -161,6 +163,13 @@
       demoSave(db); return a;
     },
     async cerrarSesion(token) { const db = demoDB(); delete db.sesiones[token]; demoSave(db); },
+    async otrosProductos() { return Store.get("demo_otros", []).filter((x) => x.ingrediente_activo); },
+    async reportarProducto(token, p) {
+      const l = Store.get("demo_otros", []), n = String(p.nombre || "").trim().toLowerCase(); let x = l.find((y) => y.nombre.toLowerCase() === n);
+      if (!x) { x = { id: l.length + 1, nombre: String(p.nombre).trim(), ingrediente_activo: p.ingrediente_activo ? String(p.ingrediente_activo).toUpperCase() : null, grupo: p.grupo || null, estado: "pendiente", veces: 1, creado: new Date().toISOString() }; l.push(x); }
+      else { x.veces = (x.veces || 1) + 1; if (!x.ingrediente_activo && p.ingrediente_activo) x.ingrediente_activo = String(p.ingrediente_activo).toUpperCase(); }
+      Store.set("demo_otros", l); return x;
+    },
   };
 
   const B = MODO_DEMO ? Demo : Supa;
@@ -206,6 +215,18 @@
       if (this.sesion) B.cerrarSesion(this.sesion.token);
       this.sesion = null; Store.del("sesion"); this.mis = { lotes: [], registros: [] }; this.pendientes = { lotes: [], registros: [] }; this.guardarLocal();
       this.avisar("sesion");
+    },
+    // productos de otras marcas: lista guardada en el teléfono + los que reportan los agricultores (se reintentan sin conexión)
+    otros: Store.get("otros_productos", []),
+    async actualizarOtros() {
+      const pend = Store.get("otros_pend", []);
+      for (const p of pend.slice()) { try { await B.reportarProducto(this.sesion && this.sesion.token, p); pend.splice(pend.indexOf(p), 1); } catch (e) { break; } }
+      Store.set("otros_pend", pend);
+      try { const l = await B.otrosProductos(); if (Array.isArray(l)) { this.otros = l; Store.set("otros_productos", l); } } catch (e) { /* sin conexión o aún no existe en la base */ }
+    },
+    reportarProducto(p) {
+      const pend = Store.get("otros_pend", []); pend.push(p); Store.set("otros_pend", pend);
+      return this.actualizarOtros();
     },
     async solicitarRol(rol) {
       const perfil = await B.solicitarRol(this.sesion.token, rol);
@@ -317,11 +338,13 @@
     async salir() { Store.del("demo_admin"); },
     async listar(t) {
       if (["agricultores", "lotes", "registros"].includes(t)) return demoDB()[t];
+      if (t === "otros_productos") return Store.get("demo_otros", []);
       const b = await borradorDemo();
       if (t === "ajustes") return Object.entries(b.ajustes || {}).map(([clave, valor]) => ({ clave, valor }));
       return b[t] || [];
     },
     async guardar(t, fila) {
+      if (t === "otros_productos") { const l = Store.get("demo_otros", []), i = l.findIndex((x) => String(x.id) === String(fila.id)); if (i < 0) { fila.id = l.length + 1; l.push(fila); } else l[i] = Object.assign({}, l[i], fila); Store.set("demo_otros", l); return fila; }
       const b = await borradorDemo(); b[t] = b[t] || [];
       if (fila.id === undefined || fila.id === null || fila.id === "") fila.id = t === "cultivos" ? String(fila.nombre || "cultivo").toLowerCase().replace(/[^a-z0-9]+/g, "-") : b[t].reduce((m, x) => Math.max(m, Number(x.id) || 0), 0) + 1;
       const i = b[t].findIndex((x) => String(x.id) === String(fila.id));

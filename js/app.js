@@ -959,11 +959,21 @@
     if (!Array.isArray(a.ultimos)) a.ultimos = a.ultimo ? [a.ultimo] : [];
     delete a.problema; delete a.ultimo; delete a.problemaTxt; delete a.ultimoTxt;
     a.problemas = a.problemas.filter((id) => (I.problemas[a.cultivo] || []).some((p) => String(p.id) === String(id)));
-    a.ultimos = a.ultimos.filter((id) => P(id));
+    if (!a.otros || typeof a.otros !== "object") a.otros = {};
+    a.ultimos = a.ultimos.filter((id) => prodUlt(id, a));
     // nivel de daño por cada plaga o enfermedad (antes era uno solo para todos)
     if (!a.niveles || typeof a.niveles !== "object") { a.niveles = {}; if (a.nivel) a.problemas.forEach((id) => { a.niveles[id] = a.nivel; }); }
     delete a.nivel; return a; };
   const nivelDe = (a, id) => (a.niveles && a.niveles[id]) || "medio";
+  // producto de la última aplicación: del portafolio o de otra marca (lista de la app, reportados por agricultores o escritos por él)
+  const OM = window.OtrasMarcas || { lista: [], grupoDeIA: () => "", norm: (t) => String(t || "").toLowerCase(), catDeGrupo: () => "" };
+  const otrasMarcas = () => { const vistos = new Set(), out = [];
+    OM.lista.concat((D.otros || []).map((x) => { const grupo = x.grupo || OM.grupoDeIA(x.ingrediente_activo); return { id: "o:" + OM.norm(x.nombre), nombre: x.nombre, ingrediente_activo: x.ingrediente_activo, grupo, categoria: x.categoria || OM.catDeGrupo(grupo), otra_marca: true }; }))
+      .forEach((x) => { if (!vistos.has(x.id)) { vistos.add(x.id); out.push(x); } }); return out; };
+  function prodUlt(id, a) {
+    if (!String(id).startsWith("o:")) return P(id);
+    return ((a || ui.asis || {}).otros || {})[id] || otrasMarcas().find((x) => x.id === id) || null;
+  }
   const CAT_PROTEGER = /fungic|insectic|acaric|bacteric|cebo|nematic|herbic|desinfec/i;
   const probDe = (id) => (I.c.problemas || []).find((p) => String(p.id) === String(id)) || null;
   function asistenteSemana(abierto) {
@@ -982,7 +992,7 @@
         <label class="campo">${ui.vol === "tanque" ? "Tanques" : "Bombas"} por hectárea<input data-a="porHa" inputmode="decimal" value="${h(a.porHa || "")}" placeholder="${ui.vol === "tanque" ? "Ej. 2" : "Ej. 20"}"></label></div>
       <div class="campo"><span>Equipo</span>${segVolAsis()}</div>
       ${campo("ultimo", "Productos de la última aplicación", "", a.ultimos.length ? "Agregar otro producto…" : "Ej. Score, Engeo (vacío si no recuerdas)")}
-      ${chips(a.ultimos, (id) => (P(id) || {}).nombre || "", "ultimo")}
+      ${chips(a.ultimos, (id) => { const x = prodUlt(id, a) || {}; return (x.nombre || "") + (x.otra_marca ? (x.grupo ? " · " + x.grupo : " · otra marca") : ""); }, "ultimo")}
       <label class="campo">Fecha de esa aplicación<input data-a="fecha" type="date" value="${h(a.fecha || "")}"></label>
       <div class="acciones"><button class="btn" type="button" id="asisBtn">Recomendar mezcla</button><button class="btn sec chico" type="button" id="asisVaciar">Vaciar</button></div>
       <div id="asisRes" style="display:flex;flex-direction:column;gap:8px"></div>
@@ -1006,13 +1016,17 @@
     if (k === "ultimo") {
       if (!t) return [];
       const lista = (I.c.productos || []).filter((p) => p.activo !== false && CAT_PROTEGER.test(p.categoria || "") && !/herbic/i.test(p.categoria || "") && !a.ultimos.map(String).includes(String(p.id)));
-      return filtrar(lista, (p) => p.nombre, (p) => p.ingrediente_activo || "").map((p) => ({ v: p.id, t: p.nombre, s: [p.categoria, p.grupo].filter(Boolean).join(" · ") }));
+      const propios = filtrar(lista, (p) => p.nombre, (p) => p.ingrediente_activo || "").map((p) => ({ v: p.id, t: p.nombre, s: [p.categoria, p.grupo].filter(Boolean).join(" · ") }));
+      const otras = filtrar(otrasMarcas().filter((x) => !a.ultimos.includes(x.id)), (x) => x.nombre, (x) => x.ingrediente_activo || "").map((x) => ({ v: x.id, t: x.nombre, s: "Otra marca · " + [x.ingrediente_activo, x.grupo].filter(Boolean).join(" · ") }));
+      const exacto = propios.concat(otras).some((o) => norm(o.t) === t);
+      return propios.slice(0, 4).concat(otras.slice(0, 4)).slice(0, 5).concat(!exacto && txt.trim().length >= 3 ? [{ v: "nuevo:" + txt.trim(), t: `Agregar «${txt.trim()}»`, s: "Producto de otra marca que no está en la lista" }] : []);
     }
     return [];
   }
   function recomendarSemana() {
     const a = asis(), prs = a.problemas.map(probDe).filter(Boolean);
-    const ults = a.ultimos.map(P).filter(Boolean), avisos = [], items = [];
+    const ults = a.ultimos.map((id) => prodUlt(id, a)).filter(Boolean), avisos = [], items = [];
+    ults.filter((x) => x.otra_marca && !x.grupo).forEach((x) => avisos.push(`No conocemos el ingrediente activo de <b>${h(x.nombre)}</b>, así que no se pudo evitar repetir su grupo químico. Si lo ves en la etiqueta, agrégalo de nuevo con el ingrediente activo.`));
     const codigos = (p) => L.codigosGrupo(p && p.grupo).filter((c) => /^(FRAC|IRAC) /.test(c) && !/^FRAC M/.test(c));
     const ultCod = [...new Set(ults.flatMap(codigos))], repite = (p) => codigos(p).some((c) => ultCod.includes(c));
     const ya = (p) => items.find((x) => x.p.id === p.id);
@@ -1084,11 +1098,24 @@
         sug.innerHTML = ops.map((o) => `<button type="button" data-v="${h(o.v)}"><b>${h(o.t)}</b>${o.s ? `<span>${h(o.s)}</span>` : ""}</button>`).join("") || (el.value.trim() ? `<span class="mini" style="padding:8px 10px">Sin coincidencias${k === "problema" ? " en el manual de este cultivo" : ""}</span>` : "");
         sug.hidden = !sug.innerHTML;
       };
+      // producto de otra marca que no conocemos: se pide el ingrediente activo (opcional) y se guarda en la base
+      const agregarOtra = async (nombre) => {
+        $(`[data-sug="ultimo"]`, box).hidden = true;
+        const ia = await UI.pedirOpcional(`¿Qué ingrediente activo tiene «${nombre}»? Míralo en la etiqueta. Si no lo sabes, déjalo vacío y toca Agregar.`, "Ej. tebuconazol, mancozeb…", "Agregar");
+        if (ia === null) return;
+        const grupo = OM.grupoDeIA(ia), id = "o:" + OM.norm(nombre);
+        a.otros[id] = { id, nombre, ingrediente_activo: ia ? ia.toUpperCase() : "", grupo, categoria: OM.catDeGrupo(grupo), otra_marca: true };
+        if (!a.ultimos.includes(id)) a.ultimos.push(id);
+        if (D.reportarProducto) D.reportarProducto({ nombre, ingrediente_activo: ia || null, grupo: grupo || null });
+        toast(!ia ? "Guardado. Vamos a buscar su ingrediente activo." : grupo ? "Guardado: " + grupo : "Guardado. Revisaremos el grupo de ese ingrediente.");
+        re("ultimo");
+      };
       const elegir = (v) => {
         if (k === "cultivo" && v !== a.cultivo) { a.cultivo = v; a.etapa = ""; a.problemas = []; }
         if (k === "etapa") a.etapa = v;
         if (k === "problema" && !a.problemas.map(String).includes(String(v))) a.problemas.push(Number(v));
-        if (k === "ultimo" && !a.ultimos.map(String).includes(String(v))) a.ultimos.push(Number(v));
+        if (k === "ultimo" && String(v).startsWith("nuevo:")) { agregarOtra(String(v).slice(6)); return; }
+        if (k === "ultimo" && !a.ultimos.map(String).includes(String(v))) a.ultimos.push(String(v).startsWith("o:") ? String(v) : Number(v));
         re(k === "problema" || k === "ultimo" ? k : null);
       };
       el.addEventListener("input", mostrar);
@@ -1698,12 +1725,13 @@
     }
     if (que === "sesion" && !D.sesion) router();
   });
-  window.addEventListener("online", () => { D.actualizarCatalogo(); D.sincronizar(); const e = $(".estado"); if (e) { e.classList.remove("off"); e.lastChild.textContent = "En línea"; } });
+  window.addEventListener("online", () => { D.actualizarCatalogo(); D.sincronizar(); D.actualizarOtros && D.actualizarOtros(); const e = $(".estado"); if (e) { e.classList.remove("off"); e.lastChild.textContent = "En línea"; } });
   window.addEventListener("offline", () => { const e = $(".estado"); if (e) { e.classList.add("off"); e.lastChild.textContent = "Sin conexión"; } });
 
   (async function iniciar() {
     router();
     await D.actualizarCatalogo();
+    if (D.actualizarOtros) D.actualizarOtros();
     if (!I || I.c !== D.catalogo) { indexar(); router(); }
     D.sincronizar();
     setInterval(() => { D.actualizarCatalogo(); D.sincronizar(); }, 5 * 60 * 1000);

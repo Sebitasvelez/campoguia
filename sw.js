@@ -1,7 +1,7 @@
 /* CampoGuía · funciona sin internet: guarda la app en el teléfono */
-const VERSION = "campoguia-v132";
+const VERSION = "campoguia-v133";
 const FOTOS = "campoguia-fotos"; // fotos del manual: se guardan aparte y no se borran al actualizar la app
-const ARCHIVOS = ["./", "index.html", "css/app.css", "js/config.js", "js/ui.js", "js/logic.js", "js/data.js", "js/reporte.js", "js/receta.js", "js/vendor/jspdf.umd.min.js", "js/app.js",
+const ARCHIVOS = ["./", "index.html", "css/app.css", "js/config.js", "js/ui.js", "js/logic.js", "js/data.js", "js/otras-marcas.js", "js/reporte.js", "js/receta.js", "js/vendor/jspdf.umd.min.js", "js/app.js",
   "js/vendor/supabase.js", "js/vendor/xlsx.mini.min.js", "data/catalogo-inicial.json", "manifest.webmanifest",
   "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png", "icons/favicon.png", "icons/logo-redondo.svg", "icons/logo-admin.svg", "icons/favicon-admin.png"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(VERSION).then((c) => c.addAll(ARCHIVOS.map((u) => new Request(u, { cache: "reload" })))).then(() => self.skipWaiting())); });

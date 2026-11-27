@@ -135,6 +135,21 @@
         { k: "nota", t: "Explicación para el agricultor", tipo: "area" },
       ],
     },
+    otros_productos: {
+      tabla: "otros_productos", titulo: "Otras marcas", ayuda: "Productos que no son del portafolio y que los agricultores escribieron como su última aplicación. Completa el ingrediente activo y el grupo FRAC / IRAC de los pendientes para que la asesoría rápida no repita el grupo. Se envían a la app al guardar (no hace falta publicar).",
+      buscar: (r) => r.nombre + " " + (r.ingrediente_activo || "") + " " + (r.grupo || "") + " " + (r.empresa || ""),
+      filtro: { campo: "estado", etiqueta: "Estado", opciones: () => [["pendiente", "Pendiente"], ["completo", "Completo"]] },
+      columnas: [["Producto", (r) => `<b>${h(r.nombre)}</b>${r.empresa ? `<br><span class="mini">${h(r.empresa)}</span>` : ""}`], ["Ingrediente activo", (r) => r.ingrediente_activo ? h(r.ingrediente_activo) : `<span class="pill ambar">Falta</span>`],
+        ["Grupo", (r) => r.grupo ? h(r.grupo) : r.ingrediente_activo && window.OtrasMarcas ? `<span class="mini">Sugerido: ${h(window.OtrasMarcas.grupoDeIA(r.ingrediente_activo) || "—")}</span>` : "—"], ["Veces", (r) => h(r.veces || 1)], ["Estado", (r) => `<span class="pill ${r.estado === "completo" ? "verde" : "ambar"}">${h(r.estado || "pendiente")}</span>`]],
+      campos: [
+        { k: "nombre", t: "Nombre comercial", req: true },
+        { k: "ingrediente_activo", t: "Ingrediente activo", ayuda: "Como dice la etiqueta. Ej. TEBUCONAZOL + TRIFLOXISTROBIN" },
+        { k: "grupo", t: "Grupo químico", ayuda: "Ej. FRAC 3 + 11 o IRAC 4A. Si lo dejas vacío la app lo deduce del ingrediente activo." },
+        { k: "categoria", t: "Categoría", ayuda: "Fungicida, Insecticida, Herbicida…" },
+        { k: "empresa", t: "Empresa / marca" },
+        { k: "estado", t: "Estado", tipo: "select", opciones: () => [["pendiente", "Pendiente"], ["completo", "Completo"]], req: true },
+      ],
+    },
     etapas: {
       tabla: "etapas", titulo: "Cultivos y etapas", ayuda: "Etapas fenológicas de cada cultivo. Para agregar un cultivo nuevo usa el botón «Nuevo cultivo».",
       buscar: (r) => r.nombre + " " + nomCultivo(r.cultivo_id),
@@ -152,7 +167,7 @@
   };
 
   // ------------------------------------------------------------ layout
-  const MENU = [["resumen", "Resumen"], ["productos", "Productos"], ["problemas", "Problemas por cultivo"], ["recomendaciones", "Recomendaciones"], ["plan_sanitario", "Plan sanitario"], ["plan_fertilizacion", "Plan de fertilización"], ["compatibilidad", "Compatibilidad de mezclas"], ["etapas", "Cultivos y etapas"], ["agricultores", "Agricultores y registros"], ["ajustes", "Ajustes de la app"]];
+  const MENU = [["resumen", "Resumen"], ["productos", "Productos"], ["problemas", "Problemas por cultivo"], ["recomendaciones", "Recomendaciones"], ["plan_sanitario", "Plan sanitario"], ["plan_fertilizacion", "Plan de fertilización"], ["compatibilidad", "Compatibilidad de mezclas"], ["otros_productos", "Otras marcas"], ["etapas", "Cultivos y etapas"], ["agricultores", "Agricultores y registros"], ["ajustes", "Ajustes de la app"]];
   const hayCambios = () => store.get("cambios", false);
   const marcarCambio = () => { store.set("cambios", true); const b = $("#estadoPub"); if (b) b.outerHTML = estadoPub(); };
   const estadoPub = () => hayCambios()
@@ -580,6 +595,7 @@
         ${sinCarencia.length ? `<div class="mini">${sinCarencia.length} productos sin <b>días de carencia</b> (la app muestra «Ver etiqueta» y no puede avisar cuándo cosechar): ${sinCarencia.slice(0, 12).map((p) => `<a href="#productos?id=${p.id}">${h(p.nombre)}</a>`).join(", ")}${sinCarencia.length > 12 ? "…" : ""}</div>` : ""}
         ${(DB.productos || []).some((p) => /Internet/.test(p.fuente || "")) ? `<div class="mini">${(DB.productos || []).filter((p) => /Internet/.test(p.fuente || "")).length} productos tienen datos completados con fichas técnicas de internet (formulación, categoría, carencia o reingreso). Revísalos: en <a href="#productos?q=Internet">Productos</a> aparecen con la etiqueta «Dato de internet».</div>` : ""}
         ${(DB.productos || []).some((p) => /^⚠/.test(p.nota || "")) ? `<div class="mini" style="color:var(--rojo)"><b>Clorpirifos prohibido:</b> ${(DB.productos || []).filter((p) => /^⚠/.test(p.nota || "")).map((p) => `<a href="#productos?id=${p.id}">${h(p.nombre)}</a>`).join(", ")}. Agrocalidad prohibió su importación y registro (mayo 2026). Decide si los desactivas.</div>` : ""}
+        ${(DB.otros_productos || []).some((r) => r.estado !== "completo") ? `<div class="mini">${(DB.otros_productos || []).filter((r) => r.estado !== "completo").length} productos de <a href="#otros_productos?f=pendiente">otras marcas</a> escritos por agricultores están pendientes de revisar el ingrediente activo.</div>` : ""}
         ${!ajuste("whatsapp_asesor", "") ? `<div class="mini">Falta tu <a href="#ajustes">número de WhatsApp</a> para los botones de contacto.</div>` : ""}
         ${(DB.problemas || []).some((p) => /Manuales de cacao/.test(p.fuente || "")) ? `<div class="mini">Cacao tiene temas y recomendaciones sugeridos desde manuales técnicos: <a href="#problemas?f=cacao">revísalos</a>.</div>` : ""}
       </section>`);
@@ -590,6 +606,7 @@
     const ts = ["cultivos", "etapas", "productos", "problemas", "recomendaciones", "plan_sanitario", "plan_fertilizacion", "compatibilidad", "ajustes"];
     const res = await Promise.all(ts.map((t) => A.listar(t)));
     ts.forEach((t, i) => { DB[t] = res[i]; });
+    try { DB.otros_productos = await A.listar("otros_productos"); } catch (e) { DB.otros_productos = []; } // tabla nueva: si aún no existe no bloquea el panel
     version = await A.versionPublicada();
   }
   async function cargarSeguimiento() {
