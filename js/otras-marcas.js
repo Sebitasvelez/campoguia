@@ -23,7 +23,7 @@
     "fenhexamida": "FRAC 17", "fenhexamid": "FRAC 17", "pencicuron": "FRAC 20", "pencycuron": "FRAC 20", "validamicina": "FRAC U18", "kasugamicina": "FRAC 24", "estreptomicina": "FRAC 25", "oxitetraciclina": "FRAC 41",
     "quintozeno": "FRAC 14", "pentacloronitrobenceno": "FRAC 14", "tolclofos": "FRAC 14", "himexazol": "FRAC 32", "hymexazol": "FRAC 32", "spiroxamina": "FRAC 5", "fenpropimorf": "FRAC 5", "tridemorf": "FRAC 5",
     "quinoxifen": "FRAC 13", "metrafenona": "FRAC 50", "ciflufenamid": "FRAC U06", "zoxamida": "FRAC 22", "fenamidona": "FRAC 11", "acibenzolar": "FRAC P01",
-    "bacillus subtilis": "FRAC BM02", "bacillus amyloliquefaciens": "FRAC BM02", "trichoderma": "FRAC BM02",
+    "bacillus subtilis": "FRAC BM02", "bacillus pumilus": "FRAC BM02", "bacillus amyloliquefaciens": "FRAC BM02", "trichoderma": "FRAC BM02",
     // IRAC
     "clorpirifos": "IRAC 1B", "chlorpyrifos": "IRAC 1B", "profenofos": "IRAC 1B", "diazinon": "IRAC 1B", "malation": "IRAC 1B", "malathion": "IRAC 1B", "dimetoato": "IRAC 1B", "acefato": "IRAC 1B", "metamidofos": "IRAC 1B", "etoprofos": "IRAC 1B", "terbufos": "IRAC 1B", "fenamifos": "IRAC 1B", "triclorfon": "IRAC 1B", "metil paration": "IRAC 1B",
     "carbofuran": "IRAC 1A", "carbaril": "IRAC 1A", "metomil": "IRAC 1A", "methomyl": "IRAC 1A", "tiodicarb": "IRAC 1A", "oxamil": "IRAC 1A", "carbosulfan": "IRAC 1A",
@@ -37,7 +37,7 @@
     "metoxifenozida": "IRAC 18", "tebufenozida": "IRAC 18", "amitraz": "IRAC 19", "bifenazate": "IRAC 20D", "acequinocil": "IRAC 20B", "fenpiroximato": "IRAC 21A", "piridaben": "IRAC 21A", "tebufenpirad": "IRAC 21A", "fenazaquin": "IRAC 21A",
     "indoxacarb": "IRAC 22A", "metaflumizona": "IRAC 22B", "spirotetramat": "IRAC 23", "spiromesifen": "IRAC 23", "spirodiclofen": "IRAC 23", "cienopirafen": "IRAC 25A", "cyenopyrafen": "IRAC 25A", "ciflumetofen": "IRAC 25A",
     "clorantraniliprol": "IRAC 28", "chlorantraniliprole": "IRAC 28", "ciantraniliprol": "IRAC 28", "flubendiamida": "IRAC 28", "ciclaniliprol": "IRAC 28", "fipronil": "IRAC 2B", "endosulfan": "IRAC 2A",
-    "azadiractina": "IRAC UN", "azadirachtina": "IRAC UN", "neem": "IRAC UN", "beauveria": "IRAC UNF", "metarhizium": "IRAC UNF", "fluensulfona": "IRAC N-UN", "fluopyram nematicida": "IRAC N-3",
+    "azadiractina": "IRAC UN", "azadirachtina": "IRAC UN", "neem": "IRAC UN", "beauveria": "IRAC UNF", "metarhizium": "IRAC UNF", "fluensulfona": "IRAC N-UN",
     // HRAC
     "glifosato": "HRAC 9", "glyphosate": "HRAC 9", "glufosinato": "HRAC 10", "paraquat": "HRAC 22", "diquat": "HRAC 22", "2 4 d": "HRAC 4", "2,4-d": "HRAC 4", "2 4d": "HRAC 4", "picloram": "HRAC 4", "triclopir": "HRAC 4", "fluroxipir": "HRAC 4", "dicamba": "HRAC 4", "aminopiralid": "HRAC 4",
     "atrazina": "HRAC 5", "ametrina": "HRAC 5", "diuron": "HRAC 5", "propanil": "HRAC 5", "metribuzina": "HRAC 5", "nicosulfuron": "HRAC 2", "metsulfuron": "HRAC 2", "bispiribac": "HRAC 2", "imazetapir": "HRAC 2", "halosulfuron": "HRAC 2",
@@ -50,7 +50,8 @@
   function grupoDeIA(ia) {
     const partes = String(ia || "").split(/\+|\/|;|,(?!\s*\d)|\by\b/i).map(norm).filter(Boolean), por = {};
     partes.forEach((p) => {
-      const c = CLAVES.find((x) => p.includes(x.k) || (x.k.length >= 6 && x.k.includes(p) && p.length >= 6)); if (!c) return;
+      // primero el ingrediente escrito completo; si no, el escrito a medias (≥ 6 letras) que empieza igual
+      const c = CLAVES.find((x) => p.includes(x.k)) || CLAVES.find((x) => p.length >= 6 && x.k.startsWith(p)); if (!c) return;
       const [pre, cod] = c.g.split(" "); por[pre] = por[pre] || []; if (!por[pre].includes(cod)) por[pre].push(cod);
     });
     return ["FRAC", "IRAC", "HRAC"].filter((p) => por[p]).map((p) => p + " " + por[p].join(" + ")).join(" · ");
@@ -70,6 +71,9 @@
     ["Cymoxanil", "Cimoxanil + Mancozeb", ""], ["Phostrol", "Fosfito de potasio", ""], ["Aliette", "Fosetil aluminio", "Bayer"], ["Bumper", "Propiconazol", "Adama"], ["Orius", "Tebuconazol", "Adama"], ["Mospilan", "Acetamiprid", ""], ["Rescate", "Acetamiprid", ""],
     ["Cipermetrina", "Cipermetrina", ""], ["Clorpirifos", "Clorpirifos", ""], ["Malathion", "Malation", ""], ["Dimetoato", "Dimetoato", ""], ["Lannate", "Metomil", "Corteva"], ["Sevin", "Carbaril", ""], ["Mocap", "Etoprofos", ""], ["Counter", "Terbufos", ""],
     ["Abamectina", "Abamectina", ""], ["Proclaim", "Emamectina benzoato", ""], ["Imidacloprid", "Imidacloprid", ""], ["Thiodan", "Endosulfan", ""], ["Kumulus", "Azufre", "BASF"], ["Sulfocop", "Azufre + Cobre", ""], ["Validacin", "Validamicina", ""], ["Agry-gent", "Estreptomicina + Oxitetraciclina", ""],
+    ["Cyperpac", "Cipermetrina", "Agripac"], ["Clorpilaq 48", "Clorpirifos", "Agripac"], ["Profenopac", "Profenofos", "Agripac"], ["Imidalaq", "Imidacloprid", "Agripac"],
+    ["Fitoraz", "Propineb + Cimoxanil", "Bayer"], ["Luna Tranquility", "Fluopyram + Pirimetanil", "Bayer"], ["Bankit", "Azoxistrobin", "Bayer"], ["Impulse", "Spiroxamina", "Bayer"], ["Sonata", "Bacillus pumilus", "Bayer"], ["Siganex", "Pirimetanil", ""], ["Volley", "Fenpropimorf", ""], ["Calixin", "Tridemorf", "BASF"], ["Tega", "Trifloxistrobin", ""],
+    ["Zorvec Encantia", "Oxatiapiprolina + Famoxadona", "Corteva"], ["Closer", "Sulfoxaflor", "Corteva"], ["Engeo Plus", "Lambdacialotrina + Tiametoxam", ""], ["Evito", "Fluoxastrobin", ""], ["Amistar", "Azoxistrobin", "Syngenta"],
     ["Roundup", "Glifosato", "Bayer"], ["Glifosato", "Glifosato", ""], ["Paraquat", "Paraquat", ""], ["Amina 2,4-D", "2,4-D", ""], ["Gesapax", "Ametrina", ""], ["Karmex", "Diuron", ""], ["Basta", "Glufosinato de amonio", "BASF"],
   ];
   const OTRAS = LISTA.map(([nombre, ia, empresa]) => { const grupo = grupoDeIA(ia); return { id: "o:" + norm(nombre), nombre, ingrediente_activo: ia.toUpperCase(), grupo, categoria: catDeGrupo(grupo), empresa, otra_marca: true }; });
