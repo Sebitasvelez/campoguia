@@ -362,6 +362,16 @@
    "notas": null,
    "costo_ref_texto": null,
    "orden": 22
+  },
+  {
+   "id": 117,
+   "cultivo_id": "pitahaya",
+   "nombre": "Recuperación de plantas amarillas",
+   "uso": "ambos",
+   "semanas": null,
+   "riesgo_hongos": null,
+   "notas": "Antes de fertilizar revisa raíces y drenaje: el amarillamiento también viene por exceso de agua, nematodos o pudrición de raíz. Corrige la causa y aplica este plan para devolver el verde a las pencas.",
+   "orden": 8
   }
  ],
  "productos": [
@@ -13614,6 +13624,104 @@
    "condicion": null,
    "nota": "Engrose y calidad del cormo.",
    "orden": 117
+  },
+  {
+   "id": 39,
+   "etapa_id": 7,
+   "tipo": "foliar",
+   "producto_id": 184,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": null,
+   "dosis_tanque": 500,
+   "frecuencia_dias": 15,
+   "condicion": null,
+   "nota": "Nitrógeno foliar para brotes nuevos y pencas gruesas.",
+   "orden": 3,
+   "cultivo_id": "pitahaya"
+  },
+  {
+   "id": 40,
+   "etapa_id": 117,
+   "tipo": "suelo",
+   "producto_id": 214,
+   "dosis_kg_ha": 100,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Nitrógeno con azufre, calcio y magnesio para devolver el color verde.",
+   "orden": 1,
+   "cultivo_id": "pitahaya"
+  },
+  {
+   "id": 41,
+   "etapa_id": 117,
+   "tipo": "suelo",
+   "producto_id": 199,
+   "dosis_kg_ha": 50,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": "Si el amarillo empieza en las pencas viejas (falta de magnesio)",
+   "nota": "Magnesio y azufre.",
+   "orden": 2,
+   "cultivo_id": "pitahaya"
+  },
+  {
+   "id": 42,
+   "etapa_id": 117,
+   "tipo": "enmienda",
+   "producto_id": 54,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": 250,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": "Si el pH del suelo es ácido",
+   "nota": "Corrige la acidez para que la planta absorba los nutrientes.",
+   "orden": 3,
+   "cultivo_id": "pitahaya"
+  },
+  {
+   "id": 43,
+   "etapa_id": 117,
+   "tipo": "foliar",
+   "producto_id": 108,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": null,
+   "dosis_tanque": 300,
+   "frecuencia_dias": 15,
+   "condicion": null,
+   "nota": "Hierro, magnesio y micronutrientes para corregir la clorosis.",
+   "orden": 4,
+   "cultivo_id": "pitahaya"
+  },
+  {
+   "id": 44,
+   "etapa_id": 117,
+   "tipo": "foliar",
+   "producto_id": 184,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": null,
+   "dosis_tanque": 500,
+   "frecuencia_dias": 15,
+   "condicion": null,
+   "nota": "Nitrógeno foliar de rápida absorción.",
+   "orden": 5,
+   "cultivo_id": "pitahaya"
+  },
+  {
+   "id": 45,
+   "etapa_id": 117,
+   "tipo": "foliar",
+   "producto_id": 46,
+   "dosis_kg_ha": null,
+   "dosis_g_planta": null,
+   "dosis_tanque": 500,
+   "frecuencia_dias": 15,
+   "condicion": null,
+   "nota": "Aminoácidos antiestrés para la recuperación.",
+   "orden": 6,
+   "cultivo_id": "pitahaya"
   }
  ],
  "compatibilidad": [
