@@ -9334,7 +9334,7 @@
    "cultivo_id": "pitahaya",
    "tipo": "enfermedad",
    "nombre": "Fusarium en flor (punto rojo)",
-   "descripcion": "Puntos y manchas rojizas en botones florales, flores y frutos pequeños; la flor se pudre, se seca y se cae, y el fruto no cuaja o queda manchado.",
+   "descripcion": "Aparece en el cuajado de la flor y en la maduración de la fruta: puntos y manchas rojizas que se secan y forman una costra con rajaduras bajo las mamilas de la fruta.",
    "orden": 8,
    "fuente": "Lista de productos EQ para pitahaya (Excel del asesor)",
    "fotos": [],
@@ -12901,47 +12901,37 @@
    "prioridad": 1,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Al follaje y botones florales."
+   "nota": "Al follaje, flores y frutos."
   },
   {
    "id": 349,
    "problema_id": 9,
-   "producto_id": 135,
+   "producto_id": 27,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Al follaje y botones florales."
+   "nota": "Al follaje, flores y frutos."
   },
   {
    "id": 350,
    "problema_id": 9,
-   "producto_id": 29,
+   "producto_id": 30,
    "etapa_id": null,
    "prioridad": 3,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Al follaje y botones florales."
+   "nota": "Al follaje, flores y frutos."
   },
   {
    "id": 351,
    "problema_id": 9,
-   "producto_id": 27,
+   "producto_id": 29,
    "etapa_id": null,
    "prioridad": 4,
    "dosis_min": null,
    "dosis_max": null,
-   "nota": "Al follaje y botones florales."
-  },
-  {
-   "id": 352,
-   "problema_id": 9,
-   "producto_id": 24,
-   "etapa_id": null,
-   "prioridad": 5,
-   "dosis_min": null,
-   "dosis_max": null,
-   "nota": "Al follaje y botones florales."
+   "nota": "Al follaje, flores y frutos."
   },
   {
    "id": 353,
@@ -12956,7 +12946,7 @@
   {
    "id": 354,
    "problema_id": 148,
-   "producto_id": 135,
+   "producto_id": 159,
    "etapa_id": null,
    "prioridad": 2,
    "dosis_min": null,
@@ -12966,19 +12956,9 @@
   {
    "id": 355,
    "problema_id": 148,
-   "producto_id": 102,
-   "etapa_id": null,
-   "prioridad": 3,
-   "dosis_min": null,
-   "dosis_max": null,
-   "nota": "En drench. Biológico: alterna con los químicos."
-  },
-  {
-   "id": 356,
-   "problema_id": 148,
    "producto_id": 115,
    "etapa_id": null,
-   "prioridad": 4,
+   "prioridad": 3,
    "dosis_min": null,
    "dosis_max": null,
    "nota": "En drench con buena humedad del suelo. Trichoderma: no mezclar con fungicidas."
