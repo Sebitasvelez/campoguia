@@ -494,7 +494,7 @@
         <div class="grid2">${cultivos().map((c) => `<a class="cultivo ${c.id === ui.cultivo ? "sel" : ""}" href="#/cultivo/${h(c.id)}" data-c="${h(c.id)}"><span style="color:var(--verde);display:flex;height:44px;align-items:center">${ICONO_CULTIVO[c.id] || ic.hoja}</span><b>${h(c.nombre)}</b><span>Manual técnico · ${(I.problemas[c.id] || []).length} temas</span></a>`).join("")}</div>
         <div class="etq" style="margin-top:4px">Accesos rápidos</div>
         <div class="lista">
-          ${esTecnico() ? `<a class="item" href="#/calcfert/${h(ui.cultivo || "")}"><div class="tx"><b>Calcular plan de fertilización</b><span>${h((cultivo(ui.cultivo) || {}).nombre || "")} · sacos y costos</span></div>${ic.flecha}</a>
+          ${esTecnico() ? `<a class="item" href="#/calcfert/${h(ui.cultivo || "")}"><div class="tx"><b>Calcular mezclas de fertilizantes</b><span>${h((cultivo(ui.cultivo) || {}).nombre || "")} · sacos y costos</span></div>${ic.flecha}</a>
           <a class="item" href="#/calcular"><div class="tx"><b>Calcular dosis de productos</b><span>Por bomba, tanque, hectáreas o plantas</span></div>${ic.flecha}</a>
           <a class="item" href="#/receta"><div class="tx"><b>Recetar</b><span>Compatibilidad, orden de mezcla y costos</span></div>${ic.flecha}</a>`
           : `<a class="item" href="#/lotes"><div class="tx"><b>Registro de mis lotes</b><span>Actividades y costos de producción</span></div>${ic.flecha}</a>
@@ -977,14 +977,19 @@
         ${omitir ? `<span class="mini"><b>Tu pH (${h(ui.ph)}) no es ácido:</b> no necesitas esta enmienda.</span>` : ""}
       </div>`;
     }).join("");
-    pintar(`${calc ? barra("Calcular fertilización", c.nombre + (et ? " · " + et.nombre : ""), "#/") : barra("Plan de fertilización", c.nombre + (et ? " · " + et.nombre : ""), "#/cultivo/" + c.id)}
+    pintar(`${calc ? barra("Mezclas de fertilizantes", c.nombre + (et ? " · " + et.nombre : ""), "#/") : barra("Plan de fertilización", c.nombre + (et ? " · " + et.nombre : ""), "#/cultivo/" + c.id)}
       <main class="cont">
-        ${calc ? segCalc("fert") + `<div class="chips" role="group" aria-label="Cultivo">${cultivos().filter(tieneReq).map((x) => `<a class="chip ${x.id === c.id ? "sel" : ""}" href="#/calcfert/${h(x.id)}">${h(x.nombre)}</a>`).join("")}</div>` : ""}
-        <div class="chips" role="group" aria-label="Etapa">${etapas.map((e) => `<button class="chip ${et && e.id === et.id ? "sel" : ""}" data-e="${e.id}">${h(e.nombre)}</button>`).join("")}</div>
+        ${calc ? segCalc("fert") + (() => { const iE = et ? etapas.findIndex((e) => e.id === et.id) : -1;
+          return `<div class="card" style="gap:10px"><div class="grid2">
+            <div class="campo busca-prod"><label for="calcCult">Cultivo</label><input id="calcCult" type="search" autocomplete="off" value="${h(c.nombre)}" placeholder="Escribe el cultivo" role="combobox" aria-expanded="false" aria-controls="sugCult"><div id="sugCult" class="sugerencias" role="listbox" hidden></div></div>
+            <div class="campo"><label for="calcEt">Etapa fenológica</label><select id="calcEt">${etapas.map((e) => `<option value="${e.id}" ${et && e.id === et.id ? "selected" : ""}>${h(e.nombre)}</option>`).join("")}</select>
+              ${etapas.length > 1 ? `<div class="et-flechas"><button type="button" class="icono-btn" data-etp="-1" aria-label="Etapa anterior" ${iE <= 0 ? "disabled" : ""}>‹</button><span class="mini">${iE + 1} de ${etapas.length}</span><button type="button" class="icono-btn" data-etp="1" aria-label="Etapa siguiente" ${iE >= etapas.length - 1 ? "disabled" : ""}>›</button></div>` : ""}</div></div>
+            <div class="grid2"><label class="campo">Hectáreas<input id="ha" inputmode="decimal" value="${h(ui.calc.ha)}"></label><label class="campo">Plantas por ha<input id="pha" inputmode="numeric" value="${h(ui.calc.pha)}" placeholder="Ej. 1600"></label></div></div>`; })() : ""}
+        <div class="chips" role="group" aria-label="Etapa" ${calc ? "hidden" : ""}>${etapas.map((e) => `<button class="chip ${et && e.id === et.id ? "sel" : ""}" data-e="${e.id}">${h(e.nombre)}</button>`).join("")}</div>
         <div class="seg" role="group" aria-label="Tipo de fertilización">${[["suelo", "Al suelo"], ["foliar", "Foliar"], ["enmienda", "Enmiendas"]].map(([k, t]) => `<button data-ft="${k}" class="${tipoSel === k ? "sel" : ""}">${t} (${items.filter((x) => x.tipo === k).length})</button>`).join("")}</div>
-        ${tipoSel === "suelo" ? cajaCultivo(c.id) : ""}
-        ${tipoSel !== "foliar" ? `<div class="card"><b class="tit-calc">${ic.calc || ""}Calcular cantidad de fertilizante a aplicar</b>
-          <div class="grid2"><label class="campo">Hectáreas<input id="ha" inputmode="decimal" value="${h(ui.calc.ha)}"></label><label class="campo">Plantas por ha<input id="pha" inputmode="numeric" value="${h(ui.calc.pha)}" placeholder="Ej. 1600"></label></div>
+        ${tipoSel === "suelo" && !calc ? cajaCultivo(c.id) : ""}
+        ${(calc ? tipoSel === "suelo" : tipoSel !== "foliar") ? `<div class="card"><b class="tit-calc">${ic.calc || ""}${calc ? "Análisis de suelo y requerimiento" : "Calcular cantidad de fertilizante a aplicar"}</b>
+          ${calc ? "" : `<div class="grid2"><label class="campo">Hectáreas<input id="ha" inputmode="decimal" value="${h(ui.calc.ha)}"></label><label class="campo">Plantas por ha<input id="pha" inputmode="numeric" value="${h(ui.calc.pha)}" placeholder="Ej. 1600"></label></div>`}
           ${calc && tipoSel === "suelo" && tieneReq(c) ? (() => { const RQ = reqCultivo(c), per = c.req_periodo === "ciclo" ? "ciclo" : "año", nv = sueloNivel(c.id), SG = reqNivel(c, nv, phaUI());
             const conS = !!(SG.s || RQ.s || ["bajo", "medio", "alto"].some((x) => numN(c["req_" + x + "_s"])));
             return `<span class="mini">Análisis de suelo</span>
@@ -996,15 +1001,16 @@
                 const tot = ets.reduce((s0, e) => s0 + appsDe(e), 0), sug = ets.reduce((s0, e) => s0 + appsEtapa(e, modo), 0);
                 const suma = ets.reduce((a0, e) => { const pc = pctEtapa(e, modo); a0.n += pc.n; a0.p += pc.p; a0.k += pc.k; return a0; }, { n: 0, p: 0, k: 0 });
                 const fuente = modo === "lit" ? (ets.map((e) => e.fuente_lit).find(Boolean) || "") : "Criterio agronómico del asesor";
-                return `<span class="mini">Reparto del requerimiento por etapa</span>
+                return `<details class="rep-det" ${ui.repAbierto ? "open" : ""}><summary>Reparto del requerimiento y fertilizaciones por etapa</summary>
                   <div class="seg" role="group" aria-label="Reparto"><button data-rep="asesor" class="${modo === "asesor" ? "sel" : ""}">Asesor</button><button data-rep="lit" class="${modo === "lit" ? "sel" : ""}" ${hayLit ? "" : "disabled"}>Literatura</button></div>
                   ${hayLit ? "" : `<span class="mini">Literatura: sin curva publicada por etapa para ${h(c.nombre.toLowerCase())}.</span>`}
                   <table class="tabla-rep"><tr><th>Etapa</th><th>Fert.</th><th>% N</th><th>% P₂O₅</th><th>% K₂O</th></tr>
                   ${ets.map((e) => { const v = appsDe(e), pc = pctEtapa(e, modo), cambio = v !== appsEtapa(e, modo);
                     return `<tr class="${cambio ? "cambio" : ""} ${et && e.id === et.id ? "actual" : ""}"><td>${h(e.nombre)}</td><td><select data-ap="${e.id}" aria-label="Fertilizaciones en ${h(e.nombre)}">${Array.from({ length: 13 }, (_, i) => `<option ${i === v ? "selected" : ""}>${i}</option>`).join("")}</select></td><td>${L.fmt(pc.n)}</td><td>${L.fmt(pc.p)}</td><td>${L.fmt(pc.k)}</td></tr>`; }).join("")}
                   <tr class="total"><td><b>Total</b></td><td><b>${tot}</b></td><td>${L.fmt(suma.n)}</td><td>${L.fmt(suma.p)}</td><td>${L.fmt(suma.k)}</td></tr></table>
-                  <span class="mini">${tot} por ${per}${tot ? " (" + cadaCuanto(mes, tot) + ")" : ""} · Sugerido: ${sug}${SIM.apps[c.id] ? ` · <button class="enlace" id="apReset">Usar el sugerido</button>` : ""}. ${h(fuente)}. Cada etapa mantiene su parte del requerimiento: con más fertilizaciones, cada una lleva menos.</span>`; })()}`; })() : ""}
-        </div>` : segVol()}
+                  <span class="mini">${tot} por ${per}${tot ? " (" + cadaCuanto(mes, tot) + ")" : ""} · Sugerido: ${sug}${SIM.apps[c.id] ? ` · <button class="enlace" id="apReset">Usar el sugerido</button>` : ""}. ${h(fuente)}. Cada etapa mantiene su parte del requerimiento: con más fertilizaciones, cada una lleva menos.</span></details>`; })()}`; })() : ""}
+        </div>` : tipoSel === "foliar" ? segVol() : ""}
+        ${tipoSel === "suelo" && calc ? cajaCultivo(c.id) : ""}
         ${calc && tipoSel === "suelo" && et ? editorSim(et, c) : ""}
         ${tipoSel === "suelo" && res ? cajaEtapa(res, haN, phaN) : ""}
         ${tipoSel === "enmienda" ? `<div class="card">
@@ -1021,6 +1027,19 @@
         </details>
       </main>`, calc ? "calcular" : "inicio");
     $$("[data-e]").forEach((b) => b.addEventListener("click", () => { ui.etapa[c.id] = b.dataset.e; guardarUI(); vFert(c.id, calc); }));
+    // calculadora: cultivo escrito con sugerencias de los manuales; etapa con lista y flechas
+    const ce = $("#calcEt"); if (ce) ce.addEventListener("change", () => { ui.etapa[c.id] = ce.value; guardarUI(); const y = window.scrollY; vFert(c.id, calc); window.scrollTo(0, y); });
+    $$("[data-etp]").forEach((b) => b.addEventListener("click", () => { const i = etapas.findIndex((e) => et && e.id === et.id) + Number(b.dataset.etp); if (!etapas[i]) return; ui.etapa[c.id] = etapas[i].id; guardarUI(); const y = window.scrollY; vFert(c.id, calc); window.scrollTo(0, y); }));
+    const cc = $("#calcCult"), sc = $("#sugCult");
+    if (cc) { const elegirC = (id) => { ui.cultivo = id; guardarUI(); location.hash = "#/calcfert/" + id; };
+      const pintarC = () => { const t = L.fonetica(cc.value), ops = cultivos().filter(tieneReq).filter((x) => !t || L.fonetica(x.nombre).split(" ").some((v) => t.split(" ").every((w) => L.fonetica(x.nombre).includes(w))));
+        sc.innerHTML = ops.map((x) => `<button type="button" role="option" data-cid="${h(x.id)}"><b>${h(x.nombre)}</b></button>`).join("") || `<div class="sin">No tenemos manual de «${h(cc.value)}».</div>`;
+        sc.hidden = false; cc.setAttribute("aria-expanded", "true"); $$("[data-cid]", sc).forEach((b) => b.addEventListener("click", () => elegirC(b.dataset.cid))); };
+      cc.addEventListener("focus", () => { cc.select(); pintarC(); }); cc.addEventListener("input", pintarC);
+      cc.addEventListener("keydown", (e) => { if (e.key === "Enter") { const b = $("[data-cid]", sc); if (b) { e.preventDefault(); elegirC(b.dataset.cid); } } });
+      sc.addEventListener("mousedown", (e) => e.preventDefault());
+      cc.addEventListener("blur", () => setTimeout(() => { sc.hidden = true; cc.setAttribute("aria-expanded", "false"); cc.value = c.nombre; }, 150)); }
+    const rd = $(".rep-det"); if (rd) rd.addEventListener("toggle", () => { ui.repAbierto = rd.open; guardarUI(); });
     $$("[data-ft]").forEach((b) => b.addEventListener("click", () => { const y = window.scrollY; ui.fertTipo = b.dataset.ft; guardarUI(); vFert(c.id, calc); window.scrollTo(0, y); }));
     conectarVol(() => vFert(c.id, calc));
     const re = (id, k) => { const el = $("#" + id); if (el) el.addEventListener("change", () => { const y = window.scrollY; if (k === "ph") ui.ph = el.value; else ui.calc[k] = el.value; guardarUI(); vFert(c.id, calc); window.scrollTo(0, y); }); };
@@ -1151,7 +1170,9 @@
     inp.addEventListener("blur", () => setTimeout(cerrar, 150));
   }
   // técnico: en Dosis elige entre calcular dosis de productos o la calculadora de fertilización
-  const segCalc = (sel) => (esTecnico() ? `<div class="seg" role="group" aria-label="Calcular"><a href="#/calcular" class="${sel === "dosis" ? "sel" : ""}">Calcular dosis</a><a href="#/calcfert/${h(ui.cultivo || "")}" class="${sel === "fert" ? "sel" : ""}">Calcular fertilización</a></div>` : "");
+  const segCalc = (sel) => (esTecnico() ? `<div class="op-cards" role="group" aria-label="Calcular">
+      <a href="#/calcular" class="op-card ${sel === "dosis" ? "sel" : ""}" ${sel === "dosis" ? 'aria-current="page"' : ""}>${ic.calc}<b>Dosis de productos</b><span>Bomba, tanque, ha o plantas</span></a>
+      <a href="#/calcfert/${h(ui.cultivo || "")}" class="op-card ${sel === "fert" ? "sel" : ""}" ${sel === "fert" ? 'aria-current="page"' : ""}>${ic.hoja || ic.calc}<b>Mezclas de fertilizantes</b><span>Sacos, g por planta y costo</span></a></div>` : "");
   function vCalcular(q) {
     const cc = ui.calc;
     if (q.p) { cc.p = q.p; cc.d = q.d || null; cc.dha = null; }
