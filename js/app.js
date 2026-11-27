@@ -765,7 +765,7 @@
         <div class="dato"><b>${fs ? h(fs.fraccion) : r.sacos50 !== null ? r.sacos50 : "—"}</b><span>${fs ? (fs.sacos <= 1 ? "Saco" : "Sacos") : "Sacos"} de ${L.fmt(kgSaco)} kg</span></div>
         <div class="dato"><b>${r.gPorPlanta !== null ? L.fmt(r.gPorPlanta, 0) + " g" : "—"}</b><span>Por planta / aplicación</span></div></div>
         ${precioSaco ? `<div class="fila"><span class="mini">Precio: <b>${dinero(precioSaco)}</b> el saco de ${L.fmt(kgSaco)} kg</span></div>` : ""}
-        <span class="mini">${x.dosis_kg_ha ? L.fmt(Number(x.dosis_kg_ha)) + " kg NPK/ha por aplicación" : ""}${x.condicion ? " · " + h(x.condicion) : ""}${x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : ""}${x.nota ? " · " + h(x.nota) : ""}${r.compraTexto ? " · Comprar " + h(r.compraTexto) : ""}${r.costo ? " · " + dinero(r.costo) : ""}</span>
+        <span class="mini">${x.dosis_kg_ha ? (L.npkDe(p) ? "Aporta por ha: N " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).n / 100, 1) + " · P₂O₅ " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).p / 100, 1) + " · K₂O " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).k / 100, 1) + " kg (" + L.fmt(Number(x.dosis_kg_ha)) + " kg de producto)" : L.fmt(Number(x.dosis_kg_ha)) + " kg de producto por ha") : ""}${x.condicion ? " · " + h(x.condicion) : ""}${x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : ""}${x.nota ? " · " + h(x.nota) : ""}</span>
         ${omitir ? `<span class="mini"><b>Tu pH (${h(ui.ph)}) no es ácido:</b> no necesitas esta enmienda.</span>` : ""}
       </div>`;
     }).join("");
