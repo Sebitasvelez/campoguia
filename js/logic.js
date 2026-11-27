@@ -567,6 +567,39 @@
     if (!mejor) return null;
     return { aporte: mejor.aporte, kgTotal: mejor.kg, items: mejor.grupo.map((x, i) => ({ id: x.id, sacos: mejor.sacos[i], kgHa: mejor.sacos[i] * x.kgSaco })) };
   }
+  // ---------------- reglas del asesor por etapa: elemento de mayor demanda y relación N:K (N ÷ K₂O)
+  const REGLAS_FERT = {
+    arranque:   { re: /siembra|arranque|tra[n]?splante|inicio|establec|vivero/, mayor: "p", min: 0.85, max: 1.15, ideal: 1, texto: "mayor demanda de fósforo, relación N:K 1:1" },
+    engrose:    { re: /engros|llenado|maduraci/, mayor: "k", min: 1 / 5, max: 1 / 3.5, ideal: 1 / 4, texto: "mayor demanda de potasio, relación N:K de 1:3,5 a 1:5" },
+    desarrollo: { re: /desarrollo|crecimiento|pencas|recuperaci|vegetativ/, mayor: "n", min: 3, max: 5, ideal: 4, texto: "mayor demanda de nitrógeno, relación N:K de 3:1 a 5:1" },
+    floracion:  { re: /flor|brotaci|producci|tuberizaci|cormo/, mayor: "p", min: 0.5, max: 1, ideal: 1 / 1.5, texto: "mayor demanda de fósforo, relación N:K de 1:1 a 1:2 (mejor 1:1,5)" },
+  };
+  const ORDEN_REGLAS = ["arranque", "engrose", "desarrollo", "floracion"];
+  const reglaDeEtapa = (nombre) => { const t = quitarTildes(nombre); const k = ORDEN_REGLAS.find((x) => REGLAS_FERT[x].re.test(t)); return k ? Object.assign({ clave: k }, REGLAS_FERT[k]) : null; };
+  // mezcla de hasta 3 fertilizantes que suma «masa» kg/ha (en partes de 25 kg), con al menos 1 saco (50 kg) de un Soli;
+  // busca que el elemento de la regla sea el mayor y que N:K quede en el rango (lo más cerca del ideal), con la menor
+  // cantidad posible de productos que no son Soli
+  function mezclaPorRegla(regla, masa, productos) {
+    const lista = productos.filter((x) => x.npk), partes = Math.round(masa / 25);
+    if (!regla || !lista.length || partes < 2) return null;
+    const ln = Math.log; let mejor = null;
+    const evaluar = (grupo, q) => {
+      if (!grupo.some((x, i) => x.soli && q[i] >= 2)) return;
+      const a = { n: 0, p: 0, k: 0 }; let kgNo = 0;
+      grupo.forEach((x, i) => { const kg = q[i] * 25; if (!x.soli) kgNo += kg; a.n += kg * x.npk.n / 100; a.p += kg * x.npk.p / 100; a.k += kg * x.npk.k / 100; });
+      const m = a[regla.mayor], otros = ["n", "p", "k"].filter((e) => e !== regla.mayor);
+      let pen = otros.reduce((s, e) => s + Math.max(0, a[e] - m) / (m + 1) * 6, 0);
+      const r = a.k > 0 ? a.n / a.k : a.n > 0 ? 99 : 0;
+      if (r <= 0) pen += 20; else { if (r < regla.min) pen += ln(regla.min / r) * 4; else if (r > regla.max) pen += ln(r / regla.max) * 4; pen += Math.abs(ln(r / regla.ideal)) * 0.4; }
+      pen += (kgNo / masa) * 1.2 + (grupo.length - 1) * 0.05;
+      if (!mejor || pen < mejor.pen - 1e-9) mejor = { pen, aporte: a, ratio: r, items: grupo.map((x, i) => ({ id: x.id, kgHa: q[i] * 25 })).filter((x) => x.kgHa > 0) };
+    };
+    const reparto = (n, k, pref, cb) => { if (k === 1) return cb(pref.concat([n])); for (let i = 1; i <= n - (k - 1); i++) reparto(n - i, k - 1, pref.concat([i]), cb); };
+    for (let i = 0; i < lista.length; i++) { reparto(partes, 1, [], (q) => evaluar([lista[i]], q));
+      for (let j = i + 1; j < lista.length; j++) { reparto(partes, 2, [], (q) => evaluar([lista[i], lista[j]], q));
+        for (let k = j + 1; k < lista.length; k++) reparto(partes, 3, [], (q) => evaluar([lista[i], lista[j], lista[k]], q)); } }
+    return mejor;
+  }
   // ¿lo escrito aparece en el texto? sin tildes, con errores de escritura (acaros = ácaros, monilla = monilia) y palabras a medias
   function coincideTexto(q, texto) {
     const ws = palabras(q); if (!ws.length) return fonetica(texto).includes(fonetica(q).trim());
@@ -730,6 +763,6 @@
   }
   const api = { fraccionSacos, textoSacos, ORDEN_FORMULACION, num, fmt, cantidad, rango, dosisDe, porVolumen, calcularFinca, calcularFertSuelo, nombresGrupo, textoBusquedaGrupo, compraOptima, precioUnitario, nombrePresentacion,
     redondearEquipos, textoEquipos, dosisHaDe, ordenMezcla, revisarMezcla, sumarDias, diasEntre, resumenCostos, costoManoObra, grupoActividad, alertas, grupoResistencia,
-    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, claseDeBusqueda, rankearPorClase, interpretarConsulta, coincideTexto, npkDe, kgSacoDe, repartirNPK, palabrasDe: (t) => palabras(t), fonetica: (t) => fonetica(t).replace(/[^a-z0-9ñ ]/g, " ").replace(/\s+/g, " ").trim(), esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
+    CLASES, OPC_CLASE, CLASES_HONGO, clasesFuncionales, claseDeBusqueda, rankearPorClase, interpretarConsulta, coincideTexto, npkDe, kgSacoDe, repartirNPK, REGLAS_FERT, reglaDeEtapa, mezclaPorRegla, palabrasDe: (t) => palabras(t), fonetica: (t) => fonetica(t).replace(/[^a-z0-9ñ ]/g, " ").replace(/\s+/g, " ").trim(), esMultisitio, tieneMultisitio, clasesDe, gruposFuncionales, codigosGrupo, coincideGrupos, sugerirAlternativas, ordenarPorEficiencia, gruposDelProblema };
   if (typeof module !== "undefined") module.exports = api; else root.Logic = api;
 })(typeof window !== "undefined" ? window : globalThis);

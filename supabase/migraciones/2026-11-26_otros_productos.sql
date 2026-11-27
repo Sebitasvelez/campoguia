@@ -65,3 +65,6 @@ grant execute on function public.app_reportar_producto(uuid, jsonb) to anon, aut
 
 -- requerimiento_cultivo_y_reparto_etapas (aplicada): cultivos.req_n/req_p2o5/req_k2o/req_periodo('año'|'ciclo')/req_fuente;
 -- etapas.aplicaciones/pct_n/pct_p2o5/pct_k2o. Requerimiento por aplicación = requerimiento del cultivo × % ÷ aplicaciones.
+
+-- cultivos_kg_aplicacion (aplicada): cultivos.kg_aplicacion (kg de fertilizante por ha por aplicación). La mezcla de
+-- cada etapa la arma la app con las reglas del asesor (Logic.REGLAS_FERT / mezclaPorRegla), priorizando los Soli.
