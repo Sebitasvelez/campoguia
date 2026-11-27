@@ -219,6 +219,8 @@
       const ub = {};
       pintar(`${intro}${cardInstalar() ? `<div class="cont" style="padding-bottom:0">${cardInstalar()}</div>` : ""}<form class="cont" id="f" novalidate>
         <h2 style="font-size:20px">Crea tu cuenta</h2>
+        <label class="campo">Soy<select name="rol"><option value="agricultor">Agricultor</option><option value="tecnico">Técnico agrícola</option></select></label>
+        <label class="campo" id="campoInst" hidden>¿A qué institución perteneces?<input name="institucion" maxlength="150" placeholder="Ej. MAG, GAD provincial, almacén, universidad…"><small>El administrador la revisa para aprobar tu acceso de técnico.</small></label>
         <label class="campo">Número de cédula<input name="cedula" inputmode="numeric" maxlength="10" autocomplete="off" required><small id="cedEstado">Con tu cédula ingresarás a la app.</small></label>
         <label class="campo">Nombres y apellidos<input name="nombres" autocomplete="name" required></label>
         <div class="grid2"><label class="campo">Edad<input name="edad" inputmode="numeric" maxlength="3" placeholder="Ej. 35" required></label>
@@ -227,8 +229,6 @@
         <label class="campo">Sector del cultivo<input name="sector" placeholder="Comunidad o parroquia" required></label></div>
         <div class="grid2"><label class="campo">Cultivo principal<input name="cultivo_texto" maxlength="80" placeholder="Ej. Cacao, plátano, naranjilla" autocomplete="off"></label>
         <label class="campo">Hectáreas<input name="hectareas" inputmode="decimal" placeholder="Ej. 2"></label></div>
-        <label class="campo">Soy<select name="rol"><option value="agricultor">Agricultor</option><option value="tecnico">Técnico agrícola</option></select></label>
-        <label class="campo" id="campoInst" hidden>¿A qué institución perteneces?<input name="institucion" maxlength="150" placeholder="Ej. MAG, GAD provincial, almacén, universidad…"><small>El administrador la revisa para aprobar tu acceso de técnico.</small></label>
         ${bloqueUbicacion(null)}
         <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--suave)"><input type="checkbox" name="acepta" checked style="width:22px;height:22px;margin:0;accent-color:var(--verde)"> Acepto que mi asesor vea mis registros y la ubicación de mi finca para darme seguimiento técnico.</label>
         <p class="mini" id="err" role="alert" style="color:var(--rojo);margin:0"></p>
