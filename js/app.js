@@ -405,10 +405,13 @@
         // primero lo del mismo tipo (clase de hongo o plaga) en este manual, luego lo parecido en los otros manuales
         const r = L.interpretarConsulta(q, I.c), vistos = new Set();
         const mismaClase = r.clase ? todos.filter((p) => p.clasificacion === r.clase.clase) : [];
-        const sim = mismaClase.concat(r.problemas, r.relacionados).filter((p) => !vistos.has(p.id) && vistos.add(p.id)).slice(0, 4);
+        const exactos = r.problemas.filter((p) => p.cultivo_id !== cid);
+        const sim = exactos.concat(mismaClase, r.relacionados).filter((p) => !vistos.has(p.id) && vistos.add(p.id)).slice(0, 4);
         const recDe = (pr) => { const rec = (I.recs[pr.id] || []).find((x) => P(x.producto_id)); return rec ? " · Recomendado: " + P(rec.producto_id).nombre : ""; };
         const ter = q.charAt(0).toUpperCase() + q.slice(1);
-        $("#probs").innerHTML = `<div class="aviso ambar">${ic.alerta}<div>No tenemos información específica de «${h(ter)}» en los manuales${sim.length ? ", pero tenemos estos similares:" : "."}</div></div>
+        const esEnf = r.clase && L.CLASES[r.clase.clase] && L.CLASES[r.clase.clase].tipo === "enfermedad";
+        const claseTxt = !r.clase ? "" : r.clase.clase === "Bacteria" ? "es una <b>bacteria</b>" : esEnf ? `es un hongo <b>${h(r.clase.clase)}</b>` : `es una plaga <b>${h(r.clase.clase.toLowerCase())}</b>`;
+        $("#probs").innerHTML = `${claseTxt ? `<div class="aviso azul">${ic.alerta}<div>Por su clasificación, <b>«${h(ter)}»</b> ${claseTxt}.</div></div>` : ""}<div class="aviso ambar">${ic.alerta}<div>${exactos.length ? `«${h(ter)}» no está en el manual de ${h(c.nombre)}, pero lo tenemos en ${exactos.length > 1 ? "otros manuales" : "el manual de " + h((cultivo(exactos[0].cultivo_id) || {}).nombre || "")}; también hay similares:` : `No tenemos información específica de «${h(ter)}» en los manuales${sim.length ? ", pero tenemos estos similares:" : "."}`}</div></div>
           ${sim.map((p) => `<a class="item" href="#/problema/${p.id}"><div class="tx"><b>${h(p.nombre)}</b><span>Manual de ${h((cultivo(p.cultivo_id) || {}).nombre || "")}${h(recDe(p))}</span></div>${ic.flecha}</a>`).join("")}
           <div class="acciones">${navigator.onLine !== false ? `<a class="btn sec chico" href="${h("https://www.google.com/search?q=" + encodeURIComponent(q + " control en " + c.nombre + " Ecuador"))}" target="_blank" rel="noopener">Buscar en internet</a>` : ""}
           <a class="btn wa chico" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", tengo este problema en mi " + c.nombre + ": " + q + ". ¿Qué me recomienda?"))}" target="_blank" rel="noopener">${ic.wa}Preguntar a mi asesor</a></div>`;
