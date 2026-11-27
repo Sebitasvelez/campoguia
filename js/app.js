@@ -942,19 +942,24 @@
   function asistenteSemana(abierto) {
     const a = asis(), probs = (I.problemas[a.cultivo] || []).filter((p) => p.tipo === "plaga" || p.tipo === "enfermedad");
     const ultimos = (I.c.productos || []).filter((p) => p.activo !== false && CAT_PROTEGER.test(p.categoria || "") && !/herbic/i.test(p.categoria || "")).sort((x, y) => x.nombre.localeCompare(y.nombre));
-    const opt = (v, t, sel) => `<option value="${h(v)}" ${String(v) === String(sel) ? "selected" : ""}>${h(t)}</option>`;
+    const nomCult = (cultivo(a.cultivo) || {}).nombre || "", nomEt = (etapa(a.etapa) || {}).nombre || "";
+    const nomProb = a.problemaTxt !== undefined ? a.problemaTxt : ((I.c.problemas || []).find((p) => String(p.id) === String(a.problema)) || {}).nombre || "";
+    const nomUlt = a.ultimoTxt !== undefined ? a.ultimoTxt : (P(a.ultimo) || {}).nombre || "";
+    const dl = (id, arr) => `<datalist id="${id}">${arr.map((t) => `<option value="${h(t)}">`).join("")}</datalist>`;
     return `<details class="card" id="asis" ${abierto || ui.asisAbierto ? "open" : ""} style="gap:10px">
       <summary style="cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px"><b style="font-size:16px">¿Qué le pongo esta semana?</b><span class="mini">Asesoría rápida</span></summary>
-      <span class="mini">Llena los datos y te sugerimos qué mezclar, como lo haría tu asesor.</span>
-      <div class="grid2"><label class="campo">Cultivo<select data-a="cultivo">${cultivos().map((c) => opt(c.id, c.nombre, a.cultivo)).join("")}</select></label>
-        <label class="campo">Etapa<select data-a="etapa">${etapasDe(a.cultivo).map((e) => opt(e.id, e.nombre, a.etapa)).join("")}</select></label></div>
-      <label class="campo">¿Qué problema ves?<select data-a="problema">${opt("", "Ninguno: solo prevención y nutrición", a.problema)}${probs.map((p) => opt(p.id, (p.tipo === "plaga" ? "Plaga: " : "Enfermedad: ") + p.nombre, a.problema)).join("")}</select></label>
+      <span class="mini">Escribe los datos y te sugerimos qué mezclar, como lo haría tu asesor.</span>
+      <div class="grid2"><label class="campo">Cultivo<input data-t="cultivo" list="dlCult" value="${h(nomCult)}" placeholder="Ej. Cacao" autocomplete="off"></label>
+        <label class="campo">Etapa<input data-t="etapa" list="dlEt" value="${h(nomEt)}" placeholder="Ej. Floración" autocomplete="off"></label></div>
+      <label class="campo">¿Qué problema ves?<input data-t="problema" list="dlProb" value="${h(nomProb)}" placeholder="Ej. monilia, ácaros… (vacío: solo prevención)" autocomplete="off"></label>
+      <span class="mini" id="asisProbInfo">${a.problema ? "Reconocido: " + h(((I.c.problemas || []).find((p) => String(p.id) === String(a.problema)) || {}).nombre || "") : nomProb ? "No está en el manual de tu cultivo: se recomendará prevención." : ""}</span>
       ${a.problema ? `<div class="campo"><span>Nivel de daño</span><div class="seg" role="group" aria-label="Nivel de daño">${["bajo", "medio", "alto"].map((n) => `<button type="button" data-nivel="${n}" class="${a.nivel === n ? "sel" : ""}">${n[0].toUpperCase() + n.slice(1)}</button>`).join("")}</div></div>` : ""}
       <div class="grid2"><label class="campo">Hectáreas a fumigar<input data-a="ha" inputmode="decimal" value="${h(a.ha || "")}" placeholder="Ej. 1"></label>
         <label class="campo">${ui.vol === "tanque" ? "Tanques" : "Bombas"} por hectárea<input data-a="porHa" inputmode="decimal" value="${h(a.porHa || "")}" placeholder="${ui.vol === "tanque" ? "Ej. 2" : "Ej. 20"}"></label></div>
       <div class="campo"><span>Equipo</span>${segVolAsis()}</div>
-      <div class="grid2"><label class="campo">Último producto aplicado<select data-a="ultimo">${opt("", "No recuerdo / ninguno", a.ultimo)}${ultimos.map((p) => opt(p.id, p.nombre, a.ultimo)).join("")}</select></label>
+      <div class="grid2"><label class="campo">Último producto aplicado<input data-t="ultimo" list="dlUlt" value="${h(nomUlt)}" placeholder="Ej. Score (vacío si no recuerdas)" autocomplete="off"></label>
         <label class="campo">Fecha de esa aplicación<input data-a="fecha" type="date" value="${h(a.fecha || "")}"></label></div>
+      ${dl("dlCult", cultivos().map((c) => c.nombre))}${dl("dlEt", etapasDe(a.cultivo).map((e) => e.nombre))}${dl("dlProb", probs.map((p) => p.nombre))}${dl("dlUlt", ultimos.map((p) => p.nombre))}
       <button class="btn" type="button" id="asisBtn">Recomendar mezcla</button>
       <div id="asisRes" style="display:flex;flex-direction:column;gap:8px"></div>
     </details>`;
@@ -1006,7 +1011,22 @@
     const box = $("#asis"); if (!box) return;
     box.addEventListener("toggle", () => { ui.asisAbierto = box.open; guardarUI(); });
     const a = asis(), re = () => { const y = window.scrollY; guardarUI(); vMezcla(); window.scrollTo(0, y); };
-    $$("[data-a]", box).forEach((el) => el.addEventListener("change", () => { a[el.dataset.a] = el.value; if (el.dataset.a === "cultivo") { a.etapa = ""; a.problema = ""; } if (["cultivo", "problema"].includes(el.dataset.a)) re(); else guardarUI(); }));
+    $$("[data-a]", box).forEach((el) => el.addEventListener("change", () => { a[el.dataset.a] = el.value; guardarUI(); }));
+    // lo que escribe se reconoce por nombre (con errores de escritura) y se guarda el dato del catálogo
+    const norm = (t) => L.palabrasDe ? L.palabrasDe(t).join(" ") : String(t || "").toLowerCase();
+    const buscar = (txt, lista, nom) => { const t = norm(txt); if (!t) return null;
+      return lista.find((x) => norm(nom(x)) === t) || lista.find((x) => norm(nom(x)).startsWith(t)) || lista.find((x) => norm(nom(x)).includes(t)) || null; };
+    $$("[data-t]", box).forEach((el) => el.addEventListener("change", () => {
+      const k = el.dataset.t, v = el.value.trim();
+      if (k === "cultivo") { const c = buscar(v, cultivos(), (x) => x.nombre); if (c && c.id !== a.cultivo) { a.cultivo = c.id; a.etapa = ""; a.problema = ""; delete a.problemaTxt; } }
+      if (k === "etapa") { const e = buscar(v, etapasDe(a.cultivo), (x) => x.nombre); if (e) a.etapa = e.id; }
+      if (k === "problema") { a.problemaTxt = v; a.problema = "";
+        if (v) { const lista = (I.problemas[a.cultivo] || []).filter((p) => p.tipo === "plaga" || p.tipo === "enfermedad");
+          const r = buscar(v, lista, (x) => x.nombre) || L.interpretarConsulta(v + " " + ((cultivo(a.cultivo) || {}).nombre || ""), I.c).problemas.find((p) => p.cultivo_id === a.cultivo && (p.tipo === "plaga" || p.tipo === "enfermedad"));
+          if (r) { a.problema = r.id; a.problemaTxt = r.nombre; } } else delete a.problemaTxt; }
+      if (k === "ultimo") { a.ultimoTxt = v; const p = buscar(v, (I.c.productos || []).filter((x) => x.activo !== false && CAT_PROTEGER.test(x.categoria || "")), (x) => x.nombre); a.ultimo = p ? p.id : ""; if (p) a.ultimoTxt = p.nombre; }
+      re();
+    }));
     $$("[data-nivel]", box).forEach((b) => b.addEventListener("click", () => { a.nivel = b.dataset.nivel; re(); }));
     $$("[data-avol]", box).forEach((b) => b.addEventListener("click", () => { ui.vol = b.dataset.avol; re(); }));
     $("#asisBtn").addEventListener("click", () => {
@@ -1072,6 +1092,7 @@
         ${asistenteSemana(m.length === 0)}
         ${cajaBuscaProd("Agregar producto")}
         ${segVol()}
+        <label class="campo">${ui.vol === "tanque" ? "¿Cuántos tanques de " + TANQUE() : "¿Cuántas bombas de " + BOMBA()} L vas a aplicar?<span class="unido"><input id="cargas" inputmode="decimal" value="${h(ui.mezclaCargas || "1")}"><span>${ui.vol === "tanque" ? "tanques" : "bombas"}</span></span></label>
         <div class="lista">${m.map((x, i) => { const p = P(x.producto_id); return `<div class="item" style="cursor:default"><div class="tx"><b>${h(p.nombre)}</b><span>${esSuelo(x) ? `${h(fmtD(x))} · al suelo, no va al tanque` : `${h(fmtD(x))} en ${h(volTxt())} · ${h(L.ORDEN_FORMULACION[p.formulacion] ? L.ORDEN_FORMULACION[p.formulacion].texto.split(" (")[0] : "Líquido")}`}</span></div><button class="icono-btn" data-q="${i}" aria-label="Quitar ${h(p.nombre)}">✕</button></div>`; }).join("") || `<div class="vacio">Tu mezcla está vacía. Agrega productos desde una recomendación, el plan sanitario o aquí abajo.</div>`}</div>
         ${prods.length >= 2 ? (rev.length ? rev.map((r) => `<div class="aviso ${r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde"}"><span class="pill ${r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde"}">${r.nivel === "incompatible" ? "NO MEZCLAR" : r.nivel === "precaucion" ? "PRECAUCIÓN" : "COMPATIBLE"}</span><div>${r.a ? `<b>${h(nombre(r.a))} + ${h(nombre(r.b))}:</b> ` : ""}${h(r.nota || "")}</div></div>`).join("")
           : `<div class="aviso verde"><span class="pill verde">SIN ALERTAS</span><div>No hay incompatibilidades registradas para esta combinación. Igual haz la <b>prueba del frasco</b> antes de llenar el tanque.</div></div>`) : ""}
@@ -1080,7 +1101,6 @@
           ${orden.fuera.length ? `<span class="mini">No van al tanque: ${orden.fuera.map((x) => h(x.nombre)).join(", ")}.</span>` : ""}
           <span class="mini">Agrega un producto a la vez y espera que se disuelva antes del siguiente. Usa agua con pH entre 5 y 6 (con cobres, no acidifiques demasiado).</span></section>` : ""}
         ${prods.length ? `<section class="card"><div class="etq">Para comprar</div>
-          ${hayTanque ? `<label class="campo">${ui.vol === "tanque" ? "¿Cuántos tanques de " + TANQUE() : "¿Cuántas bombas de " + BOMBA()} L vas a aplicar?<span class="unido"><input id="cargas" inputmode="decimal" value="${h(ui.mezclaCargas || "1")}"><span>${ui.vol === "tanque" ? "tanques" : "bombas"}</span></span></label>` : ""}
           ${haySuelo ? `<label class="campo">¿Cuántas hectáreas vas a fertilizar al suelo?<span class="unido"><input id="haSuelo" inputmode="decimal" value="${h(ui.mezclaHa || D.sesion.perfil.hectareas || "1")}"><span>ha</span></span></label>` : ""}
           ${compra.map((c) => `<div class="fila" style="font-size:14px;border-top:1px solid var(--borde);padding-top:8px"><span><b>${h(c.p.nombre)}</b><br><span class="mini">${c.total !== null ? h(L.cantidad(c.total, c.unidad || c.p.unidad)) + " en total" : "Ver etiqueta"}</span></span><span style="text-align:right">${c.texto ? h(c.texto) : "—"}${c.costo !== null ? `<br><span class="mini">${dinero(c.costo)}</span>` : ""}</span></div>`).join("")}
           <div class="fila" style="border-top:1px solid var(--borde);padding-top:8px"><span class="mini">Total de referencia</span><b>${dinero(costoCompra)}</b></div>
