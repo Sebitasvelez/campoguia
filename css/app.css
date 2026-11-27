@@ -174,3 +174,12 @@ input,select,textarea{font-size:16px}
 .visor img{touch-action:none;transform-origin:center center;will-change:transform;user-select:none;-webkit-user-drag:none}
 .visor-zoom{color:rgba(255,255,255,.7);font-size:12px;margin-top:6px}
 .gf-n{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:50%;background:var(--verde);color:#fff;font-style:normal;font-size:11px;font-weight:700;margin-right:5px}
+/* asesoría rápida: sugerencias debajo del cuadro y elegidos como fichas */
+.asis-campo{position:relative}
+.asis-sug{display:flex;flex-direction:column;border:1px solid var(--borde-2);border-radius:12px;background:#fff;margin-top:4px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.asis-sug button{display:flex;justify-content:space-between;align-items:center;gap:8px;border:0;border-top:1px solid var(--borde);background:#fff;padding:10px 12px;font-size:15px;text-align:left;min-height:44px;cursor:pointer}
+.asis-sug button:first-child{border-top:0}
+.asis-sug button span{font-size:12px;color:var(--suave)}
+.asis-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:-4px}
+.asis-chip{display:inline-flex;align-items:center;gap:4px;background:var(--verde-claro);color:var(--texto);border-radius:999px;padding:4px 4px 4px 12px;font-size:14px}
+.asis-chip button{border:0;background:transparent;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;color:var(--suave)}

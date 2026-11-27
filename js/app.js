@@ -937,95 +937,132 @@
   const asis = () => { ui.asis = ui.asis || {}; const a = ui.asis;
     if (!a.cultivo || !cultivo(a.cultivo)) a.cultivo = ui.cultivo && cultivo(ui.cultivo) ? ui.cultivo : (cultivos()[0] || {}).id;
     if (!etapasDe(a.cultivo).some((e) => String(e.id) === String(a.etapa))) a.etapa = (etapaActual(a.cultivo) || {}).id;
+    // varios problemas y varios productos de la última aplicación (se migra el formato anterior de uno solo)
+    if (!Array.isArray(a.problemas)) a.problemas = a.problema ? [a.problema] : [];
+    if (!Array.isArray(a.ultimos)) a.ultimos = a.ultimo ? [a.ultimo] : [];
+    delete a.problema; delete a.ultimo; delete a.problemaTxt; delete a.ultimoTxt;
+    a.problemas = a.problemas.filter((id) => (I.problemas[a.cultivo] || []).some((p) => String(p.id) === String(id)));
+    a.ultimos = a.ultimos.filter((id) => P(id));
     if (!a.nivel) a.nivel = "medio"; return a; };
   const CAT_PROTEGER = /fungic|insectic|acaric|bacteric|cebo|nematic|herbic|desinfec/i;
+  const probDe = (id) => (I.c.problemas || []).find((p) => String(p.id) === String(id)) || null;
   function asistenteSemana(abierto) {
-    const a = asis(), probs = (I.problemas[a.cultivo] || []).filter((p) => p.tipo === "plaga" || p.tipo === "enfermedad");
-    const ultimos = (I.c.productos || []).filter((p) => p.activo !== false && CAT_PROTEGER.test(p.categoria || "") && !/herbic/i.test(p.categoria || "")).sort((x, y) => x.nombre.localeCompare(y.nombre));
-    const nomCult = (cultivo(a.cultivo) || {}).nombre || "", nomEt = (etapa(a.etapa) || {}).nombre || "";
-    const nomProb = a.problemaTxt !== undefined ? a.problemaTxt : ((I.c.problemas || []).find((p) => String(p.id) === String(a.problema)) || {}).nombre || "";
-    const nomUlt = a.ultimoTxt !== undefined ? a.ultimoTxt : (P(a.ultimo) || {}).nombre || "";
-    const dl = (id, arr) => `<datalist id="${id}">${arr.map((t) => `<option value="${h(t)}">`).join("")}</datalist>`;
+    const a = asis();
+    const chips = (ids, nom, k) => ids.length ? `<div class="asis-chips">${ids.map((id) => `<span class="asis-chip">${h(nom(id))}<button type="button" data-quitar="${k}" data-id="${h(id)}" aria-label="Quitar ${h(nom(id))}">✕</button></span>`).join("")}</div>` : "";
+    const campo = (k, etiqueta, valor, ph) => `<div class="campo asis-campo"><span>${etiqueta}</span><input data-t="${k}" value="${h(valor)}" placeholder="${h(ph)}" autocomplete="off" autocapitalize="off" spellcheck="false"><div class="asis-sug" data-sug="${k}" hidden></div></div>`;
     return `<details class="card" id="asis" ${abierto || ui.asisAbierto ? "open" : ""} style="gap:10px">
       <summary style="cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px"><b style="font-size:16px">¿Qué le pongo esta semana?</b><span class="mini">Asesoría rápida</span></summary>
       <span class="mini">Escribe los datos y te sugerimos qué mezclar, como lo haría tu asesor.</span>
-      <div class="grid2"><label class="campo">Cultivo<input data-t="cultivo" list="dlCult" value="${h(nomCult)}" placeholder="Ej. Cacao" autocomplete="off"></label>
-        <label class="campo">Etapa<input data-t="etapa" list="dlEt" value="${h(nomEt)}" placeholder="Ej. Floración" autocomplete="off"></label></div>
-      <label class="campo">¿Qué problema ves?<input data-t="problema" list="dlProb" value="${h(nomProb)}" placeholder="Ej. monilia, ácaros… (vacío: solo prevención)" autocomplete="off"></label>
-      <span class="mini" id="asisProbInfo">${a.problema ? "Reconocido: " + h(((I.c.problemas || []).find((p) => String(p.id) === String(a.problema)) || {}).nombre || "") : nomProb ? "No está en el manual de tu cultivo: se recomendará prevención." : ""}</span>
-      ${a.problema ? `<div class="campo"><span>Nivel de daño</span><div class="seg" role="group" aria-label="Nivel de daño">${["bajo", "medio", "alto"].map((n) => `<button type="button" data-nivel="${n}" class="${a.nivel === n ? "sel" : ""}">${n[0].toUpperCase() + n.slice(1)}</button>`).join("")}</div></div>` : ""}
+      <div class="grid2">${campo("cultivo", "Cultivo", (cultivo(a.cultivo) || {}).nombre || "", "Ej. Cacao")}${campo("etapa", "Etapa", (etapa(a.etapa) || {}).nombre || "", "Ej. Floración")}</div>
+      ${campo("problema", "¿Qué problemas ves?", "", a.problemas.length ? "Agregar otro problema…" : "Ej. monilia, ácaros… (vacío: solo prevención)")}
+      ${chips(a.problemas, (id) => (probDe(id) || {}).nombre || "", "problema")}
+      ${a.problemas.length ? `<div class="campo"><span>Nivel de daño</span><div class="seg" role="group" aria-label="Nivel de daño">${["bajo", "medio", "alto"].map((n) => `<button type="button" data-nivel="${n}" class="${a.nivel === n ? "sel" : ""}">${n[0].toUpperCase() + n.slice(1)}</button>`).join("")}</div></div>` : ""}
       <div class="grid2"><label class="campo">Hectáreas a fumigar<input data-a="ha" inputmode="decimal" value="${h(a.ha || "")}" placeholder="Ej. 1"></label>
         <label class="campo">${ui.vol === "tanque" ? "Tanques" : "Bombas"} por hectárea<input data-a="porHa" inputmode="decimal" value="${h(a.porHa || "")}" placeholder="${ui.vol === "tanque" ? "Ej. 2" : "Ej. 20"}"></label></div>
       <div class="campo"><span>Equipo</span>${segVolAsis()}</div>
-      <div class="grid2"><label class="campo">Último producto aplicado<input data-t="ultimo" list="dlUlt" value="${h(nomUlt)}" placeholder="Ej. Score (vacío si no recuerdas)" autocomplete="off"></label>
-        <label class="campo">Fecha de esa aplicación<input data-a="fecha" type="date" value="${h(a.fecha || "")}"></label></div>
-      ${dl("dlCult", cultivos().map((c) => c.nombre))}${dl("dlEt", etapasDe(a.cultivo).map((e) => e.nombre))}${dl("dlProb", probs.map((p) => p.nombre))}${dl("dlUlt", ultimos.map((p) => p.nombre))}
+      ${campo("ultimo", "Productos de la última aplicación", "", a.ultimos.length ? "Agregar otro producto…" : "Ej. Score, Engeo (vacío si no recuerdas)")}
+      ${chips(a.ultimos, (id) => (P(id) || {}).nombre || "", "ultimo")}
+      <label class="campo">Fecha de esa aplicación<input data-a="fecha" type="date" value="${h(a.fecha || "")}"></label>
       <div class="acciones"><button class="btn" type="button" id="asisBtn">Recomendar mezcla</button><button class="btn sec chico" type="button" id="asisVaciar">Vaciar</button></div>
       <div id="asisRes" style="display:flex;flex-direction:column;gap:8px"></div>
     </details>`;
   }
   const segVolAsis = () => `<div class="seg" role="group" aria-label="Equipo"><button type="button" data-avol="bomba" class="${ui.vol === "bomba" ? "sel" : ""}">Bomba ${BOMBA()} L</button><button type="button" data-avol="tanque" class="${ui.vol === "tanque" ? "sel" : ""}">Tanque ${TANQUE()} L</button></div>`;
+  // sugerencias mientras escribe: nombre que empieza o contiene lo escrito (con errores de escritura, vía fonética)
+  function opcionesAsis(k, txt) {
+    const a = asis(), norm = (t) => L.fonetica(t), t = norm(txt);
+    const filtrar = (lista, nom, sub) => { const ws = t.split(" ").filter(Boolean);
+      return lista.filter((x) => !t || ws.every((w) => norm(nom(x) + " " + (sub ? sub(x) : "")).split(" ").some((v) => v.startsWith(w) || v.includes(w))))
+        .sort((x, y) => (norm(nom(y)).startsWith(t) ? 1 : 0) - (norm(nom(x)).startsWith(t) ? 1 : 0)); };
+    if (k === "cultivo") return filtrar(cultivos(), (c) => c.nombre).map((c) => ({ v: c.id, t: c.nombre }));
+    if (k === "etapa") return filtrar(etapasDe(a.cultivo), (e) => e.nombre).map((e) => ({ v: e.id, t: e.nombre }));
+    if (k === "problema") {
+      const lista = (I.problemas[a.cultivo] || []).filter((p) => (p.tipo === "plaga" || p.tipo === "enfermedad") && !a.problemas.map(String).includes(String(p.id)));
+      let r = filtrar(lista, (p) => p.nombre, (p) => p.clasificacion || "");
+      if (t && !r.length) r = L.interpretarConsulta(txt + " " + ((cultivo(a.cultivo) || {}).nombre || ""), I.c).problemas.filter((p) => lista.includes(p));
+      return r.map((p) => ({ v: p.id, t: p.nombre, s: p.tipo === "plaga" ? "Plaga" : "Enfermedad" }));
+    }
+    if (k === "ultimo") {
+      if (!t) return [];
+      const lista = (I.c.productos || []).filter((p) => p.activo !== false && CAT_PROTEGER.test(p.categoria || "") && !/herbic/i.test(p.categoria || "") && !a.ultimos.map(String).includes(String(p.id)));
+      return filtrar(lista, (p) => p.nombre, (p) => p.ingrediente_activo || "").map((p) => ({ v: p.id, t: p.nombre, s: [p.categoria, p.grupo].filter(Boolean).join(" · ") }));
+    }
+    return [];
+  }
   function recomendarSemana() {
-    const a = asis(), pr = (I.c.problemas || []).find((p) => String(p.id) === String(a.problema)) || null;
-    const ult = P(a.ultimo), avisos = [], items = [];
+    const a = asis(), prs = a.problemas.map(probDe).filter(Boolean);
+    const ults = a.ultimos.map(P).filter(Boolean), avisos = [], items = [];
     const codigos = (p) => L.codigosGrupo(p && p.grupo).filter((c) => /^(FRAC|IRAC) /.test(c) && !/^FRAC M/.test(c));
-    const ultCod = codigos(ult), repite = (p) => codigos(p).some((c) => ultCod.includes(c));
-    const usable = (p) => p && p.activo !== false && !p.no_sugerir && !items.some((x) => x.p.id === p.id);
-    const poner = (p, dosis, motivo) => { if (usable(p) && items.length < 4) items.push({ p, dosis: dosis !== null && dosis !== undefined ? Number(dosis) : L.dosisDe(p).min, motivo }); };
+    const ultCod = [...new Set(ults.flatMap(codigos))], repite = (p) => codigos(p).some((c) => ultCod.includes(c));
+    const ya = (p) => items.find((x) => x.p.id === p.id);
+    const usable = (p) => p && p.activo !== false && !p.no_sugerir;
+    const poner = (p, dosis, motivo) => { const x = ya(p); if (x) { if (!x.motivo.includes(motivo)) x.motivo += " · " + motivo; return true; }
+      if (!usable(p) || items.length >= 4) return false; items.push({ p, dosis: dosis !== null && dosis !== undefined ? Number(dosis) : L.dosisDe(p).min, motivo }); return true; };
     const multisitio = (p) => L.esMultisitio(p) || /preventiv/i.test(p.categoria || "");
-    if (pr) {
+    const evitados = new Set();
+    prs.forEach((pr) => {
       const recs = (I.recs[pr.id] || []).map((r) => ({ r, p: P(r.producto_id) })).filter((x) => usable(x.p));
-      let main = a.nivel === "alto" ? recs[0] : recs.find((x) => !repite(x.p)) || recs[0];
-      if (main) {
-        if (repite(main.p)) avisos.push(a.nivel === "alto" ? `Daño alto: se recomienda <b>${h(main.p.nombre)}</b>, el más eficiente, aunque repite el grupo ${h(codigos(main.p).filter((c) => ultCod.includes(c)).join(", "))} del último producto. En la próxima aplicación cambia de grupo.` : `Todas las opciones del manual repiten el grupo del último producto; en la próxima aplicación cambia de grupo.`);
-        else if (ult && ultCod.length) avisos.push(`Se evitó repetir el grupo ${h(ultCod.join(", "))} de ${h(ult.nombre)} para prevenir resistencia.`);
-        poner(main.p, main.r.dosis_min, `Control de ${pr.nombre} (manual de ${(cultivo(pr.cultivo_id) || {}).nombre || ""})`);
-        if (a.nivel === "alto") { const seg = recs.find((x) => x !== main && !codigos(x.p).some((c) => codigos(main.p).includes(c)) && !repite(x.p) && !multisitio(x.p));
-          if (seg) poner(seg.p, seg.r.dosis_min, "Daño alto: segundo modo de acción"); }
-      }
-      if (pr.tipo === "enfermedad" && main && !multisitio(main.p)) {
-        const prev = (I.problemas[a.cultivo] || []).find((p) => /amplio espectro|multisitio/i.test(p.clasificacion || ""));
-        const cand = (prev ? (I.recs[prev.id] || []).map((r) => P(r.producto_id)) : []).concat([(I.c.productos || []).find((p) => /daconil/i.test(p.nombre))]).filter((p) => p && multisitio(p));
-        if (cand[0]) poner(cand[0], null, "Protectante multisitio para que no avance la enfermedad");
-      }
-    } else {
+      // si un producto ya elegido también sirve para este problema, se aprovecha
+      const comun = recs.find((x) => ya(x.p));
+      const main = comun || (a.nivel === "alto" ? recs[0] : recs.find((x) => !repite(x.p)) || recs[0]);
+      if (!main) return;
+      if (!comun && repite(main.p)) avisos.push(a.nivel === "alto" ? `Daño alto en ${h(pr.nombre)}: se recomienda <b>${h(main.p.nombre)}</b>, el más eficiente, aunque repite el grupo ${h(codigos(main.p).filter((c) => ultCod.includes(c)).join(", "))} de la última aplicación. En la próxima cambia de grupo.` : `Para ${h(pr.nombre)} todas las opciones del manual repiten el grupo de la última aplicación; en la próxima cambia de grupo.`);
+      else if (!comun && recs[0] && recs[0] !== main && repite(recs[0].p)) codigos(recs[0].p).filter((c) => ultCod.includes(c)).forEach((c) => evitados.add(c));
+      poner(main.p, main.r.dosis_min, `Control de ${pr.nombre}`);
+      if (a.nivel === "alto") { const seg = recs.find((x) => x !== main && !ya(x.p) && !codigos(x.p).some((c) => codigos(main.p).includes(c)) && !repite(x.p) && !multisitio(x.p));
+        if (seg) poner(seg.p, seg.r.dosis_min, `Daño alto en ${pr.nombre}: segundo modo de acción`); }
+    });
+    if (evitados.size) avisos.push(`Se evitó repetir el grupo ${h([...evitados].join(", "))} de la última aplicación para prevenir resistencia.`);
+    const prev = (I.problemas[a.cultivo] || []).find((p) => /amplio espectro|multisitio/i.test(p.clasificacion || ""));
+    const protect = (prev ? (I.recs[prev.id] || []).map((r) => P(r.producto_id)) : []).concat([(I.c.productos || []).find((p) => /daconil/i.test(p.nombre))]).filter((p) => p && multisitio(p));
+    if (prs.some((pr) => pr.tipo === "enfermedad") && !items.some((x) => multisitio(x.p)) && protect[0]) poner(protect[0], null, "Protectante multisitio para que no avance la enfermedad");
+    if (!prs.length) {
       const plan = (I.plan[a.etapa] || []).map((x) => ({ x, p: P(x.producto_id) })).filter((y) => y.p && !/coadyuv|fertiliz|bioestim/i.test(y.p.categoria || ""));
       const elegidos = plan.filter((y) => !repite(y.p)).slice(0, 2);
       elegidos.forEach((y) => poner(y.p, y.x.dosis_tanque, "Plan sanitario de la etapa"));
-      if (!elegidos.length) {
-        const prev = (I.problemas[a.cultivo] || []).find((p) => /amplio espectro|multisitio/i.test(p.clasificacion || ""));
-        const cand = (prev ? (I.recs[prev.id] || []).map((r) => P(r.producto_id)) : []).concat([(I.c.productos || []).find((p) => /daconil/i.test(p.nombre))]).filter(Boolean);
-        if (cand[0]) poner(cand[0], null, "Prevención de hongos (multisitio)");
-      }
+      if (!elegidos.length && protect[0]) poner(protect[0], null, "Prevención de hongos (multisitio)");
     }
     const fol = (I.fert[a.etapa] || []).find((f) => f.tipo === "foliar" && P(f.producto_id));
     if (fol) poner(P(fol.producto_id), fol.dosis_tanque, "Nutrición foliar de la etapa");
     const coad = ((I.plan[a.etapa] || []).map((x) => ({ x, p: P(x.producto_id) })).find((y) => y.p && /coadyuv/i.test(y.p.categoria || ""))) || null;
     const coadP = coad ? coad.p : (I.c.productos || []).find((p) => /silwet/i.test(p.nombre) && p.activo !== false);
     if (coadP) poner(coadP, coad ? coad.x.dosis_tanque : null, "Coadyuvante: mejora la cobertura");
+    if (prs.length > 2 && items.length >= 4) avisos.push("La mezcla llegó al máximo de 4 productos; si falta controlar algún problema, consúltalo con tu asesor.");
     if (a.fecha) { const hoy = new Date(), dias = Math.round((new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) - new Date(a.fecha + "T00:00:00")) / 864e5); // días calendario
-      if (dias >= 0 && dias < 7) avisos.push(a.nivel === "alto" && pr ? `Aplicaste hace ${dias} día(s); con daño alto puedes aplicar, pero respeta el máximo de aplicaciones de la etiqueta.` : `Aplicaste hace ${dias} día(s): espera al menos 7 días entre aplicaciones, salvo que el daño sea alto.`); }
-    return { items, avisos, pr };
+      if (dias >= 0 && dias < 7) avisos.push(a.nivel === "alto" && prs.length ? `Aplicaste hace ${dias} día(s); con daño alto puedes aplicar, pero respeta el máximo de aplicaciones de la etiqueta.` : `Aplicaste hace ${dias} día(s): espera al menos 7 días entre aplicaciones, salvo que el daño sea alto.`); }
+    return { items, avisos, prs };
   }
   function conectarAsistente() {
     const box = $("#asis"); if (!box) return;
     box.addEventListener("toggle", () => { ui.asisAbierto = box.open; guardarUI(); });
-    const a = asis(), re = () => { const y = window.scrollY; guardarUI(); vMezcla(); window.scrollTo(0, y); };
+    const a = asis();
+    const re = (foco) => { const y = window.scrollY; guardarUI(); vMezcla(); window.scrollTo(0, y); if (foco) { const el = $(`#asis [data-t="${foco}"]`); if (el) el.focus(); } };
     $$("[data-a]", box).forEach((el) => el.addEventListener("change", () => { a[el.dataset.a] = el.value; guardarUI(); }));
-    // lo que escribe se reconoce por nombre (con errores de escritura) y se guarda el dato del catálogo
-    const norm = (t) => L.palabrasDe ? L.palabrasDe(t).join(" ") : String(t || "").toLowerCase();
-    const buscar = (txt, lista, nom) => { const t = norm(txt); if (!t) return null;
-      return lista.find((x) => norm(nom(x)) === t) || lista.find((x) => norm(nom(x)).startsWith(t)) || lista.find((x) => norm(nom(x)).includes(t)) || null; };
-    $$("[data-t]", box).forEach((el) => el.addEventListener("change", () => {
-      const k = el.dataset.t, v = el.value.trim();
-      if (k === "cultivo") { const c = buscar(v, cultivos(), (x) => x.nombre); if (c && c.id !== a.cultivo) { a.cultivo = c.id; a.etapa = ""; a.problema = ""; delete a.problemaTxt; } }
-      if (k === "etapa") { const e = buscar(v, etapasDe(a.cultivo), (x) => x.nombre); if (e) a.etapa = e.id; }
-      if (k === "problema") { a.problemaTxt = v; a.problema = "";
-        if (v) { const lista = (I.problemas[a.cultivo] || []).filter((p) => p.tipo === "plaga" || p.tipo === "enfermedad");
-          const r = buscar(v, lista, (x) => x.nombre) || L.interpretarConsulta(v + " " + ((cultivo(a.cultivo) || {}).nombre || ""), I.c).problemas.find((p) => p.cultivo_id === a.cultivo && (p.tipo === "plaga" || p.tipo === "enfermedad"));
-          if (r) { a.problema = r.id; a.problemaTxt = r.nombre; } } else delete a.problemaTxt; }
-      if (k === "ultimo") { a.ultimoTxt = v; const p = buscar(v, (I.c.productos || []).filter((x) => x.activo !== false && CAT_PROTEGER.test(x.categoria || "")), (x) => x.nombre); a.ultimo = p ? p.id : ""; if (p) a.ultimoTxt = p.nombre; }
-      re();
+    // sugerencias debajo del cuadro mientras escribe; al tocar una se elige
+    $$("[data-t]", box).forEach((el) => {
+      const k = el.dataset.t, sug = $(`[data-sug="${k}"]`, box);
+      const mostrar = () => {
+        const ops = opcionesAsis(k, el.value).slice(0, 6);
+        sug.innerHTML = ops.map((o) => `<button type="button" data-v="${h(o.v)}"><b>${h(o.t)}</b>${o.s ? `<span>${h(o.s)}</span>` : ""}</button>`).join("") || (el.value.trim() ? `<span class="mini" style="padding:8px 10px">Sin coincidencias${k === "problema" ? " en el manual de este cultivo" : ""}</span>` : "");
+        sug.hidden = !sug.innerHTML;
+      };
+      const elegir = (v) => {
+        if (k === "cultivo" && v !== a.cultivo) { a.cultivo = v; a.etapa = ""; a.problemas = []; }
+        if (k === "etapa") a.etapa = v;
+        if (k === "problema" && !a.problemas.map(String).includes(String(v))) a.problemas.push(Number(v));
+        if (k === "ultimo" && !a.ultimos.map(String).includes(String(v))) a.ultimos.push(Number(v));
+        re(k === "problema" || k === "ultimo" ? k : null);
+      };
+      el.addEventListener("input", mostrar);
+      el.addEventListener("focus", () => { if (k === "cultivo" || k === "etapa") el.select(); mostrar(); });
+      el.addEventListener("blur", () => setTimeout(() => { sug.hidden = true; }, 200));
+      el.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); const b = $("button", sug); if (b) elegir(b.dataset.v); } });
+      sug.addEventListener("mousedown", (e) => e.preventDefault()); // que no se pierda el foco antes de elegir
+      sug.addEventListener("click", (e) => { const b = e.target.closest("button[data-v]"); if (b) elegir(b.dataset.v); });
+    });
+    $$("[data-quitar]", box).forEach((b) => b.addEventListener("click", () => {
+      const lista = b.dataset.quitar === "problema" ? a.problemas : a.ultimos, i = lista.map(String).indexOf(b.dataset.id);
+      if (i >= 0) lista.splice(i, 1); re();
     }));
     $$("[data-nivel]", box).forEach((b) => b.addEventListener("click", () => { a.nivel = b.dataset.nivel; re(); }));
     $$("[data-avol]", box).forEach((b) => b.addEventListener("click", () => { ui.vol = b.dataset.avol; re(); }));
@@ -1040,7 +1077,7 @@
         ${cargas ? `<span class="mini">Para ${L.fmt(ha, 2)} ha a ${L.fmt(por)} ${eq}s por ha: <b>${L.fmt(cargas, 1)} ${eq}s</b> en total.</span>` : `<span class="mini">Escribe las hectáreas y ${eq}s por hectárea para calcular cuánto comprar.</span>`}
         ${r.avisos.map((t) => `<div class="aviso azul" style="padding:8px 10px">${ic.alerta}<div>${t}</div></div>`).join("")}
         <div class="acciones"><button class="btn" type="button" id="asisUsar">Usar esta mezcla</button>
-        <a class="btn wa chico" target="_blank" rel="noopener" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", la app me sugiere para " + ((cultivo(a.cultivo) || {}).nombre || "") + (r.pr ? " (" + r.pr.nombre + ", daño " + a.nivel + ")" : "") + ": " + r.items.map((x) => x.p.nombre).join(", ") + ". ¿Está bien?"))}">${ic.wa}Confirmar con mi asesor</a></div>`;
+        <a class="btn wa chico" target="_blank" rel="noopener" href="${h(waLink("Hola " + aj("nombre_asesor", "") + ", la app me sugiere para " + ((cultivo(a.cultivo) || {}).nombre || "") + (r.prs.length ? " (" + r.prs.map((p) => p.nombre).join(", ") + ", daño " + a.nivel + ")" : "") + ": " + r.items.map((x) => x.p.nombre).join(", ") + ". ¿Está bien?"))}">${ic.wa}Confirmar con mi asesor</a></div>`;
       $("#asisUsar").addEventListener("click", () => {
         S.set("mezcla", r.items.map((x) => itemMezcla(x.p, isNaN(x.dosis) ? null : x.dosis)));
         if (cargas) ui.mezclaCargas = String(Math.round(cargas * 10) / 10).replace(".", ",");
