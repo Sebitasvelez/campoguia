@@ -34,11 +34,17 @@
     (c.etapas || []).forEach((e) => {
       if (!(Number(e.req_n) || Number(e.req_p2o5) || Number(e.req_k2o))) return;
       const lista = I.fert[e.id] || [], prod = (id) => I.prod[String(id)];
-      const npk = lista.filter((x) => x.tipo === "suelo" && prod(x.producto_id) && L.npkDe(prod(x.producto_id)));
-      const r = L.repartirNPK({ n: e.req_n, p: e.req_p2o5, k: e.req_k2o }, npk.map((x) => ({ id: x.id, npk: L.npkDe(prod(x.producto_id)), kgSaco: L.kgSacoDe(prod(x.producto_id)) })));
+      const esNPK = (x) => x.tipo === "suelo" && prod(x.producto_id) && L.npkDe(prod(x.producto_id));
+      // candidatos: los fertilizantes NPK al suelo de la etapa + la línea Solei (se prefiere cuando cumple igual de bien)
+      const cand = new Map();
+      lista.filter(esNPK).forEach((x) => cand.set(String(x.producto_id), prod(x.producto_id)));
+      (c.productos || []).filter((p) => p.activo !== false && /^solei/i.test(p.nombre) && /ed[aá]fico/i.test(p.categoria || "") && L.npkDe(p)).forEach((p) => cand.set(String(p.id), p));
+      const r = L.repartirNPK({ n: e.req_n, p: e.req_p2o5, k: e.req_k2o }, [...cand.values()].map((p) => ({ id: p.id, npk: L.npkDe(p), kgSaco: L.kgSacoDe(p), preferido: /^solei/i.test(p.nombre) })));
       if (!r) return;
-      I.fert[e.id] = lista.map((x) => { const it = r.items.find((y) => y.id === x.id); return it ? Object.assign({}, x, { dosis_kg_ha: it.kgHa, dosis_g_planta: null, calculada: true }) : x; })
-        .filter((x) => !(x.calculada && !x.dosis_kg_ha));
+      const elegidos = r.items.map((it) => { const x = lista.find((y) => esNPK(y) && String(y.producto_id) === String(it.id));
+        return Object.assign({}, x || { id: "auto-" + e.id + "-" + it.id, cultivo_id: e.cultivo_id, etapa_id: e.id, tipo: "suelo", producto_id: it.id, nota: "Línea Solei: elegido para cumplir el requerimiento de la etapa.", orden: -1 },
+          { dosis_kg_ha: it.kgHa, dosis_g_planta: null, calculada: true }); });
+      I.fert[e.id] = elegidos.concat(lista.filter((x) => !esNPK(x))).sort((x, y) => (x.tipo === "suelo" ? 0 : 1) - (y.tipo === "suelo" ? 0 : 1) || (x.orden || 0) - (y.orden || 0));
       I.req[e.id] = { n: Number(e.req_n) || 0, p: Number(e.req_p2o5) || 0, k: Number(e.req_k2o) || 0, aporte: r.aporte, kg: r.kgTotal };
     });
   }

@@ -546,20 +546,26 @@
   }
   const kgSacoDe = (p) => { const pres = (p.presentaciones || []).filter((x) => (x.unidad || "g") === "g" && num(x.cantidad) >= 10000).sort((a, b) => b.cantidad - a.cantidad)[0];
     return pres ? num(pres.cantidad) / 1000 : num(p.contenido) >= 10000 && (p.contenido_unidad || "g") === "g" ? num(p.contenido) / 1000 : 50; };
-  // busca la combinación en medios sacos por hectárea que más se acerca al requerimiento (cada elemento pesa igual,
-  // en proporción a lo que se pide); a igual cercanía, la que usa menos producto
+  // busca la combinación (hasta 3 productos, en medios sacos por hectárea) que más se acerca al requerimiento;
+  // cada elemento pesa en proporción a lo que se pide. Con «preferido» (línea Solei) se prefieren esos productos
+  // cuando cumplen igual de bien; a igual resultado, la que usa menos producto.
   function repartirNPK(req, productos, maxSacos) {
     const R = { n: num(req.n) || 0, p: num(req.p) || 0, k: num(req.k) || 0 }, lista = productos.filter((x) => x.npk);
     if (!lista.length || !(R.n + R.p + R.k)) return null;
     const pasos = Math.round((maxSacos || 6) * 2), escala = Math.max(R.n, R.p, R.k, 1);
-    let mejor = null; const sacos = lista.map(() => 0);
-    const evaluar = () => { const a = { n: 0, p: 0, k: 0 }; let kg = 0;
-      lista.forEach((x, i) => { const q = sacos[i] * x.kgSaco; kg += q; a.n += q * x.npk.n / 100; a.p += q * x.npk.p / 100; a.k += q * x.npk.k / 100; });
-      const err = ["n", "p", "k"].reduce((s, e) => s + Math.pow((a[e] - R[e]) / escala, 2) + (R[e] === 0 ? 0 : Math.pow((a[e] - R[e]) / Math.max(R[e], 1), 2) * 0.25), 0);
-      if (!mejor || err < mejor.err - 1e-9 || (Math.abs(err - mejor.err) < 1e-9 && kg < mejor.kg)) mejor = { err, kg, aporte: a, sacos: sacos.slice() }; };
-    const rec = (i) => { if (i === lista.length) return evaluar(); for (let s = 0; s <= pasos; s++) { sacos[i] = s / 2; rec(i + 1); } };
-    if (Math.pow(pasos + 1, lista.length) > 300000) return null; rec(0);
-    return { aporte: mejor.aporte, kgTotal: mejor.kg, items: lista.map((x, i) => ({ id: x.id, sacos: mejor.sacos[i], kgHa: mejor.sacos[i] * x.kgSaco })) };
+    const error = (a) => ["n", "p", "k"].reduce((s, e) => s + Math.pow((a[e] - R[e]) / escala, 2) + (R[e] === 0 ? 0 : Math.pow((a[e] - R[e]) / Math.max(R[e], 1), 2) * 0.25), 0);
+    let mejor = null;
+    const probar = (grupo, sacos) => { const a = { n: 0, p: 0, k: 0 }; let kg = 0, kgNo = 0;
+      grupo.forEach((x, i) => { const q = sacos[i] * x.kgSaco; kg += q; if (!x.preferido) kgNo += q; a.n += q * x.npk.n / 100; a.p += q * x.npk.p / 100; a.k += q * x.npk.k / 100; });
+      if (!kg) return; const score = error(a) + (kgNo / kg) * 0.03;
+      if (!mejor || score < mejor.score - 1e-9 || (Math.abs(score - mejor.score) < 1e-9 && kg < mejor.kg)) mejor = { score, kg, aporte: a, grupo, sacos: sacos.slice() }; };
+    const combinar = (grupo) => { const sacos = grupo.map(() => 0);
+      const rec = (i) => { if (i === grupo.length) return probar(grupo, sacos); for (let s = 1; s <= pasos; s++) { sacos[i] = s / 2; rec(i + 1); } }; rec(0); };
+    for (let i = 0; i < lista.length; i++) { combinar([lista[i]]);
+      for (let j = i + 1; j < lista.length; j++) { combinar([lista[i], lista[j]]);
+        for (let k = j + 1; k < lista.length; k++) combinar([lista[i], lista[j], lista[k]]); } }
+    if (!mejor) return null;
+    return { aporte: mejor.aporte, kgTotal: mejor.kg, items: mejor.grupo.map((x, i) => ({ id: x.id, sacos: mejor.sacos[i], kgHa: mejor.sacos[i] * x.kgSaco })) };
   }
   // ¿lo escrito aparece en el texto? sin tildes, con errores de escritura (acaros = ácaros, monilla = monilia) y palabras a medias
   function coincideTexto(q, texto) {
