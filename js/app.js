@@ -189,11 +189,12 @@
   // costo total de la mezcla al suelo (medio saco = medio precio)
   function cajaCostoSuelo(q, ha) {
     if (!q || !q.lista.length) return ""; const haN = ha > 0 ? ha : 1; let total = 0; const sinPrecio = [];
-    const filas = q.lista.map((x) => { const kgS = L.kgSacoDe(x.p), sacos = x.kgHa * haN / kgS, pr = precioSacoDe(x.p), c = pr !== null ? sacos * pr : null;
+    let totSacos = 0;
+    const filas = q.lista.map((x) => { const kgS = L.kgSacoDe(x.p), sacos = x.kgHa * haN / kgS, pr = precioSacoDe(x.p), c = pr !== null ? sacos * pr : null; totSacos += x.kgHa * haN / 50;
       if (c !== null) total += c; else sinPrecio.push(x.p.nombre);
       return `<div class="fila"><span>${h(x.p.nombre)} · ${sacosN(sacos, kgS)}</span><span class="mini">${pr !== null ? dinero(pr) + " c/u · " + dinero(c) : "sin precio"}</span></div>`; }).join("");
     return `<div class="card costo-lista">${filas}</div>
-      <div class="costo-total"><span>Costo total de la mezcla · ${ha > 0 ? L.fmt(ha) + " ha" : "1 ha"}</span><b>${dinero(total)}</b></div>
+      <div class="costo-total"><span>Costo total de la mezcla · ${ha > 0 ? L.fmt(ha) + " ha" : "1 ha"} (${sacosTxt(totSacos * 50)})</span><b>${dinero(total)}</b></div>
       ${sinPrecio.length ? `<span class="mini">Sin el precio de ${h(sinPrecio.join(", "))}.</span>` : ""}`;
   }
   // «cada 2 meses», «cada 5 semanas aprox.»
@@ -933,7 +934,7 @@
     const res = et && tipoSel === "suelo" ? resumenSuelo(et, c) : null;
     const visibles = tipoSel === "suelo" && res ? res.lista.map((x) => Object.assign({}, x.item || {}, { producto_id: x.ref, tipo: "suelo", dosis_kg_ha: x.kgHa, dosis_g_planta: null, _p: x.p,
       nota: x.item ? x.item.nota : x.p.otra_marca ? "Otra marca (agregado por un técnico)." : "Agregado por el técnico." })) : items.filter((x) => x.tipo === tipoSel);
-    let totalCosto = 0, costoFoliar = 0; const nSuelo = visibles.filter((x) => x.tipo === "suelo").length;
+    let totalCosto = 0, costoFoliar = 0; const nSuelo = visibles.filter((x) => x.tipo === "suelo").length; let kgEnm = 0;
     const filas = visibles.map((x) => {
       const p = x._p || P(x.producto_id);
       if (x.tipo === "foliar") {
@@ -947,7 +948,7 @@
       const pres = (p.presentaciones || []).filter((y) => (y.unidad || "g") === "g" && Number(y.cantidad) >= 10000).sort((a, b) => b.cantidad - a.cantidad)[0];
       const precioSaco = pres && pres.precio !== null && pres.precio !== undefined ? Number(pres.precio) : p.pvp !== null && p.pvp !== undefined ? Number(p.pvp) : null;
       const kgSaco = fs ? fs.kgSaco : r.sacoKg || (pres ? pres.cantidad / 1000 : 50);
-      if (costo) totalCosto += costo;
+      if (costo) totalCosto += costo; if (x.tipo === "enmienda" && r.kgTotal) kgEnm += r.kgTotal;
       const omitir = x.tipo === "enmienda" && !isNaN(ph) && ph >= phAcido;
       return `<div class="card" style="${omitir ? "opacity:.6" : ""}">
         <div class="fila" style="align-items:flex-start"><div style="display:flex;flex-direction:column;gap:2px"><b>${h(p.nombre)}</b><span class="mini">${h(p.concentracion || p.ingrediente_activo || "")}</span></div>
@@ -956,9 +957,9 @@
         <div class="dato"><b>${fs ? h(fs.fraccion) : r.sacos50 !== null ? r.sacos50 : "—"}</b><span>${fs ? (fs.sacos <= 1 ? "Saco" : "Sacos") : "Sacos"} de ${L.fmt(kgSaco)} kg</span></div>
         <div class="dato"><b>${r.gPorPlanta !== null ? L.fmt(r.gPorPlanta, 0) + " g" : "—"}</b><span>Por planta / aplicación</span></div></div>
         ${precioSaco ? `<div class="fila"><span class="mini">Precio: <b>${dinero(precioSaco)}</b> el saco de ${L.fmt(kgSaco)} kg</span></div>` : ""}
-        ${!tec && precioSaco && r.kgTotal ? `<div class="fila"><span class="mini">Precio de los ${L.fmt(r.kgTotal, r.kgTotal < 10 ? 1 : 0)} kg requeridos: <b>${dinero(r.kgTotal / kgSaco * precioSaco)}</b></span></div>` : ""}
+        ${precioSaco && r.kgTotal ? `<div class="fila"><span class="mini">Precio de los ${L.fmt(r.kgTotal, r.kgTotal < 10 ? 1 : 0)} kg requeridos: <b>${dinero(r.kgTotal / kgSaco * precioSaco)}</b></span></div>` : ""}
         ${!tec && x.tipo === "suelo" && nSuelo > 1 ? `<span class="mini"><b>Observación:</b> mezclar todos los fertilizantes recomendados en fórmula.</span>` : ""}
-        ${tec || x.tipo !== "suelo" ? `<span class="mini">${x.dosis_kg_ha ? (L.npkDe(p) ? "Aporta por ha: N " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).n / 100, 1) + " · P₂O₅ " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).p / 100, 1) + " · K₂O " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).k / 100, 1) + " kg (" + L.fmt(Number(x.dosis_kg_ha)) + " kg de producto)" : L.fmt(Number(x.dosis_kg_ha)) + " kg de producto por ha") : ""}${x.condicion ? " · " + h(x.condicion) : ""}${x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : ""}${x.nota ? " · " + h(x.nota) : ""}</span>` : ""}
+        ${tec || x.tipo !== "suelo" ? `<span class="mini">${x.dosis_kg_ha ? (L.npkDe(p) ? "Aporta por ha: N " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).n / 100, 1) + " · P₂O₅ " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).p / 100, 1) + " · K₂O " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).k / 100, 1) + " kg (" + L.fmt(Number(x.dosis_kg_ha)) + " kg de producto)" : L.fmt(Number(x.dosis_kg_ha)) + " kg de producto por ha") : ""}${x.tipo === "suelo" ? "" : (x.condicion ? " · " + h(x.condicion) : "") + (x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : "") + (x.nota ? " · " + h(x.nota) : "")}</span>` : ""}
         ${omitir ? `<span class="mini"><b>Tu pH (${h(ui.ph)}) no es ácido:</b> no necesitas esta enmienda.</span>` : ""}
       </div>`;
     }).join("");
@@ -996,9 +997,9 @@
           ${!isNaN(ph) ? `<div class="aviso ${ph < phAcido ? "ambar" : "verde"}">${ic.alerta}<div>${ph < phAcido ? `Suelo <b>ácido</b> (pH ${h(ui.ph)}): aplica primero la enmienda (${h(items.filter((x) => x.tipo === "enmienda").map((x) => P(x.producto_id).nombre).join(", ") || "cal o dolomita")}) de 21 a 30 días antes o después de fertilizar.` : `pH ${h(ui.ph)}: no necesitas encalar.`}</div></div>` : ""}
         </div>` : ""}
         ${filas || `<div class="vacio">No hay productos de este tipo para la etapa ${et ? h(et.nombre) : ""}.</div>`}
-        ${tipoSel === "suelo" && res ? cajaCostoSuelo(res, haN) : tipoSel === "enmienda" && totalCosto > 0 ? `<div class="costo-total"><span>Costo total de las enmiendas · ${haN > 0 ? L.fmt(haN) + " ha" : "1 ha"}</span><b>${dinero(totalCosto)}</b></div>` : tipoSel === "foliar" && costoFoliar > 0 ? `<div class="costo-total"><span>Costo de los foliares por ${h(volTxt())}</span><b>${dinero(costoFoliar)}</b></div>` : ""}
+        ${tipoSel === "suelo" && res ? cajaCostoSuelo(res, haN) : tipoSel === "enmienda" && totalCosto > 0 ? `<div class="costo-total"><span>Costo total de las enmiendas · ${haN > 0 ? L.fmt(haN) + " ha" : "1 ha"}${kgEnm ? " (" + sacosTxt(kgEnm) + ")" : ""}</span><b>${dinero(totalCosto)}</b></div>` : tipoSel === "foliar" && costoFoliar > 0 ? `<div class="costo-total"><span>Costo de los foliares por ${h(volTxt())}</span><b>${dinero(costoFoliar)}</b></div>` : ""}
         <div class="acciones"><button class="btn" id="reg">Registrar fertilización</button>
-        ${items.length ? `<button class="btn sec" id="aMez">Añadir a mezcla</button>` : ""}</div>
+        ${visibles.length ? `<button class="btn sec" id="aMez">Añadir a mezcla</button>` : ""}</div>
         <details class="card"><summary>¿Tienes análisis de suelo?</summary>
           <span class="mini">Para ajustar las dosis con el análisis completo (pH, materia orgánica, N, P, K, Ca, Mg) envíaselo a tu asesor.</span>
           <a class="btn wa chico" target="_blank" rel="noopener" href="${h(waLink("Hola, le envío el análisis de suelo de mi finca de " + c.nombre + " para ajustar la fertilización."))}">${ic.wa}Enviar análisis al asesor</a>
@@ -1020,8 +1021,9 @@
     // añadir a mezcla: foliares por tanque; al suelo y enmiendas por hectárea (los de g por planta se pasan a kg/ha si hay plantas por ha)
     const am = $("#aMez"); if (am) am.addEventListener("click", () => {
       const m = S.get("mezcla", []), pha = Number(String(ui.calc.pha || "").replace(",", ".")); let n = 0, sinPha = [];
-      const sueloAct = et ? resumenSuelo(et, c).lista : [], otrasF = sueloAct.filter((x) => String(x.ref).startsWith("f:")).map((x) => x.p.nombre);
-      items.filter((x) => x.tipo !== "suelo").concat(sueloAct.filter((x) => !String(x.ref).startsWith("f:")).map((x) => ({ producto_id: x.ref, tipo: "suelo", dosis_kg_ha: x.kgHa }))).forEach((x) => { const p = P(x.producto_id); if (!p || m.some((y) => String(y.producto_id) === String(p.id))) return;
+      const sueloAct = et ? resumenSuelo(et, c).lista : [], otrasF = tipoSel !== "suelo" ? [] : sueloAct.filter((x) => String(x.ref).startsWith("f:")).map((x) => x.p.nombre);
+      // solo lo de la pestaña abierta (al suelo, foliar o enmiendas)
+      (tipoSel === "suelo" ? [] : items.filter((x) => x.tipo === tipoSel)).concat(tipoSel !== "suelo" ? [] : sueloAct.filter((x) => !String(x.ref).startsWith("f:")).map((x) => ({ producto_id: x.ref, tipo: "suelo", dosis_kg_ha: x.kgHa }))).forEach((x) => { const p = P(x.producto_id); if (!p || m.some((y) => String(y.producto_id) === String(p.id))) return;
         if (x.tipo === "foliar") { m.push({ producto_id: Number(p.id), dosis_tanque: x.dosis_tanque !== null && x.dosis_tanque !== undefined ? Number(x.dosis_tanque) : L.dosisDe(p).min }); n++; return; }
         const kgHa = x.dosis_kg_ha ? Number(x.dosis_kg_ha) : x.dosis_g_planta && pha > 0 ? Number(x.dosis_g_planta) * pha / 1000 : null;
         if (kgHa === null) { sinPha.push(p.nombre); return; }
