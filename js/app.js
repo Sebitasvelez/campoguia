@@ -205,7 +205,7 @@
       if (c !== null) total += c; else sinPrecio.push(x.p.nombre);
       return `<div class="fila"><span>${h(x.p.nombre)} · ${sacosN(sacos, kgS)}</span><span class="mini">${pr !== null ? dinero(pr) + " c/u · " + dinero(c) : "sin precio"}</span></div>`; }).join("");
     return `<div class="card costo-lista">${filas}</div>
-      <div class="costo-total"><span>Costo total de la mezcla · ${ha > 0 ? L.fmt(ha) + " ha" : "1 ha"} (${sacosTxt(totSacos * 50)})</span><b>${dinero(total)}</b></div>
+      <div class="costo-total"><span>Costo total aprox. de la mezcla · ${ha > 0 ? L.fmt(ha) + " ha" : "1 ha"} (${sacosTxt(totSacos * 50)})</span><b>${dinero(total)}</b></div>
       ${sinPrecio.length ? `<span class="mini">Sin el precio de ${h(sinPrecio.join(", "))}.</span>` : ""}`;
   }
   // «cada 2 meses», «cada 5 semanas aprox.»
@@ -995,7 +995,7 @@
         <div class="dato"><b>${fs ? h(fs.fraccion) : r.sacos50 !== null ? r.sacos50 : "—"}</b><span>${fs ? (fs.sacos <= 1 ? "Saco" : "Sacos") : "Sacos"} de ${L.fmt(kgSaco)} kg</span></div>
         <div class="dato"><b>${r.gPorPlanta !== null ? L.fmt(r.gPorPlanta, 0) + " g" : "—"}</b><span>Por planta / aplicación</span></div></div>
         ${precioSaco ? `<div class="fila"><span class="mini">Precio: <b>${dinero(precioSaco)}</b> el saco de ${L.fmt(kgSaco)} kg</span></div>` : ""}
-        ${precioSaco && r.kgTotal ? `<div class="fila"><span class="mini">Precio de los ${L.fmt(r.kgTotal, r.kgTotal < 10 ? 1 : 0)} kg requeridos: <b>${dinero(r.kgTotal / kgSaco * precioSaco)}</b></span></div>` : ""}
+        ${precioSaco && r.kgTotal ? `<div class="fila"><span class="mini">Precio aprox. de los ${L.fmt(r.kgTotal, r.kgTotal < 10 ? 1 : 0)} kg requeridos: <b>${dinero(r.kgTotal / kgSaco * precioSaco)}</b></span></div>` : ""}
         ${x.tipo === "suelo" ? `<span class="mini"><b>Observación:</b> ${nSuelo > 1 ? `mezclar con ${nSuelo === 2 ? "el otro fertilizante recomendado" : "los otros " + (nSuelo - 1) + " fertilizantes recomendados"} y aplicar` : "aplicar"} ${gMezcla ? `<b>${L.fmt(gMezcla, 0)} g por planta</b> de la mezcla.` : "los gramos por planta del cuadro resumen (escribe las plantas por ha)."}</span>` : ""}
         ${tec || x.tipo !== "suelo" ? `<span class="mini">${x.dosis_kg_ha ? (L.npkDe(p) ? "Aporta por ha: N " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).n / 100, 1) + " · P₂O₅ " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).p / 100, 1) + " · K₂O " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).k / 100, 1) + " kg (" + L.fmt(Number(x.dosis_kg_ha)) + " kg de producto)" : L.fmt(Number(x.dosis_kg_ha)) + " kg de producto por ha") : ""}${x.tipo === "suelo" ? "" : (x.condicion ? " · " + h(x.condicion) : "") + (x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : "") + (x.nota ? " · " + h(x.nota) : "")}</span>` : ""}
         ${omitir ? `<span class="mini"><b>Tu pH (${h(ui.ph)}) no es ácido:</b> no necesitas esta enmienda.</span>` : ""}
@@ -1042,7 +1042,7 @@
           ${!isNaN(ph) ? `<div class="aviso ${ph < phAcido ? "ambar" : "verde"}">${ic.alerta}<div>${ph < phAcido ? `Suelo <b>ácido</b> (pH ${h(ui.ph)}): aplica primero la enmienda (${h(items.filter((x) => x.tipo === "enmienda").map((x) => P(x.producto_id).nombre).join(", ") || "cal o dolomita")}) de 21 a 30 días antes o después de fertilizar.` : `pH ${h(ui.ph)}: no necesitas encalar.`}</div></div>` : ""}
         </div>` : ""}
         ${filas || `<div class="vacio">No hay productos de este tipo para la etapa ${et ? h(et.nombre) : ""}.</div>`}
-        ${tipoSel === "suelo" && res ? cajaCostoSuelo(res, haN) : tipoSel === "enmienda" && totalCosto > 0 ? `<div class="costo-total"><span>Costo total de las enmiendas · ${haN > 0 ? L.fmt(haN) + " ha" : "1 ha"}${kgEnm ? " (" + sacosTxt(kgEnm) + ")" : ""}</span><b>${dinero(totalCosto)}</b></div>` : tipoSel === "foliar" && costoFoliar > 0 ? `<div class="costo-total"><span>Costo de los foliares por ${h(volTxt())}</span><b>${dinero(costoFoliar)}</b></div>` : ""}
+        ${tipoSel === "suelo" && res ? cajaCostoSuelo(res, haN) : tipoSel === "enmienda" && totalCosto > 0 ? `<div class="costo-total"><span>Costo total aprox. de las enmiendas · ${haN > 0 ? L.fmt(haN) + " ha" : "1 ha"}${kgEnm ? " (" + sacosTxt(kgEnm) + ")" : ""}</span><b>${dinero(totalCosto)}</b></div>` : tipoSel === "foliar" && costoFoliar > 0 ? `<div class="costo-total"><span>Costo aprox. de los foliares por ${h(volTxt())}</span><b>${dinero(costoFoliar)}</b></div>` : ""}
         <div class="acciones"><button class="btn" id="reg">Registrar fertilización</button>
         ${visibles.length ? `<button class="btn sec" id="aMez">Enviar a la receta</button>` : ""}</div>
         <details class="card"><summary>¿Tienes análisis de suelo?</summary>
@@ -1273,7 +1273,7 @@
         ${r.gPorPlanta ? `<div><div class="n">${L.fmt(r.gPorPlanta, 0)} g</div><small>Por planta</small></div>` : ""}
         ${r.sitios ? `<div><div class="n">${L.fmt(r.sitios, 0)}</div><small>Sitios / plantas</small></div>` : ""}</div>`;
     }
-    const compra = r.envases ? `<div class="linea">Necesitas comprar: <b>${h(r.compraTexto || r.envases + " × " + (r.presentacion || "envase"))}</b>${r.costoEnvases !== undefined ? ` · ${dinero(r.costoEnvases)}` : ""}${costoEquipo !== null ? `<br><span style="font-size:12.5px">Costo por ${h(equipoTxt(false))}: ${dinero(costoEquipo)}</span>` + (costoAplic !== null ? `<br><span style="font-size:15px">Costo total de aplicación: <b>${dinero(costoAplic)}</b></span>` : "") : r.costoUsado !== undefined ? `<br><span style="font-size:12.5px">Costo de lo que aplicas: ${dinero(r.costoUsado)}</span>` : ""}</div>` : "";
+    const compra = r.envases ? `<div class="linea">Necesitas comprar: <b>${h(r.compraTexto || r.envases + " × " + (r.presentacion || "envase"))}</b>${r.costoEnvases !== undefined ? ` · ${dinero(r.costoEnvases)}` : ""}${costoEquipo !== null ? `<br><span style="font-size:12.5px">Costo aprox. por ${h(equipoTxt(false))}: ${dinero(costoEquipo)}</span>` + (costoAplic !== null ? `<br><span style="font-size:15px">Costo total aprox. de aplicación: <b>${dinero(costoAplic)}</b></span>` : "") : r.costoUsado !== undefined ? `<br><span style="font-size:12.5px">Costo aprox. de lo que aplicas: ${dinero(r.costoUsado)}</span>` : ""}</div>` : "";
     pintar(`${barra("Calcular para mi finca", p.nombre, "#/")}
       <main class="cont">
         ${segCalc("dosis")}
@@ -1671,7 +1671,7 @@
     });
     const costoCompra = compra.reduce((a, c) => a + (c.costo || 0), 0), costoTanqueMezcla = compra.reduce((a, c) => a + (c.costoTanque || 0), 0);
     const costoEquipoMezcla = ui.vol === "tanque" ? costoTanqueMezcla : costoTanqueMezcla * BOMBA() / TANQUE();
-    const txtCostoEquipo = ui.vol === "tanque" ? `Costo por tanque de ${TANQUE()} L de aplicación` : `Costo por bomba de ${BOMBA()} L de aplicación`;
+    const txtCostoEquipo = ui.vol === "tanque" ? `Costo aprox. por tanque de ${TANQUE()} L de aplicación` : `Costo aprox. por bomba de ${BOMBA()} L de aplicación`;
     const kgHaSuelo = sueloM.reduce((a, x) => a + (dzDe(x) || 0), 0), gPlanta = pha > 0 ? kgHaSuelo * 1000 / pha : 0;
     const idx = (x) => m.indexOf(x);
     const sec = (n, t, cuerpo) => `<section class="card rec-sec"><div class="rec-tit"><i>${n}</i>${t}</div>${cuerpo}</section>`;
@@ -1707,7 +1707,7 @@
           ${haySuelo ? `<span class="mini">${sueloM.length > 1 ? "Mezclar en fórmula y aplicar " : "Aplicar "}${gPlanta ? `<b>${L.fmt(gPlanta, 0)} g por planta</b>.` : "los gramos por planta: escribe las plantas por ha arriba."}</span>` : ""}`)}
         ${m.length ? sec(4, "Costos", `
           ${compra.map((c) => `<div class="fila" style="font-size:14px;border-top:1px solid var(--borde);padding-top:8px"><span><b>${h(c.p.nombre)}</b><br><span class="mini">${c.total !== null ? h(L.cantidad(c.total, c.unidad || c.p.unidad)) + " en total" : "Ver etiqueta"}</span></span><span style="text-align:right">${c.texto ? h(c.texto) : "—"}${c.costo !== null && c.costo !== undefined ? `<br><b>${dinero(c.costo)}</b>` : ""}</span></div>`).join("")}
-          <div class="fila" style="border-top:1px solid var(--borde);padding-top:8px"><span><b>Total de referencia</b>${haySuelo ? ` · ${L.fmt(haSuelo, 2)} ha` : ""}</span><b>${dinero(costoCompra)}</b></div>
+          <div class="fila" style="border-top:1px solid var(--borde);padding-top:8px"><span><b>Costo total aprox.</b>${haySuelo ? ` · ${L.fmt(haSuelo, 2)} ha` : ""}</span><b>${dinero(costoCompra)}</b></div>
           ${hayTanque ? `<div class="fila"><span class="mini">${txtCostoEquipo}</span><b>${dinero(costoEquipoMezcla)}</b></div>` : ""}
           <span class="mini">Precios referenciales según el PVP; pueden variar según el almacén.</span>`) : ""}
         ${m.length ? sec(5, tec ? "Indicaciones y receta" : "Mi receta", tec ? `
@@ -1750,7 +1750,7 @@
     const avisos = prodsT.length >= 2 ? (rev.length ? rev.map((r) => ({ nivel: r.nivel === "incompatible" ? "rojo" : r.nivel === "precaucion" ? "ambar" : "verde", texto: (r.nivel === "incompatible" ? "NO MEZCLAR. " : r.nivel === "precaucion" ? "PRECAUCIÓN. " : "") + (r.a ? nombre(r.a) + " + " + nombre(r.b) + ": " : "") + (r.nota || "") })) : [{ nivel: "verde", texto: "Sin incompatibilidades registradas. Haga la prueba del frasco antes de llenar el tanque." }]) : [];
     const texto = () => [`*${NOMBRE} · Receta*`, hayTanque ? `${L.fmt(cargas, 1)} ${equipo}` : "", "", hayTanque ? `*Dosis por ${volTxt()}:*` : ""].concat(tanqueM.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`))
       .concat(haySuelo ? ["", "*Al suelo:*"].concat(sueloM.map((x) => `• ${P(x.producto_id).nombre}: ${fmtD(x)}`)) : [])
-      .concat(["", "*Para comprar:*"]).concat(compra.map((c) => `• ${c.p.nombre}: ${c.texto || "ver etiqueta"}`)).concat([`Total de referencia: ${dinero(costoCompra)}`]).concat(pasos.length ? ["", "*Orden de mezcla:*"].concat(pasos) : []).filter((x, i, l) => x !== "" || l[i - 1] !== "").join("\n");
+      .concat(["", "*Para comprar:*"]).concat(compra.map((c) => `• ${c.p.nombre}: ${c.texto || "ver etiqueta"}`)).concat([`Costo total aprox.: ${dinero(costoCompra)}`]).concat(pasos.length ? ["", "*Orden de mezcla:*"].concat(pasos) : []).filter((x, i, l) => x !== "" || l[i - 1] !== "").join("\n");
     const armar = () => { const per = D.sesion.perfil, ahora = new Date(), tel = String(per.telefono || "").replace(/\D/g, "");
       const nomPer = [per.nombres, per.apellidos].filter(Boolean).join(" ");
       return { marca: NOMBRE, titulo: tec ? "Receta técnica" : "Mi receta", deAgricultor: !tec, fecha: ahora.toLocaleDateString("es-EC", { day: "numeric", month: "long", year: "numeric" }),
@@ -1767,7 +1767,7 @@
           .map((p) => `${p.nombre}: ${p.carencia_dias !== null && p.carencia_dias !== undefined ? "carencia " + p.carencia_dias + " días" : ""}${p.carencia_dias !== null && p.carencia_dias !== undefined && p.reingreso_horas !== null && p.reingreso_horas !== undefined ? " · " : ""}${p.reingreso_horas !== null && p.reingreso_horas !== undefined ? "reingreso " + p.reingreso_horas + " h" : ""}`)
           .concat(["Lea siempre la etiqueta. Use equipo de protección personal (guantes, mascarilla, gafas y ropa larga).", "No fumigue con viento fuerte ni antes de lluvia. Lave el equipo y no contamine fuentes de agua."]),
         compras: compra.map((c) => [c.p.nombre, c.texto ? `${c.texto}${c.costo !== null && c.costo !== undefined ? " · " + dinero(c.costo) : ""}` : "Ver etiqueta"]),
-        totales: [["Total de referencia", dinero(costoCompra)]].concat(hayTanque ? [[txtCostoEquipo, dinero(costoEquipoMezcla)]] : []),
+        totales: [["Costo total aprox.", dinero(costoCompra)]].concat(hayTanque ? [[txtCostoEquipo, dinero(costoEquipoMezcla)]] : []),
         indicaciones: tec ? (ui.recInd || "").trim() : "", pie: pieReporte().replace(/^Reporte generado/, "Receta generada") }; };
     const nomArch = (d) => `Receta_${nombreSeguro(d.agricultor || "receta")}_${new Date().toISOString().slice(0, 10)}.pdf`;
     const bRec = $("#recetar");
