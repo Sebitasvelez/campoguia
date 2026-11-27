@@ -332,7 +332,7 @@
   });
 
   // estilo visual: «defecto» (el original) u «op1» (Opción 1: tarjetas ordenadas). Aplica al panel del agricultor.
-  const op1 = () => (ui.estilo || "op1") === "op1";
+  const op1 = () => aj("estilo_app", "op1") !== "defecto"; // lo define el administrador en Ajustes de la app
   const secOp = (n, t) => (op1() ? `<section class="card op1-sec"><div class="rec-tit"><i>${n}</i>${t}</div>` : "");
   const finOp = () => (op1() ? "</section>" : "");
   function pintar(html, navSel) {
@@ -2152,8 +2152,6 @@
           <button class="btn" type="submit">Guardar cambios</button>
         </form>
         ${bloqueUbicacion(p)}
-        ${true ? `<section class="card"><b>Estilo de la app</b><span class="mini">Cambia cómo se ven las pantallas. La información es la misma.</span>
-          <div class="seg" role="group" aria-label="Estilo de la app"><button type="button" data-est="op1" class="${(ui.estilo || "op1") === "op1" ? "sel" : ""}">Opción 1</button><button type="button" data-est="defecto" class="${ui.estilo === "defecto" ? "sel" : ""}">Por defecto</button></div></section>` : ""}
         ${cardTipoCuenta(p)}
         <section class="card">
           <div class="fila"><span class="mini">Información técnica</span><b>Versión ${h(cat.version || "—")}</b></div>
@@ -2186,7 +2184,6 @@
         vPerfil();
       } catch (er) { toast(er.codigo === "red" ? "Necesitas internet para cambiar el tipo de cuenta." : er.message); }
     }));
-    $$("[data-est]").forEach((b) => b.addEventListener("click", () => { ui.estilo = b.dataset.est; guardarUI(); vPerfil(); toast(ui.estilo === "op1" ? "Estilo Opción 1 aplicado" : "Estilo por defecto aplicado"); }));
     $("#fp").addEventListener("submit", async (e) => {
       e.preventDefault(); const f = e.target;
       try { await D.actualizarPerfil({ nombres: f.nombres.value, edad: f.elements.namedItem("edad").value, telefono: f.telefono.value, provincia: f.provincia.value, sector: f.sector.value, cultivo_texto: f.elements.namedItem("cultivo_texto").value.trim(), cultivo_id: cultivoDeTexto(f.elements.namedItem("cultivo_texto").value) || "", hectareas: f.hectareas.value.replace(",", "."), acepta_seguimiento: f.acepta.checked }); toast("Datos guardados"); }

@@ -513,11 +513,12 @@
     ["plantas_por_bomba", "Plantas que cubre una bomba (valor inicial)", "Para calcular por número de plantas."],
     ["ph_acido", "pH desde el cual el suelo se considera ácido", "Por debajo de este valor la app recomienda la enmienda."],
     ["aviso_legal", "Aviso que aparece con cada recomendación", ""],
+    ["estilo_app", "Estilo visual de la app", "Se aplica a todos los agricultores y técnicos al publicar. Opción 1: tarjetas ordenadas; Por defecto: el diseño original.", [["op1", "Opción 1"], ["defecto", "Por defecto"]]],
   ];
   function vAjustes() {
     const aj = Object.fromEntries((DB.ajustes || []).map((a) => [a.clave, a.valor]));
     marco("ajustes", `<div class="adm-cab"><h2>Ajustes de la app</h2><div class="botones">${botonPublicar}</div></div>${estadoPub()}
-      <form class="card" id="fa" style="max-width:640px">${AJUSTES.map(([k, t, a]) => `<label class="campo">${h(t)}<input name="${k}" value="${h(aj[k] === undefined || aj[k] === null ? "" : Array.isArray(aj[k]) ? aj[k].join(", ") : aj[k])}">${a ? `<small>${h(a)}</small>` : ""}</label>`).join("")}
+      <form class="card" id="fa" style="max-width:640px">${AJUSTES.map(([k, t, a, ops]) => `<label class="campo">${h(t)}${ops ? `<select name="${k}">${ops.map(([v, l]) => `<option value="${v}" ${String(aj[k] || ops[0][0]) === v ? "selected" : ""}>${h(l)}</option>`).join("")}</select>` : `<input name="${k}" value="${h(aj[k] === undefined || aj[k] === null ? "" : Array.isArray(aj[k]) ? aj[k].join(", ") : aj[k])}">`}${a ? `<small>${h(a)}</small>` : ""}</label>`).join("")}
       <button class="btn" type="submit">Guardar ajustes</button></form>`);
     $("#fa").addEventListener("submit", async (e) => {
       e.preventDefault();

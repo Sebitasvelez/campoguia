@@ -14445,6 +14445,7 @@
   "litros_agua_ha": 400,
   "plantas_por_bomba": 60,
   "ph_acido": 5.5,
-  "aviso_legal": "Recomendación técnica referencial. Lea siempre la etiqueta y verifique con su asesor."
+  "aviso_legal": "Recomendación técnica referencial. Lea siempre la etiqueta y verifique con su asesor.",
+  "estilo_app": "op1"
  }
 }
