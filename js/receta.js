@@ -88,7 +88,7 @@
 
     // 2) fertilización al suelo y, debajo, el resumen: total de sacos, gramos por planta y próxima aplicación
     if ((d.fertilizantes || []).length) {
-      tabla(`${++nSec}. Fertilización al suelo`, d.fertilizantes, "Total para la finca", "Dosis requerida por ha por aplicación");
+      tabla(`${++nSec}. Fertilización al suelo`, d.fertilizantes, "Total para la finca", "Dosis");
       if ((d.resumenSuelo || []).length) recuadro(d.resumenSuelo); else if (limpio(d.notaSuelo)) recuadro([d.notaSuelo]);
       if (limpio(d.obsSuelo)) { sub("Observaciones"); texto(d.obsSuelo, 10, "normal", TEXTO, 3); }
       y += 2;
@@ -101,17 +101,22 @@
       espacio(14 + (d.compras.length + (d.totales || []).length) * 5.5 + 12); // el bloque de costos no se parte entre páginas
       titulo(`${++nSec}. Para comprar (costos aprox.)`);
       d.compras.concat(d.totales || []).forEach(([a, b], i) => {
-        const esTot = i >= d.compras.length; fuente(esTot ? "bold" : "normal", 10); const la = lineas(a, AN * 0.55), lb = lineas(b, AN * 0.42);
+        // subtotales (productos / fertilizantes) en normal; el costo total y por equipo en verde y negrita
+        const esTot = i >= d.compras.length, fuerte = esTot && /^Costo/.test(a);
+        if (i === d.compras.length) { doc.setDrawColor(BORDE[0], BORDE[1], BORDE[2]); doc.setLineWidth(0.2); doc.line(M, y - 3.5, W - M, y - 3.5); y += 1; }
+        fuente(fuerte || esTot ? "bold" : "normal", 10); const la = lineas(a, AN * 0.55), lb = lineas(b, AN * 0.42);
         const h = Math.max(alto(la.length, 10), alto(lb.length, 10)) + 1.5; espacio(h);
-        color(esTot ? VERDE : TEXTO); doc.text(la, M, y); doc.text(lb, W - M, y, { align: "right" }); y += h;
+        color(fuerte ? VERDE : TEXTO); doc.text(la, M, y); doc.text(lb, W - M, y, { align: "right" }); y += h;
       });
-      y += 1; texto("Nota: precios referenciales según el PVP (precio de venta al público) de los insumos. No son los precios oficiales de cada punto de venta; pueden variar según el almacén.", 8.5, "italic", SUAVE);
       y += 2;
     }
 
     // firma (solo la receta del técnico)
     if (!d.deAgricultor) { espacio(17); y += 8; doc.setDrawColor(TEXTO[0], TEXTO[1], TEXTO[2]); doc.setLineWidth(0.3); doc.line(M, y, M + 70, y);
     fuente("bold", 10); color(TEXTO); doc.text(limpio(d.tecnico || ""), M, y + 4.5); fuente("normal", 9); color(SUAVE); doc.text("Técnico responsable", M, y + 8.5); }
+
+    // nota final sobre los costos
+    if ((d.compras || []).length) { y += 6; texto("Nota: los costos de esta receta son referenciales y aproximados, calculados con el PVP (precio de venta al público) de los insumos. Pueden variar de acuerdo al punto de venta.", 8.5, "italic", SUAVE); }
 
     // pie en todas las páginas
     const pags = doc.getNumberOfPages();
