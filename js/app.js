@@ -998,7 +998,7 @@
     const coad = ((I.plan[a.etapa] || []).map((x) => ({ x, p: P(x.producto_id) })).find((y) => y.p && /coadyuv/i.test(y.p.categoria || ""))) || null;
     const coadP = coad ? coad.p : (I.c.productos || []).find((p) => /silwet/i.test(p.nombre) && p.activo !== false);
     if (coadP) poner(coadP, coad ? coad.x.dosis_tanque : null, "Coadyuvante: mejora la cobertura");
-    if (a.fecha) { const dias = Math.round((Date.now() - new Date(a.fecha + "T12:00:00").getTime()) / 864e5);
+    if (a.fecha) { const hoy = new Date(), dias = Math.round((new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) - new Date(a.fecha + "T00:00:00")) / 864e5); // días calendario
       if (dias >= 0 && dias < 7) avisos.push(a.nivel === "alto" && pr ? `Aplicaste hace ${dias} día(s); con daño alto puedes aplicar, pero respeta el máximo de aplicaciones de la etiqueta.` : `Aplicaste hace ${dias} día(s): espera al menos 7 días entre aplicaciones, salvo que el daño sea alto.`); }
     return { items, avisos, pr };
   }
