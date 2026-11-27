@@ -454,9 +454,9 @@
         G("FRAC 5", "Aminas (spiroxamina, fenpropidin)"), G("FRAC 2", "Dicarboximidas (iprodiona)"), G("FRAC 17", "Hidroxianilidas (fenhexamida)"), G("FRAC 29", "Fluazinam"),
         G("FRAC BM02", "Biológicos (Bacillus subtilis)")] },
     "Deuteromiceto": { tipo: "enfermedad", resumen: "Grupo que se mantiene en la clasificación antigua para Botrytis, Fusarium y Rhizoctonia: hongos especiales que se controlan solo con determinados ingredientes activos.",
-      control: "Botrytis: fenhexamida, ciprodinil, fludioxonil, iprodiona, boscalid. Fusarium: tiabendazol o carbendazim, triazoles y fludioxonil. Rhizoctonia: PCNB, carboxin o flutolanil y azoxistrobina. Los bencimidazoles son eficientes para deuteromicetos y ascomicetos, pero generan resistencia: rota grupos, sobre todo con Botrytis.",
+      control: "Botrytis: fenhexamida, ciprodinil, fludioxonil, iprodiona, boscalid. Fusarium: tiabendazol o carbendazim y fludioxonil. Rhizoctonia: PCNB, carboxin o flutolanil y azoxistrobina. Los bencimidazoles son eficientes para deuteromicetos, pero generan resistencia: rota grupos, sobre todo con Botrytis.",
       grupos: [G("FRAC 1", "Bencimidazoles (tiabendazol, carbendazim)"), G("FRAC 7", "Carboxamidas SDHI (boscalid, fluopyram, carboxin, flutolanil)"), G("FRAC 12", "Fenilpirroles (fludioxonil)"),
-        G("FRAC 9", "Anilinopirimidinas (ciprodinil, pirimetanil)"), G("FRAC 3", "Triazoles (tebuconazol, procloraz, difenoconazol)"), G("FRAC 17", "Hidroxianilidas (fenhexamida)"),
+        G("FRAC 9", "Anilinopirimidinas (ciprodinil, pirimetanil)"), G("FRAC 17", "Hidroxianilidas (fenhexamida)"),
         G("FRAC 2", "Dicarboximidas (iprodiona)"), G(null, "Hidrocarburos aromáticos (PCNB / quintoceno, al suelo)", /pentacloronitro|quintoceno|pcnb/), G("FRAC 11", "Estrobilurinas (azoxistrobina)"), G("FRAC 29", "Fluazinam"), G("FRAC 24", "Kasugamicina (con cobre)"), G("FRAC BM02", "Biológicos (Bacillus subtilis)")] },
     "Basidiomiceto": { tipo: "enfermedad", resumen: "Hongo verdadero con esporas sexuales en basidios (como royas, Moniliophthora y Sclerotium).",
       control: "Estrobilurinas e inhibidores del ergosterol (triazoles) son los sistémicos más activos; las carboxamidas (carboxin, oxicarboxin) son selectivas para basidiomicetos como royas y carbones. Los cobres y el clorotalonil protegen la mazorca o el tejido antes de la infección. Los bencimidazoles no son eficientes en esta clase.",
@@ -483,9 +483,9 @@
   // eficiencia van los grupos. "orden" (opcional) reemplaza el orden de la clase para plagas muy específicas.
   const BUSCA_CLASE = [
     // enfermedades: géneros, especies y nombres comunes → clase del aplicativo (Botrytis, Fusarium y Rhizoctonia como Deuteromicetos)
-    { re: /oomicet|oomycet|pseudohongo|phytophthora|pythium|peronospora|plasmopara|bremia|pseudoperonospora|albugo|mildiu velloso|mildeo velloso|mazorca negra|pudricion parda|lancha|tizon tardio|gota\b|damping|mal del talluelo/, clase: "Oomiceto" },
-    { re: /botrytis|moho gris/, clase: "Deuteromiceto", orden: ["FRAC 9", "FRAC 12", "FRAC 17", "FRAC 7", "FRAC 2", "FRAC 3", "FRAC 11", "FRAC 1"] },
-    { re: /rhizoctonia|thanatephorus/, clase: "Deuteromiceto", orden: ["Hidrocarburos aromáticos (PCNB / quintoceno, al suelo)", "FRAC 7", "FRAC 11", "FRAC 3", "FRAC 12", "FRAC 1"] },
+    { re: /\boomicet|\boomycet|pseudohongo|phytophthora|pythium|peronospora|plasmopara|bremia|pseudoperonospora|albugo|mildiu velloso|mildeo velloso|mazorca negra|pudricion parda|lancha|tizon tardio|gota\b|damping|mal del talluelo/, clase: "Oomiceto" },
+    { re: /botrytis|moho gris/, clase: "Deuteromiceto", orden: ["FRAC 9", "FRAC 12", "FRAC 17", "FRAC 7", "FRAC 2", "FRAC 11", "FRAC 1"] },
+    { re: /rhizoctonia|thanatephorus/, clase: "Deuteromiceto", orden: ["Hidrocarburos aromáticos (PCNB / quintoceno, al suelo)", "FRAC 7", "FRAC 11", "FRAC 12", "FRAC 1"] },
     { re: /deuteromicet|deuteromycet|deutero|imperfect|fusarium|fusariosis|mal de panama|marchitez vascular|pudricion basal|pie negro/, clase: "Deuteromiceto" },
     { re: /basidiomicet|basidiomycet|basidio|monilia|moniliophthora|moniliasis|escoba de bruja|roya|hemileia|puccinia|uromyces|ustilago|carbon\b|sclerotium|athelia|ceratobasidium|mal de hilachas|marasmius|crinipellis|corticium|mal rosado/, clase: "Basidiomiceto" },
     { re: /ascomicet|ascomycet|antracnosis|phyllachora|mancha de asfalto|exserohilum|turcicum|tizon foliar|cladosporium|stenocarpella|curvularia|colletotrichum|glomerella|alternaria|oidio|oidium|erysiphe|cenicilla|mildiu polvoso|sigatoka|mycosphaerella|pseudocercospora|cercospora|ojo de pollo|mancha foliar|lasiodiplodia|botryodiplodia|botryosphaeria|neofusicoccum|ascochyta|sclerotinia|moho blanco|monilinia|venturia|sarna|septoria|phoma|corynespora|helminthosporium|bipolaris|pyricularia|magnaporthe|pestalotiopsis|ceratocystis|mal del machete|diplodia|phyllosticta|nectria|verticillium|trichothecium/, clase: "Ascomiceto" },
