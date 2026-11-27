@@ -332,7 +332,7 @@
   });
 
   // estilo visual: «defecto» (el original) u «op1» (Opción 1: tarjetas ordenadas). Aplica al panel del agricultor.
-  const op1 = () => (ui.estilo || "op1") === "op1" && !esTecnico();
+  const op1 = () => (ui.estilo || "op1") === "op1";
   const secOp = (n, t) => (op1() ? `<section class="card op1-sec"><div class="rec-tit"><i>${n}</i>${t}</div>` : "");
   const finOp = () => (op1() ? "</section>" : "");
   function pintar(html, navSel) {
@@ -486,7 +486,10 @@
     const al = L.alertas(D.registros(), D.lotes(), hoy()).slice(0, 2);
     const nombre = (perfil.nombres || "").split(" ")[0];
     const estadoTxt = online ? (pend ? "Enviando…" : "En línea") : "Sin conexión";
-    const tilesOp1 = `<div class="op1-tiles">
+    const tilesOp1 = esTecnico() ? `<div class="op1-tiles">
+          <a class="op1-tile dest" href="#/calcfert/${h(ui.cultivo || "")}">${ic.hoja}<b>Mezclas de fertilizantes</b><span>Sacos, g por planta y costo</span></a>
+          <a class="op1-tile" href="#/calcular">${ic.calc}<b>Dosis de productos</b><span>Bomba, tanque, ha o plantas</span></a>
+          <a class="op1-tile" href="#/receta">${ic.mezcla}<b>Recetar</b><span>Asesoría de la app o propia</span></a></div>` : `<div class="op1-tiles">
           <a class="op1-tile dest" href="#/asesoria">${ic.asis || ic.alerta}<b>Asesoría rápida</b><span>¿Qué le pongo esta semana?</span></a>
           <a class="op1-tile" href="#/receta">${ic.mezcla}<b>Mi receta</b><span>Dosis, orden y costos</span></a>
           <a class="op1-tile" href="#/lotes">${ic.lotes}<b>Mis lotes</b><span>Registros y costos</span></a></div>`;
@@ -2149,7 +2152,7 @@
           <button class="btn" type="submit">Guardar cambios</button>
         </form>
         ${bloqueUbicacion(p)}
-        ${p.rol !== "tecnico" ? `<section class="card"><b>Estilo de la app</b><span class="mini">Cambia cómo se ven las pantallas. La información es la misma.</span>
+        ${true ? `<section class="card"><b>Estilo de la app</b><span class="mini">Cambia cómo se ven las pantallas. La información es la misma.</span>
           <div class="seg" role="group" aria-label="Estilo de la app"><button type="button" data-est="op1" class="${(ui.estilo || "op1") === "op1" ? "sel" : ""}">Opción 1</button><button type="button" data-est="defecto" class="${ui.estilo === "defecto" ? "sel" : ""}">Por defecto</button></div></section>` : ""}
         ${cardTipoCuenta(p)}
         <section class="card">
