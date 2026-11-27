@@ -1365,9 +1365,10 @@
       <span class="mini">Escribe los datos y te sugerimos qué mezclar, como lo haría tu asesor.</span>
       <div class="grid2">${campo("cultivo", "Cultivo", (cultivo(a.cultivo) || {}).nombre || "", "Ej. Cacao")}${campo("etapa", "Etapa", (etapa(a.etapa) || {}).nombre || "", "Ej. Floración")}</div>
       ${campo("problema", "¿Qué problemas ves?", "", a.problemas.length ? "Agregar otro problema…" : "Ej. monilia, ácaros… (vacío: solo prevención)")}
-      ${a.problemas.length ? `<div class="asis-probs"><span class="mini">Nivel de daño de cada uno:</span>${a.problemas.map((id) => { const nom = (probDe(id) || {}).nombre || "", nv = nivelDe(a, id);
-        return `<div class="asis-prob"><div class="asis-prob-cab"><b>${h(nom)}</b><button type="button" data-quitar="problema" data-id="${h(id)}" aria-label="Quitar ${h(nom)}">✕</button></div>
-        <div class="seg" role="group" aria-label="Nivel de daño de ${h(nom)}">${["bajo", "medio", "alto"].map((n) => `<button type="button" data-nivel="${n}" data-pid="${h(id)}" class="${nv === n ? "sel niv-" + n : ""}">${n[0].toUpperCase() + n.slice(1)}</button>`).join("")}</div></div>`; }).join("")}</div>` : ""}
+      ${a.pendiente && probDe(a.pendiente) ? `<div class="asis-nivel" role="group" aria-label="Nivel de daño"><span>¿Qué nivel de daño tiene <b>${h(probDe(a.pendiente).nombre)}</b>?</span>
+        <div class="asis-nivel-bts">${["bajo", "medio", "alto"].map((n) => `<button type="button" class="niv-${n}" data-nv="${n}">${n[0].toUpperCase() + n.slice(1)}</button>`).join("")}<button type="button" class="enlace" data-nv="">Cancelar</button></div></div>` : ""}
+      ${a.problemas.length ? `<div class="asis-chips">${a.problemas.map((id) => { const nom = (probDe(id) || {}).nombre || "", nv = nivelDe(a, id);
+        return `<span class="asis-chip"><button type="button" class="asis-renivel" data-renivel="${h(id)}" aria-label="Cambiar el nivel de daño de ${h(nom)}">${h(nom)} <i class="niv-txt niv-${nv}">(${nv})</i></button><button type="button" data-quitar="problema" data-id="${h(id)}" aria-label="Quitar ${h(nom)}">✕</button></span>`; }).join("")}</div>` : ""}
       <div class="grid2"><label class="campo">Hectáreas a fumigar<input data-a="ha" inputmode="decimal" value="${h(a.ha || "")}" placeholder="Ej. 1"></label>
         <label class="campo">${ui.vol === "tanque" ? "Tanques" : "Bombas"} por hectárea<input data-a="porHa" inputmode="decimal" value="${h(a.porHa || "")}" placeholder="${ui.vol === "tanque" ? "Ej. 2" : "Ej. 20"}"></label></div>
       <div class="campo"><span>Equipo</span>${segVolAsis()}</div>
@@ -1494,7 +1495,7 @@
       const elegir = (v) => {
         if (k === "cultivo" && v !== a.cultivo) { a.cultivo = v; a.etapa = ""; a.problemas = []; }
         if (k === "etapa") a.etapa = v;
-        if (k === "problema" && !a.problemas.map(String).includes(String(v))) a.problemas.push(Number(v));
+        if (k === "problema") a.pendiente = Number(v); // primero se pregunta el nivel de daño; luego se agrega
         if (k === "ultimo" && String(v).startsWith("nuevo:")) { agregarOtra(String(v).slice(6)); return; }
         if (k === "ultimo" && !a.ultimos.map(String).includes(String(v))) a.ultimos.push(String(v).startsWith("o:") ? String(v) : Number(v));
         re(k === "problema" || k === "ultimo" ? k : null);
@@ -1510,7 +1511,10 @@
       const lista = b.dataset.quitar === "problema" ? a.problemas : a.ultimos, i = lista.map(String).indexOf(b.dataset.id);
       if (i >= 0) lista.splice(i, 1); re();
     }));
-    $$("[data-nivel]", box).forEach((b) => b.addEventListener("click", () => { a.niveles[b.dataset.pid] = b.dataset.nivel; re(); }));
+    $$("[data-nv]", box).forEach((b) => b.addEventListener("click", () => { const id = a.pendiente; delete a.pendiente;
+      if (b.dataset.nv && id) { a.niveles[id] = b.dataset.nv; if (!a.problemas.map(String).includes(String(id))) a.problemas.push(id); }
+      re("problema"); }));
+    $$("[data-renivel]", box).forEach((b) => b.addEventListener("click", () => { a.pendiente = Number(b.dataset.renivel); re(); }));
     $$("[data-avol]", box).forEach((b) => b.addEventListener("click", () => { ui.vol = b.dataset.avol; re(); }));
     // vaciar: borra todo lo escrito en la asesoría rápida (queda el cultivo elegido en el inicio)
     $("#asisVaciar").addEventListener("click", () => { ui.asis = {}; ui.asisAbierto = true; re(); toast("Datos borrados"); });

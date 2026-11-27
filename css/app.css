@@ -249,3 +249,9 @@ button.enlace{border:0;background:none;color:var(--verde);text-decoration:underl
 .rep-det{border:1px solid var(--borde);border-radius:var(--radio);padding:8px 10px}
 .rep-det summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--verde)}
 .rep-det[open] summary{margin-bottom:8px}
+.asis-nivel{display:flex;flex-direction:column;gap:8px;padding:10px 12px;border:1px solid var(--verde);border-radius:var(--radio);background:#eef6f0}
+.asis-nivel-bts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.asis-nivel-bts button:not(.enlace){flex:1;min-height:40px;border-radius:var(--radio);border:1px solid var(--borde);background:#fff;font:inherit;font-weight:600;cursor:pointer}
+.asis-nivel-bts .niv-bajo{color:#2e7d32}.asis-nivel-bts .niv-medio{color:#b26a00}.asis-nivel-bts .niv-alto{color:#c62828}
+.asis-renivel{border:0;background:none;font:inherit;color:inherit;padding:0;cursor:pointer;text-align:left}
+.niv-txt{font-style:normal;font-weight:600}.niv-txt.niv-bajo{color:#2e7d32}.niv-txt.niv-medio{color:#b26a00}.niv-txt.niv-alto{color:#c62828}
