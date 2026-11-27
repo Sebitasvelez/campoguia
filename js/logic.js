@@ -584,6 +584,11 @@
   const ORDEN_REGLAS = ["arranque", "engrose", "desarrollo", "floracion"];
   // reglas propias de un cultivo (manda sobre la general): en maíz la prefloración pide nitrógeno y el llenado N y K parejos
   const REGLAS_CULTIVO = {
+    // pitahaya, recuperación de plantas amarillas: como desarrollo (N:K 3:1 a 5:1) y además P igual o algo mayor que K (ej. 3-1-1);
+    // la relación P:K es interna, en pantalla solo se muestra N:K
+    pitahaya: [
+      { clave: "recuperacion_pitahaya", re: /recuperaci/, mayor: "n", min: 3, max: 5, ideal: 4, pkMin: 1, pkMax: 1.5, texto: "mayor demanda de nitrógeno, relación N:K de 3:1 a 5:1" },
+    ],
     maiz: [
       { clave: "prefloracion_maiz", re: /prefloraci/, mayor: "n", min: 2, max: 3, ideal: 2.5, texto: "mayor demanda de nitrógeno, relación N:K de 2:1 a 3:1" },
       { clave: "llenado_maiz", re: /llenado/, mayor: null, min: 0.8, max: 1.25, ideal: 1, texto: "nitrógeno y potasio parejos, relación N:K cercana a 1:1" },
@@ -592,7 +597,7 @@
   const reglaDeEtapa = (nombre, cultivoId) => { const t = quitarTildes(nombre);
     const propia = (REGLAS_CULTIVO[cultivoId] || []).find((x) => x.re.test(t)); if (propia) return Object.assign({}, propia);
     const k = ORDEN_REGLAS.find((x) => REGLAS_FERT[x].re.test(t)); return k ? Object.assign({ clave: k }, REGLAS_FERT[k]) : null; };
-  const etapaCritica = (regla) => !!regla && ["desarrollo", "engrose", "llenado_maiz"].includes(regla.clave);
+  const etapaCritica = (regla) => !!regla && ["desarrollo", "engrose", "llenado_maiz", "recuperacion_pitahaya"].includes(regla.clave);
   // mezcla de hasta 3 fertilizantes que suma «masa» kg/ha (en partes de 25 kg), con al menos 1 saco (50 kg) de un Soli;
   // busca que el elemento de la regla sea el mayor y que N:K quede en el rango (lo más cerca del ideal), con la menor
   // cantidad posible de productos que no son Soli
@@ -609,6 +614,9 @@
       if (regla.mayor) { const m = a[regla.mayor]; pen = ["n", "p", "k"].filter((e) => e !== regla.mayor).reduce((s, e) => s + Math.max(0, a[e] - m) / (m + 1) * 6, 0); }
       const r = a.k > 0 ? a.n / a.k : a.n > 0 ? 99 : 0;
       if (r <= 0) pen += 20; else { if (r < regla.min) pen += ln(regla.min / r) * 4; else if (r > regla.max) pen += ln(r / regla.max) * 4; pen += Math.abs(ln(r / regla.ideal)) * 0.4; }
+      // regla interna P:K (recuperación de pitahaya): fósforo igual o ligeramente mayor que potasio
+      if (regla.pkMin) { const pk = a.k > 0 ? a.p / a.k : a.p > 0 ? 99 : 0;
+        if (pk <= 0) pen += 20; else if (pk < regla.pkMin) pen += ln(regla.pkMin / pk) * 6; else if (pk > regla.pkMax) pen += ln(pk / regla.pkMax) * 8; }
       pen += (kgNo / masa) * 1.2 + (grupo.length - 1) * 0.05;
       // con requerimiento de la etapa: que cada elemento se acerque a lo que se pide (evita sobrar fósforo, por ejemplo)
       if (sReq > 0) pen += ["n", "p", "k"].reduce((s, e) => s + Math.abs(a[e] - (num(req[e]) || 0)), 0) / sReq * 1.5;

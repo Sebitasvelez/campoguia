@@ -84,7 +84,10 @@
     if (R && R.n + R.p + R.k > 0) { const ref = L.mezclaPorRegla(regla, 100, cand); if (!ref) return null; const sA = ref.aporte.n + ref.aporte.p + ref.aporte.k;
       masa = Math.min(500, Math.max(50, Math.round(100 * (R.n + R.p + R.k) / Math.max(sA, 1e-6) / 25) * 25)); }
     else { const m0 = Number(cul.kg_aplicacion) || 0; if (!m0) return null; masa = crit ? m0 - 25 : m0; }
-    const r = L.mezclaPorRegla(regla, masa, cand, R && R.n + R.p + R.k > 0 ? R : null); if (!r) return null;
+    let r = L.mezclaPorRegla(regla, masa, cand, R && R.n + R.p + R.k > 0 ? R : null); if (!r) return null;
+    // sin requerimiento de la etapa: si con esos kg no se cumplen las reglas (N:K y, si la hay, P:K), se prueba con 25 kg más (hasta +100)
+    const cumple = (x) => { const a = x.aporte, pk = a.k > 0 ? a.p / a.k : 99; return x.ratio >= regla.min - 1e-6 && x.ratio <= regla.max + 1e-6 && (!regla.pkMin || (pk >= regla.pkMin - 1e-6 && pk <= regla.pkMax + 1e-6)); };
+    if (!(R && R.n + R.p + R.k > 0)) for (let m = masa + 25; !cumple(r) && m <= masa + 100; m += 25) { const r2 = L.mezclaPorRegla(regla, m, cand); if (r2 && cumple(r2)) { r = r2; masa = m; } }
     return { regla, masa, mg: crit ? 25 : 0, aporte: r.aporte, ratio: r.ratio, items: r.items, requiere: R || null };
   }
   function armarItemsEtapa(e, lista, calc, c) {
