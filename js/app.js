@@ -774,16 +774,18 @@
         <div class="chips" role="group" aria-label="Etapa">${etapas.map((e) => `<button class="chip ${et && e.id === et.id ? "sel" : ""}" data-e="${e.id}">${h(e.nombre)}</button>`).join("")}</div>
         <div class="seg" role="group" aria-label="Tipo de fertilización">${[["suelo", "Al suelo"], ["foliar", "Foliar"], ["enmienda", "Enmiendas"]].map(([k, t]) => `<button data-ft="${k}" class="${tipoSel === k ? "sel" : ""}">${t} (${items.filter((x) => x.tipo === k).length})</button>`).join("")}</div>
         ${tipoSel === "suelo" ? cajaCultivo(c.id) : ""}${tipoSel === "suelo" && et ? cajaReq(et.id) : ""}
-        <details class="card" ${ui.ph ? "open" : ""}><summary>¿Tienes análisis de suelo?</summary>
-          <label class="campo">pH del suelo<input id="ph" inputmode="decimal" value="${h(ui.ph)}" placeholder="Ej. 5,2"></label>
-          ${!isNaN(ph) ? `<div class="aviso ${ph < phAcido ? "ambar" : "verde"}">${ic.alerta}<div>${ph < phAcido ? `Suelo <b>ácido</b> (pH ${h(ui.ph)}): aplica primero la enmienda (${h(items.filter((x) => x.tipo === "enmienda").map((x) => P(x.producto_id).nombre).join(", ") || "cal o dolomita")}) unos 30 días antes de fertilizar.` : `pH ${h(ui.ph)}: no necesitas encalar.`}</div></div>` : ""}
-          <span class="mini">Para ajustar las dosis con el análisis completo (materia orgánica, N, P, K, Ca, Mg) envíaselo a tu asesor.</span>
-          <a class="btn wa chico" target="_blank" rel="noopener" href="${h(waLink("Hola, le envío el análisis de suelo de mi finca de " + c.nombre + " para ajustar la fertilización."))}">${ic.wa}Enviar análisis al asesor</a>
-        </details>
         ${tipoSel !== "foliar" ? `<div class="grid2"><label class="campo">Hectáreas<input id="ha" inputmode="decimal" value="${h(ui.calc.ha)}"></label><label class="campo">Plantas por ha<input id="pha" inputmode="numeric" value="${h(ui.calc.pha)}" placeholder="Ej. 1600"></label></div>` : segVol()}
+        ${tipoSel === "enmienda" ? `<div class="card">
+          <label class="campo">pH del suelo<input id="ph" inputmode="decimal" value="${h(ui.ph)}" placeholder="Ej. 5,2"></label>
+          ${!isNaN(ph) ? `<div class="aviso ${ph < phAcido ? "ambar" : "verde"}">${ic.alerta}<div>${ph < phAcido ? `Suelo <b>ácido</b> (pH ${h(ui.ph)}): aplica primero la enmienda (${h(items.filter((x) => x.tipo === "enmienda").map((x) => P(x.producto_id).nombre).join(", ") || "cal o dolomita")}) de 21 a 30 días antes o después de fertilizar.` : `pH ${h(ui.ph)}: no necesitas encalar.`}</div></div>` : ""}
+        </div>` : ""}
         ${filas || `<div class="vacio">No hay productos de este tipo para la etapa ${et ? h(et.nombre) : ""}.</div>`}
         <div class="acciones"><button class="btn" id="reg">Registrar fertilización</button>
         ${visibles.length ? `<button class="btn sec" id="aMez">Añadir a mezcla</button>` : ""}</div>
+        <details class="card"><summary>¿Tienes análisis de suelo?</summary>
+          <span class="mini">Para ajustar las dosis con el análisis completo (pH, materia orgánica, N, P, K, Ca, Mg) envíaselo a tu asesor.</span>
+          <a class="btn wa chico" target="_blank" rel="noopener" href="${h(waLink("Hola, le envío el análisis de suelo de mi finca de " + c.nombre + " para ajustar la fertilización."))}">${ic.wa}Enviar análisis al asesor</a>
+        </details>
       </main>`, "inicio");
     $$("[data-e]").forEach((b) => b.addEventListener("click", () => { ui.etapa[c.id] = b.dataset.e; guardarUI(); vFert(c.id); }));
     $$("[data-ft]").forEach((b) => b.addEventListener("click", () => { const y = window.scrollY; ui.fertTipo = b.dataset.ft; guardarUI(); vFert(c.id); window.scrollTo(0, y); }));
