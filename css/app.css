@@ -198,3 +198,17 @@ input,select,textarea{font-size:16px}
 .tabla-req th:first-child,.tabla-req td:first-child{text-align:left;width:30%}
 .tabla-req td{text-align:right;padding:5px 0;border-top:1px solid var(--borde,#e2e6e0)}
 .tabla-req tr.suma td{border-top:1.5px solid var(--suave)}
+.tit-calc{font-size:15px}
+.sim-ed{gap:8px}
+.sim-fila{display:grid;grid-template-columns:minmax(0,1fr) 104px 34px;gap:6px;align-items:start}
+.sim-prod{position:relative;display:flex;flex-direction:column;gap:2px}
+.sim-prod input,.sim-fila select{width:100%}
+.sim-x{border:0;background:transparent;height:44px;font-size:15px;color:var(--suave);cursor:pointer}
+.sim-nuevo{gap:8px;border:1px solid var(--suave)}
+.costo-lista{gap:6px;font-size:14px}
+.costo-total{display:flex;justify-content:space-between;align-items:center;background:var(--verde-claro);color:var(--verde-2);border-radius:14px;padding:12px 14px;font-size:14px}
+.costo-total b{font-size:20px}
+button.enlace{border:0;background:none;color:var(--verde);text-decoration:underline;padding:0;font:inherit;cursor:pointer}
+.tit-calc{display:flex;align-items:center;gap:6px}
+.tit-calc svg{color:var(--verde);width:20px;height:20px}
+.sim-nuevo .error{color:#b3261e;font-size:13px}

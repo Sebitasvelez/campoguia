@@ -163,10 +163,11 @@
       demoSave(db); return a;
     },
     async cerrarSesion(token) { const db = demoDB(); delete db.sesiones[token]; demoSave(db); },
-    async otrosProductos() { return Store.get("demo_otros", []).filter((x) => x.ingrediente_activo); },
+    async otrosProductos() { return Store.get("demo_otros", []).filter((x) => x.ingrediente_activo || (x.tipo === "fertilizante" && (Number(x.n) || Number(x.p2o5) || Number(x.k2o)))); },
     async reportarProducto(token, p) {
       const l = Store.get("demo_otros", []), n = String(p.nombre || "").trim().toLowerCase(); let x = l.find((y) => y.nombre.toLowerCase() === n);
-      if (!x) { x = { id: l.length + 1, nombre: String(p.nombre).trim(), ingrediente_activo: p.ingrediente_activo ? String(p.ingrediente_activo).toUpperCase() : null, grupo: p.grupo || null, estado: "pendiente", veces: 1, creado: new Date().toISOString() }; l.push(x); }
+      if (!x) { x = Object.assign({ id: l.length + 1, nombre: String(p.nombre).trim(), ingrediente_activo: p.ingrediente_activo ? String(p.ingrediente_activo).toUpperCase() : null, grupo: p.grupo || null, estado: "pendiente", veces: 1, creado: new Date().toISOString() },
+        p.tipo === "fertilizante" ? { tipo: "fertilizante", categoria: "Fertilizante edáfico", n: p.n, p2o5: p.p2o5, k2o: p.k2o, otros_nutrientes: p.otros_nutrientes || null, empresa: p.empresa || null, kg_saco: p.kg_saco || 50, precio_saco: p.precio_saco || null, estado: "completo" } : {}); l.push(x); }
       else { x.veces = (x.veces || 1) + 1; if (!x.ingrediente_activo && p.ingrediente_activo) x.ingrediente_activo = String(p.ingrediente_activo).toUpperCase(); }
       Store.set("demo_otros", l); return x;
     },
@@ -226,6 +227,8 @@
     },
     reportarProducto(p) {
       const pend = Store.get("otros_pend", []); pend.push(p); Store.set("otros_pend", pend);
+      // un fertilizante nuevo se puede usar de inmediato, aunque todavía no se haya enviado a la base
+      if (p.tipo === "fertilizante" && !this.otros.some((x) => String(x.nombre).toLowerCase() === String(p.nombre).toLowerCase())) { this.otros = this.otros.concat([Object.assign({ categoria: "Fertilizante edáfico" }, p)]); Store.set("otros_productos", this.otros); }
       return this.actualizarOtros();
     },
     async solicitarRol(rol) {

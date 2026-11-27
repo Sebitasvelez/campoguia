@@ -68,3 +68,7 @@ grant execute on function public.app_reportar_producto(uuid, jsonb) to anon, aut
 
 -- cultivos_kg_aplicacion (aplicada): cultivos.kg_aplicacion (kg de fertilizante por ha por aplicación). La mezcla de
 -- cada etapa la arma la app con las reglas del asesor (Logic.REGLAS_FERT / mezclaPorRegla), priorizando los Soli.
+
+-- cultivos_ciclo_meses (aplicada): cultivos.ciclo_meses (maíz 4, malanga 10, perennes 12) → «cada X meses/semanas».
+-- otros_productos_fertilizantes (aplicada): otros_productos.tipo ('agroquimico'|'fertilizante'), n, p2o5, k2o,
+-- otros_nutrientes, kg_saco, precio_saco; app_reportar_producto/app_otros_productos los aceptan y devuelven.
