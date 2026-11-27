@@ -170,6 +170,12 @@
     else toast("Ese producto ya está en tu mezcla");
   }
 
+  // cultivo escrito libremente → cultivo del aplicativo si coincide (pitahaya, cacao, maíz, papa china…); si no, solo queda el texto
+  function cultivoDeTexto(txt) {
+    const t = L.fonetica(txt || ""); if (!t) return null;
+    const c = cultivos().find((c) => { const n = L.fonetica(c.nombre); return n.includes(t) || n.split(" ").filter((w) => w.length >= 4).some((w) => t.includes(w)); });
+    return c ? c.id : null;
+  }
   const PROVINCIAS = ["Azuay", "Bolívar", "Cañar", "Carchi", "Chimborazo", "Cotopaxi", "El Oro", "Esmeraldas", "Galápagos", "Guayas", "Imbabura", "Loja",
     "Los Ríos", "Manabí", "Morona Santiago", "Napo", "Orellana", "Pastaza", "Pichincha", "Santa Elena", "Santo Domingo de los Tsáchilas", "Sucumbíos",
     "Tungurahua", "Zamora Chinchipe"];
@@ -208,7 +214,6 @@
 
   // ------------------------------------------------------------ BIENVENIDA / CUENTA
   function vBienvenida(modo) {
-    const cultOpts = cultivos().map((c) => `<option value="${h(c.id)}">${h(c.nombre)}</option>`).join("");
     const intro = `<div class="top" style="padding-top:36px"><img src="icons/logo-redondo.svg" alt="" width="72" height="72" style="display:block;margin-bottom:12px;border-radius:16px;box-shadow:0 0 0 2px rgba(255,255,255,.35)"><h1 style="font-size:28px">${h(NOMBRE)}</h1><p>Manual técnico de tu cultivo, registro de actividades y costos de producción de tu finca. Funciona también sin internet.</p></div>`;
     if (modo === "registro") {
       const ub = {};
@@ -220,7 +225,7 @@
         <label class="campo">Número de celular<input name="telefono" type="tel" inputmode="tel" placeholder="09X XXX XXXX" required></label></div>
         <div class="grid2"><label class="campo">Provincia<select name="provincia" required><option value="">Elige…</option>${PROVINCIAS.map((p) => `<option>${h(p)}</option>`).join("")}</select></label>
         <label class="campo">Sector del cultivo<input name="sector" placeholder="Comunidad o parroquia" required></label></div>
-        <div class="grid2"><label class="campo">Cultivo principal<select name="cultivo_id">${cultOpts}</select></label>
+        <div class="grid2"><label class="campo">Cultivo principal<input name="cultivo_texto" maxlength="80" placeholder="Ej. Cacao, plátano, naranjilla" autocomplete="off"></label>
         <label class="campo">Hectáreas<input name="hectareas" inputmode="decimal" placeholder="Ej. 2"></label></div>
         <label class="campo">Soy<select name="rol"><option value="agricultor">Agricultor</option><option value="tecnico">Técnico agrícola</option></select></label>
         <label class="campo" id="campoInst" hidden>¿A qué institución perteneces?<input name="institucion" maxlength="150" placeholder="Ej. MAG, GAD provincial, almacén, universidad…"><small>El administrador la revisa para aprobar tu acceso de técnico.</small></label>
@@ -244,15 +249,18 @@
         if (!D.cedulaValida(f.cedula.value)) { $("#err").textContent = "La cédula no es válida. Revisa los 10 dígitos."; return; }
         if (!f.provincia.value || !f.sector.value.trim()) { $("#err").textContent = "Elige la provincia y escribe el sector de tu cultivo."; return; }
         const edad = Number(String(f.elements.namedItem("edad").value).replace(/\D/g, ""));
-        if (!(edad >= 10 && edad <= 110)) { $("#err").textContent = "Escribe tu edad en años."; f.elements.namedItem("edad").focus(); return; }
+        if (!(edad >= 1 && edad <= 110)) { $("#err").textContent = "Escribe tu edad en años."; f.elements.namedItem("edad").focus(); return; }
+        if (edad < 18) { $("#err").textContent = "Para crear una cuenta debes ser mayor de edad (18 años o más)."; f.elements.namedItem("edad").focus(); return; }
+        const cultTxt = f.elements.namedItem("cultivo_texto").value.trim(), cultId = cultivoDeTexto(cultTxt);
+        if (!cultTxt) { $("#err").textContent = "Escribe tu cultivo principal."; f.elements.namedItem("cultivo_texto").focus(); return; }
         if (f.rol.value === "tecnico" && !f.institucion.value.trim()) { $("#err").textContent = "Escribe la institución a la que perteneces."; f.institucion.focus(); return; }
         b.disabled = true;
         try {
-          await D.registrar({ cedula: f.cedula.value, nombres: f.nombres.value, telefono: f.telefono.value, cultivo_id: f.cultivo_id.value,
+          await D.registrar({ cedula: f.cedula.value, nombres: f.nombres.value, telefono: f.telefono.value, cultivo_id: cultId || "", cultivo_texto: cultTxt,
             hectareas: f.hectareas.value.replace(",", "."), provincia: f.provincia.value, sector: f.sector.value, rol: f.rol.value,
             institucion: f.rol.value === "tecnico" ? f.institucion.value.trim() : null, edad,
             acepta_seguimiento: f.acepta.checked, latitud: ub.latitud, longitud: ub.longitud, precision_m: ub.precision_m });
-          ui.cultivo = f.cultivo_id.value; guardarUI(); location.hash = "#/"; router();
+          if (cultId) ui.cultivo = cultId; guardarUI(); location.hash = "#/"; router();
           if (f.rol.value === "tecnico") UI.avisar("Tu cuenta está lista. Tu acceso al panel de técnico agrícola necesita la aprobación del administrador. Se aprueba en un plazo de 24 horas. Mientras tanto tienes acceso como agricultor.");
         } catch (er) { $("#err").textContent = er.codigo === "red" ? "Para crear tu cuenta necesitas internet. Inténtalo cuando tengas señal." : er.message; b.disabled = false; }
       });
@@ -1577,7 +1585,7 @@
           <label class="campo">Celular<input name="telefono" type="tel" value="${h(p.telefono || "")}"></label></div>
           <div class="grid2"><label class="campo">Provincia<select name="provincia"><option value="">—</option>${PROVINCIAS.map((x) => `<option ${x === p.provincia ? "selected" : ""}>${h(x)}</option>`).join("")}</select></label>
           <label class="campo">Sector del cultivo<input name="sector" value="${h(p.sector || "")}"></label></div>
-          <div class="grid2"><label class="campo">Cultivo principal<select name="cultivo_id">${cultivos().map((c) => `<option value="${h(c.id)}" ${c.id === p.cultivo_id ? "selected" : ""}>${h(c.nombre)}</option>`).join("")}</select></label>
+          <div class="grid2"><label class="campo">Cultivo principal<input name="cultivo_texto" maxlength="80" value="${h(p.cultivo_texto || (cultivo(p.cultivo_id) || {}).nombre || "")}" autocomplete="off"></label>
           <label class="campo">Hectáreas<input name="hectareas" inputmode="decimal" value="${h(p.hectareas === null || p.hectareas === undefined ? "" : p.hectareas)}"></label></div>
           <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--suave)"><input type="checkbox" name="acepta" ${p.acepta_seguimiento !== false ? "checked" : ""} style="width:22px;height:22px;margin:0;accent-color:var(--verde)"> Mi asesor puede ver mis registros y la ubicación de mi finca.</label>
           <button class="btn" type="submit">Guardar cambios</button>
@@ -1617,7 +1625,7 @@
     }));
     $("#fp").addEventListener("submit", async (e) => {
       e.preventDefault(); const f = e.target;
-      try { await D.actualizarPerfil({ nombres: f.nombres.value, edad: f.elements.namedItem("edad").value, telefono: f.telefono.value, provincia: f.provincia.value, sector: f.sector.value, cultivo_id: f.cultivo_id.value, hectareas: f.hectareas.value.replace(",", "."), acepta_seguimiento: f.acepta.checked }); toast("Datos guardados"); }
+      try { await D.actualizarPerfil({ nombres: f.nombres.value, edad: f.elements.namedItem("edad").value, telefono: f.telefono.value, provincia: f.provincia.value, sector: f.sector.value, cultivo_texto: f.elements.namedItem("cultivo_texto").value.trim(), cultivo_id: cultivoDeTexto(f.elements.namedItem("cultivo_texto").value) || "", hectareas: f.hectareas.value.replace(",", "."), acepta_seguimiento: f.acepta.checked }); toast("Datos guardados"); }
       catch (er) { toast(er.codigo === "red" ? "Necesitas internet para cambiar tus datos." : er.message); }
     });
     $("#sync").addEventListener("click", async () => { if (navigator.onLine === false) return toast("Sin conexión"); await D.actualizarCatalogo(); await D.sincronizar(); toast("Todo sincronizado"); vPerfil(); });

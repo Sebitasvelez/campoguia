@@ -9,3 +9,6 @@ alter table agricultores add column if not exists institucion text;
 -- Edad (migración agricultores_edad): columna edad int (10–110), obligatoria en app_registrar (error 'edad_invalida'),
 -- editable en app_actualizar_perfil y devuelta por _perfil.
 alter table agricultores add column if not exists edad int check (edad is null or edad between 10 and 110);
+
+-- cultivo_libre_mayor_edad (aplicada): agricultores.cultivo_texto (texto libre del cultivo principal);
+-- app_registrar exige edad >= 18 ('menor_de_edad'); cultivo_id solo si coincide con un cultivo del aplicativo.
