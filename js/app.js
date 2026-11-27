@@ -176,7 +176,7 @@
     const vacia = !q.lista.length;
     const a = q.aporte, tec = esTecnico(), haN = ha > 0 ? ha : 1, rg = q.regla;
     const gPl = vacia ? `<span class="mini">Toca «+ Agregar fertilizante» o «Sugerir mezcla».</span>` : pha > 0 ? `Aplicar <b>${L.fmt((q.masa + q.mg) * 1000 / pha, 0)} g por planta</b>.` : `<span class="mini">Escribe las plantas por ha para saber los gramos por planta.</span>`;
-    const okMayor = !vacia && (!rg || a[q.mayor] > 0 && q.mayor === rg.mayor || (rg && a[rg.mayor] >= a[q.mayor] - 1e-6)), okRatio = !rg || (isFinite(q.ratio) && q.ratio >= rg.min - 1e-6 && q.ratio <= rg.max + 1e-6);
+    const okMayor = !vacia && (!rg || !rg.mayor || a[q.mayor] > 0 && q.mayor === rg.mayor || (rg && a[rg.mayor] >= a[q.mayor] - 1e-6)), okRatio = !rg || (isFinite(q.ratio) && q.ratio >= rg.min - 1e-6 && q.ratio <= rg.max + 1e-6);
     const pk = a.k > 0 ? a.p / a.k : a.p > 0 ? Infinity : 0, okPK = !rg || !rg.pkMin || (pk >= rg.pkMin - 1e-6 && pk <= rg.pkMax + 1e-6);
     const chk = (ok, si, no) => vacia && tec && rg ? `<span class="mini" style="color:#b26a00">⚠ ${no}</span>` : (tec && rg ? `<span class="mini" style="color:${ok ? "var(--verde)" : "#b26a00"}">${ok ? "✓ " + si : "⚠ " + no}</span>` : "");
     const tile = (t, v, extra) => `<div class="dato" style="text-align:left;padding:8px 10px"><span>${t}</span><b>${v}</b>${extra || ""}</div>`;
@@ -193,7 +193,7 @@
       <b style="font-size:15px">${partes || "Sin fertilizantes"}</b>
       <span>${gPl}</span>
       ${tabla}
-      <div class="grid2">${tile("Elemento más presente", vacia ? "—" : NOMBRE_EL[q.mayor], chk(okMayor, "Es el que pide la etapa", "La etapa pide " + (rg ? NOMBRE_EL[rg.mayor].charAt(0).toLowerCase() + NOMBRE_EL[rg.mayor].slice(1) : "")))}${rg && rg.pkMin ? tile("Relación N:P:K", vacia ? "—" : txtNPK(a), chk(okRatio && okPK, "Dentro de la regla", "Fuera de la regla")) : tile("Relación N:K", vacia ? "—" : txtRatio(q.ratio), chk(okRatio, "Dentro de la regla", "Fuera de la regla"))}</div>
+      <div class="grid2">${tile("Elemento más presente", vacia ? "—" : NOMBRE_EL[q.mayor], chk(okMayor, "Es el que pide la etapa", (rg && rg.mayor ? "La etapa pide " + NOMBRE_EL[rg.mayor].charAt(0).toLowerCase() + NOMBRE_EL[rg.mayor].slice(1) : "Revisa la regla de la etapa")))}${rg && rg.pkMin ? tile("Relación N:P:K", vacia ? "—" : txtNPK(a), chk(okRatio && okPK, "Dentro de la regla", "Fuera de la regla")) : tile("Relación N:K", vacia ? "—" : txtRatio(q.ratio), chk(okRatio, "Dentro de la regla", "Fuera de la regla"))}</div>
       ${tec && rg ? `<span class="mini">Regla de la etapa: ${h(rg.texto)}.</span>` : ""}
     </div>`;
   }

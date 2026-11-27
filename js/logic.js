@@ -577,7 +577,7 @@
   // ---------------- reglas del asesor por etapa: elemento de mayor demanda y relación N:K (N ÷ K₂O)
   const REGLAS_FERT = {
     arranque:   { re: /siembra|arranque|tra[n]?splante|inicio|establec|vivero/, mayor: "p", min: 0.85, max: 1.15, ideal: 1, texto: "mayor demanda de fósforo, relación N:K 1:1" },
-    engrose:    { re: /engros|llenado|maduraci/, mayor: "k", min: 1 / 5, max: 1 / 3.5, ideal: 1 / 4, texto: "mayor demanda de potasio, relación N:K de 1:3,5 a 1:5" },
+    engrose:    { re: /engros|llenado|maduraci/, mayor: "k", min: 1 / 5.5, max: 1 / 3, ideal: 1 / 4, texto: "mayor demanda de potasio, relación N:K de 1:3 a 1:5,5" },
     desarrollo: { re: /desarrollo|crecimiento|pencas|recuperaci|vegetativ/, mayor: "n", min: 3, max: 5, ideal: 4, texto: "mayor demanda de nitrógeno, relación N:K de 3:1 a 5:1" },
     floracion:  { re: /flor|brotaci|producci|tuberizaci|cormo/, mayor: "p", min: 0.5, max: 1, ideal: 1 / 1.5, texto: "mayor demanda de fósforo, relación N:K de 1:1 a 1:2 (mejor 1:1,5)" },
   };
