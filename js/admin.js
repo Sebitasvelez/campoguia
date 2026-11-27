@@ -158,7 +158,7 @@
       campos: [
         { k: "cultivo_id", t: "Cultivo", tipo: "select", opciones: optCultivos, req: true },
         { k: "nombre", t: "Nombre de la etapa", req: true },
-        { k: "uso", t: "Se usa en", tipo: "select", opciones: () => [["ambos", "Plan sanitario y fertilización"], ["sanitario", "Solo plan sanitario"], ["fertilizacion", "Solo plan de fertilización"], ["lote", "Etapa del lote (al crear un lote)"]], def: "ambos" },
+        { k: "uso", t: "Se usa en", tipo: "select", opciones: () => [["ambos", "Plan sanitario y fertilización"], ["sanitario", "Solo plan sanitario"], ["fertilizacion", "Solo fertilización y asesoría rápida"], ["lote", "Etapa del lote (al crear un lote)"]], def: "ambos" },
         { k: "semanas", t: "Semanas (texto)" },
         { k: "riesgo_hongos", t: "Riesgo de sarna/hongos", tipo: "select", opciones: () => [["bajo", "Bajo"], ["ligero", "Ligero"], ["alto", "Alto"]], vacio: true },
         { k: "notas", t: "Recomendaciones de manejo", tipo: "area" }, { k: "costo_ref_texto", t: "Costo de referencia (texto)" }, { k: "orden", t: "Orden", tipo: "num", def: 1 },

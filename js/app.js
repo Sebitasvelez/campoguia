@@ -36,7 +36,13 @@
   const cultivo = (id) => cultivos().find((c) => c.id === id) || null;
   const etapasDe = (cid) => I.etapas[cid] || [];
   const etapa = (id) => (I.c.etapas || []).find((e) => String(e.id) === String(id)) || null;
-  const etapaActual = (cid) => { const lista = etapasDe(cid); return lista.find((e) => String(e.id) === String(ui.etapa[cid])) || lista[0] || null; };
+  // etapas del plan sanitario y etapas de fertilización / asesoría rápida (un cultivo puede tener listas distintas)
+  const etapasSan = (cid) => etapasDe(cid).filter((e) => e.uso !== "fertilizacion");
+  const etapasFert = (cid) => etapasDe(cid).filter((e) => e.uso !== "sanitario");
+  // plan sanitario de una etapa; si es solo de fertilización, el de las etapas sanitarias que le corresponden
+  const planDe = (id) => { const e = etapa(id); if (I.plan[id] && I.plan[id].length) return I.plan[id];
+    return ((e && e.plan_etapas) || []).flatMap((x) => I.plan[x] || []).filter((x, i, l) => l.findIndex((y) => String(y.producto_id) === String(x.producto_id)) === i); };
+  const etapaActual = (cid) => { const lista = etapasFert(cid); return lista.find((e) => String(e.id) === String(ui.etapa[cid])) || lista[0] || null; };
   const TANQUE = () => Number(aj("volumen_tanque_l", 200)), BOMBA = () => Number(aj("volumen_bomba_l", 20));
   const volL = () => (ui.vol === "tanque" ? TANQUE() : BOMBA());
   const volTxt = () => (ui.vol === "tanque" ? `tanque de ${TANQUE()} L` : `bomba de ${BOMBA()} L`);
@@ -568,7 +574,7 @@
   function vPlan(cid) {
     const c = cultivo(cid); if (!c) return vNoEncontrado();
     const f = volL() / TANQUE();
-    const fases = etapasDe(cid).map((et) => {
+    const fases = etapasSan(cid).map((et) => {
       const items = (I.plan[et.id] || []).filter((x) => P(x.producto_id));
       const fijos = items.filter((x) => !x.alternar), alt = items.filter((x) => x.alternar);
       return { et, items, fijos, alt, elegidos: fijos.concat(alt.slice(0, 1)) };
@@ -677,7 +683,7 @@
   // ------------------------------------------------------------ FERTILIZACIÓN
   function vFert(cid) {
     const c = cultivo(cid || ui.cultivo); if (!c) return vNoEncontrado();
-    const etapas = etapasDe(c.id).filter((e) => (I.fert[e.id] || []).length), perfil = D.sesion.perfil;
+    const etapas = etapasFert(c.id).filter((e) => (I.fert[e.id] || []).length), perfil = D.sesion.perfil;
     const et = etapas.find((e) => String(e.id) === String(ui.etapa[c.id])) || etapas[0] || null;
     ui.calc.ha = ui.calc.ha !== undefined ? ui.calc.ha : perfil.hectareas || "";
     ui.calc.pha = ui.calc.pha !== undefined ? ui.calc.pha : "";
@@ -953,7 +959,7 @@
   // rotando el grupo FRAC/IRAC del último producto salvo daño alto), protectante, foliar de la etapa y coadyuvante.
   const asis = () => { ui.asis = ui.asis || {}; const a = ui.asis;
     if (!a.cultivo || !cultivo(a.cultivo)) a.cultivo = ui.cultivo && cultivo(ui.cultivo) ? ui.cultivo : (cultivos()[0] || {}).id;
-    if (!etapasDe(a.cultivo).some((e) => String(e.id) === String(a.etapa))) a.etapa = (etapaActual(a.cultivo) || {}).id;
+    if (!etapasFert(a.cultivo).some((e) => String(e.id) === String(a.etapa))) a.etapa = (etapaActual(a.cultivo) || {}).id;
     // varios problemas y varios productos de la última aplicación (se migra el formato anterior de uno solo)
     if (!Array.isArray(a.problemas)) a.problemas = a.problema ? [a.problema] : [];
     if (!Array.isArray(a.ultimos)) a.ultimos = a.ultimo ? [a.ultimo] : [];
@@ -1006,7 +1012,7 @@
       return lista.filter((x) => !t || ws.every((w) => norm(nom(x) + " " + (sub ? sub(x) : "")).split(" ").some((v) => v.startsWith(w) || v.includes(w))))
         .sort((x, y) => (norm(nom(y)).startsWith(t) ? 1 : 0) - (norm(nom(x)).startsWith(t) ? 1 : 0)); };
     if (k === "cultivo") return filtrar(cultivos(), (c) => c.nombre).map((c) => ({ v: c.id, t: c.nombre }));
-    if (k === "etapa") return filtrar(etapasDe(a.cultivo), (e) => e.nombre).map((e) => ({ v: e.id, t: e.nombre }));
+    if (k === "etapa") return filtrar(etapasFert(a.cultivo), (e) => e.nombre).map((e) => ({ v: e.id, t: e.nombre }));
     if (k === "problema") {
       const lista = (I.problemas[a.cultivo] || []).filter((p) => (p.tipo === "plaga" || p.tipo === "enfermedad") && !a.problemas.map(String).includes(String(p.id)));
       let r = filtrar(lista, (p) => p.nombre, (p) => p.clasificacion || "");
@@ -1054,14 +1060,14 @@
     const protect = (prev ? (I.recs[prev.id] || []).map((r) => P(r.producto_id)) : []).concat([(I.c.productos || []).find((p) => /daconil/i.test(p.nombre))]).filter((p) => p && multisitio(p));
     if (prs.some((pr) => pr.tipo === "enfermedad") && !items.some((x) => multisitio(x.p)) && protect[0]) poner(protect[0], null, "Protectante multisitio para que no avance la enfermedad");
     if (!prs.length) {
-      const plan = (I.plan[a.etapa] || []).map((x) => ({ x, p: P(x.producto_id) })).filter((y) => y.p && !/coadyuv|fertiliz|bioestim/i.test(y.p.categoria || ""));
+      const plan = planDe(a.etapa).map((x) => ({ x, p: P(x.producto_id) })).filter((y) => y.p && !/coadyuv|fertiliz|bioestim/i.test(y.p.categoria || ""));
       const elegidos = plan.filter((y) => !repite(y.p)).slice(0, 2);
       elegidos.forEach((y) => poner(y.p, y.x.dosis_tanque, "Plan sanitario de la etapa"));
       if (!elegidos.length && protect[0]) poner(protect[0], null, "Prevención de hongos (multisitio)");
     }
     const fol = (I.fert[a.etapa] || []).find((f) => f.tipo === "foliar" && P(f.producto_id));
     if (fol) poner(P(fol.producto_id), fol.dosis_tanque, "Nutrición foliar de la etapa");
-    const coad = ((I.plan[a.etapa] || []).map((x) => ({ x, p: P(x.producto_id) })).find((y) => y.p && /coadyuv/i.test(y.p.categoria || ""))) || null;
+    const coad = ((planDe(a.etapa) || []).map((x) => ({ x, p: P(x.producto_id) })).find((y) => y.p && /coadyuv/i.test(y.p.categoria || ""))) || null;
     const coadP = coad ? coad.p : (I.c.productos || []).find((p) => /silwet/i.test(p.nombre) && p.activo !== false);
     if (coadP) poner(coadP, coad ? coad.x.dosis_tanque : null, "Coadyuvante: mejora la cobertura");
     if (prs.length > 2 && items.length >= 4) avisos.push("La mezcla llegó al máximo de 4 productos; si falta controlar algún problema, consúltalo con tu asesor.");

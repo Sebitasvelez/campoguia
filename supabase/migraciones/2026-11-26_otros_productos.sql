@@ -56,3 +56,6 @@ end $$;
 revoke all on function public.app_reportar_producto(uuid, jsonb) from public;
 grant execute on function public.app_otros_productos() to anon, authenticated;
 grant execute on function public.app_reportar_producto(uuid, jsonb) to anon, authenticated;
+
+-- etapas_plan_sanitario (aplicada): etapas.plan_etapas int[] → para etapas solo de fertilización, qué etapas del
+-- plan sanitario le corresponden (la asesoría rápida usa ese plan). Pitahaya: Floración y cuajado = {1,2,3}; Engrose de fruta = {4,5}.
