@@ -13669,20 +13669,6 @@
    "cultivo_id": "pitahaya"
   },
   {
-   "id": 40,
-   "etapa_id": 117,
-   "tipo": "suelo",
-   "producto_id": 214,
-   "dosis_kg_ha": 100,
-   "dosis_g_planta": null,
-   "dosis_tanque": null,
-   "frecuencia_dias": null,
-   "condicion": null,
-   "nota": "Nitrógeno con azufre, calcio y magnesio para devolver el color verde.",
-   "orden": 1,
-   "cultivo_id": "pitahaya"
-  },
-  {
    "id": 41,
    "etapa_id": 117,
    "tipo": "suelo",
@@ -13691,9 +13677,9 @@
    "dosis_g_planta": null,
    "dosis_tanque": null,
    "frecuencia_dias": null,
-   "condicion": "Si el amarillo empieza en las pencas viejas (falta de magnesio)",
-   "nota": "Magnesio y azufre.",
-   "orden": 2,
+   "condicion": null,
+   "nota": "Magnesio y azufre. Junto con Soli Nitro y Soli Phos.",
+   "orden": 4,
    "cultivo_id": "pitahaya"
   },
   {
@@ -13705,23 +13691,9 @@
    "dosis_g_planta": 250,
    "dosis_tanque": null,
    "frecuencia_dias": null,
-   "condicion": "Si el pH del suelo es ácido",
-   "nota": "Corrige la acidez para que la planta absorba los nutrientes.",
-   "orden": 3,
-   "cultivo_id": "pitahaya"
-  },
-  {
-   "id": 43,
-   "etapa_id": 117,
-   "tipo": "foliar",
-   "producto_id": 108,
-   "dosis_kg_ha": null,
-   "dosis_g_planta": null,
-   "dosis_tanque": 300,
-   "frecuencia_dias": 15,
    "condicion": null,
-   "nota": "Hierro, magnesio y micronutrientes para corregir la clorosis.",
-   "orden": 4,
+   "nota": "Primero: corrige la acidez del suelo. Aplicar 30 días antes de fertilizar.",
+   "orden": 1,
    "cultivo_id": "pitahaya"
   },
   {
@@ -13734,8 +13706,8 @@
    "dosis_tanque": 500,
    "frecuencia_dias": 15,
    "condicion": null,
-   "nota": "Nitrógeno foliar de rápida absorción.",
-   "orden": 5,
+   "nota": "Nitrógeno foliar de rápida absorción. Mezclar con Isabion.",
+   "orden": 6,
    "cultivo_id": "pitahaya"
   },
   {
@@ -13748,8 +13720,36 @@
    "dosis_tanque": 500,
    "frecuencia_dias": 15,
    "condicion": null,
-   "nota": "Aminoácidos antiestrés para la recuperación.",
-   "orden": 6,
+   "nota": "Aminoácidos antiestrés para la recuperación. Mezclar con Vitafol 30-10-10.",
+   "orden": 5,
+   "cultivo_id": "pitahaya"
+  },
+  {
+   "id": 46,
+   "etapa_id": 117,
+   "tipo": "suelo",
+   "producto_id": 58,
+   "dosis_kg_ha": 150,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Después de la Caldolomita. Aplicar junto con Soli Phos y Sulfato de Magnesio.",
+   "orden": 2,
+   "cultivo_id": "pitahaya"
+  },
+  {
+   "id": 47,
+   "etapa_id": 117,
+   "tipo": "suelo",
+   "producto_id": 56,
+   "dosis_kg_ha": 150,
+   "dosis_g_planta": null,
+   "dosis_tanque": null,
+   "frecuencia_dias": null,
+   "condicion": null,
+   "nota": "Junto con Soli Nitro y Sulfato de Magnesio.",
+   "orden": 3,
    "cultivo_id": "pitahaya"
   }
  ],
