@@ -584,10 +584,10 @@
   const ORDEN_REGLAS = ["arranque", "engrose", "desarrollo", "floracion"];
   // reglas propias de un cultivo (manda sobre la general): en maíz la prefloración pide nitrógeno y el llenado N y K parejos
   const REGLAS_CULTIVO = {
-    // pitahaya, recuperación de plantas amarillas: como desarrollo (N:K 3:1 a 5:1) y además P igual o algo mayor que K (ej. 3-1-1);
-    // la relación P:K es interna, en pantalla solo se muestra N:K
+    // pitahaya, recuperación de plantas amarillas: como desarrollo (N:K 3:1 a 5:1) y además P mayor o igual que K
+    // (ej. 3 : 2 : 1 o 3 : 1,5 : 1); en pantalla se muestra la relación N:P:K
     pitahaya: [
-      { clave: "recuperacion_pitahaya", re: /recuperaci/, mayor: "n", min: 3, max: 5, ideal: 4, pkMin: 1, pkMax: 1.5, texto: "mayor demanda de nitrógeno, relación N:K de 3:1 a 5:1" },
+      { clave: "recuperacion_pitahaya", re: /recuperaci/, mayor: "n", min: 3, max: 5, ideal: 4, pkMin: 1, pkMax: 2, texto: "mayor demanda de nitrógeno, relación N:K de 3:1 a 5:1 y fósforo igual o mayor que potasio (ej. 3 : 2 : 1 o 3 : 1,5 : 1)" },
     ],
     maiz: [
       { clave: "prefloracion_maiz", re: /prefloraci/, mayor: "n", min: 2, max: 3, ideal: 2.5, texto: "mayor demanda de nitrógeno, relación N:K de 2:1 a 3:1" },

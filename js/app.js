@@ -102,6 +102,8 @@
     return elegidos.concat(lista.filter((x) => !esNPK(x) && !esMg(x))).sort((x, y) => (x.tipo === "suelo" ? 0 : 1) - (y.tipo === "suelo" ? 0 : 1) || (x.orden || 0) - (y.orden || 0));
   }
   const txtRatio = (r) => (!isFinite(r) ? "Sin K" : r <= 0 ? "Sin N" : r >= 1 ? L.fmt(r, 1) + " : 1" : "1 : " + L.fmt(1 / r, 1));
+  // «3,7 : 2 : 1» (relativo al potasio)
+  const txtNPK = (a) => (a.k > 0 ? [a.n / a.k, a.p / a.k].map((v) => L.fmt(v, 1)).join(" : ") + " : 1" : L.fmt(a.n, 1) + " : " + L.fmt(a.p, 1) + " : 0");
   const fracTxt = (n) => { const e = Math.floor(n + 1e-9), f = n - e, fr = f > 0.83 ? "" : f > 0.6 ? "¾" : f > 0.4 ? "½" : f > 0.1 ? "¼" : ""; return (f > 0.83 ? String(e + 1) : (e ? String(e) : "") + fr) || "0"; };
   const sacosN = (n, kgS) => fracTxt(n) + " " + (n > 1 ? "sacos" : "saco") + (kgS && kgS !== 50 ? " de " + L.fmt(kgS) + " kg" : "");
   const sacosTxt = (kg) => sacosN(kg / 50) + " de 50 kg";
@@ -170,6 +172,7 @@
     const a = q.aporte, tec = esTecnico(), haN = ha > 0 ? ha : 1, rg = q.regla;
     const gPl = pha > 0 ? `Aplicar <b>${L.fmt((q.masa + q.mg) * 1000 / pha, 0)} g por planta</b>.` : `<span class="mini">Escribe las plantas por ha para saber los gramos por planta.</span>`;
     const okMayor = !rg || a[q.mayor] > 0 && q.mayor === rg.mayor || (rg && a[rg.mayor] >= a[q.mayor] - 1e-6), okRatio = !rg || (isFinite(q.ratio) && q.ratio >= rg.min - 1e-6 && q.ratio <= rg.max + 1e-6);
+    const pk = a.k > 0 ? a.p / a.k : a.p > 0 ? Infinity : 0, okPK = !rg || !rg.pkMin || (pk >= rg.pkMin - 1e-6 && pk <= rg.pkMax + 1e-6);
     const chk = (ok, si, no) => (tec && rg ? `<span class="mini" style="color:${ok ? "var(--verde)" : "#b26a00"}">${ok ? "✓ " + si : "⚠ " + no}</span>` : "");
     const tile = (t, v, extra) => `<div class="dato" style="text-align:left;padding:8px 10px"><span>${t}</span><b>${v}</b>${extra || ""}</div>`;
     let tabla = "";
@@ -185,7 +188,7 @@
       <b style="font-size:15px">${partes}</b>
       <span>${gPl}</span>
       ${tabla}
-      <div class="grid2">${tile("Elemento más presente", NOMBRE_EL[q.mayor], chk(okMayor, "Es el que pide la etapa", "La etapa pide " + (rg ? NOMBRE_EL[rg.mayor].toLowerCase() : "")))}${tile("Relación N:K", txtRatio(q.ratio), chk(okRatio, "Dentro de la regla", "Fuera de la regla"))}</div>
+      <div class="grid2">${tile("Elemento más presente", NOMBRE_EL[q.mayor], chk(okMayor, "Es el que pide la etapa", "La etapa pide " + (rg ? NOMBRE_EL[rg.mayor].toLowerCase() : "")))}${rg && rg.pkMin ? tile("Relación N:P:K", txtNPK(a), chk(okRatio && okPK, "Dentro de la regla", "Fuera de la regla")) : tile("Relación N:K", txtRatio(q.ratio), chk(okRatio, "Dentro de la regla", "Fuera de la regla"))}</div>
       ${tec && rg ? `<span class="mini">Regla de la etapa: ${h(rg.texto)}.</span>` : ""}
     </div>`;
   }
@@ -937,7 +940,7 @@
     const res = et && tipoSel === "suelo" ? resumenSuelo(et, c) : null;
     const visibles = tipoSel === "suelo" && res ? res.lista.map((x) => Object.assign({}, x.item || {}, { producto_id: x.ref, tipo: "suelo", dosis_kg_ha: x.kgHa, dosis_g_planta: null, _p: x.p,
       nota: x.item ? x.item.nota : x.p.otra_marca ? "Otra marca (agregado por un técnico)." : "Agregado por el técnico." })) : items.filter((x) => x.tipo === tipoSel);
-    let totalCosto = 0, costoFoliar = 0; const nSuelo = visibles.filter((x) => x.tipo === "suelo").length; let kgEnm = 0;
+    let totalCosto = 0, costoFoliar = 0; const nSuelo = visibles.filter((x) => x.tipo === "suelo").length, gMezcla = res && phaN > 0 ? (res.masa + res.mg) * 1000 / phaN : 0; let kgEnm = 0;
     const filas = visibles.map((x) => {
       const p = x._p || P(x.producto_id);
       if (x.tipo === "foliar") {
@@ -961,7 +964,7 @@
         <div class="dato"><b>${r.gPorPlanta !== null ? L.fmt(r.gPorPlanta, 0) + " g" : "—"}</b><span>Por planta / aplicación</span></div></div>
         ${precioSaco ? `<div class="fila"><span class="mini">Precio: <b>${dinero(precioSaco)}</b> el saco de ${L.fmt(kgSaco)} kg</span></div>` : ""}
         ${precioSaco && r.kgTotal ? `<div class="fila"><span class="mini">Precio de los ${L.fmt(r.kgTotal, r.kgTotal < 10 ? 1 : 0)} kg requeridos: <b>${dinero(r.kgTotal / kgSaco * precioSaco)}</b></span></div>` : ""}
-        ${!tec && x.tipo === "suelo" && nSuelo > 1 ? `<span class="mini"><b>Observación:</b> mezclar todos los fertilizantes recomendados en fórmula.</span>` : ""}
+        ${x.tipo === "suelo" ? `<span class="mini"><b>Observación:</b> ${nSuelo > 1 ? `mezclar con ${nSuelo === 2 ? "el otro fertilizante recomendado" : "los otros " + (nSuelo - 1) + " fertilizantes recomendados"} y aplicar` : "aplicar"} ${gMezcla ? `<b>${L.fmt(gMezcla, 0)} g por planta</b> de la mezcla.` : "los gramos por planta del cuadro resumen (escribe las plantas por ha)."}</span>` : ""}
         ${tec || x.tipo !== "suelo" ? `<span class="mini">${x.dosis_kg_ha ? (L.npkDe(p) ? "Aporta por ha: N " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).n / 100, 1) + " · P₂O₅ " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).p / 100, 1) + " · K₂O " + L.fmt(Number(x.dosis_kg_ha) * L.npkDe(p).k / 100, 1) + " kg (" + L.fmt(Number(x.dosis_kg_ha)) + " kg de producto)" : L.fmt(Number(x.dosis_kg_ha)) + " kg de producto por ha") : ""}${x.tipo === "suelo" ? "" : (x.condicion ? " · " + h(x.condicion) : "") + (x.frecuencia_dias ? " · cada " + h(x.frecuencia_dias) + " días" : "") + (x.nota ? " · " + h(x.nota) : "")}</span>` : ""}
         ${omitir ? `<span class="mini"><b>Tu pH (${h(ui.ph)}) no es ácido:</b> no necesitas esta enmienda.</span>` : ""}
       </div>`;
